@@ -56,8 +56,9 @@ export default function MyTripsPage() {
     };
 
     const fetchTrips = async (token: string) => {
+        const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
         try {
-            const res = await fetch('http://localhost:5001/api/trips', {
+            const res = await fetch(`${API_URL}/api/trips`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -80,7 +81,8 @@ export default function MyTripsPage() {
         if (!token) return;
 
         try {
-            const res = await fetch(`http://localhost:5001/api/trips/${id}`, {
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
+            const res = await fetch(`${API_URL}/api/trips/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`

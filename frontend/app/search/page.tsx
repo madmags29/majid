@@ -195,8 +195,9 @@ function SearchPageContent() {
 
     const fetchItinerary = async (dest: string) => {
         setLoading(true);
+        const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
         try {
-            const response = await fetch('http://localhost:5001/api/search', {
+            const response = await fetch(`${API_URL}/api/search`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ destination: dest, days: 2 }),
@@ -255,7 +256,8 @@ function SearchPageContent() {
         if (!currentItineraryData) return;
 
         try {
-            const res = await fetch('http://localhost:5001/api/trips', {
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
+            const res = await fetch(`${API_URL}/api/trips`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

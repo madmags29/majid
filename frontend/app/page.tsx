@@ -37,8 +37,9 @@ export default function LandingPage() {
   }, []);
 
   useEffect(() => {
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
     // Fetch background video
-    fetch('http://localhost:5001/api/background-video')
+    fetch(`${API_URL}/api/background-video`)
       .then(res => res.json())
       .then(data => {
         if (data.url) setVideoUrl(data.url);
