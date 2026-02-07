@@ -25,23 +25,23 @@ import Script from "next/script";
 export const metadata: Metadata = {
   metadataBase: new URL('https://weekendtravellers.com'), // Replace with actual domain when deployed
   title: {
-    default: 'Weekend Travellers',
+    default: 'Weekend Travellers | AI-Powered Weekend Trip Planner',
     template: '%s | Weekend Travellers',
   },
-  description: 'Discover your perfect weekend getaway. Plan, save, and share your adventures with ease using our AI-powered travel companion.',
-  keywords: ['weekend trip', 'travel planner', 'getaway', 'vacation', 'AI travel', 'road trip', 'adventure', 'weekend travellers'],
+  description: 'Weekend Travellers is your AI-powered companion for discovering and planning the perfect 2-day getaway. Get instant itineraries, driving routes, and budget estimates for your next adventure.',
+  keywords: ['weekend travellers', 'weekend trip planner', 'AI travel itineraries', 'short getaways', 'road trip planner', 'travel logistics', 'itinerary generator'],
   authors: [{ name: 'Weekend Travellers Team' }],
   creator: 'Weekend Travellers',
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: 'https://weekendtravellers.com',
-    title: 'Weekend Travellers - Your AI Weekend Trip Planner',
-    description: 'Discover your perfect weekend getaway. Plan, save, and share your adventures with ease.',
+    title: 'Weekend Travellers | AI-Powered Weekend Trip Planner',
+    description: 'Weekend Travellers is your AI-powered companion for discovering and planning the perfect 2-day getaway.',
     siteName: 'Weekend Travellers',
     images: [
       {
-        url: '/og-image.jpg', // We should add an actual OG image later
+        url: '/icon.svg',
         width: 1200,
         height: 630,
         alt: 'Weekend Travellers',
@@ -50,9 +50,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Weekend Travellers - Your AI Weekend Trip Planner',
-    description: 'Discover your perfect weekend getaway. Plan, save, and share your adventures with ease.',
-    images: ['/twitter-image.jpg'],
+    title: 'Weekend Travellers | AI-Powered Weekend Trip Planner',
+    description: 'Weekend Travellers is your AI-powered companion for discovering and planning the perfect 2-day getaway.',
+    images: ['/icon.svg'],
   },
   robots: {
     index: true,
@@ -64,6 +64,9 @@ export const metadata: Metadata = {
       'max-image-preview': 'large',
       'max-snippet': -1,
     },
+  },
+  other: {
+    'google-adsense-account': 'ca-pub-9460255466960810',
   },
 };
 
@@ -77,6 +80,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${cursive.variable} antialiased`}
       >
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460255466960810"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-4FBK6YT104"
           strategy="afterInteractive"

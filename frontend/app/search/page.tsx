@@ -180,7 +180,11 @@ function SearchPageContent() {
     };
 
     useEffect(() => {
-        scrollToBottom();
+        // Only scroll to bottom if we're not in the initial loading state
+        // and we have messages (means we've moved past the first load)
+        if (!loading && messages.length > 1) {
+            scrollToBottom();
+        }
     }, [messages, loading, isTyping]);
 
     useEffect(() => {
@@ -316,8 +320,8 @@ function SearchPageContent() {
                             <AnimatedLogo />
                         </div>
                         <div className="flex flex-col md:flex-row md:items-center md:gap-3">
-                            <h1 className="text-lg md:text-2xl text-white tracking-tight">
-                                <TypewriterText text="weekendtravellers.com" className="font-cursive" delay={500} />
+                            <h1 className="text-xl md:text-3xl text-white tracking-tight">
+                                <TypewriterText text="weekendtravellers.com" className="font-cursive text-2xl md:text-4xl" delay={500} />
                             </h1>
                             <span className="hidden md:inline text-slate-500">|</span>
                             <h2 className="text-sm md:text-lg font-medium bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">

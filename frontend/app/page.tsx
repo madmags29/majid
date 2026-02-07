@@ -94,7 +94,7 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen text-white flex flex-col relative overflow-x-hidden">
+    <div className="h-screen text-white flex flex-col relative overflow-hidden">
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} initialMode={authMode} />
 
       {/* Base Background Color (Always present, sits behind video) */}
@@ -130,8 +130,8 @@ export default function LandingPage() {
       <header className="w-full py-6 px-8 flex justify-between items-center z-50">
         <div className="flex items-center gap-2">
           <AnimatedLogo className="w-10 h-10 text-blue-400" />
-          <h1 className="text-2xl text-white drop-shadow-md">
-            <TypewriterText text="weekendtravellers.com" className="font-cursive text-3xl" delay={500} />
+          <h1 className="text-3xl md:text-4xl text-white drop-shadow-md">
+            <TypewriterText text="weekendtravellers.com" className="font-cursive text-4xl md:text-5xl" delay={500} />
           </h1>
         </div>
         <nav className="flex items-center gap-4">
