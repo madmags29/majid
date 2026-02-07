@@ -2,32 +2,39 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Search, MapPin, Calendar, Briefcase, Loader2 } from 'lucide-react';
+import { Search, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import dynamic from 'next/dynamic';
 
-// Define types for itinerary
-interface Activity {
-  time: string;
-  description: string;
-  location: string;
-}
-
-interface Day {
-  day: number;
-  title: string;
-  activities: Activity[];
-}
-
-interface Itinerary {
-  destination: string;
-  summary: string;
-  days: Day[];
-}
+const AnimatedLogo = dynamic(() => import('@/components/AnimatedLogo'), { ssr: false });
+const AuthModal = dynamic(() => import('@/components/AuthModal'), { ssr: false });
+const TypewriterText = dynamic(() => import('@/components/TypewriterText'), { ssr: false });
 
 export default function LandingPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [videoUrl, setVideoUrl] = useState<string>('');
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [userLocation, setUserLocation] = useState<string>('');
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
+  const [user, setUser] = useState<{ name: string, email: string } | null>(null);
+
+  useEffect(() => {
+    // Check for logged in user
+    const checkUser = () => {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      } else {
+        setUser(null);
+      }
+    };
+
+    checkUser();
+    window.addEventListener('storage', checkUser);
+    return () => window.removeEventListener('storage', checkUser);
+  }, []);
 
   useEffect(() => {
     // Fetch background video
@@ -37,6 +44,29 @@ export default function LandingPage() {
         if (data.url) setVideoUrl(data.url);
       })
       .catch(err => console.error('Failed to fetch video', err));
+
+    // Fetch User Location and set suggestions
+    fetch('https://ipapi.co/json/')
+      .then(res => res.json())
+      .then(data => {
+        const country = data.country_name;
+        setUserLocation(country);
+
+        // Suggest destinations based on location
+        if (country === 'India') {
+          setSuggestions(['Goa', 'Jaipur', 'Kerala', 'Manali', 'Rishikesh']);
+        } else if (['United States', 'Canada'].includes(country)) {
+          setSuggestions(['New York', 'Las Vegas', 'Hawaii', 'Miami', 'Banff']);
+        } else if (['United Kingdom', 'Ireland'].includes(country)) {
+          setSuggestions(['London', 'Edinburgh', 'Cornwall', 'Dublin', 'Lake District']);
+        } else {
+          setSuggestions(['Paris', 'Tokyo', 'Bali', 'New York', 'Santorini']);
+        }
+      })
+      .catch(() => {
+        // Fallback if location fetch fails
+        setSuggestions(['Paris', 'Tokyo', 'Bali', 'New York', 'Santorini']);
+      });
   }, []);
 
   const handleSearch = (e: React.FormEvent) => {
@@ -47,8 +77,26 @@ export default function LandingPage() {
     window.location.href = `/search?destination=${encodeURIComponent(searchQuery)}`;
   };
 
+  const handleSuggestionClick = (suggestion: string) => {
+    window.location.href = `/search?destination=${encodeURIComponent(suggestion)}`;
+  };
+
+  const openAuth = (mode: 'login' | 'signup') => {
+    setAuthMode(mode);
+    setIsAuthOpen(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setUser(null);
+    window.dispatchEvent(new Event('storage')); // Notify other tabs/components
+  };
+
   return (
     <div className="min-h-screen text-white flex flex-col relative overflow-x-hidden">
+      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} initialMode={authMode} />
+
       {/* Base Background Color (Always present, sits behind video) */}
       <div className="fixed inset-0 bg-[#0f172a] -z-30" />
 
@@ -81,14 +129,23 @@ export default function LandingPage() {
       {/* Header */}
       <header className="w-full py-6 px-8 flex justify-between items-center z-50">
         <div className="flex items-center gap-2">
-          <Briefcase className="w-8 h-8 text-blue-400" />
-          <h1 className="text-2xl font-bold text-white drop-shadow-md">
-            WeekendTravellers
+          <AnimatedLogo className="w-10 h-10 text-blue-400" />
+          <h1 className="text-2xl text-white drop-shadow-md">
+            <TypewriterText text="weekendtravellers.com" className="font-cursive text-3xl" delay={500} />
           </h1>
         </div>
-        <nav>
-          <Button variant="ghost" className="text-white hover:bg-white/10">Login</Button>
-          <Button className="bg-blue-600/80 hover:bg-blue-700 backdrop-blur-sm text-white ml-4 border border-blue-400/30">Sign Up</Button>
+        <nav className="flex items-center gap-4">
+          {user ? (
+            <div className="flex items-center gap-3">
+              <span className="text-sm font-medium text-slate-200">Hi, {user.name}</span>
+              <Button onClick={handleLogout} variant="ghost" className="text-white hover:bg-white/10 text-sm">Logout</Button>
+            </div>
+          ) : (
+            <>
+              <Button variant="ghost" onClick={() => openAuth('login')} className="text-white hover:bg-white/10">Login</Button>
+              <Button onClick={() => openAuth('signup')} className="bg-blue-600/80 hover:bg-blue-700 backdrop-blur-sm text-white ml-4 border border-blue-400/30">Sign Up</Button>
+            </>
+          )}
         </nav>
       </header>
 
@@ -120,25 +177,32 @@ export default function LandingPage() {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <div className="flex-1 flex items-center px-4 py-3 glass-input rounded-xl">
-              <Calendar className="w-5 h-5 text-slate-300 mr-3" />
-              <input
-                type="text"
-                placeholder="Add dates"
-                className="bg-transparent w-full outline-none text-white placeholder:text-slate-400 font-medium"
-              />
-            </div>
             <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl px-8 py-3 h-auto text-lg shadow-lg shadow-blue-900/50 min-w-[140px] border border-white/10">
               <Search className="w-5 h-5 mr-2" /> Search
             </Button>
           </form>
+
+          {/* Suggestions */}
+          {suggestions.length > 0 && (
+            <div className="mt-8 flex flex-wrap justify-center gap-3 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
+              <span className="text-slate-300 text-sm font-medium mr-2 self-center">
+                {userLocation ? `Popular in ${userLocation}:` : 'Trending:'}
+              </span>
+              {suggestions.map((place) => (
+                <button
+                  key={place}
+                  onClick={() => handleSuggestionClick(place)}
+                  className="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 rounded-full px-4 py-1.5 text-sm text-slate-100 transition-all hover:scale-105"
+                >
+                  {place}
+                </button>
+              ))}
+            </div>
+          )}
         </motion.div>
       </section>
 
-      {/* Footer */}
-      <footer className="w-full py-8 text-center text-slate-400 text-sm relative z-10 border-t border-white/5">
-        © 2026 WeekendTravellers. All rights reserved.
-      </footer>
+
     </div>
   );
 }

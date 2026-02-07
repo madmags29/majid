@@ -4,6 +4,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import searchRouter from './routes/search';
 import mediaRouter from './routes/media';
+import authRouter from './routes/auth';
+import tripsRouter from './routes/trips';
 
 dotenv.config();
 
@@ -37,6 +39,8 @@ app.get('/', (req, res) => {
 
 app.use('/api', searchRouter);
 app.use('/api', mediaRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/trips', tripsRouter);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
