@@ -1,6 +1,7 @@
 import express from 'express';
 import { generateItinerary } from '../services/ai';
 import { createClient } from 'pexels';
+import Cache from '../models/Cache';
 
 const router = express.Router();
 
@@ -11,6 +12,17 @@ router.post('/search', async (req, res) => {
         if (!destination) {
             return res.status(400).json({ error: 'Destination is required' });
         }
+
+        const cacheKey = `itinerary:${destination.toLowerCase()}:${days || 2}${interests ? `:${interests}` : ''}`;
+
+        // Check cache first
+        const cachedResult = await Cache.findOne({ key: cacheKey });
+        if (cachedResult && cachedResult.expiresAt > new Date()) {
+            console.log(`Cache hit for: ${cacheKey}`);
+            return res.json(cachedResult.value);
+        }
+
+        console.log(`Cache miss for: ${cacheKey}. Generating new itinerary...`);
 
         // 1. Generate Itinerary
         const itinerary = await generateItinerary(destination, days, interests);
@@ -38,6 +50,16 @@ router.post('/search', async (req, res) => {
 
             await Promise.all(imagePromises);
         }
+
+        // Store in cache for 24 hours
+        const expiresAt = new Date();
+        expiresAt.setHours(expiresAt.getHours() + 24);
+
+        await Cache.findOneAndUpdate(
+            { key: cacheKey },
+            { value: itinerary, expiresAt },
+            { upsert: true, new: true }
+        );
 
         res.json(itinerary);
     } catch (error) {
