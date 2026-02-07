@@ -23,7 +23,7 @@ const cursive = Sacramento({
 import Script from "next/script";
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://weekendtravellers.com'), // Replace with actual domain when deployed
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   title: {
     default: 'Weekend Travellers | AI-Powered Weekend Trip Planner',
     template: '%s | Weekend Travellers',
