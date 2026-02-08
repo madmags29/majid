@@ -126,9 +126,9 @@ export default function MyTripsPage() {
                         </Button>
                     </Link>
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 text-blue-400">
+                        <Link href="/" className="w-10 h-10 text-blue-400 hover:opacity-90 transition-opacity">
                             <AnimatedLogo />
-                        </div>
+                        </Link>
                         <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-200 to-purple-200">
                             My Trips
                         </h1>
@@ -151,6 +151,10 @@ export default function MyTripsPage() {
                                     <p className="text-xs leading-none text-slate-400">User Setup</p>
                                 </div>
                             </DropdownMenuLabel>
+                            <DropdownMenuSeparator className="bg-slate-800" />
+                            <DropdownMenuItem asChild className="focus:bg-slate-800 focus:text-white cursor-pointer hover:bg-slate-800">
+                                <Link href="/profile">My Profile</Link>
+                            </DropdownMenuItem>
                             <DropdownMenuSeparator className="bg-slate-800" />
                             <DropdownMenuItem asChild className="focus:bg-slate-800 focus:text-white cursor-pointer hover:bg-slate-800">
                                 <Link href="/trips">My Trips</Link>

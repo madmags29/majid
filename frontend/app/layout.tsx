@@ -70,6 +70,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -80,28 +82,30 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${cursive.variable} antialiased`}
       >
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460255466960810"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-4FBK6YT104"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
+        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
+          <Script
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460255466960810"
+            crossOrigin="anonymous"
+            strategy="afterInteractive"
+          />
+          <Script
+            src="https://www.googletagmanager.com/gtag/js?id=G-4FBK6YT104"
+            strategy="afterInteractive"
+          />
+          <Script id="google-analytics" strategy="afterInteractive">
+            {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
 
             gtag('config', 'G-4FBK6YT104');
         `}
-        </Script>
-        {children}
-        <Footer />
-        <Toaster position="top-center" richColors />
+          </Script>
+          {children}
+          <Footer />
+          <Toaster position="top-center" richColors />
+        </GoogleOAuthProvider>
       </body>
     </html>
   );

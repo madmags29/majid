@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { X, Mail, Lock, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { siGoogle, siFacebook, siApple } from 'simple-icons/icons';
+import { siGoogle } from 'simple-icons/icons';
+import { useGoogleLogin } from '@react-oauth/google';
 
 interface AuthModalProps {
     isOpen: boolean;
@@ -13,14 +14,54 @@ interface AuthModalProps {
 }
 
 export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: AuthModalProps) {
-    const [mode, setMode] = useState<'login' | 'signup'>(initialMode);
+    const [mode, setMode] = useState<'login' | 'signup' | 'forgot-password'>(initialMode);
     const [isLoading, setIsLoading] = useState(false);
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const login = useGoogleLogin({
+        onSuccess: async (tokenResponse) => {
+            setIsLoading(true);
+            try {
+                const { API_URL } = await import('@/lib/config');
+                const res = await fetch(`${API_URL}/api/auth/google`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: tokenResponse.access_token })
+                });
+
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.message);
+
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+
+                // Dispatch event for header update
+                window.dispatchEvent(new Event('storage'));
+                onClose();
+
+            } catch (error) {
+                console.error('Google Auth Failed:', error);
+                alert('Google Sign-In failed. Please try again.');
+            } finally {
+                setIsLoading(false);
+            }
+        },
+        onError: () => {
+            console.error('Google Login Failed');
+            setIsLoading(false);
+        }
+    });
 
     if (!isOpen) return null;
 
     const handleSocialLogin = async (provider: string) => {
+        if (provider === 'Google') {
+            login();
+            return;
+        }
+
         setIsLoading(true);
         try {
             // Simulating a provider response (e.g. from Google SDK)
@@ -61,13 +102,29 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: Au
         e.preventDefault();
         setIsLoading(true);
 
-        const endpoint = mode === 'login' ? '/api/auth/login' : '/api/auth/register';
-        const body = mode === 'login'
-            ? { email, password }
-            : { email, password, name: email.split('@')[0] }; // Default name from email for signup
-
         try {
             const { API_URL } = await import('@/lib/config');
+
+            if (mode === 'forgot-password') {
+                const res = await fetch(`${API_URL}/api/auth/forgot-password`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.message);
+
+                alert('If an account exists, a password reset link has been sent to your email.');
+                setMode('login'); // Return to login
+                return;
+            }
+
+            const endpoint = mode === 'login' ? '/api/auth/login' : '/api/auth/register';
+            const body = mode === 'login'
+                ? { email, password }
+                : { email, password, name };
+
             const res = await fetch(`${API_URL}${endpoint}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -126,52 +183,63 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: Au
                 <div className="p-8">
                     <div className="text-center mb-8">
                         <h2 className="text-2xl font-bold text-white mb-2">
-                            {mode === 'login' ? 'Welcome Back' : 'Create Account'}
+                            {mode === 'login' ? 'Welcome Back' : mode === 'signup' ? 'Create Account' : 'Reset Password'}
                         </h2>
                         <p className="text-slate-400 text-sm">
                             {mode === 'login'
                                 ? 'Enter your details to access your trips'
-                                : 'Start your journey with us today'}
+                                : mode === 'signup'
+                                    ? 'Start your journey with us today'
+                                    : 'Enter your email to receive a reset link'}
                         </p>
                     </div>
 
-                    {/* Social Buttons */}
-                    <div className="flex flex-col gap-3 mb-6">
-                        <button
-                            onClick={() => handleSocialLogin('Google')}
-                            className="flex items-center justify-center gap-3 w-full bg-white text-slate-900 hover:bg-slate-100 font-medium py-2.5 px-4 rounded-xl transition-all active:scale-[0.98]"
-                        >
-                            <IconWrapper path={siGoogle.path} />
-                            Continue with Google
-                        </button>
+                    {mode !== 'forgot-password' && (
+                        <>
+                            {/* Social Buttons */}
+                            <div className="flex flex-col gap-3 mb-6">
+                                <button
+                                    onClick={() => handleSocialLogin('Google')}
+                                    className="flex items-center justify-center gap-3 w-full bg-white text-slate-900 hover:bg-slate-100 font-medium py-2.5 px-4 rounded-xl transition-all active:scale-[0.98]"
+                                >
+                                    <IconWrapper path={siGoogle.path} />
+                                    Continue with Google
+                                </button>
 
-                        <div className="grid grid-cols-2 gap-3">
-                            <button
-                                onClick={() => handleSocialLogin('Facebook')}
-                                className="flex items-center justify-center gap-2 bg-[#1877F2] hover:bg-[#1864cc] text-white font-medium py-2.5 px-4 rounded-xl transition-all active:scale-[0.98]"
-                            >
-                                <IconWrapper path={siFacebook.path} />
-                                Facebook
-                            </button>
-                            <button
-                                onClick={() => handleSocialLogin('Apple')}
-                                className="flex items-center justify-center gap-2 bg-black hover:bg-slate-900 text-white border border-slate-800 font-medium py-2.5 px-4 rounded-xl transition-all active:scale-[0.98]"
-                            >
-                                <IconWrapper path={siApple.path} />
-                                Apple
-                            </button>
-                        </div>
-                    </div>
 
-                    {/* Divider */}
-                    <div className="relative flex items-center gap-4 mb-6">
-                        <div className="h-px bg-slate-800 flex-1" />
-                        <span className="text-xs text-slate-500 font-medium uppercase">Or continue with</span>
-                        <div className="h-px bg-slate-800 flex-1" />
-                    </div>
+                            </div>
+
+                            {/* Divider */}
+                            <div className="relative flex items-center gap-4 mb-6">
+                                <div className="h-px bg-slate-800 flex-1" />
+                                <span className="text-xs text-slate-500 font-medium uppercase">Or continue with</span>
+                                <div className="h-px bg-slate-800 flex-1" />
+                            </div>
+                        </>
+                    )}
 
                     {/* Email Form */}
                     <form onSubmit={handleSubmit} className="space-y-4">
+
+                        {mode === 'signup' && (
+                            <div className="space-y-1">
+                                <label className="text-xs font-medium text-slate-400 ml-1">Full Name</label>
+                                <div className="relative">
+                                    <div className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 flex items-center justify-center">
+                                        <span className="text-slate-500 text-xs font-bold">Aa</span>
+                                    </div>
+                                    <input
+                                        type="text"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        placeholder="John Doe"
+                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
+                                        required
+                                    />
+                                </div>
+                            </div>
+                        )}
+
                         <div className="space-y-1">
                             <label className="text-xs font-medium text-slate-400 ml-1">Email address</label>
                             <div className="relative">
@@ -187,20 +255,31 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: Au
                             </div>
                         </div>
 
-                        <div className="space-y-1">
-                            <label className="text-xs font-medium text-slate-400 ml-1">Password</label>
-                            <div className="relative">
-                                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-                                <input
-                                    type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    placeholder="••••••••"
-                                    className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
-                                    required
-                                />
+                        {mode !== 'forgot-password' && (
+                            <div className="space-y-1">
+                                <div className="flex justify-between items-center ml-1">
+                                    <label className="text-xs font-medium text-slate-400">Password</label>
+                                    <button
+                                        type="button"
+                                        onClick={() => setMode('forgot-password')}
+                                        className="text-xs text-blue-400 hover:text-blue-300 transition-colors"
+                                    >
+                                        Forgot password?
+                                    </button>
+                                </div>
+                                <div className="relative">
+                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                                    <input
+                                        type="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        placeholder="••••••••"
+                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all"
+                                        required
+                                    />
+                                </div>
                             </div>
-                        </div>
+                        )}
 
                         <Button
                             type="submit"
@@ -214,7 +293,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: Au
                                 </span>
                             ) : (
                                 <span className="flex items-center gap-2">
-                                    {mode === 'login' ? 'Sign In' : 'Create Account'}
+                                    {mode === 'login' ? 'Sign In' : mode === 'signup' ? 'Create Account' : 'Send Reset Link'}
                                     <ArrowRight className="w-4 h-4" />
                                 </span>
                             )}
@@ -224,17 +303,30 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: Au
                     {/* Toggle Mode */}
                     <div className="mt-6 text-center">
                         <p className="text-sm text-slate-400">
-                            {mode === 'login' ? "Don't have an account?" : "Already have an account?"}
-                            <button
-                                onClick={() => setMode(mode === 'login' ? 'signup' : 'login')}
-                                className="ml-2 text-blue-400 hover:text-blue-300 font-medium transition-colors"
-                            >
-                                {mode === 'login' ? 'Sign up' : 'Log in'}
-                            </button>
+                            {mode === 'forgot-password' ? (
+                                <>
+                                    <button
+                                        onClick={() => setMode('login')}
+                                        className="text-blue-400 hover:text-blue-300 font-medium transition-colors"
+                                    >
+                                        Back to Login
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    {mode === 'login' ? "Don't have an account?" : "Already have an account?"}
+                                    <button
+                                        onClick={() => setMode(mode === 'login' ? 'signup' : 'login')}
+                                        className="ml-2 text-blue-400 hover:text-blue-300 font-medium transition-colors"
+                                    >
+                                        {mode === 'login' ? 'Sign up' : 'Log in'}
+                                    </button>
+                                </>
+                            )}
                         </p>
                     </div>
-                </div>
-            </div>
-        </div>
+                </div >
+            </div >
+        </div >
     );
 }

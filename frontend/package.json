@@ -11,6 +11,7 @@
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.4",
     "@react-leaflet/core": "^3.0.0",
+    "@react-oauth/google": "^0.13.4",
     "@types/leaflet-routing-machine": "^3.2.9",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

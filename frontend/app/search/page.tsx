@@ -318,13 +318,15 @@ function SearchPageContent() {
                         </Button>
                     </Link>
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 text-blue-400">
-                            <AnimatedLogo />
-                        </div>
-                        <div className="flex flex-col md:flex-row md:items-center md:gap-3">
-                            <h1 className="text-xl md:text-3xl text-white tracking-tight">
+                        <Link href="/" className="contents">
+                            <div className="w-10 h-10 text-blue-400 hover:opacity-90 transition-opacity">
+                                <AnimatedLogo />
+                            </div>
+                            <h1 className="text-xl md:text-3xl text-white tracking-tight hover:opacity-90 transition-opacity">
                                 <TypewriterText text="weekendtravellers.com" className="font-cursive text-2xl md:text-4xl" delay={500} />
                             </h1>
+                        </Link>
+                        <div className="flex flex-col md:flex-row md:items-center md:gap-3">
                             <span className="hidden md:inline text-slate-500">|</span>
                             <h2 className="text-sm md:text-lg font-medium bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
                                 Trip to {destination}
@@ -378,6 +380,10 @@ function SearchPageContent() {
                                         <p className="text-xs leading-none text-slate-400">{user.email}</p>
                                     </div>
                                 </DropdownMenuLabel>
+                                <DropdownMenuSeparator className="bg-slate-800" />
+                                <DropdownMenuItem asChild className="focus:bg-slate-800 focus:text-white cursor-pointer">
+                                    <Link href="/profile">My Profile</Link>
+                                </DropdownMenuItem>
                                 <DropdownMenuSeparator className="bg-slate-800" />
                                 <DropdownMenuItem asChild className="focus:bg-slate-800 focus:text-white cursor-pointer">
                                     <Link href="/trips">My Trips</Link>

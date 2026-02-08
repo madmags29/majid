@@ -11,6 +11,16 @@ const AnimatedLogo = dynamic(() => import('@/components/AnimatedLogo'), { ssr: f
 const AuthModal = dynamic(() => import('@/components/AuthModal'), { ssr: false });
 const TypewriterText = dynamic(() => import('@/components/TypewriterText'), { ssr: false });
 
+import Link from 'next/link';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
 export default function LandingPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [videoUrl, setVideoUrl] = useState<string>('');
@@ -130,23 +140,61 @@ export default function LandingPage() {
 
       {/* Header */}
       <header className="w-full py-6 px-8 flex justify-between items-center z-50">
-        <div className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
           <AnimatedLogo className="w-10 h-10 text-blue-400" />
           <h1 className="text-3xl md:text-4xl text-white drop-shadow-md">
             <TypewriterText text="weekendtravellers.com" className="font-cursive text-4xl md:text-5xl" delay={500} />
           </h1>
-        </div>
+        </Link>
         <nav className="flex items-center gap-4">
           {user ? (
             <div className="flex items-center gap-3">
-              <span className="text-sm font-medium text-slate-200">Hi, {user.name}</span>
-              <Button onClick={handleLogout} variant="ghost" className="text-white hover:bg-white/10 text-sm">Logout</Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full bg-slate-800/50 border border-slate-700/50 hover:bg-slate-700/50">
+                    <div className="flex h-full w-full items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-500 text-white font-bold text-xs shadow-lg shadow-blue-500/20">
+                      {user.name.charAt(0).toUpperCase()}
+                    </div>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56 bg-slate-900 border-slate-800 text-slate-100" align="end">
+                  <DropdownMenuLabel>
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">{user.name}</p>
+                      <p className="text-xs leading-none text-slate-400">{user.email}</p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator className="bg-slate-800" />
+                  <DropdownMenuItem asChild className="focus:bg-slate-800 focus:text-white cursor-pointer hover:bg-slate-800">
+                    <Link href="/profile">My Profile</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator className="bg-slate-800" />
+                  <DropdownMenuItem asChild className="focus:bg-slate-800 focus:text-white cursor-pointer hover:bg-slate-800">
+                    <Link href="/trips">My Trips</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator className="bg-slate-800" />
+                  <DropdownMenuItem onClick={handleLogout} className="text-red-400 focus:text-red-300 focus:bg-slate-800 cursor-pointer hover:bg-slate-800">
+                    Log out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           ) : (
-            <>
-              <Button variant="ghost" onClick={() => openAuth('login')} className="text-white hover:bg-white/10">Login</Button>
-              <Button onClick={() => openAuth('signup')} className="bg-blue-600/80 hover:bg-blue-700 backdrop-blur-sm text-white ml-4 border border-blue-400/30">Sign Up</Button>
-            </>
+            <div className="flex items-center gap-4">
+              <Button
+                onClick={() => openAuth('login')}
+                variant="ghost"
+                className="text-slate-200 hover:text-white hover:bg-white/10 transition-all font-medium"
+              >
+                Login
+              </Button>
+              <Button
+                onClick={() => openAuth('signup')}
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25 border-0 rounded-xl px-6 transition-all transform hover:scale-105 active:scale-95"
+              >
+                Sign Up
+              </Button>
+            </div>
           )}
         </nav>
       </header>
