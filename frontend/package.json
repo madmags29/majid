@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev --hostname localhost",
     "build": "next build",
+    "vercel-build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
