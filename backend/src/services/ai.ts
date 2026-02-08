@@ -32,6 +32,14 @@ export async function generateItinerary(
         },
         "destination": "${destination}",
         "summary": "A brief summary of the trip.",
+        "special_events": [
+            {
+                "name": "Name of the event/festival",
+                "date": "When it happens (e.g. 'April', 'Every Sunday', 'Winter')",
+                "description": "Short description of what happens.",
+                "location": "Where it takes place"
+            }
+        ],
         "days": [
           {
             "day": 1,
@@ -51,7 +59,9 @@ export async function generateItinerary(
         ]
       }
       
-      Ensure the JSON is valid and strict. Do not include markdown code blocks.
+      IMPORTANT:
+      - Include "special_events" ONLY if there are notable recurring events, festivals, or markets in ${destination}. If none are famous, leave the array empty.
+      - Ensure the JSON is valid and strict. Do not include markdown code blocks.
     `;
 
     const completion = await openai.chat.completions.create({

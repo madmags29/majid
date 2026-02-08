@@ -53,9 +53,17 @@ interface TripDetails {
     };
 }
 
+interface SpecialEvent {
+    name: string;
+    date: string;
+    description: string;
+    location: string;
+}
+
 interface Itinerary {
     destination: string;
     summary: string;
+    special_events?: SpecialEvent[];
     trip_details: TripDetails;
     days: Day[];
 }
@@ -417,8 +425,8 @@ function SearchPageContent() {
                             <div key={idx} className={cn("flex gap-3", msg.role === 'user' ? "justify-end" : "justify-start")}>
 
                                 {msg.role === 'assistant' && (
-                                    <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center shrink-0 mt-1 shadow-lg shadow-blue-900/20">
-                                        <Bot className="w-5 h-5 text-white" />
+                                    <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center shrink-0 mt-1 shadow-lg shadow-blue-900/20 overflow-hidden">
+                                        <AnimatedLogo className="w-5 h-5 text-white" />
                                     </div>
                                 )}
 
@@ -473,6 +481,36 @@ function SearchPageContent() {
                                                         ))}
                                                     </div>
                                                 </div>
+                                                {/* Special Events Card */}
+                                                {(msg.content as Itinerary).special_events && (msg.content as Itinerary).special_events!.length > 0 && (
+                                                    <div className="bg-gradient-to-br from-purple-900/40 to-blue-900/40 rounded-xl p-4 border border-purple-500/30 shadow-lg mb-6 relative overflow-hidden group">
+                                                        <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+                                                            <Calendar className="w-16 h-16 text-purple-400 transform rotate-12" />
+                                                        </div>
+                                                        <h3 className="text-lg font-bold text-purple-200 mb-3 flex items-center relative z-10">
+                                                            <Calendar className="w-5 h-5 mr-2 text-purple-400" />
+                                                            Special Events & Festivals
+                                                        </h3>
+                                                        <div className="space-y-3 relative z-10">
+                                                            {(msg.content as Itinerary).special_events!.map((event, eIdx) => (
+                                                                <div key={eIdx} className="bg-slate-900/60 p-3 rounded-lg border border-purple-500/20 backdrop-blur-sm hover:border-purple-500/40 transition-colors">
+                                                                    <div className="flex justify-between items-start">
+                                                                        <div className="font-bold text-slate-200 text-sm">{event.name}</div>
+                                                                        <div className="text-[10px] uppercase font-bold text-purple-300 bg-purple-900/30 px-2 py-0.5 rounded border border-purple-500/30">
+                                                                            {event.date}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="text-xs text-slate-400 mt-1 flex items-center gap-1">
+                                                                        <MapPin className="w-3 h-3 text-slate-500" /> {event.location}
+                                                                    </div>
+                                                                    <div className="text-sm text-slate-300 mt-2 leading-snug">
+                                                                        {event.description}
+                                                                    </div>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
 
                                             <p className="font-medium text-blue-200">
@@ -540,8 +578,8 @@ function SearchPageContent() {
 
                         {loading && (
                             <div className="flex gap-3">
-                                <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center shrink-0 mt-1 animate-pulse">
-                                    <Bot className="w-5 h-5 text-white" />
+                                <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center shrink-0 mt-1 animate-pulse overflow-hidden">
+                                    <AnimatedLogo className="w-5 h-5 text-white" />
                                 </div>
                                 <div className="bg-slate-800 rounded-2xl p-4 rounded-tl-sm border border-slate-700 flex items-center">
                                     <Loader2 className="w-5 h-5 text-blue-400 animate-spin mr-2" />
@@ -552,8 +590,8 @@ function SearchPageContent() {
 
                         {isTyping && (
                             <div className="flex gap-3">
-                                <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center shrink-0 mt-1">
-                                    <Bot className="w-5 h-5 text-white" />
+                                <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center shrink-0 mt-1 overflow-hidden">
+                                    <AnimatedLogo className="w-5 h-5 text-white" />
                                 </div>
                                 <div className="bg-slate-800 rounded-2xl px-4 py-3 rounded-tl-sm border border-slate-700 flex items-center gap-1">
                                     <div className="w-2 h-2 bg-slate-500 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
