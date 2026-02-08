@@ -23,6 +23,7 @@ interface Trip {
     _id: string;
     destination: string;
     createdAt: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     itinerary?: any;
 }
 
@@ -56,7 +57,7 @@ export default function MyTripsPage() {
     };
 
     const fetchTrips = async (token: string) => {
-        const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
+        const { API_URL } = await import('@/lib/config');
         try {
             const res = await fetch(`${API_URL}/api/trips`, {
                 headers: {
@@ -69,7 +70,7 @@ export default function MyTripsPage() {
             } else {
                 toast.error('Failed to load trips');
             }
-        } catch (error) {
+        } catch {
             toast.error('Error connecting to server');
         } finally {
             setLoading(false);
@@ -81,7 +82,7 @@ export default function MyTripsPage() {
         if (!token) return;
 
         try {
-            const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
+            const { API_URL } = await import('@/lib/config');
             const res = await fetch(`${API_URL}/api/trips/${id}`, {
                 method: 'DELETE',
                 headers: {
@@ -95,7 +96,7 @@ export default function MyTripsPage() {
             } else {
                 toast.error('Failed to delete trip');
             }
-        } catch (error) {
+        } catch {
             toast.error('Error deleting trip');
         }
     };

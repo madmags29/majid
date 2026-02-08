@@ -20,15 +20,15 @@ export default function TypewriterText({
     const [isComplete, setIsComplete] = useState(false);
 
     useEffect(() => {
-        let timeout: NodeJS.Timeout;
         let interval: NodeJS.Timeout;
+
         let currentIndex = 0;
 
         // Reset state on effect triggers (handling prop changes / strict mode)
         setDisplayedText('');
         setIsComplete(false);
 
-        timeout = setTimeout(() => {
+        const timeout = setTimeout(() => {
             interval = setInterval(() => {
                 if (currentIndex < text.length) {
                     // Use slice to guarantee correct substring regardless of execution count

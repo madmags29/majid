@@ -43,10 +43,10 @@ export default function NotFound() {
 
                 <div className="space-y-4">
                     <h2 className="text-4xl md:text-5xl font-bold font-cursive text-blue-200">
-                        Looks like you're lost...
+                        Looks like you&apos;re lost...
                     </h2>
                     <p className="text-xl text-slate-300">
-                        The destination you're looking for is off the map. <br />
+                        The destination you&apos;re looking for is off the map. <br />
                         Why not discover somewhere new?
                     </p>
                 </div>

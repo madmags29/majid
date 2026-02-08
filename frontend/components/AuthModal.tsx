@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { X, Mail, Lock, User, Check, ArrowRight } from 'lucide-react';
+import { X, Mail, Lock, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { siGoogle, siFacebook, siApple } from 'simple-icons/icons';
@@ -32,7 +32,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: Au
                 picture: `https://api.dicebear.com/7.x/avataaars/svg?seed=${Date.now()}`
             };
 
-            const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
+            const { API_URL } = await import('@/lib/config');
             const res = await fetch(`${API_URL}/api/auth/social-login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -67,7 +67,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: Au
             : { email, password, name: email.split('@')[0] }; // Default name from email for signup
 
         try {
-            const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
+            const { API_URL } = await import('@/lib/config');
             const res = await fetch(`${API_URL}${endpoint}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

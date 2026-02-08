@@ -3,6 +3,14 @@
         {
             "source": "/(.*)",
             "dest": "/api/index.ts"
+<<<<<<< HEAD
+=======
         }
-    ]
+    ],
+    "functions": {
+        "api/index.ts": {
+            "maxDuration": 60
+>>>>>>> majid-works
+        }
+    }
 }

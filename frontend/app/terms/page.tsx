@@ -19,7 +19,7 @@ export default function TermsPage() {
                 <section className="space-y-4">
                     <h2 className="text-2xl font-semibold text-white">1. Agreement to Terms</h2>
                     <p className="text-slate-300 leading-relaxed">
-                        These Terms of Use constitute a legally binding agreement made between you, whether personally or on behalf of an entity (“you”) and Weekend Travellers ("we," "us" or "our"), concerning your access to and use of the weekendtravellers.com website as well as any other media form, media channel, mobile website or mobile application related, linked, or otherwise connected thereto (collectively, the “Site”).
+                        These Terms of Use constitute a legally binding agreement made between you, whether personally or on behalf of an entity (&ldquo;you&rdquo;) and Weekend Travellers (&quot;we,&quot; &quot;us&quot; or &quot;our&quot;), concerning your access to and use of the weekendtravellers.com website as well as any other media form, media channel, mobile website or mobile application related, linked, or otherwise connected thereto (collectively, the &ldquo;Site&rdquo;).
                     </p>
                 </section>
 

@@ -7,7 +7,8 @@ export default function AnimatedLogo({ className }: { className?: string }) {
     const [animate, setAnimate] = useState(false);
 
     useEffect(() => {
-        setAnimate(true);
+        const timer = setTimeout(() => setAnimate(true), 10);
+        return () => clearTimeout(timer);
     }, []);
 
     return (

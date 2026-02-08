@@ -6,6 +6,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
 // Fix for default marker icons in Next.js
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
     iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
@@ -70,7 +71,7 @@ const RoutingMachine = dynamic(() => import('./RoutingMachine'), { ssr: false })
 
 export default function MapView({ itinerary, selectedActivity }: MapViewProps) {
     const [center, setCenter] = useState<[number, number]>([48.8566, 2.3522]); // Default (Paris), will update
-    const [zoom, setZoom] = useState(13);
+    const [zoom] = useState(13);
     const markerRefs = useRef<{ [key: string]: L.Marker | null }>({});
 
     // Fetch coordinates for the destination
@@ -134,15 +135,7 @@ export default function MapView({ itinerary, selectedActivity }: MapViewProps) {
 
 
 
-    // Custom Dark Blue Icon
-    const customIcon = new L.Icon({
-        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png', // Using black as base for "dark" contrast or I can try a filter
-        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41]
-    });
+
     // Actually user said "Dark Blue". "Black" is close but not blue.
     // Let's use a divIcon with an SVG for precise color control.
     const darkBlueIcon = L.divIcon({
@@ -195,6 +188,7 @@ export default function MapView({ itinerary, selectedActivity }: MapViewProps) {
                         <div className="p-0 overflow-hidden rounded-lg">
                             {loc.imageUrl && (
                                 <div className="h-32 w-full overflow-hidden">
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img
                                         src={loc.imageUrl}
                                         alt={loc.location}

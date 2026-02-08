@@ -1,5 +1,6 @@
 import express from 'express';
 import { createClient } from 'pexels';
+import Cache from '../models/Cache';
 
 const router = express.Router();
 
@@ -15,6 +16,15 @@ router.get('/background-video', async (req, res) => {
     try {
         if (!PEXELS_API_KEY) {
             return res.status(500).json({ error: 'Pexels API key missing' });
+        }
+
+        const cacheKey = 'background_video';
+
+        // Check cache
+        const cachedResult = await Cache.findOne({ key: cacheKey });
+        if (cachedResult && cachedResult.expiresAt > new Date()) {
+            console.log(`Cache hit for: ${cacheKey}`);
+            return res.json(cachedResult.value);
         }
 
         // Search for videos - alternating between nature travel and monuments
@@ -34,14 +44,25 @@ router.get('/background-video', async (req, res) => {
             const video = response.videos[randomIndex];
 
             // Get the highest quality video file suitable for web background
-            // Usually the HD version (1280x720 or 1920x1080) is good
             const videoFile = video.video_files.find(f => f.quality === 'hd' && (f.width || 0) >= 1280) || video.video_files[0];
 
-            return res.json({
+            const result = {
                 url: videoFile.link,
                 photographer: video.user.name,
                 photographer_url: video.user.url
-            });
+            };
+
+            // Store in cache for 4 hours
+            const expiresAt = new Date();
+            expiresAt.setHours(expiresAt.getHours() + 4);
+
+            await Cache.findOneAndUpdate(
+                { key: cacheKey },
+                { value: result, expiresAt },
+                { upsert: true, new: true }
+            );
+
+            return res.json(result);
         }
 
         res.status(404).json({ error: 'No videos found' });
