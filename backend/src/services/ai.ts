@@ -10,19 +10,27 @@ const openai = new OpenAI({
 export async function generateItinerary(
   destination: string,
   days: number = 2,
-  interests?: string
+  interests?: string,
+  origin?: string
 ) {
   try {
     const prompt = `
       Create a detailed ${days}-day weekend trip itinerary for ${destination}.
+      ${origin ? `Assume the traveler is starting from ${origin}.` : 'Assume the traveler is starting from a nearby major city.'}
       ${interests ? `Focus on these interests: ${interests}.` : ''}
       
       Provide the response in the following JSON format:
       {
         "trip_details": {
           "currency": "Country specific currency symbol and code (e.g. ₹ INR)",
-          "estimated_budget": "Total estimated cost for the trip in local currency (low-mid range, numeric value only, e.g. 15000)",
+          "estimated_budget": "Total estimated cost for a couple (2 people) in local currency (low-mid range, numeric value only, e.g. 15000)",
           "best_time_to_visit": "Best months to visit (e.g. Oct-Mar)",
+          "travel_logistics": {
+            "bus": "Estimated time from origin (e.g. '6 hours')",
+            "train": "Estimated time from origin (e.g. '4 hours')",
+            "flight": "Estimated time from origin (e.g. '1.5 hours')",
+            "car": "Estimated time from origin (e.g. '5 hours')"
+          },
           "hotel_suggestions": [
             { "name": "Budget Hotel Name", "tier": "Budget", "price_range": "Price in local currency" },
             { "name": "Mid-range Hotel Name", "tier": "Mid", "price_range": "Price in local currency" },

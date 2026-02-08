@@ -21,9 +21,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+const VisitorCounter = dynamic(() => import('@/components/VisitorCounter'), { ssr: false });
+const FloatingDestinations = dynamic(() => import('@/components/FloatingDestinations'), { ssr: false });
+
 export default function LandingPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [videoUrl, setVideoUrl] = useState<string>('');
+  const [videoCredit, setVideoCredit] = useState<{ name: string, url: string } | null>(null);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [userLocation, setUserLocation] = useState<string>('');
   const [isAuthOpen, setIsAuthOpen] = useState(false);
@@ -52,7 +56,12 @@ export default function LandingPage() {
       fetch(`${API_URL}/api/background-video`)
         .then(res => res.json())
         .then(data => {
-          if (data.url) setVideoUrl(data.url);
+          if (data.url) {
+            setVideoUrl(data.url);
+            if (data.photographer) {
+              setVideoCredit({ name: data.photographer, url: data.photographer_url });
+            }
+          }
         })
         .catch(err => console.error("Failed to load video", err));
     });
@@ -61,8 +70,9 @@ export default function LandingPage() {
     fetch('https://ipapi.co/json/')
       .then(res => res.json())
       .then(data => {
+        const location = data.city ? `${data.city}, ${data.country_name}` : data.country_name;
+        setUserLocation(location);
         const country = data.country_name;
-        setUserLocation(country);
 
         // Suggest destinations based on location
         if (country === 'India') {
@@ -86,11 +96,13 @@ export default function LandingPage() {
     if (!searchQuery) return;
 
     // Navigate to search page with destination as query param
-    window.location.href = `/search?destination=${encodeURIComponent(searchQuery)}`;
+    const originParam = userLocation ? `&origin=${encodeURIComponent(userLocation)}` : '';
+    window.location.href = `/search?destination=${encodeURIComponent(searchQuery)}${originParam}`;
   };
 
   const handleSuggestionClick = (suggestion: string) => {
-    window.location.href = `/search?destination=${encodeURIComponent(suggestion)}`;
+    const originParam = userLocation ? `&origin=${encodeURIComponent(userLocation)}` : '';
+    window.location.href = `/search?destination=${encodeURIComponent(suggestion)}${originParam}`;
   };
 
   const openAuth = (mode: 'login' | 'signup') => {
@@ -126,6 +138,11 @@ export default function LandingPage() {
           >
             <source src={videoUrl} type="video/mp4" />
           </video>
+          {videoCredit && (
+            <div className="absolute bottom-4 right-4 z-20 text-[10px] text-slate-400 bg-black/40 px-2 py-1 rounded backdrop-blur-sm pointer-events-auto">
+              Video by <a href={videoCredit.url} target="_blank" rel="noopener noreferrer" className="text-slate-300 hover:text-white underline decoration-dashed">{videoCredit.name}</a> on Pexels
+            </div>
+          )}
         </div>
       )}
 
@@ -137,6 +154,8 @@ export default function LandingPage() {
           <div className="absolute bottom-[-10%] left-[20%] w-[40%] h-[40%] bg-indigo-500/20 rounded-full blur-[120px]"></div>
         </div>
       )}
+
+      <FloatingDestinations />
 
       {/* Header */}
       <header className="w-full py-6 px-8 flex justify-between items-center z-50">
@@ -207,6 +226,9 @@ export default function LandingPage() {
           transition={{ duration: 0.8 }}
           className="text-center max-w-4xl z-10 w-full"
         >
+          <div className="flex justify-center mb-6">
+            <VisitorCounter />
+          </div>
           <h2 className="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-6 drop-shadow-2xl">
             Discover Your Perfect <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200">Weekend Getaway</span>

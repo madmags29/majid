@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
-import { MapPin, Calendar, Loader2, Send, User, Bot, Heart, Share2, Check, ArrowLeft } from 'lucide-react';
+import { MapPin, Calendar, Loader2, Send, User, Bot, Heart, Share2, Check, ArrowLeft, Bus, Train, Plane, Car } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -23,6 +23,7 @@ const MapView = dynamic(() => import('@/components/MapView'), { ssr: false });
 const AnimatedLogo = dynamic(() => import('@/components/AnimatedLogo'), { ssr: false });
 const AuthModal = dynamic(() => import('@/components/AuthModal'), { ssr: false });
 const TypewriterText = dynamic(() => import('@/components/TypewriterText'), { ssr: false });
+const WeatherWidget = dynamic(() => import('@/components/WeatherWidget'), { ssr: false });
 
 interface Activity {
     time: string;
@@ -47,6 +48,12 @@ interface TripDetails {
         tier: string;
         price_range: string;
     }[];
+    travel_logistics?: {
+        bus: string;
+        train: string;
+        flight: string;
+        car: string;
+    };
     destination_coordinates: {
         lat: number;
         lng: number;
@@ -202,13 +209,14 @@ function SearchPageContent() {
     }, [destination]);
 
     const fetchItinerary = async (dest: string) => {
+        const origin = searchParams.get('origin');
         setLoading(true);
         const { API_URL } = await import('@/lib/config');
         try {
             const response = await fetch(`${API_URL}/api/search`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ destination: dest, days: 2 }),
+                body: JSON.stringify({ destination: dest, days: 2, origin }),
             });
 
             if (!response.ok) throw new Error('Failed to fetch itinerary');
@@ -425,16 +433,14 @@ function SearchPageContent() {
                             <div key={idx} className={cn("flex gap-3", msg.role === 'user' ? "justify-end" : "justify-start")}>
 
                                 {msg.role === 'assistant' && (
-                                    <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center shrink-0 mt-1 shadow-lg shadow-blue-900/20 overflow-hidden">
-                                        <AnimatedLogo className="w-5 h-5 text-white" />
+                                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shrink-0 mt-1 shadow-lg shadow-blue-900/20 overflow-hidden ring-1 ring-white/20">
+                                        <AnimatedLogo className="w-5 h-5 text-white" solid />
                                     </div>
                                 )}
 
                                 <div className={cn(
                                     "max-w-[85%] rounded-2xl p-4 shadow-md",
-                                    msg.role === 'user'
-                                        ? "bg-blue-600 text-white rounded-tr-sm"
-                                        : "bg-slate-800 text-slate-200 rounded-tl-sm border border-slate-700"
+                                    msg.role === 'user' ? "bg-blue-600 text-white rounded-tr-sm" : "bg-slate-800 text-slate-200 rounded-tl-sm border border-slate-700"
                                 )}>
                                     {msg.type === 'text' ? (
                                         <p className="leading-relaxed">{msg.content as string}</p>
@@ -449,18 +455,62 @@ function SearchPageContent() {
 
                                                 <div className="grid grid-cols-2 gap-4 mb-4">
                                                     <div className="bg-slate-800/50 p-3 rounded-lg border border-slate-700">
-                                                        <div className="text-xs text-slate-400 uppercase tracking-wider mb-1">Est. Budget</div>
+                                                        <div className="text-xs text-slate-400 uppercase tracking-wider mb-1">Est. Budget (Couple)</div>
                                                         <div className="text-xl font-bold text-green-400">
                                                             {(msg.content as Itinerary).trip_details?.currency} {(msg.content as Itinerary).trip_details?.estimated_budget}
                                                         </div>
                                                     </div>
-                                                    <div className="bg-slate-800/50 p-3 rounded-lg border border-slate-700">
-                                                        <div className="text-xs text-slate-400 uppercase tracking-wider mb-1">Best Time</div>
-                                                        <div className="text-sm font-bold text-slate-200 flex items-center h-full">
-                                                            <Calendar className="w-4 h-4 mr-2 text-purple-400" />
-                                                            {(msg.content as Itinerary).trip_details?.best_time_to_visit}
+                                                    <div className="bg-slate-800/50 p-3 rounded-lg border border-slate-700 flex flex-col justify-between">
+                                                        <div className="text-xs text-slate-400 uppercase tracking-wider mb-1">Best Time to Visit</div>
+                                                        <div className="text-sm font-bold text-slate-200 flex items-center">
+                                                            <Calendar className="w-4 h-4 mr-2 text-purple-400 shrink-0" />
+                                                            <span>{(msg.content as Itinerary).trip_details?.best_time_to_visit}</span>
                                                         </div>
                                                     </div>
+                                                </div>
+
+                                                <div className="grid grid-cols-2 gap-4 mb-4">
+                                                    {/* Weather Widget */}
+                                                    {(msg.content as Itinerary).trip_details?.destination_coordinates ? (
+                                                        <WeatherWidget
+                                                            lat={(msg.content as Itinerary).trip_details.destination_coordinates.lat}
+                                                            lng={(msg.content as Itinerary).trip_details.destination_coordinates.lng}
+                                                            className="h-full"
+                                                        />
+                                                    ) : (
+                                                        <div className="bg-slate-800/50 p-3 rounded-lg border border-slate-700 flex items-center justify-center text-slate-500 text-xs italic">
+                                                            Weather unavailable
+                                                        </div>
+                                                    )}
+
+                                                    {/* Travel Logistics */}
+                                                    {(msg.content as Itinerary).trip_details?.travel_logistics ? (
+                                                        <div className="bg-slate-800/50 p-3 rounded-lg border border-slate-700 flex flex-col justify-between">
+                                                            <div className="text-xs text-slate-400 uppercase tracking-wider mb-2">Estimated Travel Time</div>
+                                                            <div className="grid grid-cols-2 gap-2">
+                                                                <div className="flex items-center gap-2 text-xs text-slate-300">
+                                                                    <Bus className="w-3 h-3 text-blue-400" />
+                                                                    <span className="truncate" title={(msg.content as Itinerary).trip_details?.travel_logistics?.bus}>{(msg.content as Itinerary).trip_details?.travel_logistics?.bus}</span>
+                                                                </div>
+                                                                <div className="flex items-center gap-2 text-xs text-slate-300">
+                                                                    <Train className="w-3 h-3 text-orange-400" />
+                                                                    <span className="truncate" title={(msg.content as Itinerary).trip_details?.travel_logistics?.train}>{(msg.content as Itinerary).trip_details?.travel_logistics?.train}</span>
+                                                                </div>
+                                                                <div className="flex items-center gap-2 text-xs text-slate-300">
+                                                                    <Plane className="w-3 h-3 text-sky-400" />
+                                                                    <span className="truncate" title={(msg.content as Itinerary).trip_details?.travel_logistics?.flight}>{(msg.content as Itinerary).trip_details?.travel_logistics?.flight}</span>
+                                                                </div>
+                                                                <div className="flex items-center gap-2 text-xs text-slate-300">
+                                                                    <Car className="w-3 h-3 text-green-400" />
+                                                                    <span className="truncate" title={(msg.content as Itinerary).trip_details?.travel_logistics?.car}>{(msg.content as Itinerary).trip_details?.travel_logistics?.car}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        <div className="bg-slate-800/50 p-3 rounded-lg border border-slate-700 flex items-center justify-center text-slate-500 text-xs italic">
+                                                            Travel info unavailable
+                                                        </div>
+                                                    )}
                                                 </div>
 
                                                 {/* Distance (calculated client-side) */}
@@ -481,37 +531,38 @@ function SearchPageContent() {
                                                         ))}
                                                     </div>
                                                 </div>
-                                                {/* Special Events Card */}
-                                                {(msg.content as Itinerary).special_events && (msg.content as Itinerary).special_events!.length > 0 && (
-                                                    <div className="bg-gradient-to-br from-purple-900/40 to-blue-900/40 rounded-xl p-4 border border-purple-500/30 shadow-lg mb-6 relative overflow-hidden group">
-                                                        <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-                                                            <Calendar className="w-16 h-16 text-purple-400 transform rotate-12" />
-                                                        </div>
-                                                        <h3 className="text-lg font-bold text-purple-200 mb-3 flex items-center relative z-10">
-                                                            <Calendar className="w-5 h-5 mr-2 text-purple-400" />
-                                                            Special Events & Festivals
-                                                        </h3>
-                                                        <div className="space-y-3 relative z-10">
-                                                            {(msg.content as Itinerary).special_events!.map((event, eIdx) => (
-                                                                <div key={eIdx} className="bg-slate-900/60 p-3 rounded-lg border border-purple-500/20 backdrop-blur-sm hover:border-purple-500/40 transition-colors">
-                                                                    <div className="flex justify-between items-start">
-                                                                        <div className="font-bold text-slate-200 text-sm">{event.name}</div>
-                                                                        <div className="text-[10px] uppercase font-bold text-purple-300 bg-purple-900/30 px-2 py-0.5 rounded border border-purple-500/30">
-                                                                            {event.date}
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="text-xs text-slate-400 mt-1 flex items-center gap-1">
-                                                                        <MapPin className="w-3 h-3 text-slate-500" /> {event.location}
-                                                                    </div>
-                                                                    <div className="text-sm text-slate-300 mt-2 leading-snug">
-                                                                        {event.description}
+                                            </div>
+
+                                            {/* Special Events Card */}
+                                            {(msg.content as Itinerary).special_events && (msg.content as Itinerary).special_events!.length > 0 && (
+                                                <div className="bg-gradient-to-br from-purple-900/40 to-blue-900/40 rounded-xl p-4 border border-purple-500/30 shadow-lg mb-6 relative overflow-hidden group">
+                                                    <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+                                                        <Calendar className="w-16 h-16 text-purple-400 transform rotate-12" />
+                                                    </div>
+                                                    <h3 className="text-lg font-bold text-purple-200 mb-3 flex items-center relative z-10">
+                                                        <Calendar className="w-5 h-5 mr-2 text-purple-400" />
+                                                        Special Events & Festivals
+                                                    </h3>
+                                                    <div className="space-y-3 relative z-10">
+                                                        {(msg.content as Itinerary).special_events!.map((event, eIdx) => (
+                                                            <div key={eIdx} className="bg-slate-900/60 p-3 rounded-lg border border-purple-500/20 backdrop-blur-sm hover:border-purple-500/40 transition-colors">
+                                                                <div className="flex justify-between items-start">
+                                                                    <div className="font-bold text-slate-200 text-sm">{event.name}</div>
+                                                                    <div className="text-[10px] uppercase font-bold text-purple-300 bg-purple-900/30 px-2 py-0.5 rounded border border-purple-500/30">
+                                                                        {event.date}
                                                                     </div>
                                                                 </div>
-                                                            ))}
-                                                        </div>
+                                                                <div className="text-xs text-slate-400 mt-1 flex items-center gap-1">
+                                                                    <MapPin className="w-3 h-3 text-slate-500" /> {event.location}
+                                                                </div>
+                                                                <div className="text-sm text-slate-300 mt-2 leading-snug">
+                                                                    {event.description}
+                                                                </div>
+                                                            </div>
+                                                        ))}
                                                     </div>
-                                                )}
-                                            </div>
+                                                </div>
+                                            )}
 
                                             <p className="font-medium text-blue-200">
                                                 Here&apos;s a {(msg.content as Itinerary).days.length}-day itinerary for {(msg.content as Itinerary).destination}:
@@ -578,8 +629,8 @@ function SearchPageContent() {
 
                         {loading && (
                             <div className="flex gap-3">
-                                <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center shrink-0 mt-1 animate-pulse overflow-hidden">
-                                    <AnimatedLogo className="w-5 h-5 text-white" />
+                                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shrink-0 mt-1 animate-pulse overflow-hidden ring-1 ring-white/20">
+                                    <AnimatedLogo className="w-5 h-5 text-white" solid />
                                 </div>
                                 <div className="bg-slate-800 rounded-2xl p-4 rounded-tl-sm border border-slate-700 flex items-center">
                                     <Loader2 className="w-5 h-5 text-blue-400 animate-spin mr-2" />
@@ -590,8 +641,8 @@ function SearchPageContent() {
 
                         {isTyping && (
                             <div className="flex gap-3">
-                                <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center shrink-0 mt-1 overflow-hidden">
-                                    <AnimatedLogo className="w-5 h-5 text-white" />
+                                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shrink-0 mt-1 overflow-hidden ring-1 ring-white/20">
+                                    <AnimatedLogo className="w-5 h-5 text-white" solid />
                                 </div>
                                 <div className="bg-slate-800 rounded-2xl px-4 py-3 rounded-tl-sm border border-slate-700 flex items-center gap-1">
                                     <div className="w-2 h-2 bg-slate-500 rounded-full animate-bounce [animation-delay:-0.3s]"></div>

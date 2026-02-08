@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 
-export default function AnimatedLogo({ className }: { className?: string }) {
+export default function AnimatedLogo({ className, solid = false }: { className?: string, solid?: boolean }) {
     const [animate, setAnimate] = useState(false);
 
     useEffect(() => {
@@ -33,7 +33,7 @@ export default function AnimatedLogo({ className }: { className?: string }) {
                 <path
                     d="M 50 20 C 35 20 25 30 25 45 C 25 65 50 90 50 90 C 50 90 75 65 75 45 C 75 30 65 20 50 20 Z"
                     className={cn("transition-all duration-700 ease-out opacity-0 origin-bottom", animate && "opacity-100 scale-100")}
-                    stroke="url(#logoGradient)"
+                    stroke={solid ? "currentColor" : "url(#logoGradient)"}
                     strokeDasharray="200"
                     strokeDashoffset={animate ? 0 : 200}
                     style={{ transitionDelay: '0s', transformOrigin: '50% 90%' }}

@@ -7,13 +7,13 @@ const router = express.Router();
 
 router.post('/search', async (req, res) => {
     try {
-        const { destination, days, interests } = req.body;
+        const { destination, days, interests, origin } = req.body;
 
         if (!destination) {
             return res.status(400).json({ error: 'Destination is required' });
         }
 
-        const cacheKey = `itinerary:${destination.toLowerCase()}:${days || 2}${interests ? `:${interests}` : ''}`;
+        const cacheKey = `itinerary/v4:${destination.toLowerCase()}:${days || 2}${interests ? `:${interests}` : ''}${origin ? `:${origin.trim()}` : ''}`;
 
         // Check cache first
         const cachedResult = await Cache.findOne({ key: cacheKey });
@@ -25,7 +25,7 @@ router.post('/search', async (req, res) => {
         console.log(`Cache miss for: ${cacheKey}. Generating new itinerary...`);
 
         // 1. Generate Itinerary
-        const itinerary = await generateItinerary(destination, days, interests);
+        const itinerary = await generateItinerary(destination, days, interests, req.body.origin);
 
         // 2. Fetch Images for Activities
         if (process.env.PEXELS_API_KEY) {

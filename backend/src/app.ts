@@ -6,6 +6,7 @@ import searchRouter from './routes/search';
 import mediaRouter from './routes/media';
 import authRouter from './routes/auth';
 import tripsRouter from './routes/trips';
+import weatherRouter from './routes/weather';
 
 dotenv.config();
 
@@ -39,5 +40,6 @@ app.use('/api', searchRouter);
 app.use('/api', mediaRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/trips', tripsRouter);
+app.use('/api', weatherRouter);
 
 export default app;
