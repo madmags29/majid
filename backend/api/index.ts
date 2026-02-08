@@ -1,6 +1,4 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
+import serverlessExpress from '@vendia/serverless-express';
 import app from '../src/app';
 
-export default async (req: VercelRequest, res: VercelResponse) => {
-    return app(req, res);
-};
+export default serverlessExpress({ app });
