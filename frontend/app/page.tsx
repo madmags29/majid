@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Search, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+
 import dynamic from 'next/dynamic';
 
 const AnimatedLogo = dynamic(() => import('@/components/AnimatedLogo'), { ssr: false });

@@ -214,7 +214,7 @@ function SearchPageContent() {
                     content: data
                 }
             ]);
-        } catch (err) {
+        } catch {
             setMessages([
                 {
                     role: 'assistant',
@@ -288,7 +288,7 @@ function SearchPageContent() {
                     text: `Check out this weekend trip to ${destination}!`,
                     url
                 });
-            } catch (err) {
+            } catch {
                 // Ignore abort
             }
         } else {
@@ -470,7 +470,7 @@ function SearchPageContent() {
                                             </div>
 
                                             <p className="font-medium text-blue-200">
-                                                Here's a {(msg.content as Itinerary).days.length}-day itinerary for {(msg.content as Itinerary).destination}:
+                                                Here&apos;s a {(msg.content as Itinerary).days.length}-day itinerary for {(msg.content as Itinerary).destination}:
                                             </p>
                                             <div className="space-y-6">
                                                 {(msg.content as Itinerary).days.map((day) => (
@@ -505,6 +505,7 @@ function SearchPageContent() {
                                                                     {/* Activity Image */}
                                                                     {activity.imageUrl && (
                                                                         <div className="mt-2 mb-2 rounded-lg overflow-hidden h-32 w-full relative">
+                                                                            {/* eslint-disable-next-line @next/next/no-img-element */}
                                                                             <img
                                                                                 src={activity.imageUrl}
                                                                                 alt={activity.location}

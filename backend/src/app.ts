@@ -28,8 +28,6 @@ if (MONGODB_URI) {
         .catch((err) => {
             console.error('Error connecting to MongoDB:', err);
         });
-} else {
-    console.warn('⚠️  MONGODB_URI not found. Running in In-Memory Mode. Data will be lost on restart.');
 }
 
 // Routes

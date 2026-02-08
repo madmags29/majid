@@ -18,6 +18,7 @@ export default function RoutingMachine({ waypoints }: RoutingMachineProps) {
         // Clean up previous routing control if it exists
         if (routingControlRef.current) {
             try {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 if (map.hasLayer(routingControlRef.current as any)) {
                     map.removeControl(routingControlRef.current);
                 }
@@ -41,7 +42,7 @@ export default function RoutingMachine({ waypoints }: RoutingMachineProps) {
                 routeWhileDragging: false,
                 fitSelectedRoutes: true,
                 showAlternatives: false,
-                // @ts-ignore
+                // @ts-expect-error - createMarker is missing in types but required to hide markers
                 createMarker: () => null
             });
 
@@ -57,11 +58,12 @@ export default function RoutingMachine({ waypoints }: RoutingMachineProps) {
                     // Check if map still exists and has a container
                     if (map.getContainer && map.getContainer()) {
                         // Check if the control is still on the map before removing
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         if (map.hasLayer(routingControlRef.current as any)) {
                             map.removeControl(routingControlRef.current);
                         }
                     }
-                } catch (e) {
+                } catch {
                     // Silently fail - map is likely already being destroyed
                     console.debug("Routing control cleanup skipped (map already destroyed)");
                 }

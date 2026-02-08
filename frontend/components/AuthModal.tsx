@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { X, Mail, Lock, User, Check, ArrowRight } from 'lucide-react';
+import { X, Mail, Lock, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { siGoogle, siFacebook, siApple } from 'simple-icons/icons';

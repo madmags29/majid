@@ -27,9 +27,9 @@ export default function AboutPage() {
                     <div className="space-y-6">
                         <h2 className="text-2xl font-semibold text-white">Our Mission</h2>
                         <p className="text-slate-300 leading-relaxed">
-                            At Weekend Travellers, we believe that you don't need a long vacation to explore the world.
+                            At Weekend Travellers, we believe that you don&apos;t need a long vacation to explore the world.
                             Our mission is to help you discover hidden gems, plan perfect itineraries, and make the most
-                            of your weekends. Whether you're looking for adventure, relaxation, or culture, we've got you covered.
+                            of your weekends. Whether you&apos;re looking for adventure, relaxation, or culture, we&apos;ve got you covered.
                         </p>
                     </div>
                     <div className="grid grid-cols-2 gap-4">

@@ -23,6 +23,7 @@ interface Trip {
     _id: string;
     destination: string;
     createdAt: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     itinerary?: any;
 }
 
@@ -69,7 +70,7 @@ export default function MyTripsPage() {
             } else {
                 toast.error('Failed to load trips');
             }
-        } catch (error) {
+        } catch {
             toast.error('Error connecting to server');
         } finally {
             setLoading(false);
@@ -95,7 +96,7 @@ export default function MyTripsPage() {
             } else {
                 toast.error('Failed to delete trip');
             }
-        } catch (error) {
+        } catch {
             toast.error('Error deleting trip');
         }
     };
