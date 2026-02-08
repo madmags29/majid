@@ -32,33 +32,34 @@ export default function ProfilePage() {
             router.push('/');
             return;
         }
+
+        const fetchUserData = async (token: string) => {
+            try {
+                const { API_URL } = await import('@/lib/config');
+                const res = await fetch(`${API_URL}/api/auth/me`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    setUser(data);
+                    setName(data.name);
+                    setPicture(data.picture || '');
+                } else {
+                    toast.error('Failed to load profile');
+                    localStorage.removeItem('token'); // Clear invalid token
+                    router.push('/');
+                }
+            } catch (error) {
+                console.error(error);
+                toast.error('Connection error');
+            } finally {
+                setLoading(false);
+            }
+        };
+
         fetchUserData(token);
     }, [router]);
-
-    const fetchUserData = async (token: string) => {
-        try {
-            const { API_URL } = await import('@/lib/config');
-            const res = await fetch(`${API_URL}/api/auth/me`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-
-            if (res.ok) {
-                const data = await res.json();
-                setUser(data);
-                setName(data.name);
-                setPicture(data.picture || '');
-            } else {
-                toast.error('Failed to load profile');
-                localStorage.removeItem('token'); // Clear invalid token
-                router.push('/');
-            }
-        } catch (error) {
-            console.error(error);
-            toast.error('Connection error');
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const handleUpdateProfile = async (e: React.FormEvent) => {
         e.preventDefault();

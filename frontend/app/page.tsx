@@ -243,7 +243,7 @@ export default function LandingPage() {
               <MapPin className="w-5 h-5 text-slate-300 mr-3" />
               <input
                 type="text"
-                placeholder="Where to? (e.g., Paris)"
+                placeholder="Where to? (e.g. Paris) or 2 days weekend trip near me?"
                 className="bg-transparent w-full outline-none text-white placeholder:text-slate-400 font-medium"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}

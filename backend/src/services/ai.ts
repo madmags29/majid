@@ -23,7 +23,7 @@ export async function generateItinerary(
       {
         "trip_details": {
           "currency": "Country specific currency symbol and code (e.g. ₹ INR)",
-          "estimated_budget": "Total estimated cost for a couple (2 people) in local currency (low-mid range, numeric value only, e.g. 15000)",
+          "estimated_budget": "Total estimated cost per person in local currency (low-mid range, numeric value only, e.g. 7500)",
           "best_time_to_visit": "Best months to visit (e.g. Oct-Mar)",
           "travel_logistics": {
             "bus": "Estimated time from origin (e.g. '6 hours')",

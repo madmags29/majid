@@ -4,11 +4,9 @@ import { useEffect, useState } from 'react';
 import { Users } from 'lucide-react';
 
 export default function VisitorCounter() {
-    const [count, setCount] = useState(120);
+    const [count, setCount] = useState(() => Math.floor(Math.random() * (200 - 100 + 1) + 100));
 
     useEffect(() => {
-        // Initial random count between 100-200
-        setCount(Math.floor(Math.random() * (200 - 100 + 1) + 100));
 
         const interval = setInterval(() => {
             setCount(prev => {

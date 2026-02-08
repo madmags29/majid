@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
-import { MapPin, Calendar, Loader2, Send, User, Bot, Heart, Share2, Check, ArrowLeft, Bus, Train, Plane, Car } from 'lucide-react';
+import { MapPin, Calendar, Loader2, Send, User, Heart, Share2, Check, ArrowLeft, Bus, Train, Plane, Car } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -203,45 +203,45 @@ function SearchPageContent() {
     }, [messages, loading, isTyping]);
 
     useEffect(() => {
+        const fetchItinerary = async (dest: string) => {
+            const origin = searchParams.get('origin');
+            setLoading(true);
+            const { API_URL } = await import('@/lib/config');
+            try {
+                const response = await fetch(`${API_URL}/api/search`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ destination: dest, days: 2, origin }),
+                });
+
+                if (!response.ok) throw new Error('Failed to fetch itinerary');
+
+                const data = await response.json();
+                setCurrentItineraryData(data);
+                setMessages([
+                    {
+                        role: 'assistant',
+                        type: 'itinerary',
+                        content: data
+                    }
+                ]);
+            } catch {
+                setMessages([
+                    {
+                        role: 'assistant',
+                        type: 'text',
+                        content: 'Sorry, I succeeded in finding the destination but failed to generate an itinerary. Please try again.'
+                    }
+                ]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
         if (destination) {
             fetchItinerary(destination);
         }
-    }, [destination]);
-
-    const fetchItinerary = async (dest: string) => {
-        const origin = searchParams.get('origin');
-        setLoading(true);
-        const { API_URL } = await import('@/lib/config');
-        try {
-            const response = await fetch(`${API_URL}/api/search`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ destination: dest, days: 2, origin }),
-            });
-
-            if (!response.ok) throw new Error('Failed to fetch itinerary');
-
-            const data = await response.json();
-            setCurrentItineraryData(data);
-            setMessages([
-                {
-                    role: 'assistant',
-                    type: 'itinerary',
-                    content: data
-                }
-            ]);
-        } catch {
-            setMessages([
-                {
-                    role: 'assistant',
-                    type: 'text',
-                    content: 'Sorry, I succeeded in finding the destination but failed to generate an itinerary. Please try again.'
-                }
-            ]);
-        } finally {
-            setLoading(false);
-        }
-    };
+    }, [destination, searchParams]);
 
     const handleSend = async (e?: React.FormEvent) => {
         e?.preventDefault();
@@ -455,7 +455,7 @@ function SearchPageContent() {
 
                                                 <div className="grid grid-cols-2 gap-4 mb-4">
                                                     <div className="bg-slate-800/50 p-3 rounded-lg border border-slate-700">
-                                                        <div className="text-xs text-slate-400 uppercase tracking-wider mb-1">Est. Budget (Couple)</div>
+                                                        <div className="text-xs text-slate-400 uppercase tracking-wider mb-1">Est. Budget (Per Person)</div>
                                                         <div className="text-xl font-bold text-green-400">
                                                             {(msg.content as Itinerary).trip_details?.currency} {(msg.content as Itinerary).trip_details?.estimated_budget}
                                                         </div>
