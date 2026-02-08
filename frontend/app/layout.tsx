@@ -83,11 +83,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${cursive.variable} antialiased`}
       >
         <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
-          <Script
+          <script
             async
             src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460255466960810"
             crossOrigin="anonymous"
-            strategy="afterInteractive"
           />
           <Script
             src="https://www.googletagmanager.com/gtag/js?id=G-4FBK6YT104"

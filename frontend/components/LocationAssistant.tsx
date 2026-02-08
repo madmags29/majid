@@ -13,27 +13,37 @@ const LocationAssistant: React.FC<LocationAssistantProps> = ({ onLocationFound }
     const [status, setStatus] = useState<'idle' | 'prompting' | 'loading' | 'success' | 'error'>('idle');
     const [error, setError] = useState<string | null>(null);
     const [isVisible, setIsVisible] = useState(false);
+    const hasNotified = React.useRef(false);
 
     useEffect(() => {
+        // Run only once on mount to check cache
         const cached = localStorage.getItem('user_precise_location');
         if (cached) {
-            const { name, coords, timestamp } = JSON.parse(cached);
-            // Cache for 2 hours
-            if (Date.now() - timestamp < 7200000) {
-                onLocationFound(name, coords);
-                setStatus('success');
-                return;
+            try {
+                const { name, coords, timestamp } = JSON.parse(cached);
+                // Cache for 2 hours
+                if (Date.now() - timestamp < 7200000 && !hasNotified.current) {
+                    hasNotified.current = true;
+                    onLocationFound(name, coords);
+                    setStatus('success');
+                    return;
+                }
+            } catch (e) {
+                console.error('Failed to parse cached location', e);
             }
         }
 
-        // Show primer after a short delay
+        // Show primer after a short delay if not successful
         const timer = setTimeout(() => {
-            if (status !== 'success') {
-                setIsVisible(true);
-            }
+            setStatus(current => {
+                if (current !== 'success') {
+                    setIsVisible(true);
+                }
+                return current;
+            });
         }, 3000);
         return () => clearTimeout(timer);
-    }, [onLocationFound, status]);
+    }, [onLocationFound]); // onLocationFound is stabilized in parent
 
     const getPreciseLocation = () => {
         setStatus('loading');
@@ -56,7 +66,10 @@ const LocationAssistant: React.FC<LocationAssistantProps> = ({ onLocationFound }
 
                     setStatus('success');
                     setIsVisible(false);
-                    onLocationFound(fullLocation, { lat: latitude, lng: longitude });
+                    if (!hasNotified.current) {
+                        hasNotified.current = true;
+                        onLocationFound(fullLocation, { lat: latitude, lng: longitude });
+                    }
 
                     // Store in localStorage
                     localStorage.setItem('user_precise_location', JSON.stringify({

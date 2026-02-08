@@ -12,9 +12,23 @@ dotenv.config();
 
 const app = express();
 
-// Use an environment variable for the frontend URL in production
-const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
-app.use(cors({ origin: frontendUrl }));
+const allowedOrigins = [
+    'http://localhost:3000',
+    'https://frontend-tau-murex-95.vercel.app',
+    process.env.FRONTEND_URL
+].filter(Boolean);
+
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            console.warn(`Blocked by CORS: ${origin}`);
+            callback(null, false);
+        }
+    },
+    credentials: true
+}));
 app.use(express.json());
 
 // MongoDB Connection

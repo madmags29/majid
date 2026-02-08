@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Search, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -25,6 +25,8 @@ const VisitorCounter = dynamic(() => import('@/components/VisitorCounter'), { ss
 const FloatingDestinations = dynamic(() => import('@/components/FloatingDestinations'), { ssr: false });
 const LocationAssistant = dynamic(() => import('@/components/LocationAssistant'), { ssr: false });
 
+import { API_URL } from '@/lib/config';
+
 export default function LandingPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [videoUrl, setVideoUrl] = useState<string>('');
@@ -35,6 +37,7 @@ export default function LandingPage() {
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
   const [user, setUser] = useState<{ name: string, email: string } | null>(null);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
+  const [lastFetchedLocation, setLastFetchedLocation] = useState<string>('');
 
   useEffect(() => {
     const checkUser = () => {
@@ -51,61 +54,68 @@ export default function LandingPage() {
     return () => window.removeEventListener('storage', checkUser);
   }, []);
 
-  const fetchDynamicSuggestions = async (location: string) => {
+  const fetchDynamicSuggestions = useCallback(async (location: string) => {
+    if (!location || isLoadingSuggestions || location === lastFetchedLocation) return;
+
     setIsLoadingSuggestions(true);
+    setLastFetchedLocation(location);
     try {
-      const { API_URL } = await import('@/lib/config');
       const res = await fetch(`${API_URL}/api/suggestions?location=${encodeURIComponent(location)}`);
       if (!res.ok) throw new Error('Failed to fetch suggestions');
       const data = await res.json();
       setSuggestions(data);
     } catch (err) {
       console.error('Failed to load suggestions', err);
-      // Fallback
-      setSuggestions(['Paris', 'Tokyo', 'Bali', 'New York', 'Santorini']);
+      // Fallback only if no suggestions already exist
+      setSuggestions(prev => prev.length > 0 ? prev : ['Paris', 'Tokyo', 'Bali', 'New York', 'Santorini']);
     } finally {
       setIsLoadingSuggestions(false);
     }
-  };
+  }, [isLoadingSuggestions, lastFetchedLocation]);
 
-  const handleLocationFound = (location: string) => {
-    setUserLocation(location);
-    fetchDynamicSuggestions(location);
-  };
-
-  useEffect(() => {
-    import('@/lib/config').then(({ API_URL }) => {
-      // Fetch background video
-      fetch(`${API_URL}/api/background-video`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.url) {
-            setVideoUrl(data.url);
-            if (data.photographer) {
-              setVideoCredit({ name: data.photographer, url: data.photographer_url });
-            }
-          }
-        })
-        .catch(err => console.error("Failed to load video", err));
+  const handleLocationFound = useCallback((location: string) => {
+    setUserLocation(prev => {
+      if (prev === location) return prev;
+      return location;
     });
+  }, []);
 
-    // Initial coarse location for suggestions (until user allows high accuracy)
-    fetch('https://ipapi.co/json/')
+  // 2. Fetch background video and other one-time data
+  useEffect(() => {
+    fetch(`${API_URL}/api/background-video`)
       .then(res => res.json())
       .then(data => {
-        const location = data.city ? `${data.city}, ${data.country_name}` : data.country_name;
-        // Don't overwrite precise location if already found
-        if (!userLocation) {
-          setUserLocation(location);
-          fetchDynamicSuggestions(location);
+        if (data.url) {
+          setVideoUrl(data.url);
+          if (data.photographer) {
+            setVideoCredit({ name: data.photographer, url: data.photographer_url });
+          }
         }
       })
-      .catch(() => {
-        if (!userLocation) {
-          setSuggestions(['Paris', 'Tokyo', 'Bali', 'New York', 'Santorini']);
-        }
-      });
-  }, []);
+      .catch(err => console.error("Failed to load video", err));
+
+    // Initial coarse location for suggestions if not already set
+    if (!userLocation) {
+      fetch('https://ipapi.co/json/')
+        .then(res => res.json())
+        .then(data => {
+          const location = data.city ? `${data.city}, ${data.country_name}` : data.country_name;
+          setUserLocation(prev => prev || location);
+        })
+        .catch(() => {
+          if (!userLocation) {
+            setSuggestions(prev => prev.length > 0 ? prev : ['Paris', 'Tokyo', 'Bali', 'New York', 'Santorini']);
+          }
+        });
+    }
+  }, []); // Truly mount-only
+
+  // 3. React to userLocation changes to fetch suggestions
+  useEffect(() => {
+    if (userLocation) {
+      fetchDynamicSuggestions(userLocation);
+    }
+  }, [userLocation, fetchDynamicSuggestions]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();

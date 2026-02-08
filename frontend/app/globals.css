@@ -1,8 +1,5 @@
 @import "tailwindcss";
 @import "leaflet/dist/leaflet.css";
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 .font-cursive {
   font-family: var(--font-cursive), cursive;
