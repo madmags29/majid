@@ -56,7 +56,7 @@ export default function MyTripsPage() {
     };
 
     const fetchTrips = async (token: string) => {
-        const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
+        const { API_URL } = await import('@/lib/config');
         try {
             const res = await fetch(`${API_URL}/api/trips`, {
                 headers: {
@@ -81,7 +81,7 @@ export default function MyTripsPage() {
         if (!token) return;
 
         try {
-            const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
+            const { API_URL } = await import('@/lib/config');
             const res = await fetch(`${API_URL}/api/trips/${id}`, {
                 method: 'DELETE',
                 headers: {

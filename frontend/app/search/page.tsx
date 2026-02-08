@@ -195,7 +195,7 @@ function SearchPageContent() {
 
     const fetchItinerary = async (dest: string) => {
         setLoading(true);
-        const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
+        const { API_URL } = await import('@/lib/config');
         try {
             const response = await fetch(`${API_URL}/api/search`, {
                 method: 'POST',
@@ -256,7 +256,7 @@ function SearchPageContent() {
         if (!currentItineraryData) return;
 
         try {
-            const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
+            const { API_URL } = await import('@/lib/config');
             const res = await fetch(`${API_URL}/api/trips`, {
                 method: 'POST',
                 headers: {

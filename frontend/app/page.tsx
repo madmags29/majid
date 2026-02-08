@@ -37,14 +37,15 @@ export default function LandingPage() {
   }, []);
 
   useEffect(() => {
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
-    // Fetch background video
-    fetch(`${API_URL}/api/background-video`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.url) setVideoUrl(data.url);
-      })
-      .catch(err => console.error('Failed to fetch video', err));
+    import('@/lib/config').then(({ API_URL }) => {
+      // Fetch background video
+      fetch(`${API_URL}/api/background-video`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.url) setVideoUrl(data.url);
+        })
+        .catch(err => console.error("Failed to load video", err));
+    });
 
     // Fetch User Location and set suggestions
     fetch('https://ipapi.co/json/')
