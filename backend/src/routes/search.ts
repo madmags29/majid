@@ -1,5 +1,5 @@
 import express from 'express';
-import { generateItinerary } from '../services/ai';
+import { generateItinerary, generateSuggestions } from '../services/ai';
 import { createClient } from 'pexels';
 import Cache from '../models/Cache';
 
@@ -65,6 +65,41 @@ router.post('/search', async (req, res) => {
     } catch (error) {
         console.error('Search error:', error);
         res.status(500).json({ error: 'Failed to generate itinerary' });
+    }
+});
+
+router.get('/suggestions', async (req, res) => {
+    try {
+        const { location } = req.query;
+
+        if (!location) {
+            return res.status(400).json({ error: 'Location is required' });
+        }
+
+        const cacheKey = `suggestions:v1:${location.toString().toLowerCase()}`;
+
+        // Check cache
+        const cachedResult = await Cache.findOne({ key: cacheKey });
+        if (cachedResult && cachedResult.expiresAt > new Date()) {
+            return res.json(cachedResult.value);
+        }
+
+        const suggestions = await generateSuggestions(location.toString());
+
+        // Store in cache for 7 days
+        const expiresAt = new Date();
+        expiresAt.setDate(expiresAt.getDate() + 7);
+
+        await Cache.findOneAndUpdate(
+            { key: cacheKey },
+            { value: suggestions, expiresAt },
+            { upsert: true, new: true }
+        );
+
+        res.json(suggestions);
+    } catch (error) {
+        console.error('Suggestions error:', error);
+        res.status(500).json({ error: 'Failed to generate suggestions' });
     }
 });
 

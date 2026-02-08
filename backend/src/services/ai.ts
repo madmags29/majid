@@ -89,3 +89,36 @@ export async function generateItinerary(
     throw error;
   }
 }
+
+export async function generateSuggestions(location: string) {
+  try {
+    const prompt = `
+      Based on the starting location: "${location}", name 5 best and most popular weekend getaway destinations (towns or cities) that are within 500km distance from ${location}.
+      Provide the response as a JSON array of strings only.
+      Example: ["Destination 1", "Destination 2", "Destination 3", "Destination 4", "Destination 5"]
+    `;
+
+    const completion = await openai.chat.completions.create({
+      messages: [{ role: 'user', content: prompt }],
+      model: 'gpt-3.5-turbo',
+      response_format: { type: "json_object" },
+    });
+
+    const content = completion.choices[0].message.content;
+    if (!content) {
+      throw new Error('No content received from OpenAI');
+    }
+
+    const data = JSON.parse(content);
+    // Handle cases where OpenAI might wrap it in an object like { "suggestions": [...] }
+    if (Array.isArray(data)) return data;
+    if (data.suggestions && Array.isArray(data.suggestions)) return data.suggestions;
+    if (data.destinations && Array.isArray(data.destinations)) return data.destinations;
+
+    return Object.values(data)[0] as string[]; // Fallback to first array found
+  } catch (error) {
+    console.error('Error generating suggestions:', error);
+    // Global fallbacks if AI fails
+    return ['Paris', 'Tokyo', 'Bali', 'New York', 'Santorini'];
+  }
+}

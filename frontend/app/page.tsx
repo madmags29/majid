@@ -23,6 +23,7 @@ import {
 
 const VisitorCounter = dynamic(() => import('@/components/VisitorCounter'), { ssr: false });
 const FloatingDestinations = dynamic(() => import('@/components/FloatingDestinations'), { ssr: false });
+const LocationAssistant = dynamic(() => import('@/components/LocationAssistant'), { ssr: false });
 
 export default function LandingPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -33,9 +34,9 @@ export default function LandingPage() {
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
   const [user, setUser] = useState<{ name: string, email: string } | null>(null);
+  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
 
   useEffect(() => {
-    // Check for logged in user
     const checkUser = () => {
       const storedUser = localStorage.getItem('user');
       if (storedUser) {
@@ -49,6 +50,28 @@ export default function LandingPage() {
     window.addEventListener('storage', checkUser);
     return () => window.removeEventListener('storage', checkUser);
   }, []);
+
+  const fetchDynamicSuggestions = async (location: string) => {
+    setIsLoadingSuggestions(true);
+    try {
+      const { API_URL } = await import('@/lib/config');
+      const res = await fetch(`${API_URL}/api/suggestions?location=${encodeURIComponent(location)}`);
+      if (!res.ok) throw new Error('Failed to fetch suggestions');
+      const data = await res.json();
+      setSuggestions(data);
+    } catch (err) {
+      console.error('Failed to load suggestions', err);
+      // Fallback
+      setSuggestions(['Paris', 'Tokyo', 'Bali', 'New York', 'Santorini']);
+    } finally {
+      setIsLoadingSuggestions(false);
+    }
+  };
+
+  const handleLocationFound = (location: string) => {
+    setUserLocation(location);
+    fetchDynamicSuggestions(location);
+  };
 
   useEffect(() => {
     import('@/lib/config').then(({ API_URL }) => {
@@ -66,28 +89,21 @@ export default function LandingPage() {
         .catch(err => console.error("Failed to load video", err));
     });
 
-    // Fetch User Location and set suggestions
+    // Initial coarse location for suggestions (until user allows high accuracy)
     fetch('https://ipapi.co/json/')
       .then(res => res.json())
       .then(data => {
         const location = data.city ? `${data.city}, ${data.country_name}` : data.country_name;
-        setUserLocation(location);
-        const country = data.country_name;
-
-        // Suggest destinations based on location
-        if (country === 'India') {
-          setSuggestions(['Goa', 'Jaipur', 'Kerala', 'Manali', 'Rishikesh']);
-        } else if (['United States', 'Canada'].includes(country)) {
-          setSuggestions(['New York', 'Las Vegas', 'Hawaii', 'Miami', 'Banff']);
-        } else if (['United Kingdom', 'Ireland'].includes(country)) {
-          setSuggestions(['London', 'Edinburgh', 'Cornwall', 'Dublin', 'Lake District']);
-        } else {
-          setSuggestions(['Paris', 'Tokyo', 'Bali', 'New York', 'Santorini']);
+        // Don't overwrite precise location if already found
+        if (!userLocation) {
+          setUserLocation(location);
+          fetchDynamicSuggestions(location);
         }
       })
       .catch(() => {
-        // Fallback if location fetch fails
-        setSuggestions(['Paris', 'Tokyo', 'Bali', 'New York', 'Santorini']);
+        if (!userLocation) {
+          setSuggestions(['Paris', 'Tokyo', 'Bali', 'New York', 'Santorini']);
+        }
       });
   }, []);
 
@@ -156,6 +172,7 @@ export default function LandingPage() {
       )}
 
       <FloatingDestinations />
+      <LocationAssistant onLocationFound={handleLocationFound} />
 
       {/* Header */}
       <header className="w-full py-6 px-8 flex justify-between items-center z-50">
@@ -255,20 +272,28 @@ export default function LandingPage() {
           </form>
 
           {/* Suggestions */}
-          {suggestions.length > 0 && (
+          {(suggestions.length > 0 || isLoadingSuggestions) && (
             <div className="mt-8 flex flex-wrap justify-center gap-3 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
               <span className="text-slate-300 text-sm font-medium mr-2 self-center">
-                {userLocation ? `Popular in ${userLocation}:` : 'Trending:'}
+                {isLoadingSuggestions ? 'Finding best trips for you...' : (userLocation ? `Popular in ${userLocation}:` : 'Trending:')}
               </span>
-              {suggestions.map((place) => (
-                <button
-                  key={place}
-                  onClick={() => handleSuggestionClick(place)}
-                  className="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 rounded-full px-4 py-1.5 text-sm text-slate-100 transition-all hover:scale-105"
-                >
-                  {place}
-                </button>
-              ))}
+              {isLoadingSuggestions ? (
+                <div className="flex gap-2">
+                  {[1, 2, 3].map(i => (
+                    <div key={i} className="h-8 w-24 bg-white/10 rounded-full animate-pulse border border-white/5" />
+                  ))}
+                </div>
+              ) : (
+                suggestions.map((place) => (
+                  <button
+                    key={place}
+                    onClick={() => handleSuggestionClick(place)}
+                    className="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 rounded-full px-4 py-1.5 text-sm text-slate-100 transition-all hover:scale-105 active:scale-95"
+                  >
+                    {place}
+                  </button>
+                ))
+              )}
             </div>
           )}
         </motion.div>
