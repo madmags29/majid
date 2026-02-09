@@ -54,6 +54,11 @@ export const metadata: Metadata = {
     description: 'Weekend Travellers is your AI-powered companion for discovering and planning the perfect 2-day getaway.',
     images: ['/icon.svg'],
   },
+  icons: {
+    icon: '/icon.svg',
+    shortcut: '/icon.svg',
+    apple: '/icon.svg',
+  },
   robots: {
     index: true,
     follow: true,

@@ -2,6 +2,9 @@ import React from 'react';
 import { MapPin, Users, Heart, Globe } from 'lucide-react';
 import Link from 'next/link';
 import { Metadata } from 'next';
+import dynamic from 'next/dynamic';
+
+const AdBanner = dynamic(() => import('@/components/AdBanner'), { ssr: false });
 
 export const metadata: Metadata = {
     title: 'About Us',
@@ -70,6 +73,9 @@ export default function AboutPage() {
                         Plan Your Next Trip
                     </Link>
                 </div>
+
+                {/* Ad Banner */}
+                <AdBanner dataAdSlot="1111222233" />
             </div>
         </div>
     );

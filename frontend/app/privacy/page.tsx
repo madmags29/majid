@@ -1,5 +1,8 @@
 import React from 'react';
 import { Metadata } from 'next';
+import dynamic from 'next/dynamic';
+
+const AdBanner = dynamic(() => import('@/components/AdBanner'), { ssr: false });
 
 export const metadata: Metadata = {
     title: 'Privacy Policy',
@@ -70,6 +73,9 @@ export default function PrivacyPage() {
                         If you have any questions about this privacy policy or our privacy practices, please contact us at: privacy@weekendtravellers.com.
                     </p>
                 </section>
+
+                {/* Ad Banner */}
+                <AdBanner dataAdSlot="7777888899" />
             </div>
         </div>
     );

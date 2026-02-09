@@ -24,6 +24,7 @@ const AnimatedLogo = dynamic(() => import('@/components/AnimatedLogo'), { ssr: f
 const AuthModal = dynamic(() => import('@/components/AuthModal'), { ssr: false });
 const TypewriterText = dynamic(() => import('@/components/TypewriterText'), { ssr: false });
 const WeatherWidget = dynamic(() => import('@/components/WeatherWidget'), { ssr: false });
+const AdBanner = dynamic(() => import('@/components/AdBanner'), { ssr: false });
 
 interface Activity {
     time: string;
@@ -101,45 +102,92 @@ const DistanceDisplay = ({ destinationCoords }: { destinationCoords: { lat: numb
     const [userLoc, setUserLoc] = useState<{ lat: number, lng: number } | null>(null);
     const [distance, setDistance] = useState<number | null>(null);
 
+    const searchParams = useSearchParams();
+    const originParam = searchParams.get('origin');
+
     useEffect(() => {
-        const fetchIPLocation = async () => {
-            try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 5000);
-
-                const res = await fetch('https://ipapi.co/json/', { signal: controller.signal });
-                clearTimeout(timeoutId);
-
-                if (!res.ok) {
-                    throw new Error(`Location fetch failed: ${res.status}`);
+        const checkLocation = async () => {
+            // 1. Check LocalStorage Cache first
+            const cached = localStorage.getItem('user_precise_location');
+            let cachedCoords = null;
+            if (cached) {
+                try {
+                    const { coords, timestamp } = JSON.parse(cached);
+                    // Use cache if it's less than 24 hours old
+                    if (Date.now() - timestamp < 86400000) {
+                        cachedCoords = coords;
+                    }
+                } catch (e) {
+                    console.error("Error parsing cached location", e);
                 }
+            }
 
-                const data = await res.json();
-                if (data.latitude && data.longitude) {
-                    setUserLoc({ lat: data.latitude, lng: data.longitude });
+            // 2. If User provided an specific origin in the search, we should NOT ask for GPS.
+            // If the cached location matches the origin (fuzzy check) or if we just want to be safe,
+            // strictly speaking we can't calculate distance from "London" if we don't have its coords.
+            // But we definitely shouldn't ask for "Current Location" if they said they are starting from "London".
+            if (originParam) {
+                if (cachedCoords) {
+                    // If we have cache, we could use it, but valid only if it matches origin? 
+                    // For now, to solve the annoyance: IF origin is present, DO NOT PROMPT.
+                    // If we have cache, use it (assuming user might have set it). 
+                    // If not, we skip distance for now to avoid the prompt.
+                    setUserLoc(cachedCoords);
                 }
-            } catch (err) {
-                console.warn("Could not determine user location (IP API failed).", err);
+                return;
+            }
+
+            // 3. If no origin specified, try to use cache
+            if (cachedCoords) {
+                setUserLoc(cachedCoords);
+                return;
+            }
+
+            // 4. Fallback: IP Location (Non-intrusive)
+            const fetchIPLocation = async () => {
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 5000);
+                    const res = await fetch('https://ipapi.co/json/', { signal: controller.signal });
+                    clearTimeout(timeoutId);
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data.latitude && data.longitude) {
+                            setUserLoc({ lat: data.latitude, lng: data.longitude });
+                        }
+                    }
+                } catch (err) {
+                    console.warn("IP Location failed", err);
+                }
+            };
+
+            // 5. Only ask for GPS if NO origin param and NO cache
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        setUserLoc({
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        });
+                        // Cache this for future
+                        localStorage.setItem('user_precise_location', JSON.stringify({
+                            name: 'Current Location',
+                            coords: { lat: position.coords.latitude, lng: position.coords.longitude },
+                            timestamp: Date.now()
+                        }));
+                    },
+                    (error) => {
+                        console.warn("Geolocation denied/error, falling back to IP.", error);
+                        fetchIPLocation();
+                    }
+                );
+            } else {
+                fetchIPLocation();
             }
         };
 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    setUserLoc({
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude
-                    });
-                },
-                (error) => {
-                    console.warn("Geolocation denied/error, falling back to IP API.", error);
-                    fetchIPLocation();
-                }
-            );
-        } else {
-            fetchIPLocation();
-        }
-    }, []);
+        checkLocation();
+    }, [originParam]);
 
     useEffect(() => {
         if (userLoc && destinationCoords) {
@@ -329,13 +377,13 @@ function SearchPageContent() {
             <header className="bg-slate-900 border-b border-slate-800 px-4 py-3 md:px-6 md:py-4 flex items-center justify-between shadow-sm z-10 w-full">
                 <div className="flex items-center gap-2 md:gap-4">
                     <Link href="/">
-                        <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/10 w-8 h-8 md:w-10 md:h-10">
-                            <ArrowLeft className="w-4 h-4 md:w-5 md:h-5" />
+                        <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/10 w-10 h-10 md:w-10 md:h-10">
+                            <ArrowLeft className="w-5 h-5 md:w-5 md:h-5" />
                         </Button>
                     </Link>
                     <div className="flex items-center gap-2 md:gap-3">
                         <Link href="/" className="contents">
-                            <div className="w-8 h-8 md:w-10 md:h-10 text-blue-400 hover:opacity-90 transition-opacity">
+                            <div className="hidden">
                                 <AnimatedLogo />
                             </div>
                             <h1 className="text-lg md:text-3xl text-white tracking-tight hover:opacity-90 transition-opacity">
@@ -344,7 +392,7 @@ function SearchPageContent() {
                         </Link>
                         <div className="flex flex-col md:flex-row md:items-center md:gap-3">
                             <span className="hidden md:inline text-slate-500">|</span>
-                            <h2 className="text-[10px] md:text-lg font-medium bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent truncate max-w-[80px] md:max-w-none">
+                            <h2 className="text-sm md:text-lg font-medium bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent truncate max-w-[150px] md:max-w-none">
                                 Trip to {destination}
                             </h2>
                         </div>
@@ -434,13 +482,13 @@ function SearchPageContent() {
                             <div key={idx} className={cn("flex gap-3", msg.role === 'user' ? "justify-end" : "justify-start")}>
 
                                 {msg.role === 'assistant' && (
-                                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shrink-0 mt-1 shadow-lg shadow-blue-900/20 overflow-hidden ring-1 ring-white/20">
+                                    <div className="hidden md:flex w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 items-center justify-center shrink-0 mt-1 shadow-lg shadow-blue-900/20 overflow-hidden ring-1 ring-white/20">
                                         <AnimatedLogo className="w-5 h-5 text-white" solid />
                                     </div>
                                 )}
 
                                 <div className={cn(
-                                    "max-w-[85%] rounded-2xl p-4 shadow-md",
+                                    "w-full md:max-w-[85%] rounded-2xl p-4 shadow-md",
                                     msg.role === 'user' ? "bg-blue-600 text-white rounded-tr-sm" : "bg-slate-800 text-slate-200 rounded-tl-sm border border-slate-700"
                                 )}>
                                     {msg.type === 'text' ? (
@@ -615,22 +663,27 @@ function SearchPageContent() {
                                                         </div>
                                                     </div>
                                                 ))}
+
+                                                {/* Ad Banner after itineraries */}
+                                                <AdBanner dataAdSlot="5821234567" className="mt-4" />
                                             </div>
                                         </div>
                                     )}
                                 </div>
 
-                                {msg.role === 'user' && (
-                                    <div className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center shrink-0 mt-1">
-                                        <User className="w-5 h-5 text-slate-300" />
-                                    </div>
-                                )}
+                                {
+                                    msg.role === 'user' && (
+                                        <div className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center shrink-0 mt-1">
+                                            <User className="w-5 h-5 text-slate-300" />
+                                        </div>
+                                    )
+                                }
                             </div>
                         ))}
 
                         {loading && (
                             <div className="flex gap-3">
-                                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shrink-0 mt-1 animate-pulse overflow-hidden ring-1 ring-white/20">
+                                <div className="hidden md:flex w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 items-center justify-center shrink-0 mt-1 animate-pulse overflow-hidden ring-1 ring-white/20">
                                     <AnimatedLogo className="w-5 h-5 text-white" solid />
                                 </div>
                                 <div className="bg-slate-800 rounded-2xl p-4 rounded-tl-sm border border-slate-700 flex items-center">
@@ -642,7 +695,7 @@ function SearchPageContent() {
 
                         {isTyping && (
                             <div className="flex gap-3">
-                                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shrink-0 mt-1 overflow-hidden ring-1 ring-white/20">
+                                <div className="hidden md:flex w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 items-center justify-center shrink-0 mt-1 overflow-hidden ring-1 ring-white/20">
                                     <AnimatedLogo className="w-5 h-5 text-white" solid />
                                 </div>
                                 <div className="bg-slate-800 rounded-2xl px-4 py-3 rounded-tl-sm border border-slate-700 flex items-center gap-1">

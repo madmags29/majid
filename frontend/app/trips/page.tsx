@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const AnimatedLogo = dynamic(() => import('@/components/AnimatedLogo'), { ssr: false });
+const AdBanner = dynamic(() => import('@/components/AdBanner'), { ssr: false });
 
 interface Trip {
     _id: string;
@@ -122,13 +123,13 @@ export default function MyTripsPage() {
             <header className="p-6 flex items-center justify-between border-b border-white/10 bg-slate-900/50 backdrop-blur-md sticky top-0 z-10">
                 <div className="flex items-center gap-2 md:gap-4">
                     <Link href="/">
-                        <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/10 w-8 h-8 md:w-10 md:h-10">
-                            <ArrowLeft className="w-4 h-4 md:w-5 md:h-5" />
+                        <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/10 w-10 h-10 md:w-10 md:h-10">
+                            <ArrowLeft className="w-5 h-5 md:w-5 md:h-5" />
                         </Button>
                     </Link>
                     <div className="flex items-center gap-2 md:gap-3">
                         <Link href="/" className="contents">
-                            <div className="w-8 h-8 md:w-10 md:h-10 text-blue-400 hover:opacity-90 transition-opacity">
+                            <div className="hidden">
                                 <AnimatedLogo />
                             </div>
                             <h1 className="text-lg md:text-3xl text-white tracking-tight hover:opacity-90 transition-opacity">
@@ -137,7 +138,7 @@ export default function MyTripsPage() {
                         </Link>
                         <div className="flex flex-col md:flex-row md:items-center md:gap-3">
                             <span className="hidden md:inline text-slate-500">|</span>
-                            <h2 className="text-xs md:text-lg font-medium bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                            <h2 className="text-sm md:text-lg font-medium bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
                                 My Trips
                             </h2>
                         </div>
@@ -197,55 +198,62 @@ export default function MyTripsPage() {
                         </div>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {trips.map((trip) => (
-                            <motion.div
-                                key={trip._id}
-                                layout
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.9 }}
-                                className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden hover:border-blue-500/30 transition-all group shadow-lg"
-                            >
-                                {/* Placeholder Image Area */}
-                                <div className="h-40 bg-gradient-to-br from-slate-800 to-slate-900 relative p-6 flex flex-col justify-end">
-                                    <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
-                                        <Button
-                                            variant="secondary"
-                                            size="icon"
-                                            className="h-8 w-8 bg-black/50 hover:bg-black/70 text-white border border-white/10 backdrop-blur-sm"
-                                            onClick={() => handleShare(trip.destination)}
-                                            title="Share Trip"
-                                        >
-                                            <Share2 className="w-4 h-4" />
-                                        </Button>
-                                        <Button
-                                            variant="destructive"
-                                            size="icon"
-                                            className="h-8 w-8 hover:bg-red-600/90 border border-white/10 backdrop-blur-sm"
-                                            onClick={() => handleDelete(trip._id)}
-                                            title="Delete Trip"
-                                        >
-                                            <Trash2 className="w-4 h-4" />
-                                        </Button>
-                                    </div>
-                                    <h3 className="text-2xl font-bold text-white drop-shadow-md">{trip.destination}</h3>
-                                </div>
-
-                                <div className="p-4">
-                                    <div className="flex items-center text-xs text-slate-500 mb-4">
-                                        <Calendar className="w-3 h-3 mr-2" />
-                                        Saved on {new Date(trip.createdAt).toLocaleDateString()}
+                    <div className="flex flex-col gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {trips.map((trip) => (
+                                <motion.div
+                                    key={trip._id}
+                                    layout
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.9 }}
+                                    className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden hover:border-blue-500/30 transition-all group shadow-lg"
+                                >
+                                    {/* Placeholder Image Area */}
+                                    <div className="h-40 bg-gradient-to-br from-slate-800 to-slate-900 relative p-6 flex flex-col justify-end">
+                                        <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
+                                            <Button
+                                                variant="secondary"
+                                                size="icon"
+                                                className="h-8 w-8 bg-black/50 hover:bg-black/70 text-white border border-white/10 backdrop-blur-sm"
+                                                onClick={() => handleShare(trip.destination)}
+                                                title="Share Trip"
+                                            >
+                                                <Share2 className="w-4 h-4" />
+                                            </Button>
+                                            <Button
+                                                variant="destructive"
+                                                size="icon"
+                                                className="h-8 w-8 hover:bg-red-600/90 border border-white/10 backdrop-blur-sm"
+                                                onClick={() => handleDelete(trip._id)}
+                                                title="Delete Trip"
+                                            >
+                                                <Trash2 className="w-4 h-4" />
+                                            </Button>
+                                        </div>
+                                        <h3 className="text-2xl font-bold text-white drop-shadow-md">{trip.destination}</h3>
                                     </div>
 
-                                    <Link href={`/search?destination=${encodeURIComponent(trip.destination)}`}>
-                                        <Button className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 hover:border-slate-600">
-                                            View Itinerary
-                                        </Button>
-                                    </Link>
-                                </div>
-                            </motion.div>
-                        ))}
+                                    <div className="p-4">
+                                        <div className="flex items-center text-xs text-slate-500 mb-4">
+                                            <Calendar className="w-3 h-3 mr-2" />
+                                            Saved on {new Date(trip.createdAt).toLocaleDateString()}
+                                        </div>
+
+                                        <Link href={`/search?destination=${encodeURIComponent(trip.destination)}`}>
+                                            <Button className="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 hover:border-slate-600">
+                                                View Itinerary
+                                            </Button>
+                                        </Link>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </div>
+
+                        {/* Ad Banner after trips list */}
+                        <div className="max-w-4xl mx-auto w-full">
+                            <AdBanner dataAdSlot="7891234567" />
+                        </div>
                     </div>
                 )}
             </main>

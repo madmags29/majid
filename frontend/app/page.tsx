@@ -144,7 +144,7 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="h-screen text-white flex flex-col relative overflow-hidden">
+    <div className="min-h-screen text-white flex flex-col relative">
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} initialMode={authMode} />
 
       {/* Base Background Color (Always present, sits behind video) */}
@@ -246,7 +246,7 @@ export default function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="flex-1 flex flex-col items-center justify-center px-4 py-20 relative z-10">
+      <section className="flex-1 flex flex-col items-center justify-center px-4 py-20 pb-32 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

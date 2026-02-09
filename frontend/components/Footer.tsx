@@ -84,10 +84,6 @@ const Footer = () => {
                 <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-slate-500">
                     <div className="flex flex-col md:flex-row gap-4 items-center">
                         <p>&copy; {new Date().getFullYear()} Weekend Travellers. All rights reserved.</p>
-                        <span className="hidden md:inline text-slate-700">|</span>
-                        <p className="text-xs text-slate-600">
-                            Powered by <a href="https://openai.com" target="_blank" rel="noreferrer" className="hover:text-slate-400">OpenAI</a> & <a href="https://www.pexels.com" target="_blank" rel="noreferrer" className="hover:text-slate-400">Pexels</a>
-                        </p>
                     </div>
                     <div className="flex space-x-6 mt-4 md:mt-0">
                         <Link href="/privacy" className="hover:text-slate-300">Privacy</Link>

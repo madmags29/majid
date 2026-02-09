@@ -1,4 +1,7 @@
 import React from 'react';
+import dynamic from 'next/dynamic';
+
+const AdBanner = dynamic(() => import('@/components/AdBanner'), { ssr: false });
 
 export default function FAQ() {
     return (
@@ -14,6 +17,9 @@ export default function FAQ() {
                     <p className="text-muted-foreground mt-2">Yes, our basic trip planning features are free for all users.</p>
                 </div>
             </div>
+
+            {/* Ad Banner */}
+            <AdBanner dataAdSlot="4444555566" />
         </div>
     );
 }
