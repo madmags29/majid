@@ -271,7 +271,7 @@ export default function LandingPage() {
               <input
                 type="text"
                 placeholder="Where to? (e.g. Paris) or 2 days weekend trip near me?"
-                className="bg-transparent w-full outline-none text-white placeholder:text-slate-400 font-medium"
+                className="bg-transparent w-full outline-none text-white placeholder:text-slate-400 font-medium text-base"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />

@@ -716,7 +716,7 @@ function SearchPageContent() {
                                 placeholder="Ask for changes (e.g., 'Add a vegan lunch spot')..."
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
-                                className="w-full bg-slate-800 text-white placeholder:text-slate-500 text-sm rounded-xl py-5 pl-4 pr-12 focus:outline-none focus:ring-2 focus:ring-blue-500/50 border border-slate-700 transition-all hover:border-slate-600"
+                                className="w-full bg-slate-800 text-white placeholder:text-slate-500 text-base rounded-xl py-5 pl-4 pr-12 focus:outline-none focus:ring-2 focus:ring-blue-500/50 border border-slate-700 transition-all hover:border-slate-600"
                             />
                             <Button
                                 type="submit"
