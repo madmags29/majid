@@ -94,21 +94,23 @@ export default function WeatherWidget({ lat, lng, className }: WeatherWidgetProp
                 </a>
             </div>
 
-            <div className="flex items-center gap-3">
-                <div className="bg-slate-900/50 p-2 rounded-full border border-slate-700/50">
-                    {getWeatherIcon(current.weathercode)}
-                </div>
-                <div>
-                    <div className="text-xl font-bold text-slate-200 flex items-center">
-                        {Math.round(current.temperature)}°C
+            <div className="flex items-center flex-wrap gap-2 sm:gap-3">
+                <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-[120px]">
+                    <div className="bg-slate-900/50 p-2 rounded-full border border-slate-700/50 shrink-0">
+                        {getWeatherIcon(current.weathercode)}
                     </div>
-                    <div className="text-xs text-slate-400 font-medium">
-                        {getWeatherDesc(current.weathercode)}
+                    <div>
+                        <div className="text-xl font-bold text-slate-200 flex items-center">
+                            {Math.round(current.temperature)}°C
+                        </div>
+                        <div className="text-xs text-slate-400 font-medium">
+                            {getWeatherDesc(current.weathercode)}
+                        </div>
                     </div>
                 </div>
 
                 {(tempMax !== undefined && tempMin !== undefined) && (
-                    <div className="ml-auto flex flex-col items-end text-xs text-slate-500 border-l border-slate-700/50 pl-3">
+                    <div className="flex flex-row sm:flex-col items-center sm:items-end text-xs text-slate-500 border-t sm:border-t-0 sm:border-l border-slate-700/50 pt-2 sm:pt-0 sm:pl-3 w-full sm:w-auto gap-4 sm:gap-0">
                         <div className="flex items-center gap-1">
                             <Thermometer className="w-3 h-3 text-red-400" />
                             <span className="text-slate-400">H: {Math.round(tempMax)}°</span>

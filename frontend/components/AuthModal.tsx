@@ -21,6 +21,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: Au
     const [password, setPassword] = useState('');
 
     const login = useGoogleLogin({
+        flow: 'auth-code',
         onSuccess: async (tokenResponse) => {
             setIsLoading(true);
             try {
@@ -28,7 +29,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: Au
                 const res = await fetch(`${API_URL}/api/auth/google`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token: tokenResponse.access_token })
+                    body: JSON.stringify({ code: tokenResponse.code })
                 });
 
                 const data = await res.json();

@@ -1,6 +1,10 @@
+'use client';
+
 import Link from 'next/link';
 import { Instagram, Youtube } from 'lucide-react';
 import React from 'react';
+import dynamic from 'next/dynamic';
+const TypewriterText = dynamic(() => import('@/components/TypewriterText'), { ssr: false });
 
 const Footer = () => {
     return (
@@ -10,9 +14,11 @@ const Footer = () => {
                     {/* Brand Section */}
                     <div className="md:w-1/3">
                         <Link href="/" className="inline-block mb-4">
-                            <span className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent font-cursive">
-                                weekendtravellers.com
-                            </span>
+                            <TypewriterText
+                                text="weekendtravellers.com"
+                                className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent font-cursive"
+                                delay={1000}
+                            />
                         </Link>
                         <p className="text-sm text-slate-400 mb-4">
                             Discover your perfect weekend getaway. Plan, save, and share your adventures with ease.

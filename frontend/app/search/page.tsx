@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
-import { MapPin, Calendar, Loader2, Send, User, Heart, Share2, Check, ArrowLeft, Bus, Train, Plane, Car } from 'lucide-react';
+import { MapPin, Calendar, Loader2, Send, User, Heart, Share2, Check, ArrowLeft, Bus, Train, Plane, Car, LogIn } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -326,37 +326,37 @@ function SearchPageContent() {
             <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
 
             {/* Header */}
-            <header className="bg-slate-900 border-b border-slate-800 px-6 py-4 flex items-center justify-between shadow-sm z-10 w-full">
-                <div className="flex items-center gap-4">
+            <header className="bg-slate-900 border-b border-slate-800 px-4 py-3 md:px-6 md:py-4 flex items-center justify-between shadow-sm z-10 w-full">
+                <div className="flex items-center gap-2 md:gap-4">
                     <Link href="/">
-                        <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/10">
-                            <ArrowLeft className="w-5 h-5" />
+                        <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/10 w-8 h-8 md:w-10 md:h-10">
+                            <ArrowLeft className="w-4 h-4 md:w-5 md:h-5" />
                         </Button>
                     </Link>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2 md:gap-3">
                         <Link href="/" className="contents">
-                            <div className="w-10 h-10 text-blue-400 hover:opacity-90 transition-opacity">
+                            <div className="w-8 h-8 md:w-10 md:h-10 text-blue-400 hover:opacity-90 transition-opacity">
                                 <AnimatedLogo />
                             </div>
-                            <h1 className="text-xl md:text-3xl text-white tracking-tight hover:opacity-90 transition-opacity">
-                                <TypewriterText text="weekendtravellers.com" className="font-cursive text-2xl md:text-4xl" delay={500} />
+                            <h1 className="text-lg md:text-3xl text-white tracking-tight hover:opacity-90 transition-opacity">
+                                <TypewriterText text="weekendtravellers.com" className="font-cursive text-xl md:text-4xl" delay={500} hideAfter={3000} />
                             </h1>
                         </Link>
                         <div className="flex flex-col md:flex-row md:items-center md:gap-3">
                             <span className="hidden md:inline text-slate-500">|</span>
-                            <h2 className="text-sm md:text-lg font-medium bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                            <h2 className="text-[10px] md:text-lg font-medium bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent truncate max-w-[80px] md:max-w-none">
                                 Trip to {destination}
                             </h2>
                         </div>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 sm:gap-3">
                     <Button
                         onClick={handleShare}
                         size="sm"
                         className={cn(
-                            "gap-2 text-white border-0 shadow-lg shadow-blue-900/20",
+                            "h-8 sm:h-9 px-2 sm:px-3 gap-1 sm:gap-2 text-white border-0 shadow-lg shadow-blue-900/20",
                             isSharing
                                 ? "bg-green-600 hover:bg-green-700"
                                 : "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
@@ -370,7 +370,7 @@ function SearchPageContent() {
                         onClick={handleSave}
                         size="sm"
                         className={cn(
-                            "gap-2 transition-all text-white border-0 shadow-lg",
+                            "h-8 sm:h-9 px-2 sm:px-3 gap-1 sm:gap-2 transition-all text-white border-0 shadow-lg",
                             isSaved
                                 ? "bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 shadow-red-900/20 scale-105"
                                 : "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-blue-900/20 opacity-90 hover:opacity-100"
@@ -383,7 +383,7 @@ function SearchPageContent() {
                     {user ? (
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full bg-slate-800 border border-slate-700 hover:bg-slate-700">
+                                <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-9 sm:w-9 rounded-full bg-slate-800 border border-slate-700 hover:bg-slate-700">
                                     <div className="flex h-full w-full items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-500 text-white font-bold text-xs">
                                         {user.name.charAt(0).toUpperCase()}
                                     </div>
@@ -414,9 +414,10 @@ function SearchPageContent() {
                         <Button
                             onClick={() => setIsAuthOpen(true)}
                             size="sm"
-                            className="text-white border-0 shadow-lg shadow-blue-900/20 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                            className="h-8 sm:h-9 px-2 sm:px-3 text-white border-0 shadow-lg shadow-blue-900/20 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 flex items-center gap-1 sm:gap-2"
                         >
-                            Login
+                            <LogIn className="w-4 h-4" />
+                            <span className="hidden sm:inline">Login</span>
                         </Button>
                     )}
                 </div>
@@ -453,7 +454,7 @@ function SearchPageContent() {
                                                     Overview: {(msg.content as Itinerary).destination}
                                                 </h3>
 
-                                                <div className="grid grid-cols-2 gap-4 mb-4">
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                                     <div className="bg-slate-800/50 p-3 rounded-lg border border-slate-700">
                                                         <div className="text-xs text-slate-400 uppercase tracking-wider mb-1">Est. Budget (Per Person)</div>
                                                         <div className="text-xl font-bold text-green-400">
@@ -469,7 +470,7 @@ function SearchPageContent() {
                                                     </div>
                                                 </div>
 
-                                                <div className="grid grid-cols-2 gap-4 mb-4">
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                                     {/* Weather Widget */}
                                                     {(msg.content as Itinerary).trip_details?.destination_coordinates ? (
                                                         <WeatherWidget
@@ -487,7 +488,7 @@ function SearchPageContent() {
                                                     {(msg.content as Itinerary).trip_details?.travel_logistics ? (
                                                         <div className="bg-slate-800/50 p-3 rounded-lg border border-slate-700 flex flex-col justify-between">
                                                             <div className="text-xs text-slate-400 uppercase tracking-wider mb-2">Estimated Travel Time</div>
-                                                            <div className="grid grid-cols-2 gap-2">
+                                                            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-2 gap-2">
                                                                 <div className="flex items-center gap-2 text-xs text-slate-300">
                                                                     <Bus className="w-3 h-3 text-blue-400" />
                                                                     <span className="truncate" title={(msg.content as Itinerary).trip_details?.travel_logistics?.bus}>{(msg.content as Itinerary).trip_details?.travel_logistics?.bus}</span>
@@ -546,9 +547,9 @@ function SearchPageContent() {
                                                     <div className="space-y-3 relative z-10">
                                                         {(msg.content as Itinerary).special_events!.map((event, eIdx) => (
                                                             <div key={eIdx} className="bg-slate-900/60 p-3 rounded-lg border border-purple-500/20 backdrop-blur-sm hover:border-purple-500/40 transition-colors">
-                                                                <div className="flex justify-between items-start">
+                                                                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 sm:gap-0">
                                                                     <div className="font-bold text-slate-200 text-sm">{event.name}</div>
-                                                                    <div className="text-[10px] uppercase font-bold text-purple-300 bg-purple-900/30 px-2 py-0.5 rounded border border-purple-500/30">
+                                                                    <div className="text-[10px] uppercase font-bold text-purple-300 bg-purple-900/30 px-2 py-0.5 rounded border border-purple-500/30 self-start sm:self-auto">
                                                                         {event.date}
                                                                     </div>
                                                                 </div>

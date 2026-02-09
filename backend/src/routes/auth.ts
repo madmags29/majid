@@ -91,26 +91,41 @@ router.post('/login', async (req, res) => {
     }
 });
 
+import { OAuth2Client } from 'google-auth-library';
+const client = new OAuth2Client(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+    'postmessage'
+);
+
 // GOOGLE LOGIN
 router.post('/google', async (req, res) => {
     try {
-        const { token } = req.body;
+        const { code } = req.body;
 
-        if (!token) {
-            return res.status(400).json({ message: 'Token is required' });
+        if (!code) {
+            return res.status(400).json({ message: 'Code is required' });
         }
 
-        // Verify Google Token
-        const googleRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-            headers: { Authorization: `Bearer ${token}` }
+        // Exchange code for tokens
+        const { tokens } = await client.getToken(code);
+
+        // Verify the ID token
+        const ticket = await client.verifyIdToken({
+            idToken: tokens.id_token!,
+            audience: process.env.GOOGLE_CLIENT_ID
         });
 
-        if (!googleRes.ok) {
+        const payload = ticket.getPayload();
+        if (!payload) {
             return res.status(401).json({ message: 'Invalid Google Token' });
         }
 
-        const googleUser = await googleRes.json();
-        const { email, name, picture, sub: googleId } = googleUser;
+        const { email, name, picture, sub: googleId } = payload;
+
+        if (!email) {
+            return res.status(400).json({ message: 'Email not provided by Google' });
+        }
 
         // Find or create user
         let user = await User.findOne({ email });

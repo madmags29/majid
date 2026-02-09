@@ -185,11 +185,11 @@ export default function LandingPage() {
       <LocationAssistant onLocationFound={handleLocationFound} />
 
       {/* Header */}
-      <header className="w-full py-6 px-8 flex justify-between items-center z-50">
+      <header className="w-full py-4 px-6 flex justify-between items-center z-50">
         <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
-          <AnimatedLogo className="w-10 h-10 text-blue-400" />
-          <h1 className="text-3xl md:text-4xl text-white drop-shadow-md">
-            <TypewriterText text="weekendtravellers.com" className="font-cursive text-4xl md:text-5xl" delay={500} />
+          <AnimatedLogo className="w-8 h-8 md:w-10 md:h-10 text-blue-400" />
+          <h1 className="text-2xl md:text-3xl text-white drop-shadow-md">
+            <TypewriterText text="weekendtravellers.com" className="font-cursive text-3xl md:text-4xl" delay={500} hideAfter={3000} />
           </h1>
         </Link>
         <nav className="flex items-center gap-4">

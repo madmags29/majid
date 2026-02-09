@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+const TypewriterText = dynamic(() => import('@/components/TypewriterText'), { ssr: false });
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -119,19 +120,27 @@ export default function MyTripsPage() {
         <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
             {/* Header */}
             <header className="p-6 flex items-center justify-between border-b border-white/10 bg-slate-900/50 backdrop-blur-md sticky top-0 z-10">
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 md:gap-4">
                     <Link href="/">
-                        <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/10">
-                            <ArrowLeft className="w-5 h-5" />
+                        <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/10 w-8 h-8 md:w-10 md:h-10">
+                            <ArrowLeft className="w-4 h-4 md:w-5 md:h-5" />
                         </Button>
                     </Link>
-                    <div className="flex items-center gap-3">
-                        <Link href="/" className="w-10 h-10 text-blue-400 hover:opacity-90 transition-opacity">
-                            <AnimatedLogo />
+                    <div className="flex items-center gap-2 md:gap-3">
+                        <Link href="/" className="contents">
+                            <div className="w-8 h-8 md:w-10 md:h-10 text-blue-400 hover:opacity-90 transition-opacity">
+                                <AnimatedLogo />
+                            </div>
+                            <h1 className="text-lg md:text-3xl text-white tracking-tight hover:opacity-90 transition-opacity">
+                                <TypewriterText text="weekendtravellers.com" className="font-cursive text-xl md:text-4xl" delay={500} hideAfter={3000} />
+                            </h1>
                         </Link>
-                        <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-200 to-purple-200">
-                            My Trips
-                        </h1>
+                        <div className="flex flex-col md:flex-row md:items-center md:gap-3">
+                            <span className="hidden md:inline text-slate-500">|</span>
+                            <h2 className="text-xs md:text-lg font-medium bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                                My Trips
+                            </h2>
+                        </div>
                     </div>
                 </div>
 
