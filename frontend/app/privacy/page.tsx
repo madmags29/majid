@@ -1,8 +1,5 @@
-import React from 'react';
 import { Metadata } from 'next';
-import dynamic from 'next/dynamic';
-
-const AdBanner = dynamic(() => import('@/components/AdBanner'), { ssr: false });
+import AdBanner from '@/components/AdBanner';
 
 export const metadata: Metadata = {
     title: 'Privacy Policy',

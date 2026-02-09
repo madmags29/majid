@@ -1,7 +1,5 @@
 import React from 'react';
-import dynamic from 'next/dynamic';
-
-const AdBanner = dynamic(() => import('@/components/AdBanner'), { ssr: false });
+import AdBanner from '@/components/AdBanner';
 
 export default function FAQ() {
     return (

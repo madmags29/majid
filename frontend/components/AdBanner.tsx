@@ -17,8 +17,14 @@ const AdBanner = ({
 }: AdBannerProps) => {
     const adRef = useRef<HTMLModElement>(null);
     const [isLoaded, setIsLoaded] = useState(false);
+    const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    useEffect(() => {
+        if (!mounted) return;
         // Only run after the component is fully mounted and has a parent with width
         const timer = setTimeout(() => {
             if (typeof window !== 'undefined' && adRef.current) {
@@ -39,6 +45,8 @@ const AdBanner = ({
 
         return () => clearTimeout(timer);
     }, [isLoaded]);
+
+    if (!mounted) return null;
 
     return (
         <div className={`ad-container my-6 overflow-hidden flex justify-center w-full min-h-[100px] ${className}`}>
