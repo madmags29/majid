@@ -1,6 +1,9 @@
 {
     "name": "weekendtrip-root",
     "private": true,
+    "dependencies": {
+        "next": "16.1.6"
+    },
     "scripts": {
         "build": "cd frontend && npm install && npm run build"
     }
