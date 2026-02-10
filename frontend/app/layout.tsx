@@ -76,6 +76,7 @@ export const metadata: Metadata = {
 };
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { GOOGLE_CLIENT_ID } from '@/lib/config';
 
 export default function RootLayout({
   children,
@@ -88,7 +89,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${cursive.variable} antialiased`}
         suppressHydrationWarning
       >
-        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
+        <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
           <script
             async
             src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460255466960810"
