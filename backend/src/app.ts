@@ -14,6 +14,7 @@ const app = express();
 
 const allowedOrigins = [
     'http://localhost:3000',
+    'http://127.0.0.1:3000',
     'https://frontend-tau-murex-95.vercel.app',
     'https://www.weekendtravellers.com',
     'https://weekendtravellers.com',
@@ -21,14 +22,7 @@ const allowedOrigins = [
 ].filter(Boolean);
 
 app.use(cors({
-    origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            console.warn(`Blocked by CORS: ${origin}`);
-            callback(null, false);
-        }
-    },
+    origin: true,
     credentials: true
 }));
 app.use(express.json());

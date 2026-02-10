@@ -24,10 +24,10 @@ const Footer = () => {
                             Discover your perfect weekend getaway. Plan, save, and share your adventures with ease.
                         </p>
                         <div className="flex space-x-4">
-                            <Link href="#" className="hover:text-pink-500 transition-colors">
+                            <Link href="https://instagram.com/weekendtravellers.official" target="_blank" rel="noopener noreferrer" className="hover:text-pink-500 transition-colors">
                                 <Instagram size={24} />
                             </Link>
-                            <Link href="#" className="hover:text-red-500 transition-colors">
+                            <Link href="https://youtube.com/@weekendtravellers.official" target="_blank" rel="noopener noreferrer" className="hover:text-red-500 transition-colors">
                                 <Youtube size={24} />
                             </Link>
                         </div>
