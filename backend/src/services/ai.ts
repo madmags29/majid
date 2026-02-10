@@ -122,3 +122,45 @@ export async function generateSuggestions(location: string) {
     return ['Paris', 'Tokyo', 'Bali', 'New York', 'Santorini'];
   }
 }
+
+export async function updateItinerary(
+  currentItinerary: any,
+  userRequest: string
+) {
+  try {
+    const prompt = `
+      The user wants to modify their weekend trip itinerary for "${currentItinerary.destination}".
+      
+      User Request: "${userRequest}"
+      
+      Current Itinerary:
+      ${JSON.stringify(currentItinerary, null, 2)}
+      
+      Update the itinerary based on the user request. You can add, remove, or modify activities, hotel suggestions, or any other details. 
+      Maintain the same JSON structure as the current itinerary.
+      
+      IMPORTANT:
+      - Return the FULL updated itinerary as a JSON object.
+      - Ensure the JSON is valid and strict. Do not include markdown code blocks.
+      - Keep the "destination" field the same.
+      - Update "summary" if necessary to reflect the changes.
+      - If adding new activities, ensure "image_query" fields are included for them.
+    `;
+
+    const completion = await openai.chat.completions.create({
+      messages: [{ role: 'user', content: prompt }],
+      model: 'gpt-3.5-turbo',
+      response_format: { type: "json_object" },
+    });
+
+    const content = completion.choices[0].message.content;
+    if (!content) {
+      throw new Error('No content received from OpenAI');
+    }
+
+    return JSON.parse(content);
+  } catch (error) {
+    console.error('Error updating itinerary:', error);
+    throw error;
+  }
+}

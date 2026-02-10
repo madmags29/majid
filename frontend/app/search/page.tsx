@@ -19,12 +19,32 @@ import {
 
 
 // Dynamically import map to avoid SSR issues
-const MapView = dynamic(() => import('@/components/MapView'), { ssr: false });
-const AnimatedLogo = dynamic(() => import('@/components/AnimatedLogo'), { ssr: false });
-const AuthModal = dynamic(() => import('@/components/AuthModal'), { ssr: false });
-const TypewriterText = dynamic(() => import('@/components/TypewriterText'), { ssr: false });
-const WeatherWidget = dynamic(() => import('@/components/WeatherWidget'), { ssr: false });
-const AdBanner = dynamic(() => import('@/components/AdBanner'), { ssr: false });
+const MapView = dynamic(() => import('@/components/MapView'));
+const AnimatedLogo = dynamic(() => import('@/components/AnimatedLogo'));
+const AuthModal = dynamic(() => import('@/components/AuthModal'));
+const TypewriterText = dynamic(() => import('@/components/TypewriterText'));
+const WeatherWidget = dynamic(() => import('@/components/WeatherWidget'));
+const AdBanner = dynamic(() => import('@/components/AdBanner'));
+
+const TypingResponse = ({ content, onComplete }: { content: string, onComplete?: () => void }) => {
+    const [displayed, setDisplayed] = useState('');
+
+    useEffect(() => {
+        let i = 0;
+        const interval = setInterval(() => {
+            if (i < content.length) {
+                setDisplayed(content.slice(0, i + 1));
+                i++;
+            } else {
+                clearInterval(interval);
+                onComplete?.();
+            }
+        }, 10);
+        return () => clearInterval(interval);
+    }, [content, onComplete]);
+
+    return <p className="leading-relaxed">{displayed}</p>;
+};
 
 interface Activity {
     time: string;
@@ -293,21 +313,43 @@ function SearchPageContent() {
 
     const handleSend = async (e?: React.FormEvent) => {
         e?.preventDefault();
-        if (!input.trim()) return;
+        if (!input.trim() || loading || !currentItineraryData) return;
 
         const userMessage = input;
         setInput('');
         setMessages(prev => [...prev, { role: 'user', type: 'text', content: userMessage }]);
         setIsTyping(true);
 
-        setTimeout(() => {
+        try {
+            const { API_URL } = await import('@/lib/config');
+            const response = await fetch(`${API_URL}/api/chat`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    currentItinerary: currentItineraryData,
+                    userRequest: userMessage
+                }),
+            });
+
+            if (!response.ok) throw new Error('Failed to update itinerary');
+
+            const data = await response.json();
+            setCurrentItineraryData(data);
+            setMessages(prev => [...prev, {
+                role: 'assistant',
+                type: 'itinerary',
+                content: data
+            }]);
+        } catch (err) {
+            console.error(err);
             setMessages(prev => [...prev, {
                 role: 'assistant',
                 type: 'text',
-                content: "I'm focusing on the initial itinerary for now, but I'll be able to help with that request soon!"
+                content: "I'm sorry, I couldn't process that update right now. Please try again."
             }]);
+        } finally {
             setIsTyping(false);
-        }, 1500);
+        }
     };
 
     const handleSave = async () => {
@@ -387,7 +429,7 @@ function SearchPageContent() {
                                 <AnimatedLogo />
                             </div>
                             <h1 className="text-lg md:text-3xl text-white tracking-tight hover:opacity-90 transition-opacity">
-                                <TypewriterText text="weekendtravellers.com" className="font-cursive text-xl md:text-4xl" delay={500} hideAfter={3000} />
+                                <TypewriterText text="weekendtravellers.com" className="font-cursive text-xl md:text-4xl" delay={500} />
                             </h1>
                         </Link>
                         <div className="flex flex-col md:flex-row md:items-center md:gap-3">
@@ -492,9 +534,9 @@ function SearchPageContent() {
                                     msg.role === 'user' ? "bg-blue-600 text-white rounded-tr-sm" : "bg-slate-800 text-slate-200 rounded-tl-sm border border-slate-700"
                                 )}>
                                     {msg.type === 'text' ? (
-                                        <p className="leading-relaxed">{msg.content as string}</p>
+                                        <TypingResponse content={msg.content as string} />
                                     ) : (
-                                        <div className="space-y-4">
+                                        <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
                                             {/* Trip Overview Card */}
                                             <div className="bg-slate-900/80 rounded-xl p-4 border border-blue-500/20 shadow-lg mb-6">
                                                 <h3 className="text-lg font-bold text-blue-200 mb-3 flex items-center">
