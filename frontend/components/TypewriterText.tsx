@@ -19,7 +19,7 @@ export default function TypewriterText({
     delay = 0,
     hideAfter
 }: TypewriterTextProps) {
-    const [displayedText, setDisplayedText] = useState('');
+    const [displayedText, setDisplayedText] = useState(text); // Initial state is the full text for SSR and SEO
     const [isComplete, setIsComplete] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
 
@@ -29,8 +29,8 @@ export default function TypewriterText({
 
         let currentIndex = 0;
 
-        // Reset state on effect triggers
-        setDisplayedText('');
+        // Reset state for typing animation
+        setDisplayedText(''); // Start typing from empty on mount
         setIsComplete(false);
         setIsVisible(true);
 

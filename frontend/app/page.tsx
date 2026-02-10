@@ -7,9 +7,9 @@ import { Button } from '@/components/ui/button';
 
 import dynamic from 'next/dynamic';
 
-const AnimatedLogo = dynamic(() => import('@/components/AnimatedLogo'), { ssr: false });
-const AuthModal = dynamic(() => import('@/components/AuthModal'), { ssr: false });
-const TypewriterText = dynamic(() => import('@/components/TypewriterText'), { ssr: false });
+const AnimatedLogo = dynamic(() => import('@/components/AnimatedLogo'));
+const AuthModal = dynamic(() => import('@/components/AuthModal'));
+const TypewriterText = dynamic(() => import('@/components/TypewriterText'));
 
 import Link from 'next/link';
 import {
@@ -189,7 +189,7 @@ export default function LandingPage() {
         <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
           <AnimatedLogo className="w-8 h-8 md:w-10 md:h-10 text-blue-400" />
           <h1 className="text-2xl md:text-3xl text-white drop-shadow-md">
-            <TypewriterText text="weekendtravellers.com" className="font-cursive text-3xl md:text-4xl" delay={500} hideAfter={3000} />
+            <TypewriterText text="weekendtravellers.com" className="font-cursive text-3xl md:text-4xl" delay={500} />
           </h1>
         </Link>
         <nav className="flex items-center gap-4">
@@ -247,12 +247,7 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <section className="flex-1 flex flex-col items-center justify-center px-4 py-20 pb-32 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center max-w-4xl z-10 w-full"
-        >
+        <div className="text-center max-w-4xl z-10 w-full animate-in fade-in slide-in-from-bottom-8 duration-1000 fill-mode-both">
           <div className="flex justify-center mb-6">
             <VisitorCounter />
           </div>
@@ -306,7 +301,7 @@ export default function LandingPage() {
               )}
             </div>
           )}
-        </motion.div>
+        </div>
       </section>
 
 
