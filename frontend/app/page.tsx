@@ -143,6 +143,15 @@ export default function LandingPage() {
     window.dispatchEvent(new Event('storage')); // Notify other tabs/components
   };
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
     <div className="min-h-screen text-white flex flex-col relative">
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} initialMode={authMode} />
@@ -189,7 +198,12 @@ export default function LandingPage() {
         <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
           <AnimatedLogo className="w-8 h-8 md:w-10 md:h-10 text-blue-400" />
           <h1 className="text-2xl md:text-3xl text-white drop-shadow-md">
-            <TypewriterText text="weekendtravellers.com" className="font-cursive text-3xl md:text-4xl" delay={500} />
+            <TypewriterText
+              text="weekendtravellers.com"
+              className="font-cursive text-3xl md:text-4xl"
+              delay={500}
+              deleteAfter={isMobile ? 2000 : undefined}
+            />
           </h1>
         </Link>
         <nav className="flex items-center gap-4">

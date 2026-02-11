@@ -1,5 +1,6 @@
 import React from 'react';
 import { Metadata } from 'next';
+import { SUPPORT_EMAIL } from '@/lib/config';
 
 export const metadata: Metadata = {
     title: 'Terms & Conditions',
@@ -61,7 +62,7 @@ export default function TermsPage() {
                 <section className="space-y-4">
                     <h2 className="text-2xl font-semibold text-white">7. Contact Us</h2>
                     <p className="text-slate-300 leading-relaxed">
-                        In order to resolve a complaint regarding the Site or to receive further information regarding use of the Site, please contact us at: legal@weekendtravellers.com.
+                        In order to resolve a complaint regarding the Site or to receive further information regarding use of the Site, please contact us at: {SUPPORT_EMAIL}.
                     </p>
                 </section>
             </div>

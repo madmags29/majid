@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import AdBanner from '@/components/AdBanner';
+import { SUPPORT_EMAIL } from '@/lib/config';
 
 export const metadata: Metadata = {
     title: 'Privacy Policy',
@@ -67,7 +68,7 @@ export default function PrivacyPage() {
                 <section className="space-y-4">
                     <h2 className="text-2xl font-semibold text-white">6. Contact Us</h2>
                     <p className="text-slate-300 leading-relaxed">
-                        If you have any questions about this privacy policy or our privacy practices, please contact us at: privacy@weekendtravellers.com.
+                        If you have any questions about this privacy policy or our privacy practices, please contact us at: {SUPPORT_EMAIL}.
                     </p>
                 </section>
 

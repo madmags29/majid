@@ -411,6 +411,15 @@ function SearchPageContent() {
         .map(m => m.content as Itinerary)
         .at(-1);
 
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
     return (
         <div className="h-screen flex flex-col bg-slate-950 text-slate-100">
             <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
@@ -429,7 +438,12 @@ function SearchPageContent() {
                                 <AnimatedLogo />
                             </div>
                             <h1 className="text-lg md:text-3xl text-white tracking-tight hover:opacity-90 transition-opacity">
-                                <TypewriterText text="weekendtravellers.com" className="font-cursive text-xl md:text-4xl" delay={500} />
+                                <TypewriterText
+                                    text="weekendtravellers.com"
+                                    className="font-cursive text-xl md:text-4xl"
+                                    delay={500}
+                                    deleteAfter={isMobile ? 2000 : undefined}
+                                />
                             </h1>
                         </Link>
                         <div className="flex flex-col md:flex-row md:items-center md:gap-3">

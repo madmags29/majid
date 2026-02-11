@@ -10,6 +10,7 @@ interface TypewriterTextProps {
     cursorClassName?: string;
     delay?: number;
     hideAfter?: number;
+    deleteAfter?: number;
 }
 
 export default function TypewriterText({
@@ -17,15 +18,18 @@ export default function TypewriterText({
     className,
     cursorClassName,
     delay = 0,
-    hideAfter
+    hideAfter,
+    deleteAfter
 }: TypewriterTextProps) {
     const [displayedText, setDisplayedText] = useState(text); // Initial state is the full text for SSR and SEO
     const [isComplete, setIsComplete] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
         let interval: NodeJS.Timeout;
         let hideTimeout: NodeJS.Timeout;
+        let deleteTimeout: NodeJS.Timeout;
 
         let currentIndex = 0;
 
@@ -33,8 +37,9 @@ export default function TypewriterText({
         setDisplayedText(''); // Start typing from empty on mount
         setIsComplete(false);
         setIsVisible(true);
+        setIsDeleting(false);
 
-        const timeout = setTimeout(() => {
+        const typingTimeout = setTimeout(() => {
             interval = setInterval(() => {
                 if (currentIndex < text.length) {
                     setDisplayedText(text.slice(0, currentIndex + 1));
@@ -47,17 +52,32 @@ export default function TypewriterText({
                         hideTimeout = setTimeout(() => {
                             setIsVisible(false);
                         }, hideAfter);
+                    } else if (deleteAfter !== undefined) {
+                        deleteTimeout = setTimeout(() => {
+                            setIsDeleting(true);
+                            let deleteIndex = text.length;
+                            const deleteInterval = setInterval(() => {
+                                if (deleteIndex > 0) {
+                                    setDisplayedText(text.slice(0, deleteIndex - 1));
+                                    deleteIndex--;
+                                } else {
+                                    clearInterval(deleteInterval);
+                                    setIsVisible(false);
+                                }
+                            }, 50);
+                        }, deleteAfter);
                     }
                 }
             }, 100);
         }, delay);
 
         return () => {
-            clearTimeout(timeout);
+            clearTimeout(typingTimeout);
             clearInterval(interval);
             if (hideTimeout) clearTimeout(hideTimeout);
+            if (deleteTimeout) clearTimeout(deleteTimeout);
         };
-    }, [text, delay, hideAfter]);
+    }, [text, delay, hideAfter, deleteAfter]);
 
     return (
         <AnimatePresence>
@@ -72,7 +92,7 @@ export default function TypewriterText({
                     <span
                         className={cn(
                             "w-[2px] h-[1.2em] bg-current ml-1 animate-pulse",
-                            isComplete ? "opacity-0" : "opacity-100",
+                            (isComplete && !isDeleting) || (!isVisible) ? "opacity-0" : "opacity-100",
                             cursorClassName
                         )}
                     />
