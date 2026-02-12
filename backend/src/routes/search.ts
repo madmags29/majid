@@ -2,8 +2,41 @@ import express from 'express';
 import { generateItinerary, generateSuggestions, updateItinerary } from '../services/ai';
 import { createClient } from 'pexels';
 import Cache from '../models/Cache';
+import { getFlightPrices, getHotelPrices } from '../services/travelpayouts';
 
 const router = express.Router();
+
+async function enrichmentWithTravelData(itinerary: any, origin?: string, destination?: string) {
+    const travelPromises: Promise<any>[] = [];
+
+    if (origin && destination) {
+        travelPromises.push(
+            getFlightPrices(origin, destination)
+                .then((data: any) => {
+                    if (data && data.success && data.data) {
+                        const flights = Object.values(data.data);
+                        if (flights.length > 0) {
+                            itinerary.trip_details.verified_flights = flights;
+                        }
+                    }
+                })
+        );
+    }
+
+    if (destination) {
+        travelPromises.push(
+            getHotelPrices(destination)
+                .then((data: any) => {
+                    if (data && Array.isArray(data)) {
+                        itinerary.trip_details.verified_hotels = data;
+                    }
+                })
+        );
+    }
+
+    await Promise.all(travelPromises);
+    return itinerary;
+}
 
 async function enrichmentWithImages(itinerary: any) {
     if (process.env.PEXELS_API_KEY) {
@@ -57,6 +90,9 @@ router.post('/search', async (req, res) => {
         // 2. Fetch Images for Activities
         await enrichmentWithImages(itinerary);
 
+        // 3. Enrich with real travel data
+        await enrichmentWithTravelData(itinerary, origin, destination);
+
         // Store in cache for 24 hours
         const expiresAt = new Date();
         expiresAt.setHours(expiresAt.getHours() + 24);
@@ -87,6 +123,9 @@ router.post('/chat', async (req, res) => {
 
         // 2. Fetch Images for any new Activities
         await enrichmentWithImages(updatedItinerary);
+
+        // 3. Enrich with real travel data
+        await enrichmentWithTravelData(updatedItinerary, currentItinerary.origin, currentItinerary.destination);
 
         res.json(updatedItinerary);
     } catch (error) {
