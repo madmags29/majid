@@ -121,6 +121,16 @@ export default function RootLayout({
             gtag('config', 'G-4FBK6YT104');
         `}
           </Script>
+          <Script id="travelpayouts-tracking" strategy="afterInteractive" data-noptimize="1" data-cfasync="false" data-wpfc-render="false">
+            {`
+            (function () {
+                var script = document.createElement("script");
+                script.async = 1;
+                script.src = 'https://emrld.ltd/NDk3Nzc5.js?t=497779';
+                document.head.appendChild(script);
+            })();
+          `}
+          </Script>
           {children}
           <Footer />
           <Toaster position="top-center" richColors />
