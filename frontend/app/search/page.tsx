@@ -308,6 +308,7 @@ function SearchPageContent() {
 
         if (destination) {
             fetchItinerary(destination);
+            document.title = `${destination} | Ultimate 2-Day Itinerary`;
         }
     }, [destination, searchParams]);
 
@@ -390,8 +391,8 @@ function SearchPageContent() {
         if (navigator.share) {
             try {
                 await navigator.share({
-                    title: `Trip to ${destination}`,
-                    text: `Check out this weekend trip to ${destination}!`,
+                    title: `${destination} Adventure`,
+                    text: `Check out this perfect 2-day guide to ${destination}!`,
                     url
                 });
             } catch {
@@ -449,7 +450,7 @@ function SearchPageContent() {
                         <div className="flex flex-col md:flex-row md:items-center md:gap-3">
                             <span className="hidden md:inline text-slate-500">|</span>
                             <h2 className="text-sm md:text-lg font-medium bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent truncate max-w-[150px] md:max-w-none">
-                                Trip to {destination}
+                                {destination} | Perfect 2-Day Guide
                             </h2>
                         </div>
                     </div>
@@ -555,7 +556,7 @@ function SearchPageContent() {
                                             <div className="bg-slate-900/80 rounded-xl p-4 border border-blue-500/20 shadow-lg mb-6">
                                                 <h3 className="text-lg font-bold text-blue-200 mb-3 flex items-center">
                                                     <MapPin className="w-5 h-5 mr-2 text-blue-400" />
-                                                    Overview: {(msg.content as Itinerary).destination}
+                                                    Your Perfect Escape: {(msg.content as Itinerary).destination}
                                                 </h3>
 
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -670,7 +671,7 @@ function SearchPageContent() {
                                             )}
 
                                             <p className="font-medium text-blue-200">
-                                                Here&apos;s a {(msg.content as Itinerary).days.length}-day itinerary for {(msg.content as Itinerary).destination}:
+                                                Your Personalized {(msg.content as Itinerary).days.length}-Day Itinerary for {(msg.content as Itinerary).destination}:
                                             </p>
                                             <div className="space-y-6">
                                                 {(msg.content as Itinerary).days.map((day) => (
