@@ -25,19 +25,32 @@ import Script from "next/script";
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   title: {
-    default: 'Weekend Travellers | AI-Powered Weekend Trip Planner',
+    default: 'Weekend Travellers | Best AI-Powered Weekend Trip Planner 2025',
     template: '%s | Weekend Travellers',
   },
-  description: 'Weekend Travellers is your AI-powered companion for discovering and planning the perfect 2-day getaway. Get instant itineraries, driving routes, and budget estimates for your next adventure.',
-  keywords: ['weekend travellers', 'weekend trip planner', 'AI travel itineraries', 'short getaways', 'road trip planner', 'travel logistics', 'itinerary generator'],
+  description: 'Weekend Travellers is your best AI-powered companion for discovering and planning the perfect 2nd-day getaway in 2025. Get instant itineraries, driving routes, and budget estimates.',
+  keywords: [
+    'weekend travellers',
+    'weekend trip planner 2025',
+    'best AI travel planner',
+    'AI itinerary generator',
+    'short getaways',
+    'road trip planner AI',
+    'travel itinerary builder',
+    'personalized weekend trip',
+    'free AI travel assistant',
+    'smart travel planning',
+    'AI trip creator',
+    'best weekend getaways 2025'
+  ],
   authors: [{ name: 'Weekend Travellers Team' }],
   creator: 'Weekend Travellers',
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: 'https://weekendtravellers.com',
-    title: 'Weekend Travellers | AI-Powered Weekend Trip Planner',
-    description: 'Weekend Travellers is your AI-powered companion for discovering and planning the perfect 2-day getaway.',
+    title: 'Weekend Travellers | Best AI-Powered Weekend Trip Planner 2025',
+    description: 'Weekend Travellers is your best AI-powered companion for discovering and planning the perfect 2nd-day getaway in 2025.',
     siteName: 'Weekend Travellers',
     images: [
       {
@@ -50,8 +63,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Weekend Travellers | AI-Powered Weekend Trip Planner',
-    description: 'Weekend Travellers is your AI-powered companion for discovering and planning the perfect 2-day getaway.',
+    title: 'Weekend Travellers | Best AI-Powered Weekend Trip Planner 2025',
+    description: 'Weekend Travellers is your best AI-powered companion for discovering and planning the perfect 2nd-day getaway in 2025.',
     images: ['/icon.svg'],
   },
   icons: {

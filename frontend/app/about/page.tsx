@@ -4,8 +4,8 @@ import Link from 'next/link';
 import AdBanner from '@/components/AdBanner';
 
 export const metadata: Metadata = {
-    title: 'About Us',
-    description: 'Learn about our mission to help you discover the perfect weekend getaways.',
+    title: 'About Weekend Travellers | Our Mission for 2025',
+    description: 'Learn how Weekend Travellers uses AI to help you discover the perfect 2nd-day getaways and plan stress-free weekend trips in 2025.',
 };
 
 export default function AboutPage() {
