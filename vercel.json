@@ -3,19 +3,14 @@
     "buildCommand": "cd frontend && npm install && npm run build",
     "outputDirectory": "frontend/.next",
     "framework": "nextjs",
-    "functions": {
-        "backend/src/index.ts": {
-            "runtime": "@vercel/node"
-        }
-    },
     "rewrites": [
         {
             "source": "/api/(.*)",
-            "destination": "backend/src/index.ts"
+            "destination": "backend/api/index.ts"
         },
         {
-            "source": "/(.*)",
-            "destination": "/$1"
+            "source": "/AgodaPartnerVerification.htm",
+            "destination": "frontend/public/AgodaPartnerVerification.htm"
         }
     ]
 }
