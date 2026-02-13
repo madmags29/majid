@@ -85,6 +85,7 @@ export const metadata: Metadata = {
   },
   other: {
     'google-adsense-account': 'ca-pub-9460255466960810',
+    'agd-partner-manual-verification': '',
   },
 };
 
