@@ -10,7 +10,7 @@ import dynamic from 'next/dynamic';
 const AnimatedLogo = dynamic(() => import('@/components/AnimatedLogo'));
 const AuthModal = dynamic(() => import('@/components/AuthModal'));
 const TypewriterText = dynamic(() => import('@/components/TypewriterText'));
-
+const CategoryBanner = dynamic(() => import('@/components/CategoryBanner'));
 import Link from 'next/link';
 import {
   DropdownMenu,
@@ -315,6 +315,8 @@ export default function LandingPage() {
               )}
             </div>
           )}
+          {/* Travel Categories */}
+          <CategoryBanner />
         </div>
       </section>
 
