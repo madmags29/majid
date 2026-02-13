@@ -12,9 +12,14 @@ const CATEGORIES = [
     { name: 'Winter trips', icon: Snowflake, color: 'text-indigo-400', bg: 'bg-indigo-500/10', border: 'border-indigo-500/20' },
 ];
 
-export default function CategoryBanner() {
+interface CategoryBannerProps {
+    userLocation?: string;
+}
+
+export default function CategoryBanner({ userLocation }: CategoryBannerProps) {
     const handleCategoryClick = (category: string) => {
-        window.location.href = `/search?destination=${encodeURIComponent(category)}`;
+        const originParam = userLocation ? `&origin=${encodeURIComponent(userLocation)}` : '';
+        window.location.href = `/search?destination=${encodeURIComponent(category)}${originParam}`;
     };
 
     return (

@@ -316,7 +316,7 @@ export default function LandingPage() {
             </div>
           )}
           {/* Travel Categories */}
-          <CategoryBanner />
+          <CategoryBanner userLocation={userLocation} />
         </div>
       </section>
 
