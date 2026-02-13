@@ -54,6 +54,31 @@ const Footer = () => {
                                         Thailand
                                     </Link>
                                 </li>
+                                <li>
+                                    <Link href="/explore/asia/japan" className="hover:text-blue-400 transition-colors">
+                                        Japan
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/explore/asia/indonesia/bali" className="hover:text-blue-400 transition-colors">
+                                        Bali
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/explore/asia/uae/dubai" className="hover:text-blue-400 transition-colors">
+                                        Dubai
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/explore/asia/singapore" className="hover:text-blue-400 transition-colors">
+                                        Singapore
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/explore/oceania/australia" className="hover:text-blue-400 transition-colors">
+                                        Australia
+                                    </Link>
+                                </li>
                             </ul>
                         </div>
 

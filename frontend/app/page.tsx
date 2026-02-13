@@ -335,7 +335,10 @@ export default function LandingPage() {
             {[
               { name: 'India', slug: 'india', image: 'https://images.pexels.com/photos/1007427/pexels-photo-1007427.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'From the Himalayas to the backwaters of Kerala.' },
               { name: 'Europe', slug: 'europe', image: 'https://images.pexels.com/photos/1530259/pexels-photo-1530259.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Timeless cities, art, and legendary landscapes.' },
-              { name: 'Thailand', slug: 'asia/thailand', image: 'https://images.pexels.com/photos/2412711/pexels-photo-2412711.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Exotic beaches, street food, and golden temples.' }
+              { name: 'Thailand', slug: 'asia/thailand', image: 'https://images.pexels.com/photos/2412711/pexels-photo-2412711.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Exotic beaches, street food, and golden temples.' },
+              { name: 'Japan', slug: 'asia/japan', image: 'https://images.pexels.com/photos/1440476/pexels-photo-1440476.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Neon cities, ancient shrines, and cherry blossoms.' },
+              { name: 'Bali', slug: 'asia/indonesia/bali', image: 'https://images.pexels.com/photos/2166553/pexels-photo-2166553.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Tropical paradise, spiritual retreats, and surf.' },
+              { name: 'Goa', slug: 'india/goa', image: 'https://images.pexels.com/photos/4429334/pexels-photo-4429334.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Sun-drenched beaches and Portuguese heritage.' }
             ].map((region) => (
               <Link key={region.slug} href={`/explore/${region.slug}`} className="group relative h-96 rounded-3xl overflow-hidden border border-white/10 hover:border-blue-500/50 transition-all shadow-2xl">
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent z-10" />
