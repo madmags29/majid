@@ -35,15 +35,37 @@ const Footer = () => {
 
                     {/* Links Section */}
                     <div className="flex gap-16 md:gap-24">
-                        {/* Discover */}
+                        {/* Discover India */}
                         <div>
-                            <h3 className="text-white font-semibold mb-4 text-xs tracking-widest uppercase">Discover</h3>
+                            <h3 className="text-white font-semibold mb-4 text-xs tracking-widest uppercase">Discover India</h3>
                             <ul className="space-y-2 text-sm">
                                 <li>
                                     <Link href="/explore/india" className="hover:text-blue-400 transition-colors">
-                                        India
+                                        All India
                                     </Link>
                                 </li>
+                                <li>
+                                    <Link href="/explore/india/goa" className="hover:text-blue-400 transition-colors">
+                                        Goa
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/explore/india/rajasthan/jaipur" className="hover:text-blue-400 transition-colors">
+                                        Jaipur
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/explore/india/kerala" className="hover:text-blue-400 transition-colors">
+                                        Kerala
+                                    </Link>
+                                </li>
+                            </ul>
+                        </div>
+
+                        {/* Discover World */}
+                        <div>
+                            <h3 className="text-white font-semibold mb-4 text-xs tracking-widest uppercase">Discover World</h3>
+                            <ul className="space-y-2 text-sm">
                                 <li>
                                     <Link href="/explore/europe" className="hover:text-blue-400 transition-colors">
                                         Europe
@@ -67,16 +89,6 @@ const Footer = () => {
                                 <li>
                                     <Link href="/explore/asia/uae/dubai" className="hover:text-blue-400 transition-colors">
                                         Dubai
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link href="/explore/asia/singapore" className="hover:text-blue-400 transition-colors">
-                                        Singapore
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link href="/explore/oceania/australia" className="hover:text-blue-400 transition-colors">
-                                        Australia
                                     </Link>
                                 </li>
                             </ul>
