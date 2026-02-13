@@ -93,7 +93,7 @@ interface Itinerary {
     destination: string;
     duration: string;
     trip_details?: TripDetails;
-    itinerary: {
+    days: {
         day: number;
         title: string;
         activities: {
@@ -192,10 +192,14 @@ export default function SearchContent() {
         }
 
         try {
-            const res = await fetch(`${API_URL}/api/chat`, {
+            const res = await fetch(`${API_URL}/api/search`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: promptContext })
+                body: JSON.stringify({
+                    destination: dest,
+                    origin: userOrigin,
+                    days: 2
+                })
             });
 
             if (!res.ok) throw new Error('Failed to fetch');
@@ -204,8 +208,9 @@ export default function SearchContent() {
             // Simulate network/processing delay for realism if it's too fast
             await new Promise(resolve => setTimeout(resolve, 1500));
 
-            const itinerary: Itinerary = data.itinerary;
-            setCurrentItineraryData(itinerary); // Store strictly for "Save Trip" functionality
+            const itinerary: Itinerary = data;
+            setCurrentItineraryData(itinerary);
+            console.log('Production Search Response:', itinerary);
 
             // 1. Add intro text
             const introMsg: Message = {
@@ -254,11 +259,11 @@ export default function SearchContent() {
 
         try {
             // Context helps the AI modify the existing plan
-            const res = await fetch(`${API_URL}/api/refine`, {
+            const res = await fetch(`${API_URL}/api/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    message: userMsg,
+                    userRequest: userMsg,
                     currentItinerary: currentItineraryData
                 })
             });
@@ -266,7 +271,7 @@ export default function SearchContent() {
             if (!res.ok) throw new Error('Refinement failed');
             const data = await res.json();
 
-            const newItinerary = data.itinerary;
+            const newItinerary = data;
             setCurrentItineraryData(newItinerary);
 
             setTimeout(() => {
@@ -656,7 +661,7 @@ export default function SearchContent() {
                         <div className="h-full flex flex-col p-6 space-y-8">
                             {/* Itinerary Timeline */}
                             <div className="space-y-8 max-w-4xl mx-auto w-full">
-                                {currentItineraryData.itinerary.map((day) => (
+                                {currentItineraryData.days?.map((day) => (
                                     <div key={day.day} className="relative pl-8 border-l border-slate-800">
                                         <div className="absolute -left-3 top-0 w-6 h-6 bg-slate-900 border border-blue-500 rounded-full flex items-center justify-center text-xs font-bold text-blue-500">
                                             {day.day}

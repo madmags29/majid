@@ -1,4 +1,4 @@
-export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://backend-neon-alpha-83.vercel.app';
+export const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || (process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : 'http://localhost:3000');
 const getGoogleClientId = () => {
     const envId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;

@@ -73,7 +73,7 @@ router.post('/search', async (req, res) => {
             return res.status(400).json({ error: 'Destination is required' });
         }
 
-        const cacheKey = `itinerary/v5:${destination.toLowerCase()}:${days || 2}${interests ? `:${interests}` : ''}${origin ? `:${origin.trim()}` : ''}`;
+        const cacheKey = `itinerary/v8:${destination.toLowerCase()}:${days || 2}${interests ? `:${interests}` : ''}${origin ? `:${origin.trim()}` : ''}`;
 
         // Check cache first
         const cachedResult = await Cache.findOne({ key: cacheKey });
