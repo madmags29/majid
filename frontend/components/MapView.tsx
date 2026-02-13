@@ -114,9 +114,8 @@ export default function MapView({ itinerary, selectedActivity }: MapViewProps) {
     };
 
     // Extract all locations with stable coordinates
-    // We depend on 'center' so markers move when center updates (to the correct city)
     const locations = useMemo(() => {
-        return itinerary.days.flatMap((day, dayIdx) =>
+        const activityLocations = itinerary.days.flatMap((day, dayIdx) =>
             day.activities.map((activity, actIdx) => ({
                 id: `${day.day}-${actIdx}`,
                 position: getCoordinates(activity.location, dayIdx, actIdx, center),
@@ -126,21 +125,42 @@ export default function MapView({ itinerary, selectedActivity }: MapViewProps) {
                 imageUrl: activity.imageUrl,
                 ticket_price: activity.ticket_price,
                 day: day.day,
+                type: 'activity'
             }))
         );
-    }, [itinerary, center]); // Recalculate when center updates (Fetched from API)
 
-    // Create waypoints for routing
-    const waypoints = useMemo(() => locations.map(loc => L.latLng(loc.position[0], loc.position[1])), [locations]);
+        const hotelLocations = (itinerary as any).trip_details?.hotel_suggestions?.map((hotel: any, idx: number) => ({
+            id: `hotel-${idx}`,
+            position: getCoordinates(hotel.name, 99, idx, center), // Use specialized offset logic or just unique indices
+            location: hotel.name,
+            time: 'Hotel',
+            description: `Tier: ${hotel.tier}`,
+            ticket_price: hotel.price_range,
+            imageUrl: null, // Hotels might not have images in this object yet
+            day: null,
+            type: 'hotel',
+            url: `https://www.google.com/search?q=${encodeURIComponent(hotel.name + ' ' + itinerary.destination + ' hotel')}`
+        })) || [];
+
+        return [...activityLocations, ...hotelLocations];
+    }, [itinerary, center]);
+
+    // Create waypoints for routing (only activities)
+    const waypoints = useMemo(() => locations.filter(l => l.type === 'activity').map(loc => L.latLng(loc.position[0], loc.position[1])), [locations]);
 
 
-
-
-    // Actually user said "Dark Blue". "Black" is close but not blue.
-    // Let's use a divIcon with an SVG for precise color control.
-    const darkBlueIcon = L.divIcon({
+    // Icons
+    const activityIcon = L.divIcon({
         className: 'bg-transparent',
         html: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#1e3a8a" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 drop-shadow-lg"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>`,
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32]
+    });
+
+    const hotelIcon = L.divIcon({
+        className: 'bg-transparent',
+        html: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ef4444" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 drop-shadow-lg"><path d="M3 21h18M5 21V7l8-4 8 4v14M9 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"></path></svg>`,
         iconSize: [32, 32],
         iconAnchor: [16, 32],
         popupAnchor: [0, -32]
@@ -170,7 +190,7 @@ export default function MapView({ itinerary, selectedActivity }: MapViewProps) {
                     key={loc.id}
                     position={loc.position}
                     opacity={selectedActivity === loc.id ? 1 : 0.8}
-                    icon={darkBlueIcon}
+                    icon={loc.type === 'hotel' ? hotelIcon : activityIcon}
                     ref={(el) => {
                         if (el) markerRefs.current[loc.id] = el;
                     }}
@@ -179,8 +199,11 @@ export default function MapView({ itinerary, selectedActivity }: MapViewProps) {
                         direction="bottom"
                         offset={[0, 10]}
                         opacity={1}
-                        permanent
-                        className="font-bold text-xs bg-white/90 border-blue-900/20 text-blue-900 px-2 py-1 rounded shadow-lg"
+                        permanent={loc.type === 'hotel' ? false : true} // Hide hotel names by default to avoid clutter? Or keep them.
+                        className={cn(
+                            "font-bold text-xs px-2 py-1 rounded shadow-lg",
+                            loc.type === 'hotel' ? "bg-white/90 border-red-900/20 text-red-900" : "bg-white/90 border-blue-900/20 text-blue-900"
+                        )}
                     >
                         {loc.location}
                     </Tooltip>
@@ -198,7 +221,9 @@ export default function MapView({ itinerary, selectedActivity }: MapViewProps) {
                             )}
                             <div className="p-3">
                                 <div className="flex justify-between items-center mb-2">
-                                    <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded border border-blue-100 uppercase tracking-wide">Day {loc.day}</span>
+                                    {loc.day && <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded border border-blue-100 uppercase tracking-wide">Day {loc.day}</span>}
+                                    {loc.type === 'hotel' && <span className="text-[10px] font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded border border-red-100 uppercase tracking-wide">Hotel</span>}
+
                                     {loc.ticket_price && (
                                         <span className="text-[10px] font-bold text-green-700 bg-green-50 px-2 py-0.5 rounded border border-green-200 max-w-[50%] truncate" title={loc.ticket_price}>
                                             {loc.ticket_price}
@@ -209,7 +234,18 @@ export default function MapView({ itinerary, selectedActivity }: MapViewProps) {
                                     <h3 className="font-bold text-gray-900 text-sm leading-tight mb-0.5">{loc.location}</h3>
                                     <p className="text-xs font-medium text-gray-500">{loc.time}</p>
                                 </div>
-                                <p className="text-xs text-gray-600 leading-relaxed">{loc.description}</p>
+                                <p className="text-xs text-gray-600 leading-relaxed mb-3">{loc.description}</p>
+
+                                {loc.type === 'hotel' && (locations as any).find((l: any) => l.id === loc.id)?.url && (
+                                    <a
+                                        href={(locations as any).find((l: any) => l.id === loc.id)?.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 rounded transition-colors"
+                                    >
+                                        Book Now
+                                    </a>
+                                )}
                             </div>
                         </div>
                     </Popup>
@@ -217,4 +253,9 @@ export default function MapView({ itinerary, selectedActivity }: MapViewProps) {
             ))}
         </MapContainer>
     );
+}
+
+// Helper for class names if utils not imported in this file
+function cn(...classes: (string | undefined | null | false)[]) {
+    return classes.filter(Boolean).join(' ');
 }

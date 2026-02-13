@@ -626,15 +626,24 @@ function SearchPageContent() {
                                                 <div className="mt-4">
                                                     <div className="text-xs text-slate-400 uppercase tracking-wider mb-2">Where to Stay</div>
                                                     <div className="space-y-2">
-                                                        {(msg.content as Itinerary).trip_details?.hotel_suggestions?.map((hotel, hIdx) => (
-                                                            <div key={hIdx} className="flex justify-between items-center bg-slate-800/30 p-2 rounded border border-slate-700/50">
-                                                                <div>
-                                                                    <div className="font-semibold text-slate-200 text-sm">{hotel.name}</div>
-                                                                    <div className="text-[10px] text-slate-500 uppercase">{hotel.tier}</div>
-                                                                </div>
-                                                                <div className="text-xs font-bold text-blue-300">{hotel.price_range}</div>
-                                                            </div>
-                                                        ))}
+                                                        {(msg.content as Itinerary).trip_details?.hotel_suggestions?.map((hotel, hIdx) => {
+                                                            const hotelUrl = `https://www.google.com/search?q=${encodeURIComponent(hotel.name + ' ' + (msg.content as Itinerary).destination + ' hotel')}`;
+                                                            return (
+                                                                <a
+                                                                    key={hIdx}
+                                                                    href={hotelUrl}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className="flex justify-between items-center bg-slate-800/30 p-2 rounded border border-slate-700/50 hover:bg-slate-700/50 transition-colors cursor-pointer group"
+                                                                >
+                                                                    <div>
+                                                                        <div className="font-semibold text-slate-200 text-sm group-hover:text-blue-300 transition-colors">{hotel.name}</div>
+                                                                        <div className="text-[10px] text-slate-500 uppercase">{hotel.tier}</div>
+                                                                    </div>
+                                                                    <div className="text-xs font-bold text-blue-300">{hotel.price_range}</div>
+                                                                </a>
+                                                            );
+                                                        })}
                                                     </div>
                                                 </div>
                                             </div>
