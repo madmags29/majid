@@ -139,7 +139,7 @@ export default function MapView({ itinerary, selectedActivity }: MapViewProps) {
             imageUrl: null, // Hotels might not have images in this object yet
             day: null,
             type: 'hotel',
-            url: `https://www.google.com/search?q=${encodeURIComponent(hotel.name + ' ' + itinerary.destination + ' hotel')}`
+            url: `https://search.hotellook.com/hotels?destination=${encodeURIComponent(hotel.name + ' ' + itinerary.destination)}&marker=497779`
         })) || [];
 
         return [...activityLocations, ...hotelLocations];

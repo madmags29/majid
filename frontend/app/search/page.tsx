@@ -627,7 +627,7 @@ function SearchPageContent() {
                                                     <div className="text-xs text-slate-400 uppercase tracking-wider mb-2">Where to Stay</div>
                                                     <div className="space-y-2">
                                                         {(msg.content as Itinerary).trip_details?.hotel_suggestions?.map((hotel, hIdx) => {
-                                                            const hotelUrl = `https://www.google.com/search?q=${encodeURIComponent(hotel.name + ' ' + (msg.content as Itinerary).destination + ' hotel')}`;
+                                                            const hotelUrl = `https://search.hotellook.com/hotels?destination=${encodeURIComponent(hotel.name + ' ' + (msg.content as Itinerary).destination)}&marker=497779`;
                                                             return (
                                                                 <a
                                                                     key={hIdx}
