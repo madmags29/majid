@@ -8,9 +8,10 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { API_URL } from '@/lib/config';
 
-// Dynamically import map to avoid SSR issues
+// Dynamically import components to avoid SSR issues
 const MapView = dynamic(() => import('@/components/MapView'));
 const WeatherWidget = dynamic(() => import('@/components/WeatherWidget'));
+const TypewriterText = dynamic(() => import('@/components/TypewriterText'));
 
 interface Activity {
     time: string;
@@ -100,9 +101,13 @@ export default function ExplorePage({ params }: { params: Promise<{ slug: string
         <div className="min-h-screen bg-[#0f172a] text-slate-100 flex flex-col">
             {/* Header */}
             <header className="fixed top-0 left-0 right-0 z-50 bg-slate-900/50 backdrop-blur-xl border-b border-white/10 px-6 py-4 flex justify-between items-center">
-                <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                    <ArrowLeft className="w-5 h-5 text-blue-400" />
-                    <span className="font-cursive text-xl">weekendtravellers</span>
+                <Link href="/" className="flex items-center gap-4 hover:opacity-80 transition-opacity">
+                    <ArrowLeft className="w-6 h-6 text-blue-400" />
+                    <TypewriterText
+                        text="weekendtravellers.com"
+                        className="font-cursive text-2xl md:text-4xl"
+                        delay={500}
+                    />
                 </Link>
                 <div className="flex items-center gap-3">
                     <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/10">
@@ -234,7 +239,10 @@ export default function ExplorePage({ params }: { params: Promise<{ slug: string
                                     <p className="text-lg font-bold">{data.trip_details.best_time_to_visit}</p>
                                 </div>
                             </div>
-                            <WeatherWidget location={data.destination} />
+                            <WeatherWidget
+                                lat={data.trip_details.destination_coordinates.lat}
+                                lng={data.trip_details.destination_coordinates.lng}
+                            />
                         </div>
                     </div>
 
