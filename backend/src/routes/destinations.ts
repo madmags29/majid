@@ -21,7 +21,7 @@ router.get('/explore', async (req, res) => {
             .map(part => part.charAt(0).toUpperCase() + part.slice(1).replace(/-/g, ' '))
             .join(', ');
 
-        const cacheKey = `explore:v1:${(slug as string).toLowerCase()}`;
+        const cacheKey = `explore:v2:${(slug as string).toLowerCase()}`;
 
         // Check cache
         const cachedResult = await Cache.findOne({ key: cacheKey });
@@ -41,10 +41,46 @@ router.get('/explore', async (req, res) => {
         await enrichmentWithImages(itinerary);
         await enrichmentWithTravelData(itinerary, undefined, destinationName);
 
+        // Phase 4: Hero Media (Video/Photo)
+        let heroVideo = null;
+        let heroImage = null;
+
+        if (process.env.PEXELS_API_KEY) {
+            const pexelsClient = createClient(process.env.PEXELS_API_KEY);
+            try {
+                // Try fetching videos first
+                const videoRes: any = await pexelsClient.videos.search({ query: destinationName, per_page: 1, orientation: 'landscape' });
+                if ('videos' in videoRes && videoRes.videos.length > 0) {
+                    const video = videoRes.videos[0];
+                    const file = video.video_files.find((f: any) => f.quality === 'hd' || f.quality === 'sd') || video.video_files[0];
+                    heroVideo = {
+                        url: file.link,
+                        photographer: video.user.name,
+                        photographer_url: video.user.url
+                    };
+                }
+
+                // Always fetch a high-res image as fallback or for static parts
+                const imageRes: any = await pexelsClient.photos.search({ query: destinationName, per_page: 1, orientation: 'landscape', size: 'large' });
+                if ('photos' in imageRes && imageRes.photos.length > 0) {
+                    const photo = imageRes.photos[0];
+                    heroImage = {
+                        url: photo.src.large2x || photo.src.original,
+                        photographer: photo.photographer,
+                        photographer_url: photo.photographer_url
+                    };
+                }
+            } catch (err) {
+                console.error('Failed to fetch hero media:', err);
+            }
+        }
+
         const result = {
             ...itinerary,
             deep_content: deepContent,
-            slug: slug
+            slug: slug,
+            heroVideo,
+            heroImage
         };
 
         // Store in cache for 30 days

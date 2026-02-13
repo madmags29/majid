@@ -170,18 +170,27 @@ export async function generateDeepExploreContent(destination: string) {
       Write a comprehensive, SEO-optimized travel guide for "${destination}". 
       The content should be between 1500 to 2000 words.
       
-      Structure the guide with the following sections (use clear HTML headings):
-      1. <h2>Introduction</h2>: A captivating overview of the destination's charm and why it's a "star-shining" place to visit.
-      2. <h2>History and Heritage</h2>: Detailed historical context and cultural significance.
-      3. <h2>Top Attractions</h2>: At least 5 must-visit spots with rich descriptions.
-      4. <h2>Gastronomy</h2>: Local delicacies, must-try foods, and the food culture.
-      5. <h2>Hidden Gems</h2>: Off-the-beaten-path locations only locals know.
-      6. <h2>Practical Information</h2>: Best time to visit, how to get there, and local customs.
-      7. <h2>Conclusion</h2>: A final encouraging wrap-up.
+      Structure the guide with a clear HTML hierarchy:
+      - <h1>[Destination Name]: The Ultimate Exploration Guide</h1> (At the very beginning)
+      - <h2>Introduction</h2>: A captivating overview.
+      - <h2>History and Heritage</h2>: Detailed context.
+      - <h2>Top Attractions</h2>: At least 5 must-visit spots.
+        CRITICAL: Each spot MUST be its own distinct block. Do NOT bunch multiple attractions into a single paragraph.
+        Each attraction must follow this exact sequence:
+        <h3>[Spot Name]</h3> 
+        <p>[Detailed Description]</p>
+        <hr />
+      - <h2>Gastronomy</h2>: Local delicacies and food culture. (Follow the same <h3> + <p> + <hr /> structure for each dish; NO bunching)
+      - <h2>Hidden Gems</h2>: Off-the-beaten-path locations. (Follow the same <h3> + <p> + <hr /> structure; NO bunching)
+      - <h2>Practical Information</h2>: Best time to visit, transit, customs.
+      - <h2>Conclusion</h2>: A final encouraging wrap-up.
       
       IMPORTANT:
       - Use professional, engaging travel journalism style.
       - Ensure the content is rich in descriptive detail.
+      - DO NOT use bold text (e.g. **Name:**) for section titles; ALWAYS use semantic <h3> tags for sub-topics.
+      - NEVER bunch distinct sub-topics (like two different attractions) into the same <p> tag. Always start a new block for the next item.
+      - Use <hr /> tags between distinct sub-topics (like individual attractions or hidden gems) to provide visual separation.
       - Return the response as a JSON object: { "content": "HTML string here" }
     `;
 

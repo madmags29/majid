@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 @import "leaflet/dist/leaflet.css";
 
 .font-cursive {
@@ -118,6 +119,32 @@ body {
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  @keyframes shimmer {
+    from {
+      transform: translateX(-100%);
+    }
+
+    to {
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes spin-slow {
+    from {
+      transform: rotate(0deg);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  --animation-shimmer: shimmer 3s infinite;
+  --animation-spin-slow: spin-slow 8s linear infinite;
+
+  --font-playfair: var(--font-playfair);
+  --font-lora: var(--font-lora);
 }
 
 .dark {

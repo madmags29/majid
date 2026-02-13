@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Sacramento } from "next/font/google";
+import { Geist, Geist_Mono, Sacramento, Playfair_Display, Lora } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import Footer from "@/components/Footer";
@@ -20,15 +20,25 @@ const cursive = Sacramento({
   subsets: ["latin"],
 });
 
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+});
+
+const lora = Lora({
+  variable: "--font-lora",
+  subsets: ["latin"],
+});
+
 import Script from "next/script";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   title: {
-    default: 'Weekend Travellers | Best AI-Powered Weekend Trip Planner 2025',
+    default: 'Weekend Travellers – AI-Powered Weekend Trip Planner for 2 & 3 Day Getaways (2026)',
     template: '%s | Weekend Travellers',
   },
-  description: 'Weekend Travellers is your best AI-powered companion for discovering and planning the perfect 2nd-day getaway in 2025. Get instant itineraries, driving routes, and budget estimates.',
+  description: 'Plan smart 2 & 3 day weekend trips near you with AI-generated itineraries, travel budgets, routes & hidden destinations across India.',
   keywords: [
     'weekend travellers',
     'weekend trip planner 2025',
@@ -100,7 +110,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${cursive.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${cursive.variable} ${playfair.variable} ${lora.variable} antialiased`}
         suppressHydrationWarning
       >
         <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
@@ -134,7 +144,7 @@ export default function RootLayout({
           </Script>
           {children}
           <Footer />
-          <Toaster position="top-center" richColors />
+          <Toaster position="top-center" richColors toastOptions={{ className: '!z-[9999]' }} />
         </GoogleOAuthProvider>
       </body>
     </html>

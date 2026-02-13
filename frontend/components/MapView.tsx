@@ -37,6 +37,17 @@ interface Itinerary {
 interface MapViewProps {
     itinerary: Itinerary;
     selectedActivity: string | null;
+    isExpanded?: boolean;
+}
+
+function InvalidateSizeController({ isExpanded }: { isExpanded: boolean }) {
+    const map = useMap();
+    useEffect(() => {
+        setTimeout(() => {
+            map.invalidateSize();
+        }, 100); // Small delay to ensure container transition finished
+    }, [isExpanded, map]);
+    return null;
 }
 
 // Component to handle map interactions based on selection
@@ -69,7 +80,7 @@ function ChangeView({ center, zoom }: { center: [number, number]; zoom: number }
 import dynamic from 'next/dynamic';
 const RoutingMachine = dynamic(() => import('./RoutingMachine'), { ssr: false });
 
-export default function MapView({ itinerary, selectedActivity }: MapViewProps) {
+export default function MapView({ itinerary, selectedActivity, isExpanded }: MapViewProps) {
     const [center, setCenter] = useState<[number, number]>([48.8566, 2.3522]); // Default (Paris), will update
     const [zoom] = useState(13);
     const markerRefs = useRef<{ [key: string]: L.Marker | null }>({});
@@ -175,6 +186,7 @@ export default function MapView({ itinerary, selectedActivity }: MapViewProps) {
                 className="z-0"
                 zoomControl={false} // We can add custom zoom control if needed, or keep default. Let's keep default but ensure UI is above.
             >
+                <InvalidateSizeController isExpanded={!!isExpanded} />
                 <MapController selectedActivity={selectedActivity} markerRefs={markerRefs} />
                 <ChangeView center={center} zoom={zoom} />
                 <TileLayer
