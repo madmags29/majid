@@ -164,3 +164,41 @@ export async function updateItinerary(
     throw error;
   }
 }
+export async function generateDeepExploreContent(destination: string) {
+  try {
+    const prompt = `
+      Write a comprehensive, SEO-optimized travel guide for "${destination}". 
+      The content should be between 1500 to 2000 words.
+      
+      Structure the guide with the following sections (use clear HTML headings):
+      1. <h2>Introduction</h2>: A captivating overview of the destination's charm and why it's a "star-shining" place to visit.
+      2. <h2>History and Heritage</h2>: Detailed historical context and cultural significance.
+      3. <h2>Top Attractions</h2>: At least 5 must-visit spots with rich descriptions.
+      4. <h2>Gastronomy</h2>: Local delicacies, must-try foods, and the food culture.
+      5. <h2>Hidden Gems</h2>: Off-the-beaten-path locations only locals know.
+      6. <h2>Practical Information</h2>: Best time to visit, how to get there, and local customs.
+      7. <h2>Conclusion</h2>: A final encouraging wrap-up.
+      
+      IMPORTANT:
+      - Use professional, engaging travel journalism style.
+      - Ensure the content is rich in descriptive detail.
+      - Return the response as a JSON object: { "content": "HTML string here" }
+    `;
+
+    const completion = await openai.chat.completions.create({
+      messages: [{ role: 'user', content: prompt }],
+      model: 'gpt-4o', // Higher quality for long-form content
+      response_format: { type: "json_object" },
+    });
+
+    const content = completion.choices[0].message.content;
+    if (!content) {
+      throw new Error('No content received from OpenAI');
+    }
+
+    return JSON.parse(content).content;
+  } catch (error) {
+    console.error('Error generating deep content:', error);
+    throw error;
+  }
+}

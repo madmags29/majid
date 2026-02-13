@@ -35,6 +35,28 @@ const Footer = () => {
 
                     {/* Links Section */}
                     <div className="flex gap-16 md:gap-24">
+                        {/* Discover */}
+                        <div>
+                            <h3 className="text-white font-semibold mb-4 text-xs tracking-widest uppercase">Discover</h3>
+                            <ul className="space-y-2 text-sm">
+                                <li>
+                                    <Link href="/explore/india" className="hover:text-blue-400 transition-colors">
+                                        India
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/explore/europe" className="hover:text-blue-400 transition-colors">
+                                        Europe
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/explore/asia/thailand" className="hover:text-blue-400 transition-colors">
+                                        Thailand
+                                    </Link>
+                                </li>
+                            </ul>
+                        </div>
+
                         {/* Support */}
                         <div>
                             <h3 className="text-white font-semibold mb-4">Support</h3>

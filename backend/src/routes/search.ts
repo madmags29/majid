@@ -6,7 +6,7 @@ import { getFlightPrices, getHotelPrices } from '../services/travelpayouts';
 
 const router = express.Router();
 
-async function enrichmentWithTravelData(itinerary: any, origin?: string, destination?: string) {
+export async function enrichmentWithTravelData(itinerary: any, origin?: string, destination?: string) {
     const travelPromises: Promise<any>[] = [];
 
     if (origin && destination) {
@@ -38,7 +38,7 @@ async function enrichmentWithTravelData(itinerary: any, origin?: string, destina
     return itinerary;
 }
 
-async function enrichmentWithImages(itinerary: any) {
+export async function enrichmentWithImages(itinerary: any) {
     if (process.env.PEXELS_API_KEY) {
         const client = createClient(process.env.PEXELS_API_KEY);
         const imagePromises: Promise<void>[] = [];

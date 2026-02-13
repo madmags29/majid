@@ -7,6 +7,7 @@ import mediaRouter from './routes/media';
 import authRouter from './routes/auth';
 import tripsRouter from './routes/trips';
 import weatherRouter from './routes/weather';
+import destinationsRouter from './routes/destinations';
 
 dotenv.config();
 
@@ -47,6 +48,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api', searchRouter);
+app.use('/api', destinationsRouter);
 app.use('/api', mediaRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/trips', tripsRouter);

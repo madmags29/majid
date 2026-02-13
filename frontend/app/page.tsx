@@ -321,6 +321,39 @@ export default function LandingPage() {
       </section>
 
 
+      {/* Explore by Region */}
+      <section className="py-24 px-6 relative z-20 border-t border-white/5 bg-slate-900/20">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+            <div>
+              <h2 className="text-4xl md:text-5xl font-black italic tracking-tighter text-white mb-4 uppercase">Explore the World</h2>
+              <p className="text-xl text-slate-400 max-w-2xl">Dive deep into our curated guides for countries, states, and cities. 2000+ words of history, food, and secret spots.</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { name: 'India', slug: 'india', image: 'https://images.pexels.com/photos/1007427/pexels-photo-1007427.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'From the Himalayas to the backwaters of Kerala.' },
+              { name: 'Europe', slug: 'europe', image: 'https://images.pexels.com/photos/1530259/pexels-photo-1530259.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Timeless cities, art, and legendary landscapes.' },
+              { name: 'Thailand', slug: 'asia/thailand', image: 'https://images.pexels.com/photos/2412711/pexels-photo-2412711.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Exotic beaches, street food, and golden temples.' }
+            ].map((region) => (
+              <Link key={region.slug} href={`/explore/${region.slug}`} className="group relative h-96 rounded-3xl overflow-hidden border border-white/10 hover:border-blue-500/50 transition-all shadow-2xl">
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent z-10" />
+                <img src={region.image} alt={region.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                <div className="absolute bottom-0 left-0 p-8 z-20">
+                  <h3 className="text-3xl font-black text-white italic tracking-tighter mb-2">{region.name}</h3>
+                  <p className="text-slate-300 text-sm mb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">{region.description}</p>
+                  <Button className="bg-white text-slate-950 rounded-full font-bold px-6 group-hover:bg-blue-500 group-hover:text-white transition-colors">
+                    Explore Guide
+                  </Button>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
     </div>
   );
 }
+
