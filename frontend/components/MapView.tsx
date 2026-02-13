@@ -167,91 +167,173 @@ export default function MapView({ itinerary, selectedActivity }: MapViewProps) {
     });
 
     return (
-        <MapContainer
-            center={center}
-            zoom={zoom}
-            style={{ height: '100%', width: '100%' }}
-            className="z-0"
-        >
-            <MapController selectedActivity={selectedActivity} markerRefs={markerRefs} />
-            <ChangeView center={center} zoom={zoom} />
-            <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
+        <div className="relative h-full w-full group">
+            <MapContainer
+                center={center}
+                zoom={zoom}
+                style={{ height: '100%', width: '100%' }}
+                className="z-0"
+                zoomControl={false} // We can add custom zoom control if needed, or keep default. Let's keep default but ensure UI is above.
+            >
+                <MapController selectedActivity={selectedActivity} markerRefs={markerRefs} />
+                <ChangeView center={center} zoom={zoom} />
+                <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
 
-            {/* Render Route */}
-            {waypoints.length > 1 && (
-                <RoutingMachine waypoints={waypoints} />
-            )}
+                {/* Render Route */}
+                {waypoints.length > 1 && (
+                    <RoutingMachine waypoints={waypoints} />
+                )}
 
-            {locations.map((loc) => (
-                <Marker
-                    key={loc.id}
-                    position={loc.position}
-                    opacity={selectedActivity === loc.id ? 1 : 0.8}
-                    icon={loc.type === 'hotel' ? hotelIcon : activityIcon}
-                    ref={(el) => {
-                        if (el) markerRefs.current[loc.id] = el;
-                    }}
-                >
-                    <Tooltip
-                        direction="bottom"
-                        offset={[0, 10]}
-                        opacity={1}
-                        permanent={loc.type === 'hotel' ? false : true} // Hide hotel names by default to avoid clutter? Or keep them.
-                        className={cn(
-                            "font-bold text-xs px-2 py-1 rounded shadow-lg",
-                            loc.type === 'hotel' ? "bg-white/90 border-red-900/20 text-red-900" : "bg-white/90 border-blue-900/20 text-blue-900"
-                        )}
+                {locations.map((loc) => (
+                    <Marker
+                        key={loc.id}
+                        position={loc.position}
+                        opacity={selectedActivity === loc.id ? 1 : 0.8}
+                        icon={loc.type === 'hotel' ? hotelIcon : activityIcon}
+                        ref={(el) => {
+                            if (el) markerRefs.current[loc.id] = el;
+                        }}
                     >
-                        {loc.location}
-                    </Tooltip>
-                    <Popup maxWidth={250} minWidth={200}>
-                        <div className="p-0 overflow-hidden rounded-lg">
-                            {loc.imageUrl && (
-                                <div className="h-32 w-full overflow-hidden">
-                                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                                    <img
-                                        src={loc.imageUrl}
-                                        alt={loc.location}
-                                        className="w-full h-full object-cover"
-                                    />
-                                </div>
+                        <Tooltip
+                            direction="bottom"
+                            offset={[0, 10]}
+                            opacity={1}
+                            permanent={loc.type === 'hotel' ? false : true} // Hide hotel names by default to avoid clutter? Or keep them.
+                            className={cn(
+                                "font-bold text-xs px-2 py-1 rounded shadow-lg",
+                                loc.type === 'hotel' ? "bg-white/90 border-red-900/20 text-red-900" : "bg-white/90 border-blue-900/20 text-blue-900"
                             )}
-                            <div className="p-3">
-                                <div className="flex justify-between items-center mb-2">
-                                    {loc.day && <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded border border-blue-100 uppercase tracking-wide">Day {loc.day}</span>}
-                                    {loc.type === 'hotel' && <span className="text-[10px] font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded border border-red-100 uppercase tracking-wide">Hotel</span>}
+                        >
+                            {loc.location}
+                        </Tooltip>
+                        <Popup maxWidth={250} minWidth={200}>
+                            <div className="p-0 overflow-hidden rounded-lg">
+                                {loc.imageUrl && (
+                                    <div className="h-32 w-full overflow-hidden">
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                        <img
+                                            src={loc.imageUrl}
+                                            alt={loc.location}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
+                                )}
+                                <div className="p-3">
+                                    <div className="flex justify-between items-center mb-2">
+                                        {loc.day && <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded border border-blue-100 uppercase tracking-wide">Day {loc.day}</span>}
+                                        {loc.type === 'hotel' && <span className="text-[10px] font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded border border-red-100 uppercase tracking-wide">Hotel</span>}
 
-                                    {loc.ticket_price && (
-                                        <span className="text-[10px] font-bold text-green-700 bg-green-50 px-2 py-0.5 rounded border border-green-200 max-w-[50%] truncate" title={loc.ticket_price}>
-                                            {loc.ticket_price}
-                                        </span>
+                                        {loc.ticket_price && (
+                                            <span className="text-[10px] font-bold text-green-700 bg-green-50 px-2 py-0.5 rounded border border-green-200 max-w-[50%] truncate" title={loc.ticket_price}>
+                                                {loc.ticket_price}
+                                            </span>
+                                        )}
+                                    </div>
+                                    <div className="mb-2">
+                                        <h3 className="font-bold text-gray-900 text-sm leading-tight mb-0.5">{loc.location}</h3>
+                                        <p className="text-xs font-medium text-gray-500">{loc.time}</p>
+                                    </div>
+                                    <p className="text-xs text-gray-600 leading-relaxed mb-3">{loc.description}</p>
+
+                                    {loc.type === 'hotel' && (locations as any).find((l: any) => l.id === loc.id)?.url && (
+                                        <a
+                                            href={(locations as any).find((l: any) => l.id === loc.id)?.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 rounded transition-colors"
+                                        >
+                                            Book Now
+                                        </a>
                                     )}
                                 </div>
-                                <div className="mb-2">
-                                    <h3 className="font-bold text-gray-900 text-sm leading-tight mb-0.5">{loc.location}</h3>
-                                    <p className="text-xs font-medium text-gray-500">{loc.time}</p>
-                                </div>
-                                <p className="text-xs text-gray-600 leading-relaxed mb-3">{loc.description}</p>
-
-                                {loc.type === 'hotel' && (locations as any).find((l: any) => l.id === loc.id)?.url && (
-                                    <a
-                                        href={(locations as any).find((l: any) => l.id === loc.id)?.url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 rounded transition-colors"
-                                    >
-                                        Book Now
-                                    </a>
-                                )}
                             </div>
-                        </div>
-                    </Popup>
-                </Marker>
-            ))}
-        </MapContainer>
+                        </Popup>
+                    </Marker>
+                ))}
+            </MapContainer>
+
+            {/* Hotel Thumbnails Carousel */}
+            <div className="absolute bottom-8 left-0 right-0 z-[1000] px-4 pointer-events-none flex justify-center">
+                <div className="flex overflow-x-auto gap-4 pb-4 snap-x snap-mandatory px-4 pointer-events-auto max-w-full no-scrollbar items-center">
+                    {locations.filter(l => l.type === 'hotel').map((hotel) => {
+                        const isSelected = selectedActivity === hotel.id;
+                        return (
+                            <div
+                                key={hotel.id}
+                                className={cn(
+                                    "snap-center shrink-0 w-72 bg-white/80 backdrop-blur-md p-4 rounded-2xl shadow-2xl border transition-all duration-300 cursor-pointer group relative overflow-hidden",
+                                    isSelected ? "border-blue-500/50 ring-2 ring-blue-500/20 scale-105" : "border-white/40 hover:border-white/60 hover:scale-105"
+                                )}
+                                onClick={() => {
+                                    const marker = markerRefs.current[hotel.id];
+                                    if (marker) {
+                                        marker.openPopup();
+                                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                        const map = (marker as any).getMap();
+                                        if (map) map.setView(marker.getLatLng(), 15, { animate: true });
+                                    }
+                                }}
+                            >
+                                {/* Decorative gradient background */}
+                                <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-white/0 pointer-events-none" />
+
+                                <div className="relative z-10">
+                                    <div className="flex justify-between items-start mb-2 gap-2">
+                                        <h3 className="font-bold text-slate-800 text-sm leading-tight truncate flex-1" title={hotel.location}>{hotel.location}</h3>
+                                        <div className="text-[10px] font-bold text-white bg-slate-900/90 backdrop-blur-sm px-2 py-1 rounded-full shadow-sm shrink-0 uppercase tracking-wide">
+                                            {hotel.ticket_price}
+                                        </div>
+                                    </div>
+
+                                    <p className="text-xs text-slate-600 mb-4 line-clamp-2 h-8 leading-relaxed font-medium">
+                                        {hotel.description}
+                                    </p>
+
+                                    <div className="flex gap-2.5">
+                                        {(hotel as any).url && (
+                                            <a
+                                                href={(hotel as any).url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-bold py-2 rounded-lg text-center transition-all shadow-md hover:shadow-blue-500/25 flex items-center justify-center gap-1.5"
+                                                onClick={(e) => e.stopPropagation()}
+                                            >
+                                                <span>Book Now</span>
+                                                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                                </svg>
+                                            </a>
+                                        )}
+                                        <button
+                                            className="px-3 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-bold py-2 rounded-lg transition-colors shadow-sm hover:shadow-md flex items-center justify-center"
+                                            title="Locate on map"
+                                        >
+                                            <svg className="w-4 h-4 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <circle cx="12" cy="12" r="10" />
+                                                <circle cx="12" cy="12" r="3" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+
+            <style jsx>{`
+                .no-scrollbar::-webkit-scrollbar {
+                    display: none;
+                }
+                .no-scrollbar {
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+                }
+            `}</style>
+        </div>
     );
 }
 
