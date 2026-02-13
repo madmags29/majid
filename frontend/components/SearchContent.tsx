@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { MapPin, Calendar, Loader2, Send, User, Heart, Share2, Check, ArrowLeft, Bus, Train, Plane, Car, LogIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
+import { Textarea } from './ui/textarea';
 import ReactMarkdown from 'react-markdown';
 import { toast } from 'sonner';
 import {
@@ -18,6 +18,7 @@ import {
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
+import DistanceDisplay from '@/components/DistanceDisplay';
 
 const AnimatedLogo = dynamic(() => import('@/components/AnimatedLogo'));
 const AuthModal = dynamic(() => import('@/components/AuthModal'));
@@ -51,17 +52,18 @@ const TypingResponse = ({ content, onComplete }: { content: string, onComplete?:
     }, [content, onComplete]);
 
     return (
-        <ReactMarkdown
-            className="prose prose-invert prose-p:leading-relaxed prose-pre:bg-slate-800 prose-pre:p-4 prose-pre:rounded-lg max-w-none text-slate-300"
-            components={{
-                ul: ({ node, ...props }) => <ul className="list-disc pl-4 space-y-2" {...props} />,
-                ol: ({ node, ...props }) => <ol className="list-decimal pl-4 space-y-2" {...props} />,
-                li: ({ node, ...props }) => <li className="pl-1" {...props} />,
-                strong: ({ node, ...props }) => <span className="font-bold text-blue-400" {...props} />,
-            }}
-        >
-            {displayed}
-        </ReactMarkdown>
+        <div className="prose prose-invert prose-p:leading-relaxed prose-pre:bg-slate-800 prose-pre:p-4 prose-pre:rounded-lg max-w-none text-slate-300">
+            <ReactMarkdown
+                components={{
+                    ul: ({ node, ...props }) => <ul className="list-disc pl-4 space-y-2" {...props} />,
+                    ol: ({ node, ...props }) => <ol className="list-decimal pl-4 space-y-2" {...props} />,
+                    li: ({ node, ...props }) => <li className="pl-1" {...props} />,
+                    strong: ({ node, ...props }) => <span className="font-bold text-blue-400" {...props} />,
+                }}
+            >
+                {displayed}
+            </ReactMarkdown>
+        </div>
     );
 };
 
@@ -496,8 +498,8 @@ export default function SearchContent() {
                                                     {/* Weather Widget */}
                                                     {(msg.content as Itinerary).trip_details?.destination_coordinates ? (
                                                         <WeatherWidget
-                                                            lat={(msg.content as Itinerary).trip_details.destination_coordinates.lat}
-                                                            lng={(msg.content as Itinerary).trip_details.destination_coordinates.lng}
+                                                            lat={(msg.content as Itinerary).trip_details!.destination_coordinates!.lat}
+                                                            lng={(msg.content as Itinerary).trip_details!.destination_coordinates!.lng}
                                                             className="h-full"
                                                         />
                                                     ) : (
