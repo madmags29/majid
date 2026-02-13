@@ -105,7 +105,7 @@ export default function ExplorePage({ params }: { params: Promise<{ slug: string
                     <ArrowLeft className="w-6 h-6 text-blue-400" />
                     <TypewriterText
                         text="weekendtravellers.com"
-                        className="font-cursive text-2xl md:text-4xl"
+                        className="font-cursive text-xl md:text-4xl"
                         delay={500}
                     />
                 </Link>

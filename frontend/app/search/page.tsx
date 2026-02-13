@@ -441,7 +441,7 @@ function SearchPageContent() {
                             <h1 className="text-lg md:text-3xl text-white tracking-tight hover:opacity-90 transition-opacity">
                                 <TypewriterText
                                     text="weekendtravellers.com"
-                                    className="font-cursive text-3xl md:text-5xl"
+                                    className="font-cursive text-xl md:text-4xl"
                                     delay={500}
                                     deleteAfter={isMobile ? 2000 : undefined}
                                 />
