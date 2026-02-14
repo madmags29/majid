@@ -7,27 +7,32 @@ import Footer from "@/components/Footer";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: 'swap',
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: 'swap',
 });
 
 const cursive = Sacramento({
   variable: "--font-cursive",
   weight: "400",
   subsets: ["latin"],
+  display: 'swap',
 });
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
+  display: 'swap',
 });
 
 const lora = Lora({
   variable: "--font-lora",
   subsets: ["latin"],
+  display: 'swap',
 });
 
 import Script from "next/script";
@@ -137,7 +142,7 @@ export default function RootLayout({
             gtag('config', 'G-4FBK6YT104');
         `}
           </Script>
-          <Script id="travelpayouts-tracking" strategy="afterInteractive" data-noptimize="1" data-cfasync="false" data-wpfc-render="false">
+          <Script id="travelpayouts-tracking" strategy="lazyOnload">
             {`
             (function () {
                 var script = document.createElement("script");

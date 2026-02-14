@@ -157,10 +157,11 @@ export default function LandingPage() {
   }, []);
 
   useEffect(() => {
-    // Simulate cinematic loading delay
+    // Simulate cinematic loading delay - reduced for mobile to improve FCP
+    const delay = window.innerWidth < 768 ? 1200 : 2800;
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 2800);
+    }, delay);
     return () => clearTimeout(timer);
   }, []);
 
@@ -175,6 +176,11 @@ export default function LandingPage() {
       {/* Base Background Color (Always present, sits behind video) */}
       <div className="fixed inset-0 bg-[#0f172a] -z-30" />
 
+      {/* Preload critical LCP assets */}
+      {videoUrl && (
+        <link rel="preload" as="image" href="/video-poster.png" />
+      )}
+
       {/* Video Background */}
       {videoUrl && (
         <div className="fixed inset-0 w-full h-full -z-10">
@@ -186,7 +192,7 @@ export default function LandingPage() {
             playsInline
             className="w-full h-full object-cover"
             key={videoUrl}
-            poster="/video-poster.jpg"
+            poster="/video-poster.png"
           >
             <source src={videoUrl} type="video/mp4" />
           </video>
