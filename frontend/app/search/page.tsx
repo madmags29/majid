@@ -21,6 +21,7 @@ import {
 
 // Dynamically import map to avoid SSR issues
 const MapView = dynamic(() => import('@/components/MapView'), { ssr: false });
+import CinematicLoader from '@/components/CinematicLoader';
 const AnimatedLogo = dynamic(() => import('@/components/AnimatedLogo'), { ssr: false });
 const AuthModal = dynamic(() => import('@/components/AuthModal'), { ssr: false });
 const TypewriterText = dynamic(() => import('@/components/TypewriterText'), { ssr: false });
@@ -704,14 +705,17 @@ function SearchPageContent() {
                         ))}
 
                         {loading && (
-                            <div className="flex gap-3">
-                                <div className="hidden md:flex w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 items-center justify-center shrink-0 mt-1 animate-pulse overflow-hidden ring-1 ring-white/20">
-                                    <AnimatedLogo className="w-5 h-5 text-white" solid />
-                                </div>
-                                <div className="bg-slate-800 rounded-2xl p-4 rounded-tl-sm border border-slate-700 flex items-center">
-                                    <Loader2 className="w-5 h-5 text-blue-400 animate-spin mr-2" />
-                                    <span className="text-slate-400 text-sm">Planning your trip and finding great spots...</span>
-                                </div>
+                            <div className="absolute inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm">
+                                <CinematicLoader
+                                    messages={[
+                                        "Planning your trip...",
+                                        "Finding great spots...",
+                                        "Checking weather forecasts...",
+                                        "Optimizing your itinerary...",
+                                        "Finalizing details..."
+                                    ]}
+                                    className="bg-transparent"
+                                />
                             </div>
                         )}
 
