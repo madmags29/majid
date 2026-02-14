@@ -446,7 +446,7 @@ function SearchPageContent() {
     };
 
     return (
-        <div className="flex flex-col h-screen bg-slate-950 text-white overflow-hidden">
+        <div className="flex flex-col h-[100dvh] bg-slate-950 text-white overflow-hidden">
             {/* Header */}
             <header className="h-16 border-b border-slate-800 flex items-center justify-between px-4 bg-slate-900/50 backdrop-blur-md z-30 shrink-0">
                 <div className="flex items-center gap-4">
@@ -790,7 +790,7 @@ function SearchPageContent() {
                     </div>
 
                     {/* Input Area */}
-                    <div className="p-4 bg-slate-900 border-t border-slate-800">
+                    <div className="p-4 bg-slate-900 border-t border-slate-800 pb-[calc(1rem+env(safe-area-inset-bottom))]">
                         <form onSubmit={handleSend} className="relative flex items-center max-w-2xl mx-auto w-full">
                             <input
                                 type="text"
