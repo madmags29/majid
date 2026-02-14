@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Search Your Next Weekend Trip | AI Itinerary Generator',
-    description: 'Find the best AI-recommended weekend getaways for 2025 tailored to your travel style. Explore instant itineraries, driving routes, and personalized recommendations.',
+    title: 'AI Itinerary Generator | Customize Your Perfect Weekend Getaway',
+    description: 'Instant AI-generated weekend itineraries tailored to your style. Explore driving routes, best hotels, and curated travel plans for the perfect 2-day trip.',
 };
 
 export default function SearchLayout({

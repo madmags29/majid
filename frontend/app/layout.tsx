@@ -37,13 +37,13 @@ import { GOOGLE_CLIENT_ID, SITE_URL } from '@/lib/config';
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Weekend Travellers – AI-Powered Weekend Trip Planner for 2 & 3 Day Getaways (2026)',
+    default: 'Weekend Trip Planner | Best AI Itinerary Generator for 2 & 3 Day Trips',
     template: '%s | Weekend Travellers',
   },
-  description: 'Plan smart 2 & 3 day weekend trips near you with AI-generated itineraries, travel budgets, routes & hidden destinations across India.',
+  description: 'AI-powered weekend trip planner for custom 2 & 3 day itineraries. Get instant travel budgets, routes, and hidden gems for your next short getaway.',
   keywords: [
     'weekend travellers',
-    'weekend trip planner 2025',
+    'weekend trip planner 2026',
     'best AI travel planner',
     'AI itinerary generator',
     'short getaways',
@@ -53,7 +53,9 @@ export const metadata: Metadata = {
     'free AI travel assistant',
     'smart travel planning',
     'AI trip creator',
-    'best weekend getaways 2025'
+    '2 day trip itineraries',
+    '3 day holiday planner',
+    'best weekend getaways 2026'
   ],
   authors: [{ name: 'Weekend Travellers Team' }],
   creator: 'Weekend Travellers',
