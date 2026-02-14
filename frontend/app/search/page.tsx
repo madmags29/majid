@@ -844,6 +844,21 @@ function SearchPageContent() {
                     )}
                 </div>
             </div>
+
+            {/* Cinematic Loading Overlay */}
+            {loading && (
+                <div className="fixed inset-0 z-[100]">
+                    <CinematicLoader
+                        messages={[
+                            "Designing your perfect escape...",
+                            "Scouting the best local spots...",
+                            "Optimizing your travel route...",
+                            "Curating premium stay options...",
+                            "Finalizing your weekend adventure..."
+                        ]}
+                    />
+                </div>
+            )}
         </div>
     );
 }

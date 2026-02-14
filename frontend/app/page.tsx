@@ -366,6 +366,49 @@ export default function LandingPage() {
       </section>
 
 
+      {/* Discover India */}
+      <section className="py-24 px-6 relative z-20 border-t border-white/5 bg-slate-900/10">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+            <div>
+              <h2 className="text-4xl md:text-5xl font-black italic tracking-tighter text-white mb-4 uppercase">Discover India</h2>
+              <p className="text-xl text-slate-400 max-w-2xl">Uncover the magic of the subcontinent. From the spiritual Ghats of Rishikesh to the royal palaces of Jaipur.</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { name: 'Rishikesh', slug: 'india/uttarakhand/rishikesh', image: 'https://images.pexels.com/photos/17228392/pexels-photo-17228392/free-photo-of-lakshman-jhula-bridge-in-rishikesh-india.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Yoga capital of the world and Ganga vibes.' },
+              { name: 'Jaipur', slug: 'india/rajasthan/jaipur', image: 'https://images.pexels.com/photos/3581364/pexels-photo-3581364.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'The Pink City: Royal forts and vibrant bazaars.' },
+              { name: 'Munnar', slug: 'india/kerala/munnar', image: 'https://images.pexels.com/photos/13691355/pexels-photo-13691355.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Rolling tea gardens and misty mountain peaks.' },
+              { name: 'Udaipur', slug: 'india/rajasthan/udaipur', image: 'https://images.pexels.com/photos/11140939/pexels-photo-11140939.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'City of Lakes: Romantic palaces and boat rides.' },
+              { name: 'Shimla', slug: 'india/himachal-pradesh/shimla', image: 'https://images.pexels.com/photos/20349479/pexels-photo-20349479/free-photo-of-shimla-city-view-in-winter-captured-at-night.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Colonial charm in the heart of the Himalayas.' },
+              { name: 'Manali', slug: 'india/himachal-pradesh/manali', image: 'https://images.pexels.com/photos/20563456/pexels-photo-20563456/free-photo-of-manali-valley-himachal-pradesh.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Adventure hub and snow-capped peaks.' },
+              { name: 'Golden Temple', slug: 'india/punjab/amritsar', image: 'https://images.pexels.com/photos/14840502/pexels-photo-14840502.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Spiritual tranquility at the heart of Amritsar.' },
+              { name: 'Goa Beaches', slug: 'india/goa', image: 'https://images.pexels.com/photos/4429334/pexels-photo-4429334.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Sun, sand, and Portuguese heritage.' }
+            ].map((city) => (
+              <Link key={city.slug} href={`/explore/${city.slug}`} className="group relative h-72 rounded-3xl overflow-hidden border border-white/10 hover:border-blue-500/50 transition-all shadow-2xl">
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent z-10" />
+                <Image
+                  src={city.image}
+                  alt={city.name}
+                  fill
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  sizes="(max-width: 768px) 100vw, 25vw"
+                />
+                <div className="absolute bottom-0 left-0 p-6 z-20">
+                  <h3 className="text-xl font-black text-white italic tracking-tighter mb-1">{city.name}</h3>
+                  <p className="text-slate-300 text-[10px] mb-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2">{city.description}</p>
+                  <Button size="sm" className="bg-white text-slate-950 rounded-full font-bold px-4 h-8 text-xs group-hover:bg-blue-500 group-hover:text-white transition-colors">
+                    Explore
+                  </Button>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Explore by Region */}
       <section className="py-24 px-6 relative z-20 border-t border-white/5 bg-slate-900/20">
         <div className="max-w-7xl mx-auto">
