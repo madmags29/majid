@@ -73,7 +73,16 @@ router.post('/search', async (req, res) => {
             return res.status(400).json({ error: 'Destination is required' });
         }
 
-        const cacheKey = `itinerary/v8:${destination.toLowerCase()}:${days || 2}${interests ? `:${interests}` : ''}${origin ? `:${origin.trim()}` : ''}`;
+        // Parse days from destination string if not explicitly provided or if provided as 2
+        let requestedDays = days;
+        const daysMatch = destination.match(/(\d+)\s*day/i);
+        if (daysMatch) {
+            requestedDays = parseInt(daysMatch[1]);
+        } else if (!requestedDays) {
+            requestedDays = 2;
+        }
+
+        const cacheKey = `itinerary/v8:${destination.toLowerCase()}:${requestedDays}${interests ? `:${interests}` : ''}${origin ? `:${origin.trim()}` : ''}`;
 
         // Check cache first
         const cachedResult = await Cache.findOne({ key: cacheKey });
@@ -85,7 +94,7 @@ router.post('/search', async (req, res) => {
         console.log(`Cache miss for: ${cacheKey}. Generating new itinerary...`);
 
         // 1. Generate Itinerary
-        const itinerary = await generateItinerary(destination, days, interests, req.body.origin);
+        const itinerary = await generateItinerary(destination, requestedDays, interests, req.body.origin);
 
         // 2. Fetch Images for Activities
         await enrichmentWithImages(itinerary);

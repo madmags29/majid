@@ -324,10 +324,14 @@ function SearchPageContent() {
             const origin = searchParams.get('origin');
             setLoading(true);
             try {
+                // Extract days from destination string if possible (e.g., "3 days in Paris")
+                const daysMatch = dest.match(/(\d+)\s*day/i);
+                const requestedDays = daysMatch ? parseInt(daysMatch[1]) : 2;
+
                 const response = await fetch(`${API_URL}/api/search`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ destination: dest, days: 2, origin }),
+                    body: JSON.stringify({ destination: dest, days: requestedDays, origin }),
                 });
 
                 if (!response.ok) throw new Error('Failed to fetch itinerary');
@@ -794,7 +798,9 @@ function SearchPageContent() {
                         <form onSubmit={handleSend} className="relative flex items-center max-w-2xl mx-auto w-full">
                             <input
                                 type="text"
-                                placeholder="Ask for changes (e.g., 'Add a vegan lunch spot')..."
+                                name="chat"
+                                autoComplete="off"
+                                placeholder="Ask for changes (e.g., 'Add 1 day more or add a vegan lunch spot')..."
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
                                 className="w-full bg-slate-800 text-white placeholder:text-slate-500 text-base rounded-xl py-5 pl-4 pr-12 focus:outline-none focus:ring-2 focus:ring-blue-500/50 border border-slate-700 transition-all hover:border-slate-600"
