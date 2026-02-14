@@ -27,7 +27,10 @@ const LocationAssistant = dynamic(() => import('@/components/LocationAssistant')
 
 import { API_URL } from '@/lib/config';
 
+import CinematicLoader from '@/components/CinematicLoader';
+
 export default function LandingPage() {
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [videoUrl, setVideoUrl] = useState<string>('');
   const [videoCredit, setVideoCredit] = useState<{ name: string, url: string } | null>(null);
@@ -151,6 +154,18 @@ export default function LandingPage() {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  useEffect(() => {
+    // Simulate cinematic loading delay
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2800);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return <CinematicLoader />;
+  }
 
   return (
     <div className="min-h-screen text-white flex flex-col relative">

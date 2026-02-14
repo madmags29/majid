@@ -208,6 +208,11 @@ export default function MapView({ itinerary, selectedActivity, isExpanded }: Map
                         ref={(el) => {
                             if (el) markerRefs.current[loc.id] = el;
                         }}
+                        eventHandlers={{
+                            click: (e) => {
+                                e.target.openPopup();
+                            },
+                        }}
                     >
                         <Tooltip
                             direction="bottom"

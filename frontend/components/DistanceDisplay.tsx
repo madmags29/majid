@@ -56,9 +56,9 @@ export default function DistanceDisplay({ destinationCoords }: { destinationCoor
     if (!distance) return null;
 
     return (
-        <div className="flex items-center text-xs text-slate-500 mt-2">
-            <MapPin className="w-3 h-3 mr-1" />
-            <span>{distance} km away from you</span>
+        <div className="bg-slate-800/30 border border-blue-500/20 rounded-xl p-4 flex justify-between items-center">
+            <span className="text-sm text-slate-400 font-medium">Distance from you</span>
+            <span className="text-blue-400 font-bold text-lg">~{distance} km</span>
         </div>
     );
 }
