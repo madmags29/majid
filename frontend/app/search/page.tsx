@@ -251,7 +251,17 @@ function SearchPageContent() {
 
     const [leftWidth, setLeftWidth] = useState(50);
     const [isResizing, setIsResizing] = useState(false);
+    const [isDesktop, setIsDesktop] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const checkIsDesktop = () => {
+            setIsDesktop(window.innerWidth >= 768);
+        };
+        checkIsDesktop();
+        window.addEventListener('resize', checkIsDesktop);
+        return () => window.removeEventListener('resize', checkIsDesktop);
+    }, []);
 
     const handleMouseDown = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -519,7 +529,7 @@ function SearchPageContent() {
                     ) : (
                         <Button
                             onClick={() => setIsAuthOpen(true)}
-                            className="bg-blue-600 hover:bg-blue-500 text-white rounded-full px-6 h-9 font-bold transition-all shadow-lg shadow-blue-500/20"
+                            className="hidden md:inline-flex bg-blue-600 hover:bg-blue-500 text-white rounded-full px-6 h-9 font-bold transition-all shadow-lg shadow-blue-500/20"
                         >
                             Sign In
                         </Button>
@@ -538,8 +548,8 @@ function SearchPageContent() {
             >
                 {/* Left Panel - Chat & Content */}
                 <div
-                    className="flex flex-col min-w-0 bg-slate-950 border-r border-slate-800"
-                    style={{ width: `${leftWidth}%` }}
+                    className="flex flex-col min-w-0 bg-slate-950 border-r border-slate-800 w-full"
+                    style={isDesktop ? { width: `${leftWidth}%` } : {}}
                 >
                     <div className="flex-1 overflow-y-auto p-4 space-y-6 scroll-smooth custom-scrollbar">
                         {messages.map((msg, idx) => (
@@ -816,7 +826,7 @@ function SearchPageContent() {
                 {/* Right Panel - Map */}
                 <div
                     className="hidden md:block bg-slate-950 relative"
-                    style={{ width: `${100 - leftWidth}%` }}
+                    style={isDesktop ? { width: `${100 - leftWidth}%` } : {}}
                 >
                     {currentItineraryData ? (
                         <MapView itinerary={currentItineraryData} selectedActivity={selectedActivity} />

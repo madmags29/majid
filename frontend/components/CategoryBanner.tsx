@@ -23,7 +23,7 @@ export default function CategoryBanner({ userLocation }: CategoryBannerProps) {
     };
 
     return (
-        <div className="w-full mt-12 overflow-x-auto no-scrollbar pb-4 animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-500">
+        <div className="w-full mt-12 overflow-x-auto no-scrollbar pb-4 animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-500 min-h-[110px]">
             <div className="flex justify-center gap-4 min-w-max px-4">
                 {CATEGORIES.map((cat, index) => (
                     <motion.button

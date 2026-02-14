@@ -12,6 +12,7 @@ const AuthModal = dynamic(() => import('@/components/AuthModal'));
 const TypewriterText = dynamic(() => import('@/components/TypewriterText'));
 const CategoryBanner = dynamic(() => import('@/components/CategoryBanner'));
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -185,6 +186,7 @@ export default function LandingPage() {
             playsInline
             className="w-full h-full object-cover"
             key={videoUrl}
+            poster="/video-poster.jpg"
           >
             <source src={videoUrl} type="video/mp4" />
           </video>
@@ -255,7 +257,7 @@ export default function LandingPage() {
               </DropdownMenu>
             </div>
           ) : (
-            <div className="flex items-center gap-4">
+            <div className="hidden md:flex items-center gap-4">
               <Button
                 onClick={() => openAuth('login')}
                 variant="ghost"
@@ -277,7 +279,7 @@ export default function LandingPage() {
       {/* Hero Section */}
       <section className="flex-1 flex flex-col items-center justify-center px-4 py-20 pb-32 relative z-10">
         <div className="text-center max-w-4xl z-10 w-full animate-in fade-in slide-in-from-bottom-8 duration-1000 fill-mode-both">
-          <div className="flex justify-center mb-6">
+          <div className="flex justify-center mb-6 min-h-[40px]">
             <VisitorCounter />
           </div>
           <h2 className="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-6 drop-shadow-2xl">
@@ -306,30 +308,32 @@ export default function LandingPage() {
           </form>
 
           {/* Suggestions */}
-          {(suggestions.length > 0 || isLoadingSuggestions) && (
-            <div className="mt-8 flex flex-wrap justify-center gap-3 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
-              <span className="text-slate-300 text-sm font-medium mr-2 self-center">
-                {isLoadingSuggestions ? 'Finding best trips for you...' : (userLocation ? `Popular in ${userLocation}:` : 'Trending:')}
-              </span>
-              {isLoadingSuggestions ? (
-                <div className="flex gap-2">
-                  {[1, 2, 3].map(i => (
-                    <div key={i} className="h-8 w-24 bg-white/10 rounded-full animate-pulse border border-white/5" />
-                  ))}
-                </div>
-              ) : (
-                suggestions.map((place) => (
-                  <button
-                    key={place}
-                    onClick={() => handleSuggestionClick(place)}
-                    className="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 rounded-full px-4 py-1.5 text-sm text-slate-100 transition-all hover:scale-105 active:scale-95"
-                  >
-                    {place}
-                  </button>
-                ))
-              )}
-            </div>
-          )}
+          <div className="min-h-[100px] mt-8">
+            {(suggestions.length > 0 || isLoadingSuggestions) && (
+              <div className="flex flex-wrap justify-center gap-3 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
+                <span className="text-slate-300 text-sm font-medium mr-2 self-center">
+                  {isLoadingSuggestions ? 'Finding best trips for you...' : (userLocation ? `Popular in ${userLocation}:` : 'Trending:')}
+                </span>
+                {isLoadingSuggestions ? (
+                  <div className="flex gap-2">
+                    {[1, 2, 3].map(i => (
+                      <div key={i} className="h-8 w-24 bg-white/10 rounded-full animate-pulse border border-white/5" />
+                    ))}
+                  </div>
+                ) : (
+                  suggestions.map((place) => (
+                    <button
+                      key={place}
+                      onClick={() => handleSuggestionClick(place)}
+                      className="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 rounded-full px-4 py-1.5 text-sm text-slate-100 transition-all hover:scale-105 active:scale-95"
+                    >
+                      {place}
+                    </button>
+                  ))
+                )}
+              </div>
+            )}
+          </div>
           {/* Travel Categories */}
           <CategoryBanner userLocation={userLocation} />
         </div>
@@ -357,7 +361,13 @@ export default function LandingPage() {
             ].map((region) => (
               <Link key={region.slug} href={`/explore/${region.slug}`} className="group relative h-96 rounded-3xl overflow-hidden border border-white/10 hover:border-blue-500/50 transition-all shadow-2xl">
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent z-10" />
-                <img src={region.image} alt={region.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                <Image
+                  src={region.image}
+                  alt={region.name}
+                  fill
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
                 <div className="absolute bottom-0 left-0 p-8 z-20">
                   <h3 className="text-3xl font-black text-white italic tracking-tighter mb-2">{region.name}</h3>
                   <p className="text-slate-300 text-sm mb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">{region.description}</p>
