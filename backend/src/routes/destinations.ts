@@ -77,6 +77,7 @@ router.get('/explore', async (req, res) => {
 
         const result = {
             ...itinerary,
+            days: itinerary.days || itinerary.itinerary,
             deep_content: deepContent,
             slug: slug,
             heroVideo,

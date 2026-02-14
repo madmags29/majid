@@ -55,10 +55,11 @@ const TypingResponse = ({ content, onComplete }: { content: string, onComplete?:
         <div className="prose prose-invert prose-p:leading-relaxed prose-pre:bg-slate-800 prose-pre:p-4 prose-pre:rounded-lg max-w-none text-slate-300">
             <ReactMarkdown
                 components={{
-                    ul: ({ node, ...props }) => <ul className="list-disc pl-4 space-y-2" {...props} />,
-                    ol: ({ node, ...props }) => <ol className="list-decimal pl-4 space-y-2" {...props} />,
-                    li: ({ node, ...props }) => <li className="pl-1" {...props} />,
-                    strong: ({ node, ...props }) => <span className="font-bold text-blue-400" {...props} />,
+                    ul: ({ node, ...props }) => <ul className="list-disc pl-4 space-y-2">{props.children}</ul>,
+                    ol: ({ node, ...props }) => <ol className="list-decimal pl-4 space-y-2">{props.children}</ol>,
+                    li: ({ node, ...props }) => <li className="pl-1">{props.children}</li>,
+                    strong: ({ node, ...props }) => <span className="font-bold text-blue-400">{props.children}</span>,
+                    p: ({ node, ...props }) => <p className="leading-relaxed mb-4">{props.children}</p>,
                 }}
             >
                 {displayed}

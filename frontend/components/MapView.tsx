@@ -126,8 +126,8 @@ export default function MapView({ itinerary, selectedActivity, isExpanded }: Map
 
     // Extract all locations with stable coordinates
     const locations = useMemo(() => {
-        const activityLocations = itinerary.days.flatMap((day, dayIdx) =>
-            day.activities.map((activity, actIdx) => ({
+        const activityLocations = (itinerary?.days || (itinerary as any)?.itinerary || []).flatMap((day: any, dayIdx: number) =>
+            (day.activities || []).map((activity: any, actIdx: number) => ({
                 id: `${day.day}-${actIdx}`,
                 position: getCoordinates(activity.location, dayIdx, actIdx, center),
                 location: activity.location,

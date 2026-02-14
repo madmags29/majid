@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { MapPin, ArrowLeft, Sparkles, Utensils, Compass, Share2, Maximize2, X, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { cn } from '@/lib/utils';
+import { cn, formatCurrency } from '@/lib/utils';
 import { toast } from 'sonner';
 
 // Dynamically import components to avoid SSR issues
@@ -279,7 +279,7 @@ export default function ExploreContent({ slug }: { slug: string }) {
                         </h2>
 
                         <div className="space-y-12">
-                            {data.days.map((day) => (
+                            {(data.days || (data as any).itinerary || []).map((day: any) => (
                                 <div key={day.day} className="bg-slate-900/40 rounded-3xl border border-white/5 overflow-hidden">
                                     <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 px-8 py-6 border-b border-white/5">
                                         <h3 className="text-2xl font-bold flex items-center gap-3">
@@ -290,7 +290,7 @@ export default function ExploreContent({ slug }: { slug: string }) {
                                         </h3>
                                     </div>
                                     <div className="p-8 space-y-8">
-                                        {day.activities.map((activity, idx) => (
+                                        {(day.activities || []).map((activity: Activity, idx: number) => (
                                             <div key={idx} className="flex flex-col md:flex-row gap-8 group">
                                                 {activity.imageUrl && (
                                                     <div className="w-full md:w-48 h-32 rounded-2xl overflow-hidden shrink-0">
@@ -340,7 +340,7 @@ export default function ExploreContent({ slug }: { slug: string }) {
                                 </div>
                                 <div>
                                     <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Est. Budget</p>
-                                    <p className="text-lg font-bold">{data.trip_details.currency}{data.trip_details.estimated_budget}</p>
+                                    <p className="text-lg font-bold">{formatCurrency(data.trip_details.estimated_budget, data.trip_details.currency)}</p>
                                 </div>
                             </div>
                             <div className="flex items-center gap-4">
@@ -353,8 +353,8 @@ export default function ExploreContent({ slug }: { slug: string }) {
                                 </div>
                             </div>
                             <WeatherWidget
-                                lat={data.trip_details.destination_coordinates.lat}
-                                lng={data.trip_details.destination_coordinates.lng}
+                                lat={data.trip_details?.destination_coordinates?.lat || 0}
+                                lng={data.trip_details?.destination_coordinates?.lng || 0}
                             />
                         </div>
                     </div>
@@ -395,7 +395,7 @@ export default function ExploreContent({ slug }: { slug: string }) {
                             TOP SLEEP SPOTS
                         </h3>
                         <div className="space-y-4">
-                            {data.trip_details.hotel_suggestions.map((hotel, idx) => {
+                            {(data.trip_details?.hotel_suggestions || []).map((hotel, idx) => {
                                 const hotelUrl = `https://search.hotellook.com/hotels?destination=${encodeURIComponent(hotel.name + ' ' + data.destination)}&marker=497779`;
                                 return (
                                     <a
