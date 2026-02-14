@@ -263,20 +263,40 @@ export default function LandingPage() {
               </DropdownMenu>
             </div>
           ) : (
-            <div className="hidden md:flex items-center gap-4">
-              <Button
-                onClick={() => openAuth('login')}
-                variant="ghost"
-                className="text-slate-200 hover:text-white hover:bg-white/10 transition-all font-medium"
-              >
-                Login
-              </Button>
-              <Button
-                onClick={() => openAuth('signup')}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25 border-0 rounded-xl px-6 transition-all transform hover:scale-105 active:scale-95"
-              >
-                Sign Up
-              </Button>
+            <div className="flex items-center gap-4">
+              {/* Mobile Login | Signup */}
+              <div className="flex md:hidden items-center text-sm font-bold tracking-wide">
+                <button
+                  onClick={() => openAuth('login')}
+                  className="text-slate-200 hover:text-white transition-colors"
+                >
+                  LOGIN
+                </button>
+                <span className="mx-2 text-slate-500/50 font-light">|</span>
+                <button
+                  onClick={() => openAuth('signup')}
+                  className="text-slate-200 hover:text-white transition-colors"
+                >
+                  SIGNUP
+                </button>
+              </div>
+
+              {/* Desktop Login & Sign Up */}
+              <div className="hidden md:flex items-center gap-4">
+                <Button
+                  onClick={() => openAuth('login')}
+                  variant="ghost"
+                  className="text-slate-200 hover:text-white hover:bg-white/10 transition-all font-medium"
+                >
+                  Login
+                </Button>
+                <Button
+                  onClick={() => openAuth('signup')}
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25 border-0 rounded-xl px-6 transition-all transform hover:scale-105 active:scale-95"
+                >
+                  Sign Up
+                </Button>
+              </div>
             </div>
           )}
         </nav>
@@ -387,7 +407,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-    </div>
+    </div >
   );
 }
 
