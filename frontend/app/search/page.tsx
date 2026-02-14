@@ -529,7 +529,7 @@ function SearchPageContent() {
                     ) : (
                         <Button
                             onClick={() => setIsAuthOpen(true)}
-                            className="hidden md:inline-flex bg-blue-600 hover:bg-blue-500 text-white rounded-full px-6 h-9 font-bold transition-all shadow-lg shadow-blue-500/20"
+                            className="hidden md:inline-flex bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25 border-0 rounded-xl px-6 transition-all transform hover:scale-105 active:scale-95"
                         >
                             Sign In
                         </Button>
