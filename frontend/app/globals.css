@@ -142,9 +142,6 @@ body {
 
   --animation-shimmer: shimmer 3s infinite;
   --animation-spin-slow: spin-slow 8s linear infinite;
-
-  --font-playfair: var(--font-playfair);
-  --font-lora: var(--font-lora);
 }
 
 .dark {

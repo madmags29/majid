@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Sacramento, Playfair_Display, Lora } from "next/font/google";
+import { Geist, Geist_Mono, Sacramento } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import Footer from "@/components/Footer";
@@ -23,17 +23,7 @@ const cursive = Sacramento({
   display: 'swap',
 });
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
-  subsets: ["latin"],
-  display: 'swap',
-});
 
-const lora = Lora({
-  variable: "--font-lora",
-  subsets: ["latin"],
-  display: 'swap',
-});
 
 import Script from "next/script";
 
@@ -118,7 +108,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${cursive.variable} ${playfair.variable} ${lora.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${cursive.variable} antialiased`}
         suppressHydrationWarning
       >
         <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>

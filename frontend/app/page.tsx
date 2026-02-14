@@ -7,12 +7,13 @@ import { Button } from '@/components/ui/button';
 
 import dynamic from 'next/dynamic';
 
-const AnimatedLogo = dynamic(() => import('@/components/AnimatedLogo'));
-const AuthModal = dynamic(() => import('@/components/AuthModal'));
-const TypewriterText = dynamic(() => import('@/components/TypewriterText'));
-const CategoryBanner = dynamic(() => import('@/components/CategoryBanner'));
 import Link from 'next/link';
 import Image from 'next/image';
+import AnimatedLogo from '@/components/AnimatedLogo';
+import TypewriterText from '@/components/TypewriterText';
+
+const AuthModal = dynamic(() => import('@/components/AuthModal'));
+const CategoryBanner = dynamic(() => import('@/components/CategoryBanner'));
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -157,8 +158,8 @@ export default function LandingPage() {
   }, []);
 
   useEffect(() => {
-    // Simulate cinematic loading delay - reduced for mobile to improve FCP
-    const delay = window.innerWidth < 768 ? 1200 : 2800;
+    // Simulate minimal loading delay - significantly reduced for mobile FCP
+    const delay = window.innerWidth < 768 ? 50 : 2500;
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, delay);
@@ -193,6 +194,7 @@ export default function LandingPage() {
             className="w-full h-full object-cover"
             key={videoUrl}
             poster="/video-poster.png"
+            title="Destination background"
           >
             <source src={videoUrl} type="video/mp4" />
           </video>
