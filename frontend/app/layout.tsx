@@ -32,8 +32,10 @@ const lora = Lora({
 
 import Script from "next/script";
 
+import { GOOGLE_CLIENT_ID, SITE_URL } from '@/lib/config';
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: 'Weekend Travellers – AI-Powered Weekend Trip Planner for 2 & 3 Day Getaways (2026)',
     template: '%s | Weekend Travellers',
@@ -100,7 +102,6 @@ export const metadata: Metadata = {
 };
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import { GOOGLE_CLIENT_ID } from '@/lib/config';
 
 export default function RootLayout({
   children,
