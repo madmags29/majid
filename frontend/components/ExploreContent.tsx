@@ -199,7 +199,7 @@ export default function ExploreContent({ slug }: { slug: string }) {
                             {isSharing ? <Check className="w-5 h-5 text-green-400" /> : <Share2 className="w-5 h-5" />}
                         </Button>
                         <Link href={`/search?destination=${encodeURIComponent(data.destination)}`}>
-                            <Button className="bg-blue-600 hover:bg-blue-700 rounded-full px-6">Customize Trip</Button>
+                            <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25 border-0 rounded-xl px-6 transition-all transform hover:scale-105 active:scale-95">Customize Trip</Button>
                         </Link>
                     </div>
                 </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef, Suspense } from 'react';
+import { useEffect, useState, useRef, Suspense, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { MapPin, Calendar, Loader2, Send, User, Heart, Share2, Check, ArrowLeft, Bus, Train, Plane, Car, LogIn } from 'lucide-react';
@@ -249,6 +249,42 @@ function SearchPageContent() {
     const [currentItineraryData, setCurrentItineraryData] = useState<Itinerary | null>(null);
     const [user, setUser] = useState<{ name: string, email: string } | null>(null);
 
+    const [leftWidth, setLeftWidth] = useState(50);
+    const [isResizing, setIsResizing] = useState(false);
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    const handleMouseDown = (e: React.MouseEvent) => {
+        e.preventDefault();
+        setIsResizing(true);
+    };
+
+    const handleMouseMove = useCallback((e: MouseEvent) => {
+        if (!isResizing || !containerRef.current) return;
+        const containerRect = containerRef.current.getBoundingClientRect();
+        const newWidth = ((e.clientX - containerRect.left) / containerRect.width) * 100;
+        if (newWidth > 20 && newWidth < 80) {
+            setLeftWidth(newWidth);
+        }
+    }, [isResizing]);
+
+    const handleMouseUp = useCallback(() => {
+        setIsResizing(false);
+    }, []);
+
+    useEffect(() => {
+        if (isResizing) {
+            window.addEventListener('mousemove', handleMouseMove);
+            window.addEventListener('mouseup', handleMouseUp);
+        } else {
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mouseup', handleMouseUp);
+        }
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mouseup', handleMouseUp);
+        };
+    }, [isResizing, handleMouseMove, handleMouseUp]);
+
     useEffect(() => {
         const userData = localStorage.getItem('user');
         if (userData) {
@@ -493,12 +529,21 @@ function SearchPageContent() {
 
             <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
 
-            <div className="flex-1 flex overflow-hidden">
+            <div
+                ref={containerRef}
+                className={cn(
+                    "flex-1 flex overflow-hidden relative",
+                    isResizing && "cursor-col-resize select-none"
+                )}
+            >
                 {/* Left Panel - Chat & Content */}
-                <div className="flex-1 flex flex-col min-w-0 bg-slate-950 border-r border-slate-800">
+                <div
+                    className="flex flex-col min-w-0 bg-slate-950 border-r border-slate-800"
+                    style={{ width: `${leftWidth}%` }}
+                >
                     <div className="flex-1 overflow-y-auto p-4 space-y-6 scroll-smooth custom-scrollbar">
                         {messages.map((msg, idx) => (
-                            <div key={idx} className={cn("flex gap-3 max-w-[90%] md:max-w-[80%]", msg.role === 'assistant' ? "mr-auto" : "ml-auto flex-row-reverse")}>
+                            <div key={idx} className={cn("flex gap-3", msg.role === 'assistant' ? "mr-auto w-full md:max-w-[95%]" : "ml-auto max-w-[90%] md:max-w-[80%] flex-row-reverse")}>
                                 {msg.role === 'assistant' && (
                                     <div className="hidden md:flex w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 items-center justify-center shrink-0 mt-1 overflow-hidden ring-1 ring-white/20">
                                         <AnimatedLogo className="w-5 h-5 text-white" solid />
@@ -639,8 +684,8 @@ function SearchPageContent() {
                                                     <div key={dIdx} className="bg-slate-900/50 rounded-2xl border border-slate-800 overflow-hidden shadow-2xl">
                                                         <div className="bg-slate-800/80 px-4 py-3 border-b border-slate-700 flex items-center justify-between">
                                                             <h4 className="text-sm font-black flex items-center gap-3">
-                                                                <span className="flex items-center justify-center w-6 h-6 rounded-lg bg-blue-600/20 text-blue-400 text-xs">
-                                                                    {day.day}
+                                                                <span className="flex items-center justify-center px-2.5 py-0.5 rounded-lg bg-blue-600/20 text-blue-400 text-xs whitespace-nowrap">
+                                                                    Day {day.day}
                                                                 </span>
                                                                 {day.title}
                                                             </h4>
@@ -651,11 +696,11 @@ function SearchPageContent() {
                                                                     key={aIdx}
                                                                     className={cn(
                                                                         "p-4 rounded-xl border border-slate-800 transition-all duration-300 cursor-pointer group",
-                                                                        selectedActivity === activity.location
+                                                                        selectedActivity === `${day.day}-${aIdx}`
                                                                             ? "bg-blue-600/10 border-blue-500/50 ring-1 ring-blue-500/20"
                                                                             : "bg-slate-800/30 hover:bg-slate-800/50 hover:border-slate-700"
                                                                     )}
-                                                                    onClick={() => setSelectedActivity(activity.location)}
+                                                                    onClick={() => setSelectedActivity(`${day.day}-${aIdx}`)}
                                                                 >
                                                                     <div className="flex items-start justify-between mb-2">
                                                                         <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">{activity.time}</div>
@@ -736,7 +781,7 @@ function SearchPageContent() {
 
                     {/* Input Area */}
                     <div className="p-4 bg-slate-900 border-t border-slate-800">
-                        <form onSubmit={handleSend} className="relative flex items-center">
+                        <form onSubmit={handleSend} className="relative flex items-center max-w-2xl mx-auto w-full">
                             <input
                                 type="text"
                                 placeholder="Ask for changes (e.g., 'Add a vegan lunch spot')..."
@@ -756,8 +801,23 @@ function SearchPageContent() {
                     </div>
                 </div>
 
+                {/* Resize Handle */}
+                <div
+                    className="hidden md:flex absolute top-0 bottom-0 z-50 w-4 cursor-col-resize items-center justify-center hover:bg-white/5 transition-colors"
+                    style={{ left: `calc(${leftWidth}% - 8px)` }}
+                    onMouseDown={handleMouseDown}
+                >
+                    <div className={cn(
+                        "h-12 w-1 rounded-full transition-colors",
+                        isResizing ? "bg-blue-500" : "bg-slate-700 group-hover:bg-slate-500"
+                    )} />
+                </div>
+
                 {/* Right Panel - Map */}
-                <div className="hidden md:block flex-1 bg-slate-950 relative">
+                <div
+                    className="hidden md:block bg-slate-950 relative"
+                    style={{ width: `${100 - leftWidth}%` }}
+                >
                     {currentItineraryData ? (
                         <MapView itinerary={currentItineraryData} selectedActivity={selectedActivity} />
                     ) : (
