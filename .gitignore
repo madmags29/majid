@@ -17,3 +17,6 @@ frontend/build/
 .env.test.local
 .env.production.local
 .vercel
+backend/.env.production
+backend/log_pid.txt
+backend/vercel_logs.txt
