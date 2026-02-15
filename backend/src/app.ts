@@ -36,11 +36,21 @@ if (MONGODB_URI) {
     mongoose
         .connect(MONGODB_URI)
         .then(() => {
-            console.log('Connected to MongoDB');
+            console.log('Successfully connected to MongoDB Atlas');
         })
         .catch((err) => {
-            console.error('Error connecting to MongoDB:', err);
+            console.error('CRITICAL: MongoDB connection error:', err);
         });
+
+    mongoose.connection.on('error', err => {
+        console.error('Mongoose connection error:', err);
+    });
+
+    mongoose.connection.on('disconnected', () => {
+        console.warn('Mongoose disconnected');
+    });
+} else {
+    console.error('CRITICAL: MONGODB_URI is not defined in environment variables');
 }
 
 // Routes
@@ -55,5 +65,15 @@ app.use('/api/auth', authRouter);
 app.use('/api/trips', tripsRouter);
 app.use('/api', weatherRouter);
 app.use('/api', contactRouter);
+
+// Global Error Handling Middleware
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    console.error('UNHANDLED ERROR:', err);
+    res.status(500).json({
+        error: 'Internal Server Error',
+        message: err.message,
+        stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+    });
+});
 
 export default app;

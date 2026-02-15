@@ -34,7 +34,7 @@ import CinematicLoader from '@/components/CinematicLoader';
 
 export default function LandingPage() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [videoUrl, setVideoUrl] = useState<string>('');
   const [videoCredit, setVideoCredit] = useState<{ name: string, url: string } | null>(null);
@@ -163,7 +163,7 @@ export default function LandingPage() {
 
   useEffect(() => {
     // Simulate minimal loading delay - significantly reduced for mobile FCP
-    const delay = window.innerWidth < 768 ? 50 : 2500;
+    const delay = window.innerWidth < 768 ? 800 : 2500;
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, delay);
