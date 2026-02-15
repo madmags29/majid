@@ -7,11 +7,13 @@ import { Button } from '@/components/ui/button';
 
 import dynamic from 'next/dynamic';
 
-const AnimatedLogo = dynamic(() => import('@/components/AnimatedLogo'));
-const AuthModal = dynamic(() => import('@/components/AuthModal'));
-const TypewriterText = dynamic(() => import('@/components/TypewriterText'));
-const CategoryBanner = dynamic(() => import('@/components/CategoryBanner'));
 import Link from 'next/link';
+import Image from 'next/image';
+import AnimatedLogo from '@/components/AnimatedLogo';
+import TypewriterText from '@/components/TypewriterText';
+
+const AuthModal = dynamic(() => import('@/components/AuthModal'));
+const CategoryBanner = dynamic(() => import('@/components/CategoryBanner'));
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,7 +29,10 @@ const LocationAssistant = dynamic(() => import('@/components/LocationAssistant')
 
 import { API_URL } from '@/lib/config';
 
+import CinematicLoader from '@/components/CinematicLoader';
+
 export default function LandingPage() {
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [videoUrl, setVideoUrl] = useState<string>('');
   const [videoCredit, setVideoCredit] = useState<{ name: string, url: string } | null>(null);
@@ -152,12 +157,30 @@ export default function LandingPage() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  useEffect(() => {
+    // Simulate minimal loading delay - significantly reduced for mobile FCP
+    const delay = window.innerWidth < 768 ? 50 : 2500;
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, delay);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return <CinematicLoader />;
+  }
+
   return (
     <div className="min-h-screen text-white flex flex-col relative">
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} initialMode={authMode} />
 
       {/* Base Background Color (Always present, sits behind video) */}
       <div className="fixed inset-0 bg-[#0f172a] -z-30" />
+
+      {/* Preload critical LCP assets */}
+      {videoUrl && (
+        <link rel="preload" as="image" href="/video-poster.png" />
+      )}
 
       {/* Video Background */}
       {videoUrl && (
@@ -170,6 +193,8 @@ export default function LandingPage() {
             playsInline
             className="w-full h-full object-cover"
             key={videoUrl}
+            poster="/video-poster.png"
+            title="Destination background"
           >
             <source src={videoUrl} type="video/mp4" />
           </video>
@@ -241,19 +266,39 @@ export default function LandingPage() {
             </div>
           ) : (
             <div className="flex items-center gap-4">
-              <Button
-                onClick={() => openAuth('login')}
-                variant="ghost"
-                className="text-slate-200 hover:text-white hover:bg-white/10 transition-all font-medium"
-              >
-                Login
-              </Button>
-              <Button
-                onClick={() => openAuth('signup')}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25 border-0 rounded-xl px-6 transition-all transform hover:scale-105 active:scale-95"
-              >
-                Sign Up
-              </Button>
+              {/* Mobile Login | Signup */}
+              <div className="flex md:hidden items-center text-sm font-bold tracking-wide">
+                <button
+                  onClick={() => openAuth('login')}
+                  className="text-slate-200 hover:text-white transition-colors"
+                >
+                  LOGIN
+                </button>
+                <span className="mx-2 text-slate-500/50 font-light">|</span>
+                <button
+                  onClick={() => openAuth('signup')}
+                  className="text-slate-200 hover:text-white transition-colors"
+                >
+                  SIGNUP
+                </button>
+              </div>
+
+              {/* Desktop Login & Sign Up */}
+              <div className="hidden md:flex items-center gap-4">
+                <Button
+                  onClick={() => openAuth('login')}
+                  variant="ghost"
+                  className="text-slate-200 hover:text-white hover:bg-white/10 transition-all font-medium"
+                >
+                  Login
+                </Button>
+                <Button
+                  onClick={() => openAuth('signup')}
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25 border-0 rounded-xl px-6 transition-all transform hover:scale-105 active:scale-95"
+                >
+                  Sign Up
+                </Button>
+              </div>
             </div>
           )}
         </nav>
@@ -262,7 +307,7 @@ export default function LandingPage() {
       {/* Hero Section */}
       <section className="flex-1 flex flex-col items-center justify-center px-4 py-20 pb-32 relative z-10">
         <div className="text-center max-w-4xl z-10 w-full animate-in fade-in slide-in-from-bottom-8 duration-1000 fill-mode-both">
-          <div className="flex justify-center mb-6">
+          <div className="flex justify-center mb-6 min-h-[40px]">
             <VisitorCounter />
           </div>
           <h2 className="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-6 drop-shadow-2xl">
@@ -279,7 +324,7 @@ export default function LandingPage() {
               <MapPin className="w-5 h-5 text-slate-300 mr-3" />
               <input
                 type="text"
-                placeholder="Where to? (e.g. Paris) or 2 days weekend trip near me?"
+                placeholder="Where to? (e.g. Paris) or 3 days weekend trip near me?"
                 className="bg-transparent w-full outline-none text-white placeholder:text-slate-400 font-medium text-base"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -291,35 +336,80 @@ export default function LandingPage() {
           </form>
 
           {/* Suggestions */}
-          {(suggestions.length > 0 || isLoadingSuggestions) && (
-            <div className="mt-8 flex flex-wrap justify-center gap-3 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
-              <span className="text-slate-300 text-sm font-medium mr-2 self-center">
-                {isLoadingSuggestions ? 'Finding best trips for you...' : (userLocation ? `Popular in ${userLocation}:` : 'Trending:')}
-              </span>
-              {isLoadingSuggestions ? (
-                <div className="flex gap-2">
-                  {[1, 2, 3].map(i => (
-                    <div key={i} className="h-8 w-24 bg-white/10 rounded-full animate-pulse border border-white/5" />
-                  ))}
-                </div>
-              ) : (
-                suggestions.map((place) => (
-                  <button
-                    key={place}
-                    onClick={() => handleSuggestionClick(place)}
-                    className="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 rounded-full px-4 py-1.5 text-sm text-slate-100 transition-all hover:scale-105 active:scale-95"
-                  >
-                    {place}
-                  </button>
-                ))
-              )}
-            </div>
-          )}
+          <div className="min-h-[100px] mt-8">
+            {(suggestions.length > 0 || isLoadingSuggestions) && (
+              <div className="flex flex-wrap justify-center gap-3 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
+                <span className="text-slate-300 text-sm font-medium mr-2 self-center">
+                  {isLoadingSuggestions ? 'Finding best trips for you...' : (userLocation ? `Popular in ${userLocation}:` : 'Trending:')}
+                </span>
+                {isLoadingSuggestions ? (
+                  <div className="flex gap-2">
+                    {[1, 2, 3].map(i => (
+                      <div key={i} className="h-8 w-24 bg-white/10 rounded-full animate-pulse border border-white/5" />
+                    ))}
+                  </div>
+                ) : (
+                  suggestions.map((place) => (
+                    <button
+                      key={place}
+                      onClick={() => handleSuggestionClick(place)}
+                      className="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 rounded-full px-4 py-1.5 text-sm text-slate-100 transition-all hover:scale-105 active:scale-95"
+                    >
+                      {place}
+                    </button>
+                  ))
+                )}
+              </div>
+            )}
+          </div>
           {/* Travel Categories */}
           <CategoryBanner userLocation={userLocation} />
         </div>
       </section>
 
+
+      {/* Discover India */}
+      <section className="py-24 px-6 relative z-20 border-t border-white/5 bg-slate-900/10">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+            <div>
+              <h2 className="text-4xl md:text-5xl font-black italic tracking-tighter text-white mb-4 uppercase">Discover India</h2>
+              <p className="text-xl text-slate-400 max-w-2xl">Uncover the magic of the subcontinent. From the spiritual Ghats of Rishikesh to the royal palaces of Jaipur.</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { name: 'Rishikesh', slug: 'india/uttarakhand/rishikesh', image: 'https://images.pexels.com/photos/17228392/pexels-photo-17228392/free-photo-of-lakshman-jhula-bridge-in-rishikesh-india.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Yoga capital of the world and Ganga vibes.' },
+              { name: 'Jaipur', slug: 'india/rajasthan/jaipur', image: 'https://images.pexels.com/photos/3581364/pexels-photo-3581364.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'The Pink City: Royal forts and vibrant bazaars.' },
+              { name: 'Munnar', slug: 'india/kerala/munnar', image: 'https://images.pexels.com/photos/13691355/pexels-photo-13691355.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Rolling tea gardens and misty mountain peaks.' },
+              { name: 'Udaipur', slug: 'india/rajasthan/udaipur', image: 'https://images.pexels.com/photos/11140939/pexels-photo-11140939.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'City of Lakes: Romantic palaces and boat rides.' },
+              { name: 'Shimla', slug: 'india/himachal-pradesh/shimla', image: 'https://images.pexels.com/photos/20349479/pexels-photo-20349479/free-photo-of-shimla-city-view-in-winter-captured-at-night.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Colonial charm in the heart of the Himalayas.' },
+              { name: 'Manali', slug: 'india/himachal-pradesh/manali', image: 'https://images.pexels.com/photos/20563456/pexels-photo-20563456/free-photo-of-manali-valley-himachal-pradesh.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Adventure hub and snow-capped peaks.' },
+              { name: 'Golden Temple', slug: 'india/punjab/amritsar', image: 'https://images.pexels.com/photos/14840502/pexels-photo-14840502.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Spiritual tranquility at the heart of Amritsar.' },
+              { name: 'Goa Beaches', slug: 'india/goa', image: 'https://images.pexels.com/photos/4429334/pexels-photo-4429334.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Sun, sand, and Portuguese heritage.' }
+            ].map((city) => (
+              <Link key={city.slug} href={`/explore/${city.slug}`} className="group relative h-72 rounded-3xl overflow-hidden border border-white/10 hover:border-blue-500/50 transition-all shadow-2xl">
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent z-10" />
+                <Image
+                  src={city.image}
+                  alt={city.name}
+                  fill
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  sizes="(max-width: 768px) 100vw, 25vw"
+                />
+                <div className="absolute bottom-0 left-0 p-6 z-20">
+                  <h3 className="text-xl font-black text-white italic tracking-tighter mb-1">{city.name}</h3>
+                  <p className="text-slate-300 text-[10px] mb-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2">{city.description}</p>
+                  <Button size="sm" className="bg-white text-slate-950 rounded-full font-bold px-4 h-8 text-xs group-hover:bg-blue-500 group-hover:text-white transition-colors">
+                    Explore
+                  </Button>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* Explore by Region */}
       <section className="py-24 px-6 relative z-20 border-t border-white/5 bg-slate-900/20">
@@ -342,7 +432,13 @@ export default function LandingPage() {
             ].map((region) => (
               <Link key={region.slug} href={`/explore/${region.slug}`} className="group relative h-96 rounded-3xl overflow-hidden border border-white/10 hover:border-blue-500/50 transition-all shadow-2xl">
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent z-10" />
-                <img src={region.image} alt={region.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                <Image
+                  src={region.image}
+                  alt={region.name}
+                  fill
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
                 <div className="absolute bottom-0 left-0 p-8 z-20">
                   <h3 className="text-3xl font-black text-white italic tracking-tighter mb-2">{region.name}</h3>
                   <p className="text-slate-300 text-sm mb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">{region.description}</p>
@@ -356,7 +452,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-    </div>
+    </div >
   );
 }
 

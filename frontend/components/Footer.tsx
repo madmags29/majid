@@ -34,7 +34,7 @@ const Footer = () => {
                     </div>
 
                     {/* Links Section */}
-                    <div className="flex gap-16 md:gap-24">
+                    <div className="grid grid-cols-2 gap-8 md:flex md:gap-24">
                         {/* Discover India */}
                         <div>
                             <h3 className="text-white font-semibold mb-4 text-xs tracking-widest uppercase">Discover India</h3>

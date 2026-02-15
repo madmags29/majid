@@ -8,6 +8,7 @@ import authRouter from './routes/auth';
 import tripsRouter from './routes/trips';
 import weatherRouter from './routes/weather';
 import destinationsRouter from './routes/destinations';
+import contactRouter from './routes/contact';
 
 dotenv.config();
 
@@ -53,5 +54,6 @@ app.use('/api', mediaRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/trips', tripsRouter);
 app.use('/api', weatherRouter);
+app.use('/api', contactRouter);
 
 export default app;

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import { MapPin, ArrowLeft, Sparkles, Utensils, Compass, Share2, Maximize2, X, Check } from 'lucide-react';
@@ -63,6 +63,18 @@ interface DestinationData {
 }
 
 export default function ExploreContent({ slug }: { slug: string }) {
+    const [leftWidth, setLeftWidth] = useState(60); // Percentage width of left panel
+    const [isResizing, setIsResizing] = useState(false);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [isDesktop, setIsDesktop] = useState(true);
+
+    useEffect(() => {
+        const checkDesktop = () => setIsDesktop(window.innerWidth >= 1024);
+        checkDesktop();
+        window.addEventListener('resize', checkDesktop);
+        return () => window.removeEventListener('resize', checkDesktop);
+    }, []);
+
     const [data, setData] = useState<DestinationData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -147,25 +159,49 @@ export default function ExploreContent({ slug }: { slug: string }) {
         );
     }
 
+
+    const handleMouseDown = (e: React.MouseEvent) => {
+        e.preventDefault();
+        setIsResizing(true);
+    };
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        if (!isResizing || !containerRef.current) return;
+
+        const containerRect = containerRef.current.getBoundingClientRect();
+        const newLeftWidth = ((e.clientX - containerRect.left) / containerRect.width) * 100;
+
+        // Clamp width between 30% and 70%
+        if (newLeftWidth >= 30 && newLeftWidth <= 70) {
+            setLeftWidth(newLeftWidth);
+        }
+    };
+
+    const handleMouseUp = () => {
+        setIsResizing(false);
+    };
+
     return (
-        <div className="min-h-screen bg-[#0f172a] text-slate-100 flex flex-col">
+        <div className={cn("min-h-screen bg-[#0f172a] text-slate-100 flex flex-col", isResizing && "cursor-col-resize select-none")}>
             {/* Header */}
-            <header className="fixed top-0 left-0 right-0 z-50 bg-slate-900/50 backdrop-blur-xl border-b border-white/10 px-6 py-4 flex justify-between items-center">
-                <Link href="/" className="flex items-center gap-4 hover:opacity-80 transition-opacity">
-                    <ArrowLeft className="w-6 h-6 text-blue-400" />
-                    <TypewriterText
-                        text="weekendtravellers.com"
-                        className="font-cursive text-xl md:text-4xl"
-                        delay={500}
-                    />
-                </Link>
-                <div className="flex items-center gap-3">
-                    <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/10" onClick={handleShare}>
-                        {isSharing ? <Check className="w-5 h-5 text-green-400" /> : <Share2 className="w-5 h-5" />}
-                    </Button>
-                    <Link href={`/search?destination=${encodeURIComponent(data.destination)}`}>
-                        <Button className="bg-blue-600 hover:bg-blue-700 rounded-full px-6">Customize Trip</Button>
+            <header className="fixed top-0 left-0 right-0 z-50 bg-slate-900/50 backdrop-blur-xl border-b border-white/10 px-6 py-4">
+                <div className="max-w-7xl mx-auto w-full flex justify-between items-center">
+                    <Link href="/" className="flex items-center gap-4 hover:opacity-80 transition-opacity">
+                        <ArrowLeft className="w-6 h-6 text-blue-400" />
+                        <TypewriterText
+                            text="weekendtravellers.com"
+                            className="font-cursive text-xl md:text-4xl"
+                            delay={500}
+                        />
                     </Link>
+                    <div className="flex items-center gap-3">
+                        <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/10" onClick={handleShare}>
+                            {isSharing ? <Check className="w-5 h-5 text-green-400" /> : <Share2 className="w-5 h-5" />}
+                        </Button>
+                        <Link href={`/search?destination=${encodeURIComponent(data.destination)}`}>
+                            <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25 border-0 rounded-xl px-6 transition-all transform hover:scale-105 active:scale-95">Customize Trip</Button>
+                        </Link>
+                    </div>
                 </div>
             </header>
 
@@ -207,7 +243,7 @@ export default function ExploreContent({ slug }: { slug: string }) {
                     </div>
                 )}
 
-                <div className="relative z-30 h-full flex flex-col items-center justify-end pb-12 px-6 text-center max-w-6xl mx-auto">
+                <div className="relative z-30 h-full flex flex-col items-center justify-end pb-12 px-6 text-center max-w-7xl mx-auto w-full">
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -231,13 +267,20 @@ export default function ExploreContent({ slug }: { slug: string }) {
 
             {/* Content Layout */}
             <main className={cn(
-                "max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-3 gap-12 relative",
+                "max-w-7xl mx-auto px-6 py-16 flex flex-col lg:flex-row gap-8 relative",
                 isMapFullscreen ? "z-[10000]" : "z-20"
-            )}>
-                {/* Main Content Column */}
-                <div className="lg:col-span-2 space-y-16">
-                    {/* Deep Dive Content (SEO Text) */}
-                    <article className="prose prose-invert max-w-4xl 
+            )} ref={containerRef} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp}>
+
+                {/* Main Content Column (Resizable) */}
+                <div
+                    className="flex-shrink-0 relative group/resize"
+                    style={{
+                        width: isDesktop ? `${leftWidth}%` : '100%'
+                    }}
+                >
+                    <div className="space-y-16 pr-4">
+                        {/* Deep Dive Content (SEO Text) */}
+                        <article className="prose prose-invert max-w-4xl 
                         prose-p:font-sans prose-p:text-slate-300 prose-p:text-base md:prose-p:text-lg prose-p:leading-relaxed prose-p:mb-6 [&>p]:whitespace-pre-line
                         prose-headings:font-sans prose-headings:italic prose-headings:tracking-tighter
                         prose-h1:text-2xl md:prose-h1:text-4xl prose-h1:font-black prose-h1:mb-8 prose-h1:text-white prose-h1:uppercase
@@ -246,87 +289,106 @@ export default function ExploreContent({ slug }: { slug: string }) {
                         prose-li:font-sans prose-li:text-slate-300 prose-li:text-base md:prose-li:text-lg
                         prose-strong:text-white prose-strong:font-bold
                         antialiased">
-                        <div
-                            dangerouslySetInnerHTML={{
-                                __html: data.deep_content
-                                    // Robust fallback: post-process HTML to ensure spacing if AI bunches text
-                                    .replace(/([A-Z][a-zA-Z\s]+):/g, '<br/><br/><strong class="text-white text-lg block mb-1">$1</strong>')
-                                    .replace(/<br\/><br\/>/g, '<div class="h-4"></div>') // Semantic spacer
-                            }}
-                            className="[&>h1]:font-sans [&>h1]:font-black [&>h1]:italic [&>h1]:text-white [&>h1]:text-2xl md:[&>h1]:text-4xl [&>h1]:mb-8 [&>h1]:leading-[1.1] [&>h1]:uppercase
+                            <div
+                                dangerouslySetInnerHTML={{
+                                    __html: data.deep_content
+                                        // Robust fallback: post-process HTML to ensure spacing if AI bunches text
+                                        .replace(/([A-Z][a-zA-Z\s]+):/g, '<br/><br/><strong class="text-white text-lg block mb-1">$1</strong>')
+                                        .replace(/<br\/><br\/>/g, '<div class="h-4"></div>') // Semantic spacer
+                                }}
+                                className="[&>h1]:font-sans [&>h1]:font-black [&>h1]:italic [&>h1]:text-white [&>h1]:text-2xl md:[&>h1]:text-4xl [&>h1]:mb-8 [&>h1]:leading-[1.1] [&>h1]:uppercase
                                        [&>p]:font-sans [&>p]:text-slate-300 [&>p]:text-base md:[&>p]:text-lg [&>p]:leading-relaxed [&>p]:mb-6 [&>p]:whitespace-pre-line
                                        [&>h2]:font-sans [&>h2]:font-black [&>h2]:italic [&>h2]:text-xl md:[&>h2]:text-3xl [&>h2]:mt-12 [&>h2]:mb-6 [&>h2]:text-blue-400 [&>h2]:uppercase [&>h2]:flex [&>h2]:items-start [&>h2]:gap-4
                                        [&>h2]:before:content-[''] [&>h2]:before:w-1.5 [&>h2]:before:h-6 md:[&>h2]:before:h-8 [&>h2]:before:bg-blue-600 [&>h2]:before:rounded-full [&>h2]:before:shrink-0 [&>h2]:before:mt-1
                                        [&>h3]:font-sans [&>h3]:font-black [&>h3]:italic [&>h3]:text-lg md:[&>h3]:text-xl [&>h3]:mt-8 [&>h3]:mb-4 [&>h3]:text-slate-100 [&>h3]:uppercase [&>h3]:tracking-tight
                                        [&>ul]:mb-8 [&>li]:mb-8 [&>li]:leading-relaxed
                                        [&>hr]:border-none [&>hr]:h-px [&>hr]:bg-gradient-to-r [&>hr]:from-transparent [&>hr]:via-white/10 [&>hr]:to-transparent [&>hr]:my-16"
-                        />
-                    </article>
+                            />
+                        </article>
 
-                    {/* AdSense - Main Content Interstitial */}
-                    <div className="w-full flex justify-center py-8">
-                        <AdBanner
-                            dataAdSlot="8888999900"
-                            className="bg-slate-900/50 rounded-2xl border border-white/5"
-                        />
-                    </div>
+                        {/* AdSense - Main Content Interstitial */}
+                        <div className="w-full flex justify-center py-8">
+                            <AdBanner
+                                dataAdSlot="8888999900"
+                                className="bg-slate-900/50 rounded-2xl border border-white/5"
+                            />
+                        </div>
 
-                    {/* Itinerary Visualization */}
-                    <div className="pt-12 border-t border-white/10">
-                        <h2 className="text-4xl font-black italic tracking-tight mb-8 flex items-center gap-4">
-                            <Compass className="w-10 h-10 text-blue-500" />
-                            THE PERFECT WEEKEND PLAN
-                        </h2>
+                        {/* Itinerary Visualization */}
+                        <div className="pt-12 border-t border-white/10">
+                            <h2 className="text-4xl font-black italic tracking-tight mb-8 flex items-center gap-4">
+                                <Compass className="w-10 h-10 text-blue-500" />
+                                THE PERFECT WEEKEND PLAN
+                            </h2>
 
-                        <div className="space-y-12">
-                            {(data.days || (data as any).itinerary || []).map((day: any) => (
-                                <div key={day.day} className="bg-slate-900/40 rounded-3xl border border-white/5 overflow-hidden">
-                                    <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 px-8 py-6 border-b border-white/5">
-                                        <h3 className="text-2xl font-bold flex items-center gap-3">
-                                            <span className="bg-white text-[#0f172a] w-8 h-8 rounded-full flex items-center justify-center text-sm font-black">
-                                                {day.day}
-                                            </span>
-                                            {day.title}
-                                        </h3>
-                                    </div>
-                                    <div className="p-8 space-y-8">
-                                        {(day.activities || []).map((activity: Activity, idx: number) => (
-                                            <div key={idx} className="flex flex-col md:flex-row gap-8 group">
-                                                {activity.imageUrl && (
-                                                    <div className="w-full md:w-48 h-32 rounded-2xl overflow-hidden shrink-0">
-                                                        <img src={activity.imageUrl} alt={activity.location} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                                                    </div>
-                                                )}
-                                                <div className="flex-1">
-                                                    <div className="flex items-start justify-between mb-2">
-                                                        <span className="text-blue-400 text-sm font-bold tracking-widest uppercase">
-                                                            {activity.time}
-                                                        </span>
-                                                        {activity.ticket_price && (
-                                                            <span className="bg-slate-800 text-slate-300 text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider font-bold border border-white/5">
-                                                                {activity.ticket_price}
+                            <div className="space-y-12">
+                                {(data.days || (data as any).itinerary || []).map((day: any) => (
+                                    <div key={day.day} className="bg-slate-900/40 rounded-3xl border border-white/5 overflow-hidden">
+                                        <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 px-8 py-6 border-b border-white/5">
+                                            <h3 className="text-2xl font-bold flex items-center gap-3">
+                                                <span className="bg-white text-[#0f172a] w-8 h-8 rounded-full flex items-center justify-center text-sm font-black">
+                                                    {day.day}
+                                                </span>
+                                                {day.title}
+                                            </h3>
+                                        </div>
+                                        <div className="p-8 space-y-8">
+                                            {(day.activities || []).map((activity: Activity, idx: number) => (
+                                                <div key={idx} className="flex flex-col md:flex-row gap-8 group">
+                                                    {activity.imageUrl && (
+                                                        <div className="w-full md:w-48 h-32 rounded-2xl overflow-hidden shrink-0">
+                                                            <img src={activity.imageUrl} alt={activity.location} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                                                        </div>
+                                                    )}
+                                                    <div className="flex-1">
+                                                        <div className="flex items-start justify-between mb-2">
+                                                            <span className="text-blue-400 text-sm font-bold tracking-widest uppercase">
+                                                                {activity.time}
                                                             </span>
-                                                        )}
+                                                            {activity.ticket_price && (
+                                                                <span className="bg-slate-800 text-slate-300 text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider font-bold border border-white/5">
+                                                                    {activity.ticket_price}
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                        <h4 className="text-xl font-bold mb-2 flex items-center gap-2">
+                                                            <MapPin className="w-4 h-4 text-slate-500" />
+                                                            {activity.location}
+                                                        </h4>
+                                                        <p className="text-slate-400 leading-relaxed">
+                                                            {activity.description}
+                                                        </p>
                                                     </div>
-                                                    <h4 className="text-xl font-bold mb-2 flex items-center gap-2">
-                                                        <MapPin className="w-4 h-4 text-slate-500" />
-                                                        {activity.location}
-                                                    </h4>
-                                                    <p className="text-slate-400 leading-relaxed">
-                                                        {activity.description}
-                                                    </p>
                                                 </div>
-                                            </div>
-                                        ))}
+                                            ))}
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
                     </div>
+
                 </div>
 
-                {/* Sidebar Column */}
-                <div className="space-y-8 h-fit lg:sticky lg:top-28">
+                {/* Resize Handle (Desktop Only) */}
+                {isDesktop && (
+                    <div
+                        className="w-4 cursor-col-resize flex items-center justify-center hover:bg-white/5 transition-colors absolute top-0 bottom-0 z-50 select-none touch-none"
+                        style={{ left: `calc(${leftWidth}% + 1rem)` }}
+                        onMouseDown={handleMouseDown}
+                    >
+                        <div className="h-12 w-1.5 rounded-full bg-slate-700/50 group-hover:bg-blue-500 transition-colors" />
+                    </div>
+                )}
+
+                {/* Sidebar / Map Column */}
+                <div
+                    className="flex-grow space-y-8 sticky top-24 h-fit"
+                    style={{
+                        width: isDesktop ? `${100 - leftWidth}%` : '100%',
+                        marginLeft: isDesktop ? '2rem' : 0
+                    }}
+                >
                     {/* Quick Stats */}
                     <div className="bg-slate-900/60 backdrop-blur-xl rounded-3xl border border-white/10 p-8 shadow-2xl">
                         <h3 className="text-xl font-bold mb-6 flex items-center gap-2">

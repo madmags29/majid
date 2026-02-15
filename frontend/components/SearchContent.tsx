@@ -33,6 +33,7 @@ const AuthModal = dynamic(() => import('@/components/AuthModal'));
 const WeatherWidget = dynamic(() => import('@/components/WeatherWidget'));
 const AdBanner = dynamic(() => import('@/components/AdBanner'));
 import CinematicLoader from '@/components/CinematicLoader';
+import MapView from '@/components/MapView';
 
 const TypingResponse = ({ content, onComplete }: { content: string, onComplete?: () => void }) => {
     const [displayed, setDisplayed] = useState('');
@@ -93,6 +94,7 @@ interface TripDetails {
 interface Itinerary {
     destination: string;
     duration: string;
+    summary: string;
     trip_details?: TripDetails;
     days: {
         day: number;
@@ -102,6 +104,7 @@ interface Itinerary {
             activity: string;
             location: string;
             description: string;
+            imageUrl?: string;
         }[];
     }[];
 }
@@ -128,6 +131,7 @@ export default function SearchContent() {
     const [isAuthOpen, setIsAuthOpen] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [isSharing, setIsSharing] = useState(false);
+    const [selectedActivity, setSelectedActivity] = useState<any>(null);
 
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
@@ -478,69 +482,93 @@ export default function SearchContent() {
                                     ) : (
                                         <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
                                             {/* Trip Overview Card */}
-                                            <div className="bg-slate-900/80 rounded-xl p-4 border border-blue-500/20 shadow-lg mb-6">
-                                                <h3 className="text-lg font-bold text-blue-200 mb-3 flex items-center">
-                                                    <MapPin className="w-5 h-5 mr-2 text-blue-400" />
-                                                    Your Perfect Escape: {(msg.content as Itinerary).destination}
+                                            <div className="bg-slate-900/80 rounded-3xl p-6 border border-white/10 shadow-2xl mb-8">
+                                                <h3 className="text-3xl font-bold text-white mb-6">
+                                                    Trip to {(msg.content as Itinerary).destination}
                                                 </h3>
 
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                                    <div className="bg-slate-800/50 p-3 rounded-lg border border-slate-700">
-                                                        <div className="text-xs text-slate-400 uppercase tracking-wider mb-1">Est. Budget (Per Person)</div>
-                                                        <div className="text-xl font-bold text-green-400">
+                                                <div className="border-l-4 border-blue-500 pl-6 py-2 mb-8">
+                                                    <p className="text-slate-300 italic text-lg leading-relaxed">
+                                                        Experience the rich culture and history of {(msg.content as Itinerary).destination} with this 2-day weekend trip itinerary filled with iconic landmarks, vibrant markets, and delicious cuisine.
+                                                    </p>
+                                                </div>
+
+                                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                                    <div className="bg-slate-800/40 p-6 rounded-3xl border border-white/5 flex flex-col justify-between">
+                                                        <div className="text-xs text-slate-500 font-bold uppercase tracking-widest mb-2">BUDGET</div>
+                                                        <div className="text-2xl font-bold text-white">
                                                             {(msg.content as Itinerary).trip_details?.currency} {(msg.content as Itinerary).trip_details?.estimated_budget}
                                                         </div>
                                                     </div>
-                                                    <div className="bg-slate-800/50 p-3 rounded-lg border border-slate-700 flex flex-col justify-between">
-                                                        <div className="text-xs text-slate-400 uppercase tracking-wider mb-1">Best Time to Visit</div>
-                                                        <div className="text-sm font-bold text-slate-200 flex items-center">
-                                                            <Calendar className="w-4 h-4 mr-2 text-purple-400 shrink-0" />
-                                                            <span>{(msg.content as Itinerary).trip_details?.best_time_to_visit}</span>
+                                                    <div className="bg-slate-800/40 p-6 rounded-3xl border border-white/5 flex flex-col justify-between">
+                                                        <div className="text-xs text-slate-500 font-bold uppercase tracking-widest mb-2">WHEN</div>
+                                                        <div className="text-lg font-bold text-white leading-tight">
+                                                            {(msg.content as Itinerary).trip_details?.best_time_to_visit}
                                                         </div>
                                                     </div>
-                                                </div>
-
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                                     {/* Weather Widget */}
                                                     {(msg.content as Itinerary).trip_details?.destination_coordinates ? (
-                                                        <WeatherWidget
-                                                            lat={(msg.content as Itinerary).trip_details!.destination_coordinates!.lat}
-                                                            lng={(msg.content as Itinerary).trip_details!.destination_coordinates!.lng}
-                                                            className="h-full"
-                                                        />
+                                                        <div className="bg-slate-800/40 rounded-3xl border border-white/5 overflow-hidden">
+                                                            <WeatherWidget
+                                                                lat={(msg.content as Itinerary).trip_details!.destination_coordinates!.lat}
+                                                                lng={(msg.content as Itinerary).trip_details!.destination_coordinates!.lng}
+                                                                className="h-full w-full"
+                                                            />
+                                                        </div>
                                                     ) : (
-                                                        <div className="bg-slate-800/50 p-3 rounded-lg border border-slate-700 flex items-center justify-center text-slate-500 text-xs italic">
+                                                        <div className="bg-slate-800/40 p-6 rounded-3xl border border-white/5 flex items-center justify-center text-slate-500 text-xs italic">
                                                             Weather unavailable
                                                         </div>
                                                     )}
+                                                </div>
 
-                                                    {/* Transportation - Simplified Grid */}
-                                                    <div className="grid grid-cols-2 gap-2">
-                                                        <div className="bg-slate-800/50 p-2 rounded-lg border border-slate-700 flex flex-col items-center justify-center text-center">
-                                                            <Bus className="w-4 h-4 text-slate-400 mb-1" />
-                                                            <span className="text-[10px] text-slate-500 uppercase">Bus</span>
-                                                            <span className="truncate w-full text-xs font-bold" title={(msg.content as Itinerary).trip_details?.travel_logistics?.bus}>
-                                                                {(msg.content as Itinerary).trip_details?.travel_logistics?.bus?.split(' ')[0] || "N/A"}
-                                                            </span>
+                                                {/* Distance (calculated client-side) */}
+                                                <div className="mb-6">
+                                                    <DistanceDisplay destinationCoords={(msg.content as Itinerary).trip_details?.destination_coordinates} />
+                                                </div>
+
+                                                {/* Transportation */}
+                                                <div className="bg-slate-800/30 rounded-3xl p-6 border border-white/5 mb-8">
+                                                    <div className="flex items-center gap-3 mb-6">
+                                                        <Bus className="w-5 h-5 text-slate-400" />
+                                                        <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">TRAVEL TIMES FROM {origin ? origin.toUpperCase() : 'YOUR LOCATION'}</span>
+                                                    </div>
+                                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                                        <div className="bg-slate-900/50 p-4 rounded-2xl border border-white/5 flex items-center gap-4">
+                                                            <div className="w-10 h-10 rounded-full bg-orange-500/10 flex items-center justify-center shrink-0">
+                                                                <Bus className="w-5 h-5 text-orange-500" />
+                                                            </div>
+                                                            <div>
+                                                                <div className="text-[10px] text-slate-500 font-bold uppercase">Bus</div>
+                                                                <div className="text-sm font-bold text-white">{(msg.content as Itinerary).trip_details?.travel_logistics?.bus?.split(' ')[0] || "N/A"} hours</div>
+                                                            </div>
                                                         </div>
-                                                        <div className="bg-slate-800/50 p-2 rounded-lg border border-slate-700 flex flex-col items-center justify-center text-center">
-                                                            <Train className="w-4 h-4 text-slate-400 mb-1" />
-                                                            <span className="text-[10px] text-slate-500 uppercase">Train</span>
-                                                            <span className="truncate w-full text-xs font-bold" title={(msg.content as Itinerary).trip_details?.travel_logistics?.train}>
-                                                                {(msg.content as Itinerary).trip_details?.travel_logistics?.train?.split(' ')[0] || "N/A"}
-                                                            </span>
+                                                        <div className="bg-slate-900/50 p-4 rounded-2xl border border-white/5 flex items-center gap-4">
+                                                            <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center shrink-0">
+                                                                <Train className="w-5 h-5 text-blue-500" />
+                                                            </div>
+                                                            <div>
+                                                                <div className="text-[10px] text-slate-500 font-bold uppercase">Train</div>
+                                                                <div className="text-sm font-bold text-white">{(msg.content as Itinerary).trip_details?.travel_logistics?.train?.split(' ')[0] || "N/A"} hours</div>
+                                                            </div>
                                                         </div>
-                                                        <div className="bg-slate-800/50 p-2 rounded-lg border border-slate-700 flex flex-col items-center justify-center text-center">
-                                                            <Plane className="w-4 h-4 text-slate-400 mb-1" />
-                                                            <span className="text-[10px] text-slate-500 uppercase">Flight</span>
-                                                            <span className="truncate w-full text-xs font-bold" title={(msg.content as Itinerary).trip_details?.travel_logistics?.flight}>
-                                                                {(msg.content as Itinerary).trip_details?.travel_logistics?.flight?.split(' ')[0] || "N/A"}
-                                                            </span>
+                                                        <div className="bg-slate-900/50 p-4 rounded-2xl border border-white/5 flex items-center gap-4">
+                                                            <div className="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center shrink-0">
+                                                                <Plane className="w-5 h-5 text-purple-500" />
+                                                            </div>
+                                                            <div>
+                                                                <div className="text-[10px] text-slate-500 font-bold uppercase">Flight</div>
+                                                                <div className="text-sm font-bold text-white">{(msg.content as Itinerary).trip_details?.travel_logistics?.flight?.split(' ')[0] || "N/A"} hours</div>
+                                                            </div>
                                                         </div>
-                                                        <div className="bg-slate-800/50 p-2 rounded-lg border border-slate-700 flex flex-col items-center justify-center text-center">
-                                                            <Car className="w-4 h-4 text-slate-400 mb-1" />
-                                                            <span className="text-[10px] text-slate-500 uppercase">Car</span>
-                                                            <span className="truncate" title={(msg.content as Itinerary).trip_details?.travel_logistics?.car}>{(msg.content as Itinerary).trip_details?.travel_logistics?.car}</span>
+                                                        <div className="bg-slate-900/50 p-4 rounded-2xl border border-white/5 flex items-center gap-4">
+                                                            <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center shrink-0">
+                                                                <Car className="w-5 h-5 text-green-500" />
+                                                            </div>
+                                                            <div>
+                                                                <div className="text-[10px] text-slate-500 font-bold uppercase">Car</div>
+                                                                <div className="text-sm font-bold text-white">{(msg.content as Itinerary).trip_details?.travel_logistics?.car?.split(' ')[0] || "N/A"} hours</div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -549,18 +577,29 @@ export default function SearchContent() {
                                                 <DistanceDisplay destinationCoords={(msg.content as Itinerary).trip_details?.destination_coordinates} />
 
                                                 {/* Hotels */}
-                                                <div className="mt-4">
-                                                    <div className="text-xs text-slate-400 uppercase tracking-wider mb-2">Where to Stay</div>
-                                                    <div className="space-y-2">
+                                                <div className="mt-8 border-t border-white/10 pt-8">
+                                                    <div className="flex items-center gap-2 mb-6">
+                                                        <Heart className="w-4 h-4 text-pink-500" />
+                                                        <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">RECOMMENDED STAYS</span>
+                                                    </div>
+                                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                                                         {(msg.content as Itinerary).trip_details?.hotel_suggestions?.map((hotel, hIdx) => {
                                                             const hotelUrl = `https://search.hotellook.com/hotels?destination=${encodeURIComponent(hotel.name + ' ' + (msg.content as Itinerary).destination)}&marker=497779`;
                                                             return (
-                                                                <a key={hIdx} href={hotelUrl} target="_blank" rel="noopener noreferrer" className="block bg-slate-800 hover:bg-slate-700 p-3 rounded-lg border border-slate-700 transition-colors group">
-                                                                    <div className="flex justify-between items-start">
-                                                                        <span className="font-bold text-sm text-slate-200 group-hover:text-blue-400 transition-colors">{hotel.name}</span>
-                                                                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 font-bold uppercase">{hotel.tier}</span>
+                                                                <a key={hIdx} href={hotelUrl} target="_blank" rel="noopener noreferrer" className="block bg-slate-800/40 hover:bg-slate-800 p-5 rounded-2xl border border-white/5 hover:border-blue-500/30 transition-all group flex flex-col justify-between h-full">
+                                                                    <div>
+                                                                        <div className="flex justify-between items-start mb-2">
+                                                                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-700 text-slate-300 font-bold uppercase tracking-wide">{hotel.tier}</span>
+                                                                        </div>
+                                                                        <div className="font-bold text-base text-white group-hover:text-blue-400 transition-colors mb-2 leading-tight">{hotel.name}</div>
                                                                     </div>
-                                                                    <div className="text-xs text-slate-400 mt-1">{hotel.price_range}</div>
+                                                                    <div className="flex justify-between items-center mt-4 pt-4 border-t border-white/5">
+                                                                        <div className="text-xs text-slate-400">Avg. Night</div>
+                                                                        <div className="text-sm font-bold text-blue-400">{hotel.price_range}</div>
+                                                                    </div>
+                                                                    <div className="mt-3 text-xs font-bold text-blue-500 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-[-10px] group-hover:translate-x-0 duration-300">
+                                                                        Book Now <ArrowLeft className="w-3 h-3 rotate-180" />
+                                                                    </div>
                                                                 </a>
                                                             );
                                                         })}
@@ -659,42 +698,65 @@ export default function SearchContent() {
                 {/* Right Panel - Map/Itinerary Visualization (Hidden on mobile) */}
                 <div className="hidden md:block md:w-[55%] lg:w-[60%] relative bg-[#0f172a] overflow-y-auto">
                     {currentItineraryData ? (
-                        <div className="h-full flex flex-col p-6 space-y-8">
-                            {/* Itinerary Timeline */}
-                            <div className="space-y-8 max-w-4xl mx-auto w-full">
-                                {currentItineraryData.days?.map((day) => (
-                                    <div key={day.day} className="relative pl-8 border-l border-slate-800">
-                                        <div className="absolute -left-3 top-0 w-6 h-6 bg-slate-900 border border-blue-500 rounded-full flex items-center justify-center text-xs font-bold text-blue-500">
-                                            {day.day}
-                                        </div>
-                                        <h3 className="text-xl font-bold text-white mb-6 pl-2">{day.title}</h3>
-                                        <div className="space-y-6">
-                                            {day.activities.map((act, idx) => (
-                                                <div key={idx} className="bg-slate-900/50 p-5 rounded-xl border border-white/5 hover:border-blue-500/30 transition-all group">
-                                                    <div className="flex items-start justify-between mb-2">
-                                                        <span className="text-blue-400 font-mono text-xs font-bold bg-blue-950/30 px-2 py-1 rounded">
-                                                            {act.time}
-                                                        </span>
-                                                    </div>
-                                                    <h4 className="text-lg font-bold text-slate-200 mb-1 group-hover:text-blue-400 transition-colors">
-                                                        {act.activity}
-                                                    </h4>
-                                                    <div className="flex items-center text-xs text-slate-500 mb-2">
-                                                        <MapPin className="w-3 h-3 mr-1" />
-                                                        {act.location}
-                                                    </div>
-                                                    <p className="text-slate-400 text-sm leading-relaxed">
-                                                        {act.description}
-                                                    </p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                ))}
+                        <div className="h-full flex flex-col">
+                            {/* Map Fixed at Top */}
+                            <div className="h-[45%] min-h-[300px] w-full relative z-10 border-b border-slate-800">
+                                <MapView
+                                    itinerary={currentItineraryData}
+                                    selectedActivity={selectedActivity}
+                                    isExpanded={true}
+                                />
+                            </div>
 
-                                {/* Ad Banner in Right Panel */}
-                                <div className="mt-8">
-                                    <AdBanner dataAdSlot="5821234567" className="mt-4" />
+                            {/* Scrollable Itinerary Timeline */}
+                            <div className="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">
+                                <div className="space-y-8 max-w-4xl mx-auto w-full">
+                                    {currentItineraryData.days?.map((day) => (
+                                        <div key={day.day} className="relative pl-8 border-l border-slate-800">
+                                            <div className="absolute -left-3 top-0 w-6 h-6 bg-slate-900 border border-blue-500 rounded-full flex items-center justify-center text-xs font-bold text-blue-500">
+                                                {day.day}
+                                            </div>
+                                            <h3 className="text-xl font-bold text-white mb-6 pl-2">{day.title}</h3>
+                                            <div className="space-y-6">
+                                                {day.activities.map((act, idx) => (
+                                                    <div
+                                                        key={idx}
+                                                        className="bg-slate-900/50 p-5 rounded-xl border border-white/5 hover:border-blue-500/30 transition-all group cursor-pointer"
+                                                        onClick={() => {
+                                                            setSelectedActivity(act);
+                                                            console.log("Clicked activity:", act);
+                                                        }}
+                                                    >
+                                                        <div className="flex items-start justify-between mb-2">
+                                                            <span className="text-blue-400 font-mono text-xs font-bold bg-blue-950/30 px-2 py-1 rounded">
+                                                                {act.time}
+                                                            </span>
+                                                        </div>
+                                                        <h4 className="text-lg font-bold text-slate-200 mb-1 group-hover:text-blue-400 transition-colors">
+                                                            {act.activity}
+                                                        </h4>
+                                                        <div className="flex items-center text-xs text-slate-500 mb-2">
+                                                            <MapPin className="w-3 h-3 mr-1" />
+                                                            {act.location}
+                                                        </div>
+                                                        {act.imageUrl && (
+                                                            <div className="mb-3 rounded-lg overflow-hidden h-32 w-full">
+                                                                <img src={act.imageUrl} alt={act.activity} className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" />
+                                                            </div>
+                                                        )}
+                                                        <p className="text-slate-400 text-sm leading-relaxed">
+                                                            {act.description}
+                                                        </p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ))}
+
+                                    {/* Ad Banner in Right Panel */}
+                                    <div className="mt-8">
+                                        <AdBanner dataAdSlot="5821234567" className="mt-4" />
+                                    </div>
                                 </div>
                             </div>
                         </div>

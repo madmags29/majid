@@ -4,8 +4,8 @@ import Link from 'next/link';
 import AdBanner from '@/components/AdBanner';
 
 export const metadata: Metadata = {
-    title: 'About Weekend Travellers | Our Mission for 2025',
-    description: 'Learn how Weekend Travellers uses AI to help you discover the perfect 2nd-day getaways and plan stress-free weekend trips in 2025.',
+    title: 'About Weekend Travellers | The Future of AI Travel Planning',
+    description: 'Discover how Weekend Travellers uses advanced AI to curate the best 2 & 3 day weekend itineraries, hidden gems, and road trip plans for 2026.',
 };
 
 export default function AboutPage() {

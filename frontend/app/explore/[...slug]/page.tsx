@@ -12,8 +12,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const title = slug.split('/').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
     return {
-        title: `${title} 2-Day Itinerary & Travel Guide 2025`,
-        description: `Discover the best 2-day itinerary for ${title}. AI-curated guide including hidden gems, top hotels, and budget tips for your perfect weekend getaway.`,
+        title: `${title} Weekend Itinerary | AI Travel Guide & 2-Day Planner (2026)`,
+        description: `Plan your perfect ${title} getaway with our AI-powered travel guide. Get custom 2-day itineraries, hidden gems, and local tips for your next weekend trip.`,
     };
 }
 
