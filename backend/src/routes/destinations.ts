@@ -31,57 +31,62 @@ router.get('/explore', async (req, res) => {
 
         console.log(`Cache miss for: ${cacheKey}. Generating deep content for ${destinationName}...`);
 
-        // Phase 1: Standard Itinerary
-        const itinerary = await generateItinerary(destinationName);
+        // Parallelize all independent tasks: AI generation and Media fetching
+        const [itinerary, deepContent, heroMedia] = await Promise.all([
+            generateItinerary(destinationName),
+            generateDeepExploreContent(destinationName),
+            (async () => {
+                if (!process.env.PEXELS_API_KEY) return { video: null, image: null };
+                const pexelsClient = createClient(process.env.PEXELS_API_KEY);
+                try {
+                    const [videoRes, imageRes] = await Promise.all([
+                        pexelsClient.videos.search({ query: destinationName, per_page: 1, orientation: 'landscape' }),
+                        pexelsClient.photos.search({ query: destinationName, per_page: 1, orientation: 'landscape', size: 'large' })
+                    ]);
 
-        // Phase 2: Long-form Descriptive Content (SEO)
-        const deepContent = await generateDeepExploreContent(destinationName);
+                    let video = null;
+                    let image = null;
 
-        // Phase 3: Enrichment
-        await enrichmentWithImages(itinerary);
-        await enrichmentWithTravelData(itinerary, undefined, destinationName);
+                    if ('videos' in videoRes && videoRes.videos.length > 0) {
+                        const v = videoRes.videos[0];
+                        const file = v.video_files.find((f: any) => f.quality === 'hd' || f.quality === 'sd') || v.video_files[0];
+                        video = {
+                            url: file.link,
+                            photographer: v.user.name,
+                            photographer_url: v.user.url
+                        };
+                    }
 
-        // Phase 4: Hero Media (Video/Photo)
-        let heroVideo = null;
-        let heroImage = null;
-
-        if (process.env.PEXELS_API_KEY) {
-            const pexelsClient = createClient(process.env.PEXELS_API_KEY);
-            try {
-                // Try fetching videos first
-                const videoRes: any = await pexelsClient.videos.search({ query: destinationName, per_page: 1, orientation: 'landscape' });
-                if ('videos' in videoRes && videoRes.videos.length > 0) {
-                    const video = videoRes.videos[0];
-                    const file = video.video_files.find((f: any) => f.quality === 'hd' || f.quality === 'sd') || video.video_files[0];
-                    heroVideo = {
-                        url: file.link,
-                        photographer: video.user.name,
-                        photographer_url: video.user.url
-                    };
+                    if ('photos' in imageRes && imageRes.photos.length > 0) {
+                        const p = imageRes.photos[0];
+                        image = {
+                            url: p.src.large2x || p.src.original,
+                            photographer: p.photographer,
+                            photographer_url: p.photographer_url
+                        };
+                    }
+                    return { video, image };
+                } catch (err) {
+                    console.error('Hero media fetch error:', err);
+                    return { video: null, image: null };
                 }
+            })()
+        ]);
 
-                // Always fetch a high-res image as fallback or for static parts
-                const imageRes: any = await pexelsClient.photos.search({ query: destinationName, per_page: 1, orientation: 'landscape', size: 'large' });
-                if ('photos' in imageRes && imageRes.photos.length > 0) {
-                    const photo = imageRes.photos[0];
-                    heroImage = {
-                        url: photo.src.large2x || photo.src.original,
-                        photographer: photo.photographer,
-                        photographer_url: photo.photographer_url
-                    };
-                }
-            } catch (err) {
-                console.error('Failed to fetch hero media:', err);
-            }
-        }
+        // Enrichment also happens in parallel where possible
+        // Note: enrichmentWithImages/TravelData modify the itinerary object in-place
+        await Promise.all([
+            enrichmentWithImages(itinerary),
+            enrichmentWithTravelData(itinerary, undefined, destinationName)
+        ]);
 
         const result = {
             ...itinerary,
             days: itinerary.days || itinerary.itinerary,
             deep_content: deepContent,
             slug: slug,
-            heroVideo,
-            heroImage
+            heroVideo: heroMedia.video,
+            heroImage: heroMedia.image
         };
 
         // Store in cache for 30 days
