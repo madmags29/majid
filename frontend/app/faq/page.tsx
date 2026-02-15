@@ -19,7 +19,7 @@ const faqs = [
                 a: "Weekendtravellers.com is an AI-powered travel assistant designed specifically for planning perfect 2 to 4-day getaways. We analyze thousands of data points to give you the best itineraries, hotel suggestions, and travel logistics for your weekend trips."
             },
             {
-                q: "How does the AI itinerary generator work?",
+                q: "How does the smart trip planner work?",
                 a: "Our AI uses advanced language models and real-time travel data to understand your preferences. When you search for a destination, it creates a custom-tailored multi-day plan (2-4 days) including activities, timings, and logistics based on the latest trends and local secrets."
             }
         ]

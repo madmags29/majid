@@ -3,15 +3,48 @@ const { body, validationResult } = require('express-validator');
 
 const router = express.Router();
 
-// Mock email sending function
+import nodemailer from 'nodemailer';
+
+// Email Configuration
+const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: parseInt(process.env.SMTP_PORT || '587'),
+    secure: false, // true for 465, false for other ports
+    auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+    },
+});
+
 const sendEmail = async (data: any) => {
-    console.log('--- Contact Form Submission ---');
-    console.log(`To: trip@weekendtravellers.com`);
-    console.log(`From: ${data.name} <${data.email}>`);
-    console.log(`Phone: ${data.phone}`);
-    console.log(`Message: ${data.comment}`);
-    console.log('-------------------------------');
-    return true;
+    console.log('--- Sending Email ---');
+    try {
+        await transporter.sendMail({
+            from: `"${data.name}" <${process.env.SMTP_USER}>`, // Sender address must be verified/authenticated
+            to: process.env.CONTACT_EMAIL || 'trip@weekendtravellers.com', // List of receivers
+            replyTo: data.email,
+            subject: `New Contact Message from ${data.name}`,
+            text: `
+Name: ${data.name}
+Email: ${data.email}
+Phone: ${data.phone}
+Message: ${data.comment}
+            `,
+            html: `
+<h3>New Contact Form Submission</h3>
+<p><strong>Name:</strong> ${data.name}</p>
+<p><strong>Email:</strong> ${data.email}</p>
+<p><strong>Phone:</strong> ${data.phone}</p>
+<p><strong>Message:</strong></p>
+<p>${data.comment.replace(/\n/g, '<br>')}</p>
+            `,
+        });
+        console.log('Email sent successfully');
+        return true;
+    } catch (error) {
+        console.error('Nodemailer error:', error);
+        throw error;
+    }
 };
 
 router.post(

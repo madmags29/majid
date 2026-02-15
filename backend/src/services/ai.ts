@@ -38,7 +38,7 @@ export async function generateItinerary(
           ],
           "destination_coordinates": { "lat": 12.34, "lng": 56.78 }
         },
-        "destination": "${destination}",
+        "destination": "The specific city or town name for this itinerary (e.g. 'Manali'). If the input was a category like '${destination}', provide the actual place name you selected.",
         "summary": "A brief summary of the trip.",
         "special_events": [
             {

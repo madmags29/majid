@@ -93,7 +93,7 @@ export default function ContactPage() {
                     </Link>
                     <Link href="/" className="flex items-center gap-2 group">
                         <AnimatedLogo className="w-8 h-8 text-blue-500 group-hover:text-blue-400 transition-colors" />
-                        <span className="font-cursive text-2xl text-white hidden sm:block">weekendtravellers.com</span>
+                        <span className="font-cursive text-2xl text-white sm:block">weekendtravellers.com</span>
                     </Link>
                 </div>
             </header>
@@ -106,8 +106,8 @@ export default function ContactPage() {
                         <h1 className="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-8">
                             Get in <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Touch</span>
                         </h1>
-                        <p className="text-xl text-slate-400 mb-12 leading-relaxed">
-                            Have a question about a specific destination, need help with your itinerary, or just want to say hi? We are here for you.
+                        <p className="text-white/80 max-w-2xl mx-auto text-lg">
+                            Have questions about our smart travel planner? Need help with your itinerary? We're here to help you plan the perfect weekend escape.
                         </p>
 
                         <div className="space-y-6">

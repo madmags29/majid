@@ -82,7 +82,7 @@ router.post('/search', async (req, res) => {
             requestedDays = 2;
         }
 
-        const cacheKey = `itinerary/v8:${destination.toLowerCase()}:${requestedDays}${interests ? `:${interests}` : ''}${origin ? `:${origin.trim()}` : ''}`;
+        const cacheKey = `itinerary/v9:${destination.toLowerCase()}:${requestedDays}${interests ? `:${interests}` : ''}${origin ? `:${origin.trim()}` : ''}`;
 
         // Check cache first
         const cachedResult = await Cache.findOne({ key: cacheKey });
