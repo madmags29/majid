@@ -222,14 +222,14 @@ export default function LandingPage() {
       <header className="w-full py-4 px-6 flex justify-between items-center z-50">
         <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
           <AnimatedLogo className="w-8 h-8 md:w-10 md:h-10 text-blue-400" />
-          <h1 className="text-2xl md:text-3xl text-white drop-shadow-md">
+          <div className="text-2xl md:text-3xl text-white drop-shadow-md">
             <TypewriterText
               text="weekendtravellers.com"
               className="font-cursive text-3xl md:text-4xl"
               delay={500}
               deleteAfter={isMobile ? 2000 : undefined}
             />
-          </h1>
+          </div>
         </Link>
         <nav className="flex items-center gap-4">
           {user ? (
@@ -310,10 +310,10 @@ export default function LandingPage() {
           <div className="flex justify-center mb-6 min-h-[40px]">
             <VisitorCounter />
           </div>
-          <h2 className="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-6 drop-shadow-2xl">
+          <h1 className="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-6 drop-shadow-2xl">
             Discover Your Perfect <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200">Weekend Getaway</span>
-          </h2>
+          </h1>
           <p className="text-xl text-slate-100 mb-12 max-w-2xl mx-auto leading-relaxed drop-shadow-md font-medium">
             Just tell us where you want to go, or let us surprise you.
           </p>
