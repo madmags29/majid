@@ -14,20 +14,13 @@ dotenv.config();
 
 const app = express();
 
-const allowedOrigins = [
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-    'https://frontend-tau-murex-95.vercel.app',
-    'https://www.weekendtravellers.com',
-    'https://weekendtravellers.com',
-    process.env.FRONTEND_URL
-].filter(Boolean);
-
 app.use(cors({
-    origin: true,
-    credentials: true
+    origin: '*',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 
 // MongoDB Connection
 const MONGODB_URI = process.env.MONGODB_URI;
