@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Search, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
@@ -159,6 +159,8 @@ export default function LandingPage() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  const [isVideoReady, setIsVideoReady] = useState(false);
+
   useEffect(() => {
     // Simulate minimal loading delay - significantly reduced for mobile FCP
     const delay = window.innerWidth < 768 ? 50 : 2500;
@@ -168,13 +170,13 @@ export default function LandingPage() {
     return () => clearTimeout(timer);
   }, []);
 
-  if (isLoading) {
-    return <CinematicLoader />;
-  }
-
   return (
     <div className="min-h-screen text-white flex flex-col relative">
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} initialMode={authMode} />
+
+      <AnimatePresence mode="wait">
+        {isLoading && <CinematicLoader key="loader" />}
+      </AnimatePresence>
 
       {/* Base Background Color (Always present, sits behind video) */}
       <div className="fixed inset-0 bg-[#0f172a] -z-30" />
@@ -186,13 +188,19 @@ export default function LandingPage() {
 
       {/* Video Background */}
       {videoUrl && (
-        <div className="fixed inset-0 w-full h-full -z-10">
-          <div className="absolute inset-0 bg-black/80 z-10" /> {/* Overlay for text readability */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isVideoReady ? 1 : 0 }}
+          transition={{ duration: 1 }}
+          className="fixed inset-0 w-full h-full -z-10"
+        >
+          <div className="absolute inset-0 bg-black/80 z-10" />
           <video
             autoPlay
             loop
             muted
             playsInline
+            onLoadedData={() => setIsVideoReady(true)}
             className="w-full h-full object-cover"
             key={videoUrl}
             poster="/video-poster.png"
@@ -205,7 +213,7 @@ export default function LandingPage() {
               Video by <a href={videoCredit.url} target="_blank" rel="noopener noreferrer" className="text-slate-300 hover:text-white underline decoration-dashed">{videoCredit.name}</a> on Pexels
             </div>
           )}
-        </div>
+        </motion.div>
       )}
 
       {/* Fallback Background Gradients (only if no video) */}

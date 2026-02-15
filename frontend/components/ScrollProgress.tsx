@@ -28,7 +28,7 @@ export default function ScrollProgress() {
 
     return (
         <motion.div
-            className="fixed top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-blue-600 via-purple-500 to-blue-600 z-[9999] origin-left shimmer-effect"
+            className="fixed top-0 left-0 right-0 h-[6px] bg-gradient-to-r from-blue-600 via-purple-500 to-blue-600 z-[100000] origin-left shimmer-effect"
             style={{
                 scaleX,
                 opacity: isVisible ? 1 : 0,

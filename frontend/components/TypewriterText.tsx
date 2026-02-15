@@ -104,8 +104,8 @@ export default function TypewriterText({
                     {displayedText}
                     <span
                         className={cn(
-                            "w-[2px] h-[1.2em] bg-current ml-1 animate-pulse",
-                            (isComplete && !isDeleting) || (!isVisible) ? "opacity-0" : "opacity-100",
+                            "w-[2px] h-[1.2em] bg-blue-400 ml-1",
+                            isComplete && !isDeleting ? "animate-none opacity-0" : "animate-pulse opacity-100",
                             cursorClassName
                         )}
                     />

@@ -34,7 +34,12 @@ export default function CinematicLoader({
     }, [messages, interval]);
 
     return (
-        <div className={cn("min-h-screen bg-slate-950 flex flex-col items-center justify-center text-white p-6", className)}>
+        <motion.div
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
+            className={cn("fixed inset-0 min-h-screen bg-slate-950 flex flex-col items-center justify-center text-white z-[100] p-6", className)}
+        >
             <div className="relative mb-12">
                 <div className="absolute inset-0 bg-blue-500/20 blur-3xl animate-pulse" />
                 <Loader2 className="w-16 h-16 text-blue-500 animate-spin relative z-10" />
@@ -64,6 +69,6 @@ export default function CinematicLoader({
                     />
                 ))}
             </div>
-        </div>
+        </motion.div>
     );
 }
