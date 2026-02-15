@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Sacramento } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import Footer from "@/components/Footer";
+import ScrollProgress from "@/components/ScrollProgress";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -143,6 +144,7 @@ export default function RootLayout({
           `}
           </Script>
           {children}
+          <ScrollProgress />
           <Footer />
           <Toaster position="top-center" richColors toastOptions={{ className: '!z-[9999]' }} />
         </GoogleOAuthProvider>

@@ -21,63 +21,76 @@ export default function TypewriterText({
     hideAfter,
     deleteAfter
 }: TypewriterTextProps) {
-    const [displayedText, setDisplayedText] = useState(text); // Initial state is the full text for SSR and SEO
+    const [displayedText, setDisplayedText] = useState("");
+    const [isHydrated, setIsHydrated] = useState(false);
     const [isComplete, setIsComplete] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
     const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
-        let interval: NodeJS.Timeout;
-        let hideTimeout: NodeJS.Timeout;
-        let deleteTimeout: NodeJS.Timeout;
+        setIsHydrated(true);
+    }, []);
 
-        let currentIndex = 0;
+    useEffect(() => {
+        if (!isHydrated) return;
+        let interval: NodeJS.Timeout;
 
         // Reset state for typing animation
-        setDisplayedText(''); // Start typing from empty on mount
+        setDisplayedText('');
         setIsComplete(false);
         setIsVisible(true);
         setIsDeleting(false);
 
         const typingTimeout = setTimeout(() => {
             interval = setInterval(() => {
-                if (currentIndex < text.length) {
-                    setDisplayedText(text.slice(0, currentIndex + 1));
-                    currentIndex++;
-                } else {
+                setDisplayedText(prev => {
+                    if (prev.length < text.length) {
+                        return text.slice(0, prev.length + 1);
+                    }
                     clearInterval(interval);
                     setIsComplete(true);
-
-                    if (hideAfter !== undefined) {
-                        hideTimeout = setTimeout(() => {
-                            setIsVisible(false);
-                        }, hideAfter);
-                    } else if (deleteAfter !== undefined) {
-                        deleteTimeout = setTimeout(() => {
-                            setIsDeleting(true);
-                            let deleteIndex = text.length;
-                            const deleteInterval = setInterval(() => {
-                                if (deleteIndex > 0) {
-                                    setDisplayedText(text.slice(0, deleteIndex - 1));
-                                    deleteIndex--;
-                                } else {
-                                    clearInterval(deleteInterval);
-                                    setIsVisible(false);
-                                }
-                            }, 50);
-                        }, deleteAfter);
-                    }
-                }
+                    return prev;
+                });
             }, 100);
         }, delay);
 
         return () => {
             clearTimeout(typingTimeout);
             clearInterval(interval);
+        };
+    }, [text, delay, isHydrated]);
+
+    useEffect(() => {
+        if (!isComplete) return;
+
+        let hideTimeout: NodeJS.Timeout;
+        let deleteTimeout: NodeJS.Timeout;
+
+        if (hideAfter !== undefined) {
+            hideTimeout = setTimeout(() => {
+                setIsVisible(false);
+            }, hideAfter);
+        } else if (deleteAfter !== undefined) {
+            deleteTimeout = setTimeout(() => {
+                setIsDeleting(true);
+                const deleteInterval = setInterval(() => {
+                    setDisplayedText(prev => {
+                        if (prev.length > 0) {
+                            return prev.slice(0, -1);
+                        }
+                        clearInterval(deleteInterval);
+                        setIsVisible(false);
+                        return prev;
+                    });
+                }, 50);
+            }, deleteAfter);
+        }
+
+        return () => {
             if (hideTimeout) clearTimeout(hideTimeout);
             if (deleteTimeout) clearTimeout(deleteTimeout);
         };
-    }, [text, delay, hideAfter, deleteAfter]);
+    }, [isComplete, hideAfter, deleteAfter, text.length]);
 
     return (
         <AnimatePresence>

@@ -15,6 +15,7 @@ const WeatherWidget = dynamic(() => import('@/components/WeatherWidget'));
 const TypewriterText = dynamic(() => import('@/components/TypewriterText'));
 import CinematicLoader from '@/components/CinematicLoader';
 import AdBanner from '@/components/AdBanner';
+import { API_URL } from '@/lib/config';
 
 interface Activity {
     time: string;
@@ -84,13 +85,14 @@ export default function ExploreContent({ slug }: { slug: string }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const { API_URL } = await import('@/lib/config');
-                const res = await fetch(`${API_URL}/api/explore?slug=${encodeURIComponent(slug)}`);
+                // Use relative path to leverage Next.js rewrites (more robust for CORS)
+                const fetchUrl = `/api/explore?slug=${encodeURIComponent(slug)}`;
+                const res = await fetch(fetchUrl);
                 if (!res.ok) throw new Error('Destination not found');
                 const result = await res.json();
                 setData(result);
             } catch (err) {
-                console.error(err);
+                console.error('Explore fetch error:', err);
                 setError('We couldn\'t load this destination. Please try again later.');
             } finally {
                 setLoading(false);

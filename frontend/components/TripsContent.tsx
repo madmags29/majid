@@ -138,7 +138,7 @@ export default function TripsContent() {
                                 <AnimatedLogo />
                             </div>
                             <h1 className="text-lg md:text-3xl text-white tracking-tight hover:opacity-90 transition-opacity">
-                                <TypewriterText text="weekendtravellers.com" className="font-cursive text-xl md:text-4xl" delay={500} hideAfter={3000} />
+                                <TypewriterText text="weekendtravellers.com" className="font-cursive text-xl md:text-4xl" delay={500} />
                             </h1>
                         </Link>
                         <div className="flex flex-col md:flex-row md:items-center md:gap-3">

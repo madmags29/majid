@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Search, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
 
 import dynamic from 'next/dynamic';
 
@@ -32,7 +33,8 @@ import { API_URL } from '@/lib/config';
 import CinematicLoader from '@/components/CinematicLoader';
 
 export default function LandingPage() {
-  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [videoUrl, setVideoUrl] = useState<string>('');
   const [videoCredit, setVideoCredit] = useState<{ name: string, url: string } | null>(null);
@@ -60,7 +62,7 @@ export default function LandingPage() {
   }, []);
 
   const fetchDynamicSuggestions = useCallback(async (location: string) => {
-    if (!location || isLoadingSuggestions || location === lastFetchedLocation) return;
+    if (!location) return;
 
     setIsLoadingSuggestions(true);
     setLastFetchedLocation(location);
@@ -76,7 +78,7 @@ export default function LandingPage() {
     } finally {
       setIsLoadingSuggestions(false);
     }
-  }, [isLoadingSuggestions, lastFetchedLocation]);
+  }, []); // Remove dependencies to prevent loop
 
   const handleLocationFound = useCallback((location: string) => {
     setUserLocation(prev => {
@@ -128,12 +130,12 @@ export default function LandingPage() {
 
     // Navigate to search page with destination as query param
     const originParam = userLocation ? `&origin=${encodeURIComponent(userLocation)}` : '';
-    window.location.href = `/search?destination=${encodeURIComponent(searchQuery)}${originParam}`;
+    router.push(`/search?destination=${encodeURIComponent(searchQuery)}${originParam}`);
   };
 
   const handleSuggestionClick = (suggestion: string) => {
     const originParam = userLocation ? `&origin=${encodeURIComponent(userLocation)}` : '';
-    window.location.href = `/search?destination=${encodeURIComponent(suggestion)}${originParam}`;
+    router.push(`/search?destination=${encodeURIComponent(suggestion)}${originParam}`);
   };
 
   const openAuth = (mode: 'login' | 'signup') => {
@@ -227,7 +229,6 @@ export default function LandingPage() {
               text="weekendtravellers.com"
               className="font-cursive text-3xl md:text-4xl"
               delay={500}
-              deleteAfter={isMobile ? 2000 : undefined}
             />
           </div>
         </Link>
