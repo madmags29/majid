@@ -23,8 +23,7 @@ import {
 const MapView = dynamic(() => import('@/components/MapView'), { ssr: false });
 import CinematicLoader from '@/components/CinematicLoader';
 const AnimatedLogo = dynamic(() => import('@/components/AnimatedLogo'), { ssr: false });
-const AuthModal = dynamic(() => import('@/components/AuthModal'), { ssr: false });
-const TypewriterText = dynamic(() => import('@/components/TypewriterText'), { ssr: false });
+const Navbar = dynamic(() => import('@/components/Navbar'), { ssr: false });
 const WeatherWidget = dynamic(() => import('@/components/WeatherWidget'), { ssr: false });
 const AdBanner = dynamic(() => import('@/components/AdBanner'), { ssr: false });
 
@@ -305,7 +304,7 @@ function SearchClient() {
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-        setUser(null);
+        // The Navbar will handle the UI update via storage event
         toast.success('Logged out successfully');
     };
 
@@ -452,96 +451,37 @@ function SearchClient() {
     return (
         <div className="flex flex-col h-[100dvh] bg-slate-950 text-white overflow-hidden">
             {/* Header */}
-            <header className="h-16 border-b border-slate-800 flex items-center justify-between px-4 bg-slate-900/50 backdrop-blur-md z-30 shrink-0">
-                <div className="flex items-center gap-4">
-                    <Link href="/" className="p-2 hover:bg-slate-800 rounded-lg transition-colors">
-                        <ArrowLeft className="w-5 h-5" />
-                    </Link>
-                    <div>
-                        <h1 className="text-sm font-bold text-slate-200 truncate max-w-[150px] md:max-w-none">
-                            {destination || 'New Trip'}
-                        </h1>
-                        <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Weekend Getaway</p>
-                    </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                    {currentItineraryData && (
-                        <>
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={handleSaveTrip}
-                                className={cn(
-                                    "flex items-center gap-2 h-9 px-4 rounded-full transition-all",
-                                    isSaved ? "bg-green-500/10 text-green-500 hover:bg-green-500/20" : "bg-slate-800 text-slate-300 hover:bg-slate-700"
-                                )}
-                            >
-                                <Heart className={cn("w-4 h-4", isSaved && "fill-current")} />
-                                <span className="hidden sm:inline font-semibold">{isSaved ? 'Saved' : 'Save'}</span>
-                            </Button>
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={handleShare}
-                                className="flex items-center gap-2 h-9 px-4 rounded-full bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all font-semibold"
-                            >
-                                <Share2 className="w-4 h-4" />
-                                <span className="hidden sm:inline">Share</span>
-                            </Button>
-                        </>
-                    )}
-
-                    <div className="h-6 w-[1px] bg-slate-800 mx-1" />
-
-                    {user ? (
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" className="relative h-9 w-9 rounded-full ring-2 ring-blue-500/20 hover:ring-blue-500/40 transition-all p-0 overflow-hidden">
-                                    <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-xs">
-                                        {user.name.charAt(0)}
-                                    </div>
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-56 bg-slate-900 border-slate-800 text-slate-200">
-                                <DropdownMenuLabel className="font-normal">
-                                    <div className="flex flex-col space-y-1">
-                                        <p className="text-sm font-medium leading-none">{user.name}</p>
-                                        <p className="text-xs leading-none text-slate-400">{user.email}</p>
-                                    </div>
-                                </DropdownMenuLabel>
-                                <DropdownMenuSeparator className="bg-slate-800" />
-                                <DropdownMenuItem asChild className="focus:bg-slate-800 focus:text-white cursor-pointer">
-                                    <Link href="/profile" className="flex items-center">
-                                        <User className="mr-2 h-4 w-4" />
-                                        <span>Profile</span>
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem asChild className="focus:bg-slate-800 focus:text-white cursor-pointer">
-                                    <Link href="/trips" className="flex items-center">
-                                        <Calendar className="mr-2 h-4 w-4" />
-                                        <span>My Trips</span>
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuSeparator className="bg-slate-800" />
-                                <DropdownMenuItem onClick={handleLogout} className="focus:bg-red-500/10 focus:text-red-500 cursor-pointer text-red-500 font-medium">
-                                    <LogIn className="mr-2 h-4 w-4 rotate-180" />
-                                    <span>Log out</span>
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    ) : (
+            <Navbar
+                showBackButton
+                showLogo={false}
+                title={destination || 'New Trip'}
+                subtitle="Weekend Getaway"
+                actions={currentItineraryData && (
+                    <div className="flex items-center gap-2">
                         <Button
-                            onClick={() => setIsAuthOpen(true)}
-                            className="hidden md:inline-flex bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25 border-0 rounded-xl px-6 transition-all transform hover:scale-105 active:scale-95"
+                            variant="ghost"
+                            size="sm"
+                            onClick={handleSaveTrip}
+                            className={cn(
+                                "flex items-center gap-2 h-9 px-4 rounded-full transition-all",
+                                isSaved ? "bg-green-500/10 text-green-500 hover:bg-green-500/20" : "bg-slate-800 text-slate-300 hover:bg-slate-700"
+                            )}
                         >
-                            Sign In
+                            <Heart className={cn("w-4 h-4", isSaved && "fill-current")} />
+                            <span className="hidden sm:inline font-semibold">{isSaved ? 'Saved' : 'Save'}</span>
                         </Button>
-                    )}
-                </div>
-            </header>
-
-            <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={handleShare}
+                            className="flex items-center gap-2 h-9 px-4 rounded-full bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all font-semibold"
+                        >
+                            <Share2 className="w-4 h-4" />
+                            <span className="hidden sm:inline">Share</span>
+                        </Button>
+                    </div>
+                )}
+            />
 
             <div
                 ref={containerRef}

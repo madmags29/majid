@@ -10,6 +10,7 @@ import { cn, formatCurrency } from '@/lib/utils';
 import { toast } from 'sonner';
 
 // Dynamically import components to avoid SSR issues
+const Navbar = dynamic(() => import('@/components/Navbar'), { ssr: false });
 const MapView = dynamic(() => import('@/components/MapView'));
 const WeatherWidget = dynamic(() => import('@/components/WeatherWidget'));
 const TypewriterText = dynamic(() => import('@/components/TypewriterText'));
@@ -210,26 +211,22 @@ export default function ExploreContent({ slug }: { slug: string }) {
             className={cn("min-h-screen bg-[#0f172a] text-slate-100 flex flex-col", isResizing && "cursor-col-resize select-none")}
         >
             {/* Header */}
-            <header className="fixed top-0 left-0 right-0 z-50 bg-slate-900/50 backdrop-blur-xl border-b border-white/10 px-6 py-4">
-                <div className="max-w-7xl mx-auto w-full flex justify-between items-center">
-                    <Link href="/" className="flex items-center gap-4 hover:opacity-80 transition-opacity">
-                        <ArrowLeft className="w-6 h-6 text-blue-400" />
-                        <TypewriterText
-                            text="weekendtravellers.com"
-                            className="font-cursive text-xl md:text-4xl"
-                            delay={500}
-                        />
-                    </Link>
+            <Navbar
+                className="fixed top-0 left-0 right-0 bg-slate-900/50 backdrop-blur-xl border-b border-white/10"
+                showBackButton
+                actions={
                     <div className="flex items-center gap-3">
                         <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/10" onClick={handleShare}>
                             {isSharing ? <Check className="w-5 h-5 text-green-400" /> : <Share2 className="w-5 h-5" />}
                         </Button>
                         <Link href={`/search?destination=${encodeURIComponent(data.destination)}`}>
-                            <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25 border-0 rounded-xl px-6 transition-all transform hover:scale-105 active:scale-95">Customize Trip</Button>
+                            <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25 border-0 rounded-xl px-6 transition-all transform hover:scale-105 active:scale-95">
+                                Customize Trip
+                            </Button>
                         </Link>
                     </div>
-                </div>
-            </header>
+                }
+            />
 
             {/* Hero Section */}
             <section className="relative h-[70vh] w-full pt-20 overflow-hidden">

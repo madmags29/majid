@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 import { User } from '../models/User';
+import { authenticateToken, authenticateAdmin } from '../middleware/auth';
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key_change_this';
@@ -40,7 +41,8 @@ router.post('/register', async (req, res) => {
             user: {
                 id: newUser._id,
                 name: newUser.name,
-                email: newUser.email
+                email: newUser.email,
+                isAdmin: newUser.isAdmin
             }
         });
 
@@ -81,7 +83,8 @@ router.post('/login', async (req, res) => {
                 id: user._id,
                 name: user.name,
                 email: user.email,
-                picture: user.picture
+                picture: user.picture,
+                isAdmin: user.isAdmin
             }
         });
 
@@ -160,7 +163,8 @@ router.post('/google', async (req, res) => {
                 id: user._id,
                 name: user.name,
                 email: user.email,
-                picture: user.picture
+                picture: user.picture,
+                isAdmin: (user as any).isAdmin
             }
         });
 
@@ -257,19 +261,6 @@ router.post('/reset-password', async (req, res) => {
 });
 
 
-// Middleware to authenticate token
-const authenticateToken = (req: any, res: any, next: any) => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
-
-    if (!token) return res.sendStatus(401);
-
-    jwt.verify(token, JWT_SECRET, (err: any, user: any) => {
-        if (err) return res.sendStatus(403);
-        req.user = user;
-        next();
-    });
-};
 
 // GET CURRENT USER (ME)
 router.get('/me', authenticateToken, async (req: any, res: any) => {
@@ -279,6 +270,17 @@ router.get('/me', authenticateToken, async (req: any, res: any) => {
         res.json(user);
     } catch (error) {
         console.error('Get Me Error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// GET ALL USERS (ADMIN ONLY)
+router.get('/users', authenticateAdmin, async (req: any, res: any) => {
+    try {
+        const users = await User.find().select('-password').sort({ createdAt: -1 });
+        res.json(users);
+    } catch (error) {
+        console.error('Get Users Error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 });
@@ -301,7 +303,8 @@ router.put('/profile', authenticateToken, async (req: any, res: any) => {
                 id: user._id,
                 name: user.name,
                 email: user.email,
-                picture: user.picture
+                picture: user.picture,
+                isAdmin: (user as any).isAdmin
             }
         });
 

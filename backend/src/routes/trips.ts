@@ -1,23 +1,12 @@
 import express from 'express';
 import { Trip } from '../models/Trip';
+import { User } from '../models/User';
 import jwt from 'jsonwebtoken';
+import { authenticateToken, authenticateAdmin } from '../middleware/auth';
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key_change_this';
 
-// Middleware to authenticate token
-const authenticateToken = (req: any, res: any, next: any) => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
-
-    if (!token) return res.sendStatus(401);
-
-    jwt.verify(token, JWT_SECRET, (err: any, user: any) => {
-        if (err) return res.sendStatus(403);
-        req.user = user;
-        next();
-    });
-};
 
 // SAVE TRIP
 router.post('/', authenticateToken, async (req: any, res: any) => {
@@ -48,6 +37,17 @@ router.get('/', authenticateToken, async (req: any, res: any) => {
         res.json(trips);
     } catch (error) {
         console.error('Get Trips Error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// GET ALL TRIPS (ADMIN ONLY)
+router.get('/all', authenticateAdmin, async (req: any, res: any) => {
+    try {
+        const trips = await Trip.find().populate('userId', 'name email').sort({ createdAt: -1 });
+        res.json(trips);
+    } catch (error) {
+        console.error('Get All Trips Error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 });

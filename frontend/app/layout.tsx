@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "sonner";
 import Footer from "@/components/Footer";
 import ScrollProgress from "@/components/ScrollProgress";
+import AnalyticsTracker from "@/components/AnalyticsTracker";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -145,6 +146,7 @@ export default function RootLayout({
           `}
           </Script>
           {children}
+          <AnalyticsTracker />
           <ScrollProgress />
           <Footer />
           <Toaster position="top-center" richColors toastOptions={{ className: '!z-[9999]' }} />

@@ -10,10 +10,7 @@ import dynamic from 'next/dynamic';
 
 import Link from 'next/link';
 import Image from 'next/image';
-import AnimatedLogo from '@/components/AnimatedLogo';
-import TypewriterText from '@/components/TypewriterText';
-
-const AuthModal = dynamic(() => import('@/components/AuthModal'));
+const Navbar = dynamic(() => import('@/components/Navbar'), { ssr: false });
 const CategoryBanner = dynamic(() => import('@/components/CategoryBanner'));
 import {
   DropdownMenu,
@@ -47,18 +44,10 @@ export default function LandingPage() {
   const [lastFetchedLocation, setLastFetchedLocation] = useState<string>('');
 
   useEffect(() => {
-    const checkUser = () => {
-      const storedUser = localStorage.getItem('user');
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
-      } else {
-        setUser(null);
-      }
-    };
-
-    checkUser();
-    window.addEventListener('storage', checkUser);
-    return () => window.removeEventListener('storage', checkUser);
+    // We still keep a small check for user location or other page-specific needs,
+    // but the main user/auth state is now managed by Navbar.
+    // If we need the user object for anything beyond the header, 
+    // we'd use a context or global state here.
   }, []);
 
   const fetchDynamicSuggestions = useCallback(async (location: string) => {
@@ -138,17 +127,7 @@ export default function LandingPage() {
     router.push(`/search?destination=${encodeURIComponent(suggestion)}${originParam}`);
   };
 
-  const openAuth = (mode: 'login' | 'signup') => {
-    setAuthMode(mode);
-    setIsAuthOpen(true);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    setUser(null);
-    window.dispatchEvent(new Event('storage')); // Notify other tabs/components
-  };
+  // Auth and logout are now handled by Navbar
 
   const [isMobile, setIsMobile] = useState(false);
 
@@ -172,8 +151,6 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen text-white flex flex-col relative">
-      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} initialMode={authMode} />
-
       <AnimatePresence mode="wait">
         {isLoading && <CinematicLoader key="loader" />}
       </AnimatePresence>
@@ -228,90 +205,7 @@ export default function LandingPage() {
       <FloatingDestinations />
       <LocationAssistant onLocationFound={handleLocationFound} />
 
-      {/* Header */}
-      <header className="w-full py-4 px-6 flex justify-between items-center z-50">
-        <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
-          <AnimatedLogo className="w-8 h-8 md:w-10 md:h-10 text-blue-400" />
-          <div className="text-2xl md:text-3xl text-white drop-shadow-md">
-            <TypewriterText
-              text="weekendtravellers.com"
-              className="font-cursive text-3xl md:text-4xl"
-              delay={500}
-            />
-          </div>
-        </Link>
-        <nav className="flex items-center gap-4">
-          {user ? (
-            <div className="flex items-center gap-3">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full bg-slate-800/50 border border-slate-700/50 hover:bg-slate-700/50">
-                    <div className="flex h-full w-full items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-500 text-white font-bold text-xs shadow-lg shadow-blue-500/20">
-                      {user.name.charAt(0).toUpperCase()}
-                    </div>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56 bg-slate-900 border-slate-800 text-slate-100" align="end">
-                  <DropdownMenuLabel>
-                    <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">{user.name}</p>
-                      <p className="text-xs leading-none text-slate-400">{user.email}</p>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator className="bg-slate-800" />
-                  <DropdownMenuItem asChild className="focus:bg-slate-800 focus:text-white cursor-pointer hover:bg-slate-800">
-                    <Link href="/profile">My Profile</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator className="bg-slate-800" />
-                  <DropdownMenuItem asChild className="focus:bg-slate-800 focus:text-white cursor-pointer hover:bg-slate-800">
-                    <Link href="/trips">My Trips</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator className="bg-slate-800" />
-                  <DropdownMenuItem onClick={handleLogout} className="text-red-400 focus:text-red-300 focus:bg-slate-800 cursor-pointer hover:bg-slate-800">
-                    Log out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          ) : (
-            <div className="flex items-center gap-4">
-              {/* Mobile Login | Signup */}
-              <div className="flex md:hidden items-center text-sm font-bold tracking-wide">
-                <button
-                  onClick={() => openAuth('login')}
-                  className="text-slate-200 hover:text-white transition-colors"
-                >
-                  LOGIN
-                </button>
-                <span className="mx-2 text-slate-500/50 font-light">|</span>
-                <button
-                  onClick={() => openAuth('signup')}
-                  className="text-slate-200 hover:text-white transition-colors"
-                >
-                  SIGNUP
-                </button>
-              </div>
-
-              {/* Desktop Login & Sign Up */}
-              <div className="hidden md:flex items-center gap-4">
-                <Button
-                  onClick={() => openAuth('login')}
-                  variant="ghost"
-                  className="text-slate-200 hover:text-white hover:bg-white/10 transition-all font-medium"
-                >
-                  Login
-                </Button>
-                <Button
-                  onClick={() => openAuth('signup')}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25 border-0 rounded-xl px-6 transition-all transform hover:scale-105 active:scale-95"
-                >
-                  Sign Up
-                </Button>
-              </div>
-            </div>
-          )}
-        </nav>
-      </header>
+      <Navbar transparent />
 
       {/* Hero Section */}
       <section className="flex-1 flex flex-col items-center justify-center px-4 py-20 pb-32 relative z-10">
