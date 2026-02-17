@@ -1,11 +1,14 @@
 {
     "version": 2,
-    "framework": null,
-    "buildCommand": null,
+    "outputDirectory": "public",
     "rewrites": [
         {
-            "source": "/(.*)",
+            "source": "/api/(.*)",
             "destination": "/api/index.ts"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/public/index.html"
         }
     ]
 }
