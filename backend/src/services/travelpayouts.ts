@@ -17,7 +17,7 @@ export async function getFlightPrices(origin: string, destination: string) {
                 page: 1,
                 limit: 1,
                 show_to_affiliates: true,
-                sorting: 'price'
+                sorting: 'price' 
             }
         });
         return response.data;
