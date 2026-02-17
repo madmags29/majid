@@ -1,5 +1,10 @@
 {
     "version": 2,
+    "functions": {
+        "api/index.ts": {
+            "runtime": "vercel-node@5.5.33"
+        }
+    },
     "rewrites": [
         {
             "source": "/(.*)",
