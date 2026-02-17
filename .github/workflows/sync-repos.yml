@@ -1,0 +1,49 @@
+name: Sync Repositories to Vercel
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout monorepo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push to Frontend Repo
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.SYNC_GITHUB_TOKEN }}
+        with:
+          source-directory: 'frontend'
+          destination-github-username: 'madmags29'
+          destination-repository-name: 'frontend'
+          user-email: 'mails365@gmail.com'
+          target-branch: main
+
+      - name: Push to Backend Repo
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.SYNC_GITHUB_TOKEN }}
+        with:
+          source-directory: 'backend'
+          destination-github-username: 'madmags29'
+          destination-repository-name: 'backend'
+          user-email: 'mails365@gmail.com'
+          target-branch: main
+
+      - name: Push to Final Repo
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.SYNC_GITHUB_TOKEN }}
+        with:
+          source-directory: '.'
+          destination-github-username: 'madmags29'
+          destination-repository-name: 'wt-trip-final'
+          user-email: 'mails365@gmail.com'
+          target-branch: main
