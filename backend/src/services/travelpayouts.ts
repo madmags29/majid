@@ -20,7 +20,7 @@ export async function getFlightPrices(origin: string, destination: string) {
                 sorting: 'price' 
             }
         });
-        return response.data;
+        return response.data; 
     } catch (error) {
         console.error('TravelPayouts Flight API Error:', error);
         return null;
