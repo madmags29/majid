@@ -211,3 +211,57 @@ export async function generateDeepExploreContent(destination: string) {
     throw error;
   }
 }
+export async function analyzeAnalyticsData(data: any) {
+  try {
+    const prompt = `
+      You are an expert business analyst and travel industry consultant. 
+      Analyze the following web analytics data for our "Weekend Trip Planner" application and provide 3-5 actionable insights and recommendations.
+      
+      Analytics Data Summary (Last 24h):
+      - Total Pageviews: ${data.totalPageviews}
+      - Unique Visitors: ${data.uniqueVisitors}
+      - Top Destinations Searched: ${JSON.stringify(data.topDestinations)}
+      - Conversion Rate (Search to Itinerary): ${data.conversionRate}%
+      - Avg. Engagement Time: ${data.avgEngagementTime}s
+      - Traffic Sources: ${JSON.stringify(data.trafficSources)}
+      - Country Distribution: ${JSON.stringify(data.countryStats)}
+
+      Provide the response in the following JSON format:
+      {
+        "summary": "High-level overview of performance",
+        "insights": [
+          { "title": "Insight Title", "description": "Detailed explanation", "impact": "High/Medium/Low" }
+        ],
+        "recommendations": [
+          { "action": "Specific action to take", "rationale": "Why this will help" }
+        ],
+        "sentiment": "Positive/Neutral/Negative",
+        "trend": "Growth/Stable/Declining"
+      }
+      
+      Ensure insights are specific to the travel industry and the provided data.
+    `;
+
+    const completion = await openai.chat.completions.create({
+      messages: [{ role: 'user', content: prompt }],
+      model: 'gpt-4o',
+      response_format: { type: "json_object" },
+    });
+
+    const content = completion.choices[0].message.content;
+    if (!content) {
+      throw new Error('No content received from OpenAI');
+    }
+
+    return JSON.parse(content);
+  } catch (error) {
+    console.error('Error analyzing analytics data:', error);
+    return {
+      summary: "Unable to generate AI analysis at this time.",
+      insights: [],
+      recommendations: [],
+      sentiment: "Neutral",
+      trend: "Stable"
+    };
+  }
+}

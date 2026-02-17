@@ -3,12 +3,13 @@ import { Analytics } from '../models/Analytics';
 import { User } from '../models/User';
 import mongoose from 'mongoose';
 import { authenticateAdmin } from '../middleware/auth';
+import { analyzeAnalyticsData } from '../services/ai';
 
 const router = express.Router();
 
 // Helper to determine source
 const determineSource = (referrer: string, utmSource?: string, utmMedium?: string): string => {
-    if (utmSource === 'google' || utmSource === 'bing') return 'Paid Search'; // Simplified logic
+    if (utmSource === 'google' || utmSource === 'bing') return 'Paid Search';
     if (utmMedium === 'cpc' || utmMedium === 'paid') return 'Paid Search';
     if (utmMedium === 'social') return 'Organic Social';
     if (referrer) {
@@ -16,26 +17,20 @@ const determineSource = (referrer: string, utmSource?: string, utmMedium?: strin
         if (referrer.includes('facebook') || referrer.includes('twitter') || referrer.includes('instagram') || referrer.includes('linkedin')) return 'Organic Social';
         return 'Referral';
     }
-    return 'Direct'; // Default or Unassigned could be used if strictly direct
+    return 'Direct';
 };
 
 // TRACK ENDPOINT
 router.post('/analytics/track', async (req, res) => {
     try {
-        const { visitorId, userId, path, action, metadata, duration, referrer, ip } = req.body;
+        const { visitorId, sessionId, userId, path, action, metadata, duration, referrer, ip } = req.body;
 
-        // Use provided IP or extract from request
         const userIp = ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-
-        // Basic GeoIP (Mocked for now, or use a library like ip-api or maxmind in production)
-        // For this implementation, we will accept country/city from frontend if provided (e.g. via timezone or browser API) 
-        // OR just store IP and process later. Let's assume frontend sends basic locale or we rely on IP.
         const country = req.body.country || 'Unknown';
         const city = req.body.city || 'Unknown';
 
         const source = determineSource(referrer, metadata?.utm_source, metadata?.utm_medium);
 
-        // Standardize userId if present
         let cleanUserId = undefined;
         if (userId && mongoose.Types.ObjectId.isValid(userId)) {
             cleanUserId = userId;
@@ -43,6 +38,7 @@ router.post('/analytics/track', async (req, res) => {
 
         const analyticsEntry = new Analytics({
             visitorId,
+            sessionId,
             userId: cleanUserId,
             ip: userIp as string,
             country,
@@ -56,11 +52,9 @@ router.post('/analytics/track', async (req, res) => {
         });
 
         await analyticsEntry.save();
-
         res.status(200).json({ success: true });
     } catch (error) {
         console.error('Tracking Error:', error);
-        // Don't block client with error, just log it
         res.status(200).json({ success: false });
     }
 });
@@ -68,7 +62,6 @@ router.post('/analytics/track', async (req, res) => {
 // DASHBOARD DATA ENDPOINT
 router.get('/analytics/dashboard', authenticateAdmin, async (req, res) => {
     try {
-        // Time ranges
         const now = new Date();
         const thirtyMinAgo = new Date(now.getTime() - 30 * 60 * 1000);
         const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
@@ -79,14 +72,13 @@ router.get('/analytics/dashboard', authenticateAdmin, async (req, res) => {
             timestamp: { $gte: fiveMinAgo }
         }).then(ids => ids.length);
 
-        // 2. 30 Min Activity (Pageviews)
+        // 2. 30 Min Activity
         const activity30Min = await Analytics.countDocuments({
             timestamp: { $gte: thirtyMinAgo },
             action: 'pageview'
         });
 
-        // 3. User Engagement Time (Average duration of sessions in last 24h - simplified)
-        // Group by visitorId, sum durations
+        // 3. User Engagement Time
         const engagementStats = await Analytics.aggregate([
             { $match: { timestamp: { $gte: twentyFourHoursAgo } } },
             { $group: { _id: "$visitorId", totalDuration: { $sum: "$duration" } } },
@@ -94,30 +86,44 @@ router.get('/analytics/dashboard', authenticateAdmin, async (req, res) => {
         ]);
         const avgEngagementTime = engagementStats.length > 0 ? Math.round(engagementStats[0].avgDuration) : 0;
 
-        // 4. Traffic Sources (Last 24h)
+        // 4. Traffic Sources
         const trafficSources = await Analytics.aggregate([
             { $match: { timestamp: { $gte: twentyFourHoursAgo }, action: 'pageview' } },
             { $group: { _id: "$source", count: { $sum: 1 } } }
         ]);
 
-        // 5. Form Submitted Count (Last 24h)
-        const formsSubmitted = await Analytics.countDocuments({
+        // 5. Conversions
+        const searchCount = await Analytics.countDocuments({
             timestamp: { $gte: twentyFourHoursAgo },
-            action: 'form_submit'
+            action: 'search'
+        });
+        const itineraryCount = await Analytics.countDocuments({
+            timestamp: { $gte: twentyFourHoursAgo },
+            action: 'itinerary_generate'
+        });
+        const conversionRate = searchCount > 0 ? Math.round((itineraryCount / searchCount) * 100) : 0;
+
+        // 6. Registered Users
+        const totalUsers = await User.countDocuments();
+        const newUsers24h = await User.countDocuments({
+            createdAt: { $gte: twentyFourHoursAgo }
         });
 
-        // 6. Registered Users (Total & New in last 24h)
-        const totalUsers = await User.countDocuments();
-        // Assuming User model has createdAt, if not we skip 24h new users or assume strict ID order slightly
-        // Let's check User Schema later. For now, we return total.
-
-        // 7. Recent Activity List
+        // 7. Recent Activity
         const recentActivity = await Analytics.find()
             .sort({ timestamp: -1 })
             .limit(10)
             .select('path action timestamp country source');
 
-        // 8. User Country Distribution
+        // 8. Top Destinations
+        const topDestinations = await Analytics.aggregate([
+            { $match: { timestamp: { $gte: twentyFourHoursAgo }, action: 'search' } },
+            { $group: { _id: "$metadata.destination", count: { $sum: 1 } } },
+            { $sort: { count: -1 } },
+            { $limit: 10 }
+        ]);
+
+        // 9. Country Stats
         const countryStats = await Analytics.aggregate([
             { $match: { timestamp: { $gte: twentyFourHoursAgo } } },
             { $group: { _id: "$country", count: { $sum: 1 } } },
@@ -128,16 +134,90 @@ router.get('/analytics/dashboard', authenticateAdmin, async (req, res) => {
         res.json({
             realtimeUsers: realtimeUsersCount,
             activity30Min,
-            avgEngagementTime, // in seconds
+            avgEngagementTime,
             trafficSources,
-            formsSubmitted,
             totalUsers,
+            newUsers24h,
             recentActivity,
-            countryStats
+            topDestinations,
+            conversionRate,
+            countryStats,
+            funnel: {
+                search: searchCount,
+                itinerary: itineraryCount
+            }
         });
 
     } catch (error) {
         console.error('Dashboard Data Error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// AI INSIGHTS ENDPOINT
+router.get('/analytics/ai-insights', authenticateAdmin, async (req, res) => {
+    try {
+        const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+
+        // Fetch metrics for AI analysis
+        const totalPageviews = await Analytics.countDocuments({
+            timestamp: { $gte: twentyFourHoursAgo },
+            action: 'pageview'
+        });
+
+        const uniqueVisitors = await Analytics.distinct('visitorId', {
+            timestamp: { $gte: twentyFourHoursAgo }
+        }).then(ids => ids.length);
+
+        const trafficSources = await Analytics.aggregate([
+            { $match: { timestamp: { $gte: twentyFourHoursAgo }, action: 'pageview' } },
+            { $group: { _id: "$source", count: { $sum: 1 } } }
+        ]);
+
+        const topDestinations = await Analytics.aggregate([
+            { $match: { action: 'search', timestamp: { $gte: twentyFourHoursAgo } } },
+            { $group: { _id: "$metadata.destination", count: { $sum: 1 } } },
+            { $sort: { count: -1 } },
+            { $limit: 5 }
+        ]);
+
+        const countryStats = await Analytics.aggregate([
+            { $match: { timestamp: { $gte: twentyFourHoursAgo } } },
+            { $group: { _id: "$country", count: { $sum: 1 } } },
+            { $sort: { count: -1 } },
+            { $limit: 5 }
+        ]);
+
+        const searchCount = await Analytics.countDocuments({
+            timestamp: { $gte: twentyFourHoursAgo },
+            action: 'search'
+        });
+        const itineraryCount = await Analytics.countDocuments({
+            timestamp: { $gte: twentyFourHoursAgo },
+            action: 'itinerary_generate'
+        });
+        const conversionRate = searchCount > 0 ? ((itineraryCount / searchCount) * 100).toFixed(1) : "0";
+
+        const engagementStats = await Analytics.aggregate([
+            { $match: { timestamp: { $gte: twentyFourHoursAgo } } },
+            { $group: { _id: "$visitorId", totalDuration: { $sum: "$duration" } } },
+            { $group: { _id: null, avgDuration: { $avg: "$totalDuration" } } }
+        ]);
+        const avgEngagementTime = engagementStats.length > 0 ? Math.round(engagementStats[0].avgDuration) : 0;
+
+        const aiInsights = await analyzeAnalyticsData({
+            totalPageviews,
+            uniqueVisitors,
+            topDestinations,
+            conversionRate,
+            avgEngagementTime,
+            trafficSources,
+            countryStats
+        });
+
+        res.json(aiInsights);
+    } catch (error) {
+        console.error('AI Insights Error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 });

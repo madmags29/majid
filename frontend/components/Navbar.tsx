@@ -166,7 +166,15 @@ export default function Navbar({
 
                                 {Boolean(user.isAdmin) && (
                                     <DropdownMenuItem asChild className="focus:bg-slate-800 focus:text-blue-400 cursor-pointer hover:bg-slate-800">
-                                        <Link href="/admin" className="flex items-center w-full">
+                                        <Link
+                                            href="/admin"
+                                            className="flex items-center w-full"
+                                            onClick={() => {
+                                                if ((window as any).trackWtripEvent) {
+                                                    (window as any).trackWtripEvent('click', { target: 'admin_dashboard' });
+                                                }
+                                            }}
+                                        >
                                             <Shield className="mr-2 h-4 w-4 text-blue-400" />
                                             <span className="font-bold text-blue-400">Admin Dashboard</span>
                                         </Link>
@@ -174,7 +182,15 @@ export default function Navbar({
                                 )}
 
                                 <DropdownMenuItem asChild className="focus:bg-slate-800 focus:text-white cursor-pointer hover:bg-slate-800">
-                                    <Link href="/trips" className="flex items-center w-full">
+                                    <Link
+                                        href="/trips"
+                                        className="flex items-center w-full"
+                                        onClick={() => {
+                                            if ((window as any).trackWtripEvent) {
+                                                (window as any).trackWtripEvent('click', { target: 'my_trips' });
+                                            }
+                                        }}
+                                    >
                                         <Calendar className="mr-2 h-4 w-4" />
                                         <span>My Trips</span>
                                     </Link>

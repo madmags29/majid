@@ -344,6 +344,9 @@ function SearchClient() {
                         content: data
                     }
                 ]);
+                if ((window as any).trackWtripEvent) {
+                    (window as any).trackWtripEvent('itinerary_generate', { destination: data.destination });
+                }
             } catch (error) {
                 console.error("Search error:", error);
                 setMessages([
@@ -360,6 +363,9 @@ function SearchClient() {
 
         if (destination) {
             fetchItinerary(destination);
+            if ((window as any).trackWtripEvent) {
+                (window as any).trackWtripEvent('search', { destination });
+            }
         } else {
             setLoading(false);
         }
@@ -422,6 +428,9 @@ function SearchClient() {
             if (response.ok) {
                 setIsSaved(true);
                 toast.success('Trip saved to your profile!');
+                if ((window as any).trackWtripEvent) {
+                    (window as any).trackWtripEvent('itinerary_save', { destination: currentItineraryData.destination });
+                }
             } else {
                 toast.error('Failed to save trip');
             }
@@ -626,6 +635,15 @@ function SearchClient() {
                                                                 target="_blank"
                                                                 rel="noopener noreferrer"
                                                                 className="mt-2 text-[10px] text-blue-400 font-bold flex items-center gap-1 hover:underline"
+                                                                onClick={() => {
+                                                                    if ((window as any).trackWtripEvent) {
+                                                                        (window as any).trackWtripEvent('click', {
+                                                                            type: 'hotel_booking',
+                                                                            hotel: hotel.name,
+                                                                            destination: (msg.content as Itinerary).destination
+                                                                        });
+                                                                    }
+                                                                }}
                                                             >
                                                                 Book Now
                                                                 <ArrowLeft className="w-3 h-3 rotate-180" />

@@ -119,11 +119,17 @@ export default function LandingPage() {
 
     // Navigate to search page with destination as query param
     const originParam = userLocation ? `&origin=${encodeURIComponent(userLocation)}` : '';
+    if ((window as any).trackWtripEvent) {
+      (window as any).trackWtripEvent('search', { destination: searchQuery, source: 'hero_input' });
+    }
     router.push(`/search?destination=${encodeURIComponent(searchQuery)}${originParam}`);
   };
 
   const handleSuggestionClick = (suggestion: string) => {
     const originParam = userLocation ? `&origin=${encodeURIComponent(userLocation)}` : '';
+    if ((window as any).trackWtripEvent) {
+      (window as any).trackWtripEvent('search', { destination: suggestion, source: 'suggestion_chip' });
+    }
     router.push(`/search?destination=${encodeURIComponent(suggestion)}${originParam}`);
   };
 

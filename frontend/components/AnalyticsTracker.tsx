@@ -19,10 +19,23 @@ export default function AnalyticsTracker() {
         return vid;
     }, []);
 
+    // Get or create session ID
+    const getSessionId = useCallback(() => {
+        let sid = sessionStorage.getItem('session_id');
+        if (!sid) {
+            sid = uuidv4();
+            sessionStorage.setItem('session_id', sid);
+        }
+        return sid;
+    }, []);
+
     const trackEvent = useCallback(async (action: string, metadata: any = {}, duration: number = 0) => {
         try {
             const visitorId = getVisitorId();
+            const sessionId = getSessionId();
             const referrer = document.referrer;
+            const userStr = localStorage.getItem('user');
+            const userId = userStr ? JSON.parse(userStr)._id : undefined;
 
             // Collect UTM params
             const utmParams: any = {};
@@ -39,6 +52,8 @@ export default function AnalyticsTracker() {
                 },
                 body: JSON.stringify({
                     visitorId,
+                    sessionId,
+                    userId,
                     path: pathname,
                     action,
                     metadata: { ...metadata, ...utmParams },
@@ -49,7 +64,14 @@ export default function AnalyticsTracker() {
         } catch (error) {
             console.error('Tracking failed', error);
         }
-    }, [pathname, searchParams, getVisitorId]);
+    }, [pathname, searchParams, getVisitorId, getSessionId]);
+
+    // Expose trackEvent globally
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            (window as any).trackWtripEvent = trackEvent;
+        }
+    }, [trackEvent]);
 
     // Track Pageview on route change
     useEffect(() => {
