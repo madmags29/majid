@@ -43,7 +43,8 @@ async function fetchVideosForQuery(query: string): Promise<any[]> {
 router.get('/background-video', async (req, res) => {
     try {
         if (!PEXELS_API_KEY) {
-            return res.status(500).json({ error: 'Pexels API key missing' });
+            console.error('CRITICAL: PEXELS_API_KEY is missing');
+            return res.status(500).json({ error: 'Server configuration error: Pexels API key missing' });
         }
 
         const cacheKey = 'background_video_pool';
@@ -109,9 +110,12 @@ router.get('/background-video', async (req, res) => {
         }
 
         res.status(404).json({ error: 'No videos found' });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Pexels API error:', error);
-        res.status(500).json({ error: 'Failed to fetch video' });
+        res.status(500).json({
+            error: 'Failed to fetch video',
+            details: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
     }
 });
 

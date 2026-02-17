@@ -15,10 +15,16 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-    origin: '*',
+    origin: [
+        'http://localhost:3000',
+        'http://localhost:5173',
+        'https://weekendtravellers.com',
+        'https://www.weekendtravellers.com',
+        /\.vercel\.app$/
+    ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin']
 }));
 app.use(express.json({ limit: '10mb' }));
 
