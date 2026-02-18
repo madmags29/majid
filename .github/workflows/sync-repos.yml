@@ -22,41 +22,39 @@ jobs:
           git config --global user.email "mails365@gmail.com"
           git config --global user.name "Majid Khan"
           
-          # Clone and update backend
-          git clone https://x-access-token:${GITHUB_TOKEN}@github.com/madmags29/backend.git backend-repo
-          cd backend-repo
+          # Clone to /tmp to avoid circular copy
+          git clone https://x-access-token:${GITHUB_TOKEN}@github.com/madmags29/backend.git /tmp/backend-repo
+          cd /tmp/backend-repo
           git rm -rf .
-          cp -r ../backend/* .
+          cp -r $GITHUB_WORKSPACE/backend/* .
           git add .
           git commit -m "Auto-sync from monorepo" || echo "No changes to commit"
           git push origin main --force
-          cd ..
 
       - name: Sync Frontend
         env:
           GITHUB_TOKEN: ${{ secrets.SYNC_GITHUB_TOKEN }}
         run: |
-          # Clone and update frontend
-          git clone https://x-access-token:${GITHUB_TOKEN}@github.com/madmags29/frontend.git frontend-repo
-          cd frontend-repo
+          git clone https://x-access-token:${GITHUB_TOKEN}@github.com/madmags29/frontend.git /tmp/frontend-repo
+          cd /tmp/frontend-repo
           git rm -rf .
-          cp -r ../frontend/* .
+          cp -r $GITHUB_WORKSPACE/frontend/* .
           git add .
           git commit -m "Auto-sync from monorepo" || echo "No changes to commit"
           git push origin main --force
-          cd ..
 
       - name: Sync Final
         env:
           GITHUB_TOKEN: ${{ secrets.SYNC_GITHUB_TOKEN }}
         run: |
-          # Clone and update final
-          git clone https://x-access-token:${GITHUB_TOKEN}@github.com/madmags29/wt-trip-final.git final-repo
-          cd final-repo
+          git clone https://x-access-token:${GITHUB_TOKEN}@github.com/madmags29/wt-trip-final.git /tmp/final-repo
+          cd /tmp/final-repo
           git rm -rf .
-          cp -r ../* .
-          # Remove the temporary clone folders
-          rm -rf backend-repo frontend-repo final-repo
+          
+          # Copy everything except hidden .git (already handled by git rm)
+          # Use rsync if available, or just cp
+          cp -r $GITHUB_WORKSPACE/* .
+          
           git add .
           git commit -m "Auto-sync from monorepo" || echo "No changes to commit"
           git push origin main --force
