@@ -17,7 +17,6 @@ const app = express();
 app.use(cors({
     origin: [
         'http://localhost:3000',
-        'http://localhost:3002',
         'http://localhost:5173',
         'https://weekendtravellers.com',
         'https://www.weekendtravellers.com',
@@ -25,7 +24,7 @@ app.use(cors({
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin', 'Access-Control-Allow-Origin']
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin']
 }));
 app.use(express.json({ limit: '10mb' }));
 
@@ -58,14 +57,11 @@ app.get('/', (req, res) => {
     res.send('Weekend Travellers Backend is running!');
 });
 
-import adminRouter from './routes/admin';
-
 app.use('/api', searchRouter);
 app.use('/api', destinationsRouter);
 app.use('/api', mediaRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/trips', tripsRouter);
-app.use('/api/admin', adminRouter);
 app.use('/api', weatherRouter);
 app.use('/api', contactRouter);
 

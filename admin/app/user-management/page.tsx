@@ -9,19 +9,8 @@ import api from '@/lib/api';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 
-interface User {
-    _id: string;
-    name: string;
-    email: string;
-    status: 'active' | 'blocked';
-    picture?: string;
-    device?: string;
-    tripsGenerated?: number;
-    createdAt: string;
-}
-
 export default function UsersPage() {
-    const [users, setUsers] = useState<User[]>([]);
+    const [users, setUsers] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
     const [page, setPage] = useState(1);

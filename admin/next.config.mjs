@@ -1,7 +1,4 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-    basePath: '/admin',
-    trailingSlash: true,
-};
+const nextConfig = {};
 
 export default nextConfig;

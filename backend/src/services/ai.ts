@@ -7,18 +7,12 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-import { AIRequestLog } from '../models/Analytics';
-
 export async function generateItinerary(
   destination: string,
   days: number = 2,
   interests?: string,
   origin?: string
 ) {
-  const startTime = Date.now();
-  let status: 'success' | 'failed' = 'success';
-  let errorMsg = '';
-
   try {
     const prompt = `
       Create a detailed ${days}-day weekend trip itinerary for ${destination}.
@@ -90,28 +84,13 @@ export async function generateItinerary(
     }
 
     return JSON.parse(content);
-  } catch (error: any) {
-    status = 'failed';
-    errorMsg = error.message;
+  } catch (error) {
     console.error('Error generating itinerary:', error);
     throw error;
-  } finally {
-    await AIRequestLog.create({
-      prompt: `Itinerary for ${destination}`,
-      destination,
-      responseTime: Date.now() - startTime,
-      status,
-      error: errorMsg,
-      timestamp: new Date()
-    }).catch(err => console.error('Failed to log AI request:', err));
   }
 }
 
 export async function generateSuggestions(location: string) {
-  const startTime = Date.now();
-  let status: 'success' | 'failed' = 'success';
-  let errorMsg = '';
-
   try {
     const prompt = `
       Based on the starting location: "${location}", name 5 best and most popular weekend getaway destinations (towns or cities) that are within 500km distance from ${location}.
@@ -137,20 +116,10 @@ export async function generateSuggestions(location: string) {
     if (data.destinations && Array.isArray(data.destinations)) return data.destinations;
 
     return Object.values(data)[0] as string[]; // Fallback to first array found
-  } catch (error: any) {
-    status = 'failed';
-    errorMsg = error.message;
+  } catch (error) {
     console.error('Error generating suggestions:', error);
     // Global fallbacks if AI fails
     return ['Paris', 'Tokyo', 'Bali', 'New York', 'Santorini'];
-  } finally {
-    await AIRequestLog.create({
-      prompt: `Suggestions for ${location}`,
-      responseTime: Date.now() - startTime,
-      status,
-      error: errorMsg,
-      timestamp: new Date()
-    }).catch(err => console.error('Failed to log AI request:', err));
   }
 }
 

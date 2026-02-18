@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Sacramento } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
-import { Suspense } from "react";
 import Footer from "@/components/Footer";
 import ScrollProgress from "@/components/ScrollProgress";
 
@@ -103,8 +102,6 @@ export const metadata: Metadata = {
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
-import AnalyticsWrapper from "@/components/AnalyticsWrapper";
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -117,7 +114,6 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-          <AnalyticsWrapper />
           <Script
             id="adsense-init"
             async
@@ -148,9 +144,7 @@ export default function RootLayout({
             })();
           `}
           </Script>
-          <Suspense fallback={null}>
-            {children}
-          </Suspense>
+          {children}
           <ScrollProgress />
           <Footer />
           <Toaster position="top-center" richColors toastOptions={{ className: '!z-[9999]' }} />
