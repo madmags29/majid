@@ -9,6 +9,7 @@ import tripsRouter from './routes/trips';
 import weatherRouter from './routes/weather';
 import destinationsRouter from './routes/destinations';
 import contactRouter from './routes/contact';
+import adminRouter from './routes/admin';
 
 dotenv.config();
 
@@ -64,6 +65,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/trips', tripsRouter);
 app.use('/api', weatherRouter);
 app.use('/api', contactRouter);
+app.use('/api/admin', adminRouter);
 
 // Global Error Handling Middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {

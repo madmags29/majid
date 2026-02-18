@@ -20,6 +20,12 @@ const userSchema = new mongoose.Schema({
     facebookId: { type: String },
     appleId: { type: String },
     picture: { type: String },
+    isAdmin: { type: Boolean, default: false },
+    status: { type: String, enum: ['Active', 'Blocked'], default: 'Active' },
+    phone: { type: String },
+    location: { type: String },
+    device: { type: String },
+    lastActive: { type: Date, default: Date.now },
     createdAt: {
         type: Date,
         default: Date.now,
@@ -27,5 +33,10 @@ const userSchema = new mongoose.Schema({
     resetPasswordToken: { type: String },
     resetPasswordExpires: { type: Date },
 });
+
+// Indexes for Admin Dashboard searches and filters
+userSchema.index({ email: 1 });
+userSchema.index({ status: 1 });
+userSchema.index({ createdAt: -1 });
 
 export const User = mongoose.model('User', userSchema);
