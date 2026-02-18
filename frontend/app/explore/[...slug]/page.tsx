@@ -21,5 +21,5 @@ export default async function ExplorePage({ params }: PageProps) {
     const resolvedParams = await params;
     const slug = resolvedParams.slug.join('/');
 
-    return <ExploreContent slug={slug} />; 
+    return <ExploreContent slug={slug} />;
 }
