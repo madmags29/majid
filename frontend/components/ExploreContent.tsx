@@ -359,8 +359,8 @@ export default function ExploreContent({ slug }: { slug: string }) {
                                     <div key={day.day} className="bg-slate-900/40 rounded-3xl border border-white/5 overflow-hidden">
                                         <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 px-8 py-6 border-b border-white/5">
                                             <h3 className="text-2xl font-bold flex items-center gap-3">
-                                                <span className="bg-white text-[#0f172a] w-8 h-8 rounded-full flex items-center justify-center text-sm font-black">
-                                                    {day.day}
+                                                <span className="bg-white text-[#0f172a] px-4 py-1.5 rounded-full flex items-center justify-center text-sm font-black whitespace-nowrap shadow-lg shadow-white/10">
+                                                    Day {day.day}
                                                 </span>
                                                 {day.title}
                                             </h3>
