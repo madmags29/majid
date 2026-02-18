@@ -22,13 +22,20 @@ const seedAdmin = async () => {
         // Check if admin already exists
         const existingAdmin = await User.findOne({ email: adminEmail });
         if (existingAdmin) {
-            console.log(`Admin user ${adminEmail} already exists.`);
-            // Update to be admin just in case
-            if (!existingAdmin.isAdmin) {
-                existingAdmin.isAdmin = true;
-                await existingAdmin.save();
-                console.log(`User ${adminEmail} promoted to Admin.`);
-            }
+            console.log(`Admin user ${adminEmail} already exists. Updating password/role...`);
+
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(adminPassword, salt);
+
+            existingAdmin.isAdmin = true;
+            existingAdmin.password = hashedPassword;
+            await existingAdmin.save();
+
+            console.log('---------------------------------------------------');
+            console.log('Admin User Updated Successfully');
+            console.log(`Email: ${adminEmail}`);
+            console.log(`New Password: ${adminPassword}`);
+            console.log('---------------------------------------------------');
             process.exit(0);
         }
 
