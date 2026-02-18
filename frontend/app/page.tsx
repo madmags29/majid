@@ -319,30 +319,46 @@ export default function LandingPage() {
           <div className="flex justify-center mb-6 min-h-[40px]">
             <VisitorCounter />
           </div>
-          <h1 className="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-6 drop-shadow-2xl">
+          <h1 className="text-3xl md:text-7xl font-extrabold text-white tracking-tight mb-6 drop-shadow-2xl">
             Discover Your Perfect <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200">Weekend Getaway</span>
           </h1>
-          <p className="text-xl text-slate-100 mb-12 max-w-2xl mx-auto leading-relaxed drop-shadow-md font-medium">
+          <p className="text-lg md:text-xl text-slate-100 mb-12 max-w-2xl mx-auto leading-relaxed drop-shadow-md font-medium">
             Just tell us where you want to go, or let us surprise you.
           </p>
 
-          {/* Glass Search Bar */}
-          <form onSubmit={handleSearch} className="w-full max-w-3xl mx-auto glass-panel p-3 rounded-2xl flex flex-col md:flex-row gap-3 transition-all duration-500 ease-in-out">
-            <div className="flex-1 flex items-center px-4 py-3 glass-input rounded-xl">
-              <MapPin className="w-5 h-5 text-slate-300 mr-3" />
-              <input
-                type="text"
-                placeholder="Where to? (e.g. Paris) or 3 days weekend trip near me?"
-                className="bg-transparent w-full outline-none text-white placeholder:text-slate-400 font-medium text-base"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-            <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl px-8 py-3 h-auto text-lg shadow-lg shadow-blue-900/50 min-w-[140px] border border-white/10">
-              <Search className="w-5 h-5 mr-2" /> Search
-            </Button>
-          </form>
+          {/* Highlighted & Shining Glass Search Bar */}
+          <div className="relative w-full max-w-3xl mx-auto p-[1px] rounded-2xl overflow-hidden group/search-container">
+            {/* The Border Shine/Beam Effect */}
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-400/80 to-transparent"
+              initial={{ x: '-100%' }}
+              animate={{ x: '100%' }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "linear",
+                repeatDelay: 1
+              }}
+              style={{ width: '50%', height: '100%' }}
+            />
+
+            <form onSubmit={handleSearch} className="relative w-full glass-panel p-3 rounded-2xl flex flex-col md:flex-row gap-3 transition-all duration-500 ease-in-out border border-white/10 hover:border-blue-500/30 shadow-[0_4px_30px_rgba(0,0,0,0.1)] group-hover/search-container:shadow-[0_0_20px_rgba(59,130,246,0.2)]">
+              <div className="flex-1 flex items-center px-4 py-3 glass-input rounded-xl">
+                <MapPin className="w-5 h-5 text-slate-300 mr-3" />
+                <input
+                  type="text"
+                  placeholder="Where to? (e.g. Paris) or 3 days weekend trip near me?"
+                  className="bg-transparent w-full outline-none text-white placeholder:text-slate-400 font-medium text-base"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl px-8 py-3 h-auto text-lg shadow-lg shadow-blue-900/50 min-w-[140px] border border-white/10">
+                <Search className="w-5 h-5 mr-2" /> Search
+              </Button>
+            </form>
+          </div>
 
           {/* Suggestions */}
           <div className="min-h-[100px] mt-8">

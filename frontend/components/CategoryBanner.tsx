@@ -23,18 +23,18 @@ export default function CategoryBanner({ userLocation }: CategoryBannerProps) {
     };
 
     return (
-        <div className="w-full mt-12 overflow-x-auto no-scrollbar pb-4 animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-500 min-h-[110px]">
-            <div className="flex justify-center gap-4 min-w-max px-4">
+        <div className="w-full mt-12 animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-500">
+            <div className="grid grid-cols-2 md:flex md:justify-center gap-3 md:gap-4 px-4 max-w-4xl mx-auto">
                 {CATEGORIES.map((cat, index) => (
                     <motion.button
                         key={cat.name}
                         whileHover={{ scale: 1.05, y: -2 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={() => handleCategoryClick(cat.name)}
-                        className={`flex items-center gap-2.5 px-5 py-3 rounded-2xl backdrop-blur-md border ${cat.bg} ${cat.border} transition-all shadow-xl group cursor-pointer`}
+                        className={`flex items-center justify-center md:justify-start gap-2.5 px-4 md:px-5 py-3 rounded-2xl backdrop-blur-md border ${cat.bg} ${cat.border} transition-all shadow-xl group cursor-pointer ${index === CATEGORIES.length - 1 ? 'col-span-2 sm:col-span-1' : ''}`}
                     >
-                        <cat.icon className={`w-5 h-5 ${cat.color} group-hover:scale-110 transition-transform`} />
-                        <span className="text-sm font-semibold text-slate-100 whitespace-nowrap">
+                        <cat.icon className={`w-4 h-4 md:w-5 md:h-5 ${cat.color} group-hover:scale-110 transition-transform`} />
+                        <span className="text-xs md:text-sm font-semibold text-slate-100 whitespace-nowrap">
                             {cat.name}
                         </span>
                     </motion.button>
