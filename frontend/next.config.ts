@@ -18,7 +18,7 @@ const nextConfig: NextConfig = {
             },
             {
                 source: "/admin/:path*",
-                destination: `http://localhost:3002/admin/:path*`,
+                destination: `${process.env.ADMIN_URL || 'http://localhost:3002'}/admin/:path*`,
             },
             {
                 source: "/sitemap",
