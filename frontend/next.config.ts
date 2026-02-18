@@ -17,6 +17,10 @@ const nextConfig: NextConfig = {
                 destination: `${apiUrl}/api/:path*`,
             },
             {
+                source: "/admin/:path*",
+                destination: `http://localhost:3002/admin/:path*`,
+            },
+            {
                 source: "/sitemap",
                 destination: "/sitemap.xml",
             },

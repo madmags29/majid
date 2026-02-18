@@ -89,7 +89,7 @@ export default function SecurityPage() {
                         Danger Zone: GDPR Data Erasure
                     </h4>
                     <p className="text-xs text-rose-500/60 mb-4">
-                        Permanently delete all data associated with a user account to comply with GDPR "Right to be Forgotten" requests.
+                        Permanently delete all data associated with a user account to comply with GDPR &quot;Right to be Forgotten&quot; requests.
                     </p>
                     <div className="flex gap-4">
                         <input

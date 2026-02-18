@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import {
     LayoutDashboard, Users, Activity, Brain, BarChart3,
     PieChart, Map, ShieldCheck, Search, DollarSign,
-    Settings, LogOut, TrendingUp, Monitor
+    LogOut, TrendingUp, Monitor
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -65,7 +65,7 @@ export default function Sidebar() {
                 <button
                     onClick={() => {
                         localStorage.removeItem('adminToken');
-                        window.location.href = '/login';
+                        window.location.href = '/admin/login/';
                     }}
                     className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm text-zinc-400 hover:text-red-400 hover:bg-red-400/5 transition-all w-full"
                 >

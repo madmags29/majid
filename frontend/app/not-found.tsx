@@ -1,12 +1,20 @@
 'use client';
 
+import { Suspense, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import { Search, MapPin, Compass } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function NotFound() {
+    return (
+        <Suspense fallback={null}>
+            <NotFoundContent />
+        </Suspense>
+    );
+}
+
+function NotFoundContent() {
     const router = useRouter();
     const [query, setQuery] = useState('');
 
