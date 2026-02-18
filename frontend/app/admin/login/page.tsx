@@ -17,8 +17,10 @@ export default function LoginPage() {
 
         try {
             // Ensure we hit the /api/auth/login endpoint correctly
-            const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
-            const apiUrl = baseUrl.endsWith('/api') ? baseUrl : `${baseUrl}/api`;
+            // Default to empty string to use relative path (handled by Vercel rewrites) if no env var
+            const baseUrl = process.env.NEXT_PUBLIC_API_URL || '';
+            const apiUrl = baseUrl && !baseUrl.startsWith('/') ? (baseUrl.endsWith('/api') ? baseUrl : `${baseUrl}/api`) : '/api';
+
             const res = await axios.post(`${apiUrl}/auth/login`, formData);
 
             const { token, user } = res.data;
