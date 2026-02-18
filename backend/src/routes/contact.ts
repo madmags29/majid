@@ -1,15 +1,15 @@
 import express from 'express';
 const { body, validationResult } = require('express-validator');
+import Contact from '../models/Contact';
+import nodemailer from 'nodemailer';
 
 const router = express.Router();
-
-import nodemailer from 'nodemailer';
 
 // Email Configuration
 const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: parseInt(process.env.SMTP_PORT || '587'),
-    secure: false, // true for 465, false for other ports
+    secure: process.env.SMTP_PORT === '465', // true for 465, false for other ports
     auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
@@ -17,11 +17,11 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendEmail = async (data: any) => {
-    console.log('--- Sending Email ---');
+    console.log('--- Sending Notification Email ---');
     try {
         await transporter.sendMail({
-            from: `"${data.name}" <${process.env.SMTP_USER}>`, // Sender address must be verified/authenticated
-            to: process.env.CONTACT_EMAIL || 'trip@weekendtravellers.com', // List of receivers
+            from: `"Contact Form" <${process.env.SMTP_USER}>`,
+            to: process.env.CONTACT_EMAIL || 'trip@weekendtravellers.com',
             replyTo: data.email,
             subject: `New Contact Message from ${data.name}`,
             text: `
@@ -43,7 +43,8 @@ Message: ${data.comment}
         return true;
     } catch (error) {
         console.error('Nodemailer error:', error);
-        throw error;
+        // We don't throw here so the DB save still succeeds in the response
+        return false;
     }
 };
 
@@ -54,11 +55,9 @@ router.post(
         body('email').isEmail().withMessage('Valid email is required'),
         body('phone').trim().notEmpty().withMessage('Phone number is required'),
         body('comment').trim().notEmpty().withMessage('Comment is required'),
-        // Simple honeypot check: 'website' field should be empty
+        // Honeypot check
         body('website').custom((value: string) => {
-            if (value) {
-                throw new Error('Spam detected');
-            }
+            if (value) throw new Error('Spam detected');
             return true;
         }),
     ],
@@ -68,11 +67,23 @@ router.post(
             return res.status(400).json({ success: false, errors: errors.array() });
         }
 
-        const { name, email, phone, comment } = req.body;
+        const { name, email, phone, comment, website } = req.body;
 
         try {
-            await sendEmail({ name, email, phone, comment });
-            res.json({ success: true, message: 'Thank you for your message. We will get back to you soon!' });
+            // 1. Save to Database (Critical)
+            const newContact = new Contact({ name, email, phone, comment, website });
+            await newContact.save();
+            console.log('Contact message saved to DB');
+
+            // 2. Send Email (Non-critical for success response)
+            sendEmail({ name, email, phone, comment }).catch(err => {
+                console.error('Background Email Error:', err);
+            });
+
+            res.json({
+                success: true,
+                message: 'Thank you! Your message has been received and saved.'
+            });
         } catch (error) {
             console.error('Contact form submission error:', error);
             res.status(500).json({ success: false, message: 'Something went wrong. Please try again later.' });
