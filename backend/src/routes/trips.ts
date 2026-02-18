@@ -32,6 +32,18 @@ router.post('/', authenticateToken, async (req: any, res: any) => {
         });
 
         await trip.save();
+
+        // Log conversion
+        const { TrafficSource } = require('../models/Analytics');
+        await TrafficSource.create({
+            source: 'Direct', // Default if unknown
+            sessionId: req.headers['x-session-id'] || 'unknown',
+            path: '/trips',
+            isConversion: true,
+            conversionType: 'Trip Saved',
+            timestamp: new Date()
+        }).catch(() => { });
+
         res.status(201).json(trip);
 
     } catch (error) {

@@ -80,6 +80,17 @@ router.post(
                 console.error('Background Email Error:', err);
             });
 
+            // 3. Log conversion
+            const { TrafficSource } = require('../models/Analytics');
+            await TrafficSource.create({
+                source: 'Direct',
+                sessionId: req.headers['x-session-id'] || 'unknown',
+                path: '/contact',
+                isConversion: true,
+                conversionType: 'Contact Lead',
+                timestamp: new Date()
+            }).catch(() => { });
+
             res.json({
                 success: true,
                 message: 'Thank you! Your message has been received and saved.'

@@ -102,6 +102,8 @@ export const metadata: Metadata = {
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
+import AnalyticsTracker from "@/components/AnalyticsTracker";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -114,6 +116,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+          <AnalyticsTracker />
           <Script
             id="adsense-init"
             async
