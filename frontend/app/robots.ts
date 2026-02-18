@@ -8,7 +8,7 @@ export default function robots(): MetadataRoute.Robots {
             {
                 userAgent: '*',
                 allow: '/',
-                disallow: '/private/',
+                disallow: ['/private/', '/profile', '/trips', '/admin', '/reset-password'],
             },
             {
                 userAgent: 'Mediapartners-Google',

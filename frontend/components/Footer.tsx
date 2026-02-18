@@ -147,7 +147,7 @@ const Footer = () => {
                     <div className="flex space-x-6 mt-4 md:mt-0">
                         <Link href="/privacy" className="hover:text-slate-300">Privacy</Link>
                         <Link href="/terms" className="hover:text-slate-300">Terms</Link>
-                        <Link href="/sitemap" className="hover:text-slate-300">Sitemap</Link>
+                        <Link href="/sitemap.xml" className="hover:text-slate-300">Sitemap</Link>
                     </div>
                 </div>
             </div>
