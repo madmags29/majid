@@ -9,10 +9,6 @@
             "destination": "backend/api/index.ts"
         },
         {
-            "source": "/admin/(.*)",
-            "destination": "admin/$1"
-        },
-        {
             "source": "/AgodaPartnerVerification.htm",
             "destination": "frontend/public/AgodaPartnerVerification.htm"
         }
