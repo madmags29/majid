@@ -25,8 +25,10 @@ jobs:
           # Clone to /tmp to avoid circular copy
           git clone https://x-access-token:${GITHUB_TOKEN}@github.com/madmags29/backend.git /tmp/backend-repo
           cd /tmp/backend-repo
-          git rm -rf .
-          cp -r $GITHUB_WORKSPACE/backend/* .
+          
+          # Sync backend folder to target repo, excluding .git
+          rsync -av --delete --exclude='.git' $GITHUB_WORKSPACE/backend/ .
+          
           git add .
           git commit -m "Auto-sync from monorepo" || echo "No changes to commit"
           git push origin main --force
@@ -37,8 +39,10 @@ jobs:
         run: |
           git clone https://x-access-token:${GITHUB_TOKEN}@github.com/madmags29/frontend.git /tmp/frontend-repo
           cd /tmp/frontend-repo
-          git rm -rf .
-          cp -r $GITHUB_WORKSPACE/frontend/* .
+          
+          # Sync frontend folder to target repo, excluding .git
+          rsync -av --delete --exclude='.git' $GITHUB_WORKSPACE/frontend/ .
+          
           git add .
           git commit -m "Auto-sync from monorepo" || echo "No changes to commit"
           git push origin main --force
@@ -49,11 +53,9 @@ jobs:
         run: |
           git clone https://x-access-token:${GITHUB_TOKEN}@github.com/madmags29/wt-trip-final.git /tmp/final-repo
           cd /tmp/final-repo
-          git rm -rf .
           
-          # Copy everything except hidden .git (already handled by git rm)
-          # Use rsync if available, or just cp
-          cp -r $GITHUB_WORKSPACE/* .
+          # Sync entire monorepo to target repo, excluding .git
+          rsync -av --delete --exclude='.git' $GITHUB_WORKSPACE/ .
           
           git add .
           git commit -m "Auto-sync from monorepo" || echo "No changes to commit"
