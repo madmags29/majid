@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import {
     ShieldCheck,
     Lock,
@@ -8,18 +9,51 @@ import {
     AlertTriangle,
     History,
     ShieldAlert,
-    FileCheck
+    FileCheck,
+    Loader2
 } from 'lucide-react';
-
-const auditLogs = [
-    { action: 'Admin Login', user: 'Majid Khan', ip: '192.168.1.1', time: '5 mins ago', status: 'Success' },
-    { action: 'User Blocked', user: 'System (Auto)', target: 'spammer@mail.com', time: '12 mins ago', status: 'Success' },
-    { action: 'Database Config Update', user: 'Admin Main', ip: '10.0.0.45', time: '1h 12m ago', status: 'Pending Review' },
-    { action: 'Failed Login Attempt', user: 'Unknown', ip: '45.12.3.99', time: '2h 45m ago', status: 'Alert' },
-    { action: 'Exported User Data', user: 'Majid Khan', ip: '192.168.1.1', time: '3h 10m ago', status: 'Logged' },
-];
+import api from '../../../lib/api';
+import { format } from 'date-fns';
 
 export default function SecurityCompliancePage() {
+    const [stats, setStats] = useState<any>(null);
+    const [logs, setLogs] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [statsRes, logsRes] = await Promise.all([
+                    api.get('/stats/security'),
+                    api.get('/logs?limit=5')
+                ]);
+                setStats(statsRes.data);
+                setLogs(logsRes.data);
+            } catch (error) {
+                console.error('Failed to fetch security data');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+    if (isLoading) {
+        return (
+            <div className="flex h-96 items-center justify-center">
+                <Loader2 className="w-8 h-8 animate-spin text-emerald-500" />
+            </div>
+        );
+    }
+
+    const auditLogs = logs.map((log: any) => ({
+        action: log.message,
+        user: log.metadata?.email || 'System',
+        ip: log.metadata?.ip || 'Internal',
+        time: format(new Date(log.timestamp), 'HH:mm:ss'),
+        status: log.level === 'error' ? 'Alert' : 'Success'
+    }));
+
     return (
         <div className="space-y-8">
             <div className="border-b border-slate-200 dark:border-zinc-800 pb-6">
@@ -31,19 +65,19 @@ export default function SecurityCompliancePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <SecurityCard
                     title="Security Score"
-                    value="94/100"
+                    value={`${stats?.securityScore || 100}/100`}
                     icon={<ShieldCheck className="w-5 h-5 text-emerald-500" />}
                     status="Good"
                 />
                 <SecurityCard
                     title="Active Admins"
-                    value="2"
+                    value="1"
                     icon={<UserCheck className="w-5 h-5 text-blue-500" />}
                     status="Verified"
                 />
                 <SecurityCard
-                    title="Login Attempts (24h)"
-                    value="142"
+                    title="Failed Logins"
+                    value={stats?.failedLogins || '0'}
                     icon={<Lock className="w-5 h-5 text-amber-500" />}
                     status="Normal"
                 />
@@ -73,17 +107,21 @@ export default function SecurityCompliancePage() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-50 dark:divide-zinc-800 text-sm font-medium">
-                                {auditLogs.map((log, i) => (
+                                {auditLogs.length === 0 ? (
+                                    <tr>
+                                        <td colSpan={4} className="py-8 text-center text-slate-400 italic">No recent audit logs.</td>
+                                    </tr>
+                                ) : auditLogs.map((log: any, i: number) => (
                                     <tr key={i} className="hover:bg-slate-50 dark:hover:bg-zinc-800 transition-colors group">
                                         <td className="py-4 font-bold text-slate-700 dark:text-zinc-300">{log.action}</td>
                                         <td className="py-4 flex flex-col">
                                             <span>{log.user}</span>
-                                            <span className="text-[10px] text-slate-400 font-mono">{log.ip || log.target}</span>
+                                            <span className="text-[10px] text-slate-400 font-mono">{log.ip}</span>
                                         </td>
                                         <td className="py-4 text-slate-500 text-xs font-mono">{log.time}</td>
                                         <td className="py-4 text-right">
                                             <span className={`text-[10px] font-black px-2 py-0.5 rounded uppercase ${log.status === 'Alert' ? 'bg-rose-500 text-white' :
-                                                    log.status === 'Success' ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-600'
+                                                log.status === 'Success' ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-600'
                                                 }`}>
                                                 {log.status}
                                             </span>
@@ -102,8 +140,11 @@ export default function SecurityCompliancePage() {
                         Threat Prevention
                     </h3>
                     <div className="space-y-4">
-                        <ThreatCard title="Rate Limiting" desc="IP: 45.x.x.99 blocked for 24h (Brute Force attempt)" type="warning" />
-                        <ThreatCard title="SQL Injection Blocked" desc="Payload detected in /api/search. Automatically sanitized." type="info" />
+                        {stats?.threats?.length > 0 ? stats.threats.map((threat: any) => (
+                            <ThreatCard key={threat._id} title="Blocked Blocked" desc={threat.message} type="warning" />
+                        )) : (
+                            <div className="text-slate-500 text-xs italic text-center py-4">No active threats detected. System secure.</div>
+                        )}
                     </div>
                     <div className="pt-6 border-t border-white/5">
                         <h4 className="text-xs font-black uppercase text-slate-500 tracking-widest mb-4">RBAC Roles</h4>
@@ -124,7 +165,7 @@ export default function SecurityCompliancePage() {
     );
 }
 
-function SecurityCard({ title, value, icon, status }: { title: string, value: string, icon: React.ReactNode, status: string }) {
+function SecurityCard({ title, value, icon, status }: { title: string, value: string | number, icon: React.ReactNode, status: string }) {
     return (
         <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-sm relative overflow-hidden">
             <div className="flex items-center justify-between mb-2">

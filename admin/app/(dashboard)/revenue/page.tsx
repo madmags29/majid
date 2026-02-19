@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import {
     DollarSign,
     CreditCard,
@@ -8,7 +9,8 @@ import {
     ArrowUpRight,
     ArrowDownRight,
     Download,
-    PieChart as PieChartIcon
+    PieChart as PieChartIcon,
+    Loader2
 } from 'lucide-react';
 import {
     BarChart,
@@ -24,23 +26,50 @@ import {
     PieChart,
     Pie
 } from 'recharts';
-
-const monthlyRevenue = [
-    { month: 'Sep', revenue: 4200 },
-    { month: 'Oct', revenue: 5100 },
-    { month: 'Nov', revenue: 4800 },
-    { month: 'Dec', revenue: 7200 },
-    { month: 'Jan', revenue: 6500 },
-    { month: 'Feb', revenue: 8900 },
-];
-
-const revenueByChannel = [
-    { name: 'Affiliates', value: 55, color: '#3b82f6' },
-    { name: 'AdSense', value: 30, color: '#10b981' },
-    { name: 'Premium', value: 15, color: '#f59e0b' },
-];
+import api from '../../../lib/api';
+import { format } from 'date-fns';
+import { toast } from 'sonner';
 
 export default function RevenueDashboardPage() {
+    const [stats, setStats] = useState<any>(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchRevenue = async () => {
+            try {
+                const res = await api.get('/stats/revenue');
+                setStats(res.data);
+            } catch (error) {
+                console.error('Failed to fetch revenue stats', error);
+                toast.error('Failed to load revenue data');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchRevenue();
+    }, []);
+
+    if (isLoading) {
+        return (
+            <div className="flex h-96 items-center justify-center">
+                <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+            </div>
+        );
+    }
+
+    const chartData = stats?.dailyRevenue.map((item: any) => ({
+        month: format(new Date(item._id), 'MMM dd'),
+        revenue: item.total
+    })) || [];
+
+    const pieData = stats?.bySource.map((item: any, index: number) => ({
+        name: item._id,
+        value: item.value,
+        color: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6'][index % 4]
+    })) || [];
+
+    const totalRevenue = stats?.total || 0;
+
     return (
         <div className="space-y-8">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 dark:border-zinc-800 pb-6">
@@ -55,10 +84,10 @@ export default function RevenueDashboardPage() {
 
             {/* Financial KPI Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <FinanceCard title="Total Revenue" value="$8,900.00" trend="+24.5%" trendUp={true} sub="This month" />
-                <FinanceCard title="Affiliate Earnings" value="$4,895.50" trend="+15.2%" trendUp={true} sub="Top: Travelpayouts" />
-                <FinanceCard title="Ad Revenue" value="$2,670.20" trend="-2.4%" trendUp={false} sub="Google AdSense" />
-                <FinanceCard title="Rev per User" value="$2.10" trend="+8.4%" trendUp={true} sub="ARPU (30 days)" />
+                <FinanceCard title="Total Revenue" value={`$${totalRevenue.toLocaleString()}`} trend="+24.5%" trendUp={true} sub="This month" />
+                <FinanceCard title="Affiliate Earnings" value={`$${(stats?.bySource?.find((s: any) => s._id === 'affiliate')?.value || 0).toLocaleString()}`} trend="+15.2%" trendUp={true} sub="Top: Travelpayouts" />
+                <FinanceCard title="Ad Revenue" value={`$${(stats?.bySource?.find((s: any) => s._id === 'ad')?.value || 0).toLocaleString()}`} trend="-2.4%" trendUp={false} sub="Google AdSense" />
+                <FinanceCard title="Rev per User" value="$0.00" trend="+0.0%" trendUp={true} sub="ARPU (30 days)" />
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -66,11 +95,11 @@ export default function RevenueDashboardPage() {
                 <div className="lg:col-span-2 bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-slate-200 dark:border-zinc-800">
                     <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
                         <LineChart className="w-5 h-5 text-blue-500" />
-                        Monthly Revenue Growth
+                        Revenue Growth (30 Days)
                     </h3>
                     <div className="h-[350px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
-                            <LineChart data={monthlyRevenue}>
+                            <LineChart data={chartData}>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
                                 <XAxis dataKey="month" stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
                                 <YAxis stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
@@ -88,13 +117,13 @@ export default function RevenueDashboardPage() {
                         <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
                                 <Pie
-                                    data={revenueByChannel}
+                                    data={pieData}
                                     innerRadius={70}
                                     outerRadius={90}
                                     paddingAngle={5}
                                     dataKey="value"
                                 >
-                                    {revenueByChannel.map((entry, index) => (
+                                    {pieData.map((entry: any, index: number) => (
                                         <Cell key={`cell-${index}`} fill={entry.color} />
                                     ))}
                                 </Pie>
@@ -103,13 +132,15 @@ export default function RevenueDashboardPage() {
                         </ResponsiveContainer>
                     </div>
                     <div className="space-y-4">
-                        {revenueByChannel.map((channel) => (
+                        {pieData.map((channel: any) => (
                             <div key={channel.name} className="flex items-center justify-between group">
                                 <div className="flex items-center gap-3">
                                     <div className="w-3 h-3 rounded-full" style={{ backgroundColor: channel.color }} />
-                                    <span className="text-sm font-bold text-slate-700 dark:text-slate-300">{channel.name}</span>
+                                    <span className="text-sm font-bold text-slate-700 dark:text-slate-300 capitalize">{channel.name}</span>
                                 </div>
-                                <span className="text-sm font-black italic">{channel.value}%</span>
+                                <span className="text-sm font-black italic">
+                                    {totalRevenue > 0 ? ((channel.value / totalRevenue) * 100).toFixed(1) : 0}%
+                                </span>
                             </div>
                         ))}
                     </div>

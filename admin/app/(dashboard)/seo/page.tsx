@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import {
     Search,
     Link as LinkIcon,
@@ -13,7 +14,8 @@ import {
     AlertCircle,
     XCircle,
     Globe,
-    TrendingUp
+    TrendingUp,
+    Loader2
 } from 'lucide-react';
 import {
     BarChart,
@@ -29,6 +31,7 @@ import {
     Pie,
     Cell
 } from 'recharts';
+import api from '../../../lib/api';
 
 const keywordData = [
     { range: 'Top 3', count: 145, color: '#10b981' },
@@ -49,20 +52,39 @@ const ctrData = [
     { pos: '10', ctr: 1 },
 ];
 
-const topContent = [
-    { title: 'Top 10 Spiritual Getaways in India', views: '12,500', clicks: '8,400', ctr: '4.2%', pos: '3.2' },
-    { title: 'How to Plan a 3-Day Trip to Jaipur', views: '10,200', clicks: '6,100', ctr: '3.8%', pos: '4.1' },
-    { title: 'Best Hill Stations Near Delhi in June', views: '9,800', clicks: '5,900', ctr: '5.1%', pos: '2.8' },
-    { title: 'Rishikesh Adventure Guide for 2026', views: '8,400', clicks: '4,200', ctr: '2.5%', pos: '8.4' },
-    { title: 'Budget Weekend Escapes from Mumbai', views: '7,200', clicks: '3,800', ctr: '6.4%', pos: '1.9' },
-];
-
 const seoHealth = [
     { name: 'Healthy', value: 85, color: '#10b981' },
     { name: 'Issues', value: 15, color: '#ef4444' },
 ];
 
 export default function SEOContentPage() {
+    const [stats, setStats] = useState<any>(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchSEO = async () => {
+            try {
+                const res = await api.get('/stats/seo');
+                setStats(res.data);
+            } catch (error) {
+                console.error('Failed to fetch SEO stats');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchSEO();
+    }, []);
+
+    if (isLoading) {
+        return (
+            <div className="flex h-96 items-center justify-center">
+                <Loader2 className="w-8 h-8 animate-spin text-purple-500" />
+            </div>
+        );
+    }
+
+    const topContent = stats?.topPages || [];
+
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex items-center justify-between border-b border-slate-200/60 dark:border-white/5 pb-6">
@@ -180,28 +202,30 @@ export default function SEOContentPage() {
                     <div className="flex items-center justify-between mb-6">
                         <h3 className="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2">
                             <FileText className="w-5 h-5 text-indigo-500" />
-                            Top Performing Content
+                            Top Performing Content (Internal Views)
                         </h3>
                     </div>
                     <div className="overflow-x-auto">
                         <table className="w-full text-left">
                             <thead>
                                 <tr className="text-[10px] font-black text-slate-400 uppercase tracking-wider border-b border-slate-100 dark:border-white/5">
-                                    <th className="pb-4 pl-4">Page Title</th>
-                                    <th className="pb-4">Clicks</th>
-                                    <th className="pb-4">CTR</th>
-                                    <th className="pb-4 text-right pr-4">Avg. Pos</th>
+                                    <th className="pb-4 pl-4">Page Title / URL</th>
+                                    <th className="pb-4">Views</th>
+                                    <th className="pb-4">Rank</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-50 dark:divide-white/5">
-                                {topContent.map((post) => (
-                                    <tr key={post.title} className="hover:bg-slate-50/50 dark:hover:bg-white/5 transition-colors group">
+                                {topContent.length === 0 ? (
+                                    <tr>
+                                        <td colSpan={3} className="py-8 text-center text-slate-400 italic">No content data yet.</td>
+                                    </tr>
+                                ) : topContent.map((page: any, i: number) => (
+                                    <tr key={page._id} className="hover:bg-slate-50/50 dark:hover:bg-white/5 transition-colors group">
                                         <td className="py-4 pl-4 font-bold text-slate-700 dark:text-zinc-200 text-sm truncate max-w-[200px] group-hover:text-indigo-500 transition-colors">
-                                            {post.title}
+                                            {page._id}
                                         </td>
-                                        <td className="py-4 font-black text-xs text-slate-600 dark:text-zinc-400">{post.clicks}</td>
-                                        <td className="py-4 text-sm font-bold text-emerald-500">{post.ctr}</td>
-                                        <td className="py-4 pr-4 text-right font-mono text-xs text-slate-500">{post.pos}</td>
+                                        <td className="py-4 font-black text-xs text-slate-600 dark:text-zinc-400">{page.views}</td>
+                                        <td className="py-4 font-mono text-xs text-slate-500">#{i + 1}</td>
                                     </tr>
                                 ))}
                             </tbody>
