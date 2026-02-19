@@ -49,7 +49,7 @@ jobs:
         run: |
           git clone https://x-access-token:${GITHUB_TOKEN}@github.com/madmags29/admin.git /tmp/admin-repo
           cd /tmp/admin-repo
-          git rm -rf .
+          git rm -rf . || true
           cp -r $GITHUB_WORKSPACE/admin/* .
           git add .
           git commit -m "Auto-sync from monorepo" || echo "No changes to commit"
