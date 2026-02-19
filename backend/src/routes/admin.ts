@@ -124,7 +124,36 @@ router.get('/stats/ai', async (req, res) => {
     }
 });
 
-// 4. SYSTEM MONITORING
+// 5. ACTIVITY TRACKING
+router.get('/tracking/activities', async (req, res) => {
+    try {
+        const limit = Number(req.query.limit) || 50;
+        const activities = await ActivityLog.find()
+            .sort({ timestamp: -1 })
+            .limit(limit)
+            .populate('userId', 'name email picture');
+
+        res.json(activities);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching activities' });
+    }
+});
+
+router.get('/tracking/sessions', async (req, res) => {
+    try {
+        const limit = Number(req.query.limit) || 50;
+        const sessions = await UserSession.find()
+            .sort({ startTime: -1 })
+            .limit(limit)
+            .populate('userId', 'name email');
+
+        res.json(sessions);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching sessions' });
+    }
+});
+
+// 6. SYSTEM MONITORING
 router.get('/logs', async (req, res) => {
     try {
         const { level, context, limit = 50 } = req.query;
