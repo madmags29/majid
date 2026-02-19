@@ -3,22 +3,26 @@
 import { useState, useEffect } from 'react';
 import {
     Activity,
-    Server,
-    Cpu,
-    Layers,
-    Terminal,
-    AlertTriangle,
     CheckCircle,
-    Info,
-    Filter
+    Cpu,
+    Terminal,
+    Zap
 } from 'lucide-react';
 import api from '../../../lib/api';
 import { format } from 'date-fns';
 
 export default function SystemMonitoringPage() {
-    const [logs, setLogs] = useState<any[]>([]);
+    const [logs, setLogs] = useState<LogItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [filter, setFilter] = useState({ level: '', context: '' });
+
+    interface LogItem {
+        _id: string;
+        timestamp: string;
+        level: 'info' | 'warn' | 'error';
+        context: string;
+        message: string;
+    }
 
     useEffect(() => {
         const fetchLogs = async () => {
@@ -26,7 +30,7 @@ export default function SystemMonitoringPage() {
             try {
                 const res = await api.get(`/logs?level=${filter.level}&context=${filter.context}`);
                 setLogs(res.data);
-            } catch (error) {
+            } catch {
                 console.error('Failed to fetch logs');
             } finally {
                 setIsLoading(false);
@@ -111,10 +115,3 @@ function PerformanceCard({ title, value, status, icon }: { title: string, value:
     );
 }
 
-function Zap(props: any) {
-    return (
-        <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" />
-        </svg>
-    );
-}

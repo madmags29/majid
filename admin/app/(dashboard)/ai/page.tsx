@@ -3,12 +3,10 @@
 import { useState, useEffect } from 'react';
 import {
     Bot,
-    Zap,
     AlertCircle,
     Clock,
     TrendingUp,
-    CheckCircle2,
-    XCircle
+    CheckCircle2
 } from 'lucide-react';
 import {
     AreaChart,
@@ -17,24 +15,30 @@ import {
     YAxis,
     CartesianGrid,
     Tooltip,
-    ResponsiveContainer,
-    BarChart,
-    Bar,
-    Cell
+    ResponsiveContainer
 } from 'recharts';
 import api from '../../../lib/api';
 import { toast } from 'sonner';
 
 export default function AIMonitoringPage() {
-    const [stats, setStats] = useState<any>(null);
+    const [stats, setStats] = useState<AIStats | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+
+    interface AIStats {
+        summary: {
+            totalRequests: number;
+            avgResponseTime: number;
+            failRate: string;
+        };
+        dailyStats: Array<{ _id: string; count: number }>;
+    }
 
     useEffect(() => {
         const fetchStats = async () => {
             try {
                 const res = await api.get('/stats/ai');
                 setStats(res.data);
-            } catch (error) {
+            } catch {
                 toast.error('Failed to fetch AI stats');
             } finally {
                 setIsLoading(false);

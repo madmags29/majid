@@ -2,13 +2,8 @@
 
 import {
     Zap,
-    TrendingUp,
     Target,
-    Share2,
-    Mail,
-    Megaphone,
     Rocket,
-    Gift
 } from 'lucide-react';
 import {
     BarChart,

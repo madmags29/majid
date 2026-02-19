@@ -22,7 +22,7 @@ export default function LoginPage() {
 
             const res = await axios.post(`${apiUrl}/auth/login`, formData);
 
-            const { token, user } = res.data;
+            const { token } = res.data;
 
             // We need to verify if the user is actually an admin
             // In a production app, the backend would ideally return this or the admin check would happen on the next request.
@@ -32,8 +32,9 @@ export default function LoginPage() {
             document.cookie = `adminToken=${token}; path=/; max-age=604800; samesite=lax`;
             toast.success('Login successful! Welcome to the Admin Panel.');
             router.push('/');
-        } catch (error: any) {
-            toast.error(error.response?.data?.message || 'Login failed. Please check your credentials.');
+        } catch (error: unknown) {
+            const err = error as { response?: { data?: { message?: string } } };
+            toast.error(err.response?.data?.message || 'Login failed. Please check your credentials.');
         } finally {
             setIsLoading(false);
         }

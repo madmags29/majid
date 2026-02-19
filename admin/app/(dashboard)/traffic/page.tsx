@@ -1,25 +1,14 @@
 'use client';
 
 import {
-    BarChart,
-    Bar,
-    XAxis,
-    YAxis,
-    CartesianGrid,
-    Tooltip,
-    ResponsiveContainer,
     PieChart,
     Pie,
-    Cell
+    Cell,
+    Tooltip,
+    ResponsiveContainer
 } from 'recharts';
 import {
-    Globe,
-    ArrowUpRight,
-    Users,
-    MousePointer2,
-    Search,
     Link as LinkIcon,
-    Share2
 } from 'lucide-react';
 
 const sourceData = [
@@ -43,7 +32,7 @@ export default function TrafficAnalyticsPage() {
         <div className="space-y-8">
             <div className="border-b border-slate-200 dark:border-zinc-800 pb-6">
                 <h1 className="text-2xl font-black text-slate-800 dark:text-white uppercase tracking-tight italic">Traffic Analytics</h1>
-                <p className="text-slate-500 dark:text-zinc-400 text-sm font-medium">Analyze where your visitors are coming from and what they're looking at</p>
+                <p className="text-slate-500 dark:text-zinc-400 text-sm font-medium">Analyze where your visitors are coming from and what they&apos;re looking at</p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -146,7 +135,7 @@ export default function TrafficAnalyticsPage() {
 function KeywordCard({ label, clicks, ctr, pos }: { label: string, clicks: string, ctr: string, pos: string }) {
     return (
         <div className="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-white/10">
-            <h4 className="font-bold text-sm mb-4 truncate italic">"{label}"</h4>
+            <h4 className="font-bold text-sm mb-4 truncate italic">&quot;{label}&quot;</h4>
             <div className="grid grid-cols-3 gap-2 text-center border-t border-white/5 pt-4">
                 <div>
                     <div className="text-[10px] font-bold uppercase opacity-60 mb-1">Clicks</div>

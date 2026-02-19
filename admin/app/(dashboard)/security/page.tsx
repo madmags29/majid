@@ -5,8 +5,6 @@ import {
     ShieldCheck,
     Lock,
     UserCheck,
-    Eye,
-    AlertTriangle,
     History,
     ShieldAlert,
     FileCheck,
@@ -16,9 +14,25 @@ import api from '../../../lib/api';
 import { format } from 'date-fns';
 
 export default function SecurityCompliancePage() {
-    const [stats, setStats] = useState<any>(null);
-    const [logs, setLogs] = useState<any[]>([]);
+    const [stats, setStats] = useState<SecurityStats | null>(null);
+    const [logs, setLogs] = useState<SecurityLog[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+
+    interface SecurityStats {
+        securityScore: number;
+        failedLogins: number;
+        threats: Array<{ _id: string; message: string }>;
+    }
+
+    interface SecurityLog {
+        message: string;
+        metadata?: {
+            email?: string;
+            ip?: string;
+        };
+        timestamp: string;
+        level: string;
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -30,7 +44,7 @@ export default function SecurityCompliancePage() {
                 setStats(statsRes.data);
                 setLogs(logsRes.data);
             } catch (error) {
-                console.error('Failed to fetch security data');
+                console.error('Failed to fetch security data', error);
             } finally {
                 setIsLoading(false);
             }
@@ -46,7 +60,7 @@ export default function SecurityCompliancePage() {
         );
     }
 
-    const auditLogs = logs.map((log: any) => ({
+    const auditLogs = logs.map((log: SecurityLog) => ({
         action: log.message,
         user: log.metadata?.email || 'System',
         ip: log.metadata?.ip || 'Internal',
@@ -111,7 +125,7 @@ export default function SecurityCompliancePage() {
                                     <tr>
                                         <td colSpan={4} className="py-8 text-center text-slate-400 italic">No recent audit logs.</td>
                                     </tr>
-                                ) : auditLogs.map((log: any, i: number) => (
+                                ) : auditLogs.map((log: { action: string; user: string; ip: string; time: string; status: string }, i: number) => (
                                     <tr key={i} className="hover:bg-slate-50 dark:hover:bg-zinc-800 transition-colors group">
                                         <td className="py-4 font-bold text-slate-700 dark:text-zinc-300">{log.action}</td>
                                         <td className="py-4 flex flex-col">
@@ -140,7 +154,7 @@ export default function SecurityCompliancePage() {
                         Threat Prevention
                     </h3>
                     <div className="space-y-4">
-                        {stats?.threats?.length > 0 ? stats.threats.map((threat: any) => (
+                        {stats?.threats && stats.threats.length > 0 ? stats.threats.map((threat: { _id: string; message: string }) => (
                             <ThreatCard key={threat._id} title="Blocked Blocked" desc={threat.message} type="warning" />
                         )) : (
                             <div className="text-slate-500 text-xs italic text-center py-4">No active threats detected. System secure.</div>
@@ -186,7 +200,7 @@ function ThreatCard({ title, desc, type }: { title: string, desc: string, type: 
         <div className="bg-white/5 p-4 rounded-xl border border-white/10 space-y-1 group hover:border-blue-500/30 transition-all">
             <h4 className={`text-xs font-black uppercase ${type === 'warning' ? 'text-rose-500' : 'text-blue-400'
                 }`}>{title}</h4>
-            <p className="text-slate-400 text-[11px] leading-relaxed italic">"{desc}"</p>
+            <p className="text-slate-400 text-[11px] leading-relaxed italic">&quot;{desc}&quot;</p>
         </div>
     );
 }

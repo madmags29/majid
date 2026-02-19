@@ -3,18 +3,12 @@
 import { useState, useEffect } from 'react';
 import {
     DollarSign,
-    CreditCard,
-    TrendingUp,
-    Award,
     ArrowUpRight,
     ArrowDownRight,
     Download,
-    PieChart as PieChartIcon,
     Loader2
 } from 'lucide-react';
 import {
-    BarChart,
-    Bar,
     XAxis,
     YAxis,
     CartesianGrid,
@@ -31,8 +25,14 @@ import { format } from 'date-fns';
 import { toast } from 'sonner';
 
 export default function RevenueDashboardPage() {
-    const [stats, setStats] = useState<any>(null);
+    const [stats, setStats] = useState<RevenueStats | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+
+    interface RevenueStats {
+        total: number;
+        dailyRevenue: Array<{ _id: string; total: number }>;
+        bySource: Array<{ _id: string; value: number }>;
+    }
 
     useEffect(() => {
         const fetchRevenue = async () => {
@@ -57,12 +57,12 @@ export default function RevenueDashboardPage() {
         );
     }
 
-    const chartData = stats?.dailyRevenue.map((item: any) => ({
+    const chartData = stats?.dailyRevenue.map((item: { _id: string; total: number }) => ({
         month: format(new Date(item._id), 'MMM dd'),
         revenue: item.total
     })) || [];
 
-    const pieData = stats?.bySource.map((item: any, index: number) => ({
+    const pieData = stats?.bySource.map((item: { _id: string; value: number }, index: number) => ({
         name: item._id,
         value: item.value,
         color: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6'][index % 4]
@@ -85,8 +85,8 @@ export default function RevenueDashboardPage() {
             {/* Financial KPI Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <FinanceCard title="Total Revenue" value={`$${totalRevenue.toLocaleString()}`} trend="+24.5%" trendUp={true} sub="This month" />
-                <FinanceCard title="Affiliate Earnings" value={`$${(stats?.bySource?.find((s: any) => s._id === 'affiliate')?.value || 0).toLocaleString()}`} trend="+15.2%" trendUp={true} sub="Top: Travelpayouts" />
-                <FinanceCard title="Ad Revenue" value={`$${(stats?.bySource?.find((s: any) => s._id === 'ad')?.value || 0).toLocaleString()}`} trend="-2.4%" trendUp={false} sub="Google AdSense" />
+                <FinanceCard title="Affiliate Earnings" value={`$${(stats?.bySource?.find((s: { _id: string }) => s._id === 'affiliate')?.value || 0).toLocaleString()}`} trend="+15.2%" trendUp={true} sub="Top: Travelpayouts" />
+                <FinanceCard title="Ad Revenue" value={`$${(stats?.bySource?.find((s: { _id: string }) => s._id === 'ad')?.value || 0).toLocaleString()}`} trend="-2.4%" trendUp={false} sub="Google AdSense" />
                 <FinanceCard title="Rev per User" value="$0.00" trend="+0.0%" trendUp={true} sub="ARPU (30 days)" />
             </div>
 
@@ -123,7 +123,7 @@ export default function RevenueDashboardPage() {
                                     paddingAngle={5}
                                     dataKey="value"
                                 >
-                                    {pieData.map((entry: any, index: number) => (
+                                    {pieData.map((entry: { color: string }, index: number) => (
                                         <Cell key={`cell-${index}`} fill={entry.color} />
                                     ))}
                                 </Pie>
@@ -132,7 +132,7 @@ export default function RevenueDashboardPage() {
                         </ResponsiveContainer>
                     </div>
                     <div className="space-y-4">
-                        {pieData.map((channel: any) => (
+                        {pieData.map((channel: { name: string; color: string; value: number }) => (
                             <div key={channel.name} className="flex items-center justify-between group">
                                 <div className="flex items-center gap-3">
                                     <div className="w-3 h-3 rounded-full" style={{ backgroundColor: channel.color }} />

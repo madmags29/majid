@@ -4,10 +4,8 @@ import { useState, useEffect } from 'react';
 import {
     Search,
     Link as LinkIcon,
-    Clock,
     MousePointer2,
     BarChart3,
-    ArrowUpRight,
     Sparkles,
     FileText,
     CheckCircle2,
@@ -58,15 +56,19 @@ const seoHealth = [
 ];
 
 export default function SEOContentPage() {
-    const [stats, setStats] = useState<any>(null);
+    const [stats, setStats] = useState<SEOStats | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+
+    interface SEOStats {
+        topPages: Array<{ _id: string; views: number }>;
+    }
 
     useEffect(() => {
         const fetchSEO = async () => {
             try {
                 const res = await api.get('/stats/seo');
                 setStats(res.data);
-            } catch (error) {
+            } catch {
                 console.error('Failed to fetch SEO stats');
             } finally {
                 setIsLoading(false);
@@ -219,7 +221,7 @@ export default function SEOContentPage() {
                                     <tr>
                                         <td colSpan={3} className="py-8 text-center text-slate-400 italic">No content data yet.</td>
                                     </tr>
-                                ) : topContent.map((page: any, i: number) => (
+                                ) : topContent.map((page: { _id: string; views: number }, i: number) => (
                                     <tr key={page._id} className="hover:bg-slate-50/50 dark:hover:bg-white/5 transition-colors group">
                                         <td className="py-4 pl-4 font-bold text-slate-700 dark:text-zinc-200 text-sm truncate max-w-[200px] group-hover:text-indigo-500 transition-colors">
                                             {page._id}

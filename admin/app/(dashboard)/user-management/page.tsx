@@ -1,10 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
     Search,
-    Filter,
-    MoreVertical,
     UserX,
     UserCheck,
     Download,
@@ -18,29 +16,38 @@ import { toast } from 'sonner';
 import { format } from 'date-fns';
 
 export default function UserManagementPage() {
-    const [users, setUsers] = useState<any[]>([]);
+    const [users, setUsers] = useState<User[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+
+    interface User {
+        _id: string;
+        name: string;
+        email: string;
+        googleId?: string;
+        status: string;
+        createdAt: string;
+    }
     const [search, setSearch] = useState('');
     const [status, setStatus] = useState('');
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
 
-    const fetchUsers = async () => {
+    const fetchUsers = useCallback(async () => {
         setIsLoading(true);
         try {
             const res = await api.get(`/users?page=${page}&search=${search}&status=${status}`);
             setUsers(res.data.users);
             setTotalPages(res.data.totalPages);
-        } catch (error) {
+        } catch {
             toast.error('Failed to fetch users');
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [page, search, status]);
 
     useEffect(() => {
         fetchUsers();
-    }, [page, status]);
+    }, [page, status, search]);
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
@@ -55,6 +62,7 @@ export default function UserManagementPage() {
             toast.success(`User successfully ${newStatus === 'Blocked' ? 'blocked' : 'unblocked'}`);
             fetchUsers();
         } catch (error) {
+            console.error('Failed to update user status', error);
             toast.error('Failed to update user status');
         }
     };

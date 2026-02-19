@@ -1,30 +1,11 @@
 'use client';
 
-import {
-    Clock,
-    Search,
-    Eye,
-    MapPin,
-    Zap,
-    History,
-    ArrowRight,
-    UserCircle,
-    Smartphone,
-    Globe
-} from 'lucide-react';
-
-const activities = [
-    'use client';
-
 import { useState, useEffect } from 'react';
 import {
-    Clock,
     Search,
     Eye,
-    MapPin,
     Zap,
     History,
-    ArrowRight,
     UserCircle,
     Smartphone,
     Globe,
@@ -34,9 +15,30 @@ import {
 import api from '../../../lib/api';
 import { format } from 'date-fns';
 
+interface Activity {
+    type: string;
+    timestamp: string;
+    userId?: {
+        name: string;
+    };
+    details?: Record<string, unknown>;
+    page?: string;
+}
+
+interface Session {
+    _id: string;
+    userId?: {
+        name: string;
+    };
+    startTime: string;
+    duration?: number;
+    device?: string;
+    location?: string;
+}
+
 export default function UserActivityTrackingPage() {
-    const [activities, setActivities] = useState<any[]>([]);
-    const [sessions, setSessions] = useState<any[]>([]);
+    const [activities, setActivities] = useState<Activity[]>([]);
+    const [sessions, setSessions] = useState<Session[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {

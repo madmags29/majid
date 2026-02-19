@@ -6,7 +6,6 @@ import {
     TrendingUp,
     ArrowUpRight,
     ArrowDownRight,
-    Activity
 } from 'lucide-react';
 import {
     LineChart,
