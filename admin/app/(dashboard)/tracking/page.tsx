@@ -1,5 +1,21 @@
 'use client';
 
+import {
+    Clock,
+    Search,
+    Eye,
+    MapPin,
+    Zap,
+    History,
+    ArrowRight,
+    UserCircle,
+    Smartphone,
+    Globe
+} from 'lucide-react';
+
+const activities = [
+    'use client';
+
 import { useState, useEffect } from 'react';
 import {
     Clock,
@@ -50,7 +66,7 @@ export default function UserActivityTrackingPage() {
             case 'page_view': return Eye;
             case 'trip_save': return Zap;
             case 'contact_submit': return Globe;
-            default: return UserCircle;
+            default: return userCircle;
         }
     };
 
@@ -71,6 +87,8 @@ export default function UserActivityTrackingPage() {
         const s = Math.floor(seconds % 60);
         return `${m}m ${s}s`;
     };
+
+    const userCircle = UserCircle;
 
     if (isLoading) {
         return (
