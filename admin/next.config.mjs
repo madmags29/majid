@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    basePath: '/admin',
+    // basePath removed for subdomain deployment
 };
 
 export default nextConfig;
