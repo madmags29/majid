@@ -43,14 +43,14 @@ jobs:
           git commit -m "Auto-sync from monorepo" || echo "No changes to commit"
           git push origin main --force
 
-      - name: Sync Frontend
+      - name: Sync Admin
         env:
           GITHUB_TOKEN: ${{ secrets.SYNC_GITHUB_TOKEN }}
         run: |
-          git clone https://x-access-token:${GITHUB_TOKEN}@github.com/madmags29/frontend.git /tmp/frontend-repo
-          cd /tmp/frontend-repo
+          git clone https://x-access-token:${GITHUB_TOKEN}@github.com/madmags29/admin.git /tmp/admin-repo
+          cd /tmp/admin-repo
           git rm -rf .
-          cp -r $GITHUB_WORKSPACE/frontend/* .
+          cp -r $GITHUB_WORKSPACE/admin/* .
           git add .
           git commit -m "Auto-sync from monorepo" || echo "No changes to commit"
           git push origin main --force
