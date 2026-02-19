@@ -17,7 +17,10 @@ export default function LoginPage() {
 
         try {
             // Note: We use the regular auth endpoint but check for isAdmin in the response or next step
-            const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api'}/auth/login`, formData);
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+            console.log('Attempting login to:', `${apiUrl}/auth/login`);
+
+            const res = await axios.post(`${apiUrl}/auth/login`, formData);
 
             const { token, user } = res.data;
 
