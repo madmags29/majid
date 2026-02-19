@@ -11,10 +11,15 @@ export function middleware(request: NextRequest) {
         return NextResponse.next();
     }
 
-    // 2. Redirect to login if no token is found
+    // 2. Rewrite to login if no token is found
     if (!token) {
+        if (pathname === '/') {
+            return NextResponse.rewrite(new URL('/login', request.url));
+        }
+        // For other protected paths, we might still want to redirect or rewrite
+        // Let's redirect them to root, which will render login
         const url = request.nextUrl.clone();
-        url.pathname = '/login';
+        url.pathname = '/';
         return NextResponse.redirect(url);
     }
 
