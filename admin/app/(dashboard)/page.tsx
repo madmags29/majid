@@ -2,11 +2,11 @@
 
 import {
     Users,
-    MousePointerClick,
     Zap,
     TrendingUp,
     ArrowUpRight,
-    ArrowDownRight
+    ArrowDownRight,
+    Activity
 } from 'lucide-react';
 import {
     LineChart,
@@ -19,8 +19,6 @@ import {
     PieChart,
     Pie,
     Cell,
-    BarChart as ReBarChart,
-    Bar
 } from 'recharts';
 
 const data = [
@@ -40,17 +38,18 @@ const trafficSource = [
     { name: 'Social', value: 10 },
 ];
 
-const COLORS = ['#3b82f6', '#8b5cf6', '#ec4899', '#f97316'];
+const COLORS = ['#6366f1', '#8b5cf6', '#ec4899', '#f43f5e'];
 
 export default function OverviewPage() {
     return (
-        <div className="space-y-8 pb-12">
+        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {/* KPI Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <StatCard
                     title="Total Users"
                     value="4,231"
-                    icon={<Users className="w-5 h-5 text-blue-600" />}
+                    icon={<Users className="w-6 h-6 text-white" />}
+                    iconBg="bg-blue-500"
                     trend="+12% from last week"
                     trendUp={true}
                 />
@@ -58,20 +57,23 @@ export default function OverviewPage() {
                     title="Active Now"
                     value="124"
                     icon={<ActivityIndicator />}
+                    iconBg="bg-emerald-500/20"
                     trend="Live users"
                     trendUp={true}
                 />
                 <StatCard
                     title="AI Trip Searches"
                     value="18.5k"
-                    icon={<Zap className="w-5 h-5 text-purple-600" />}
+                    icon={<Zap className="w-6 h-6 text-white" />}
+                    iconBg="bg-violet-500"
                     trend="+5% from yesterday"
                     trendUp={true}
                 />
                 <StatCard
                     title="Conversion Rate"
                     value="3.2%"
-                    icon={<TrendingUp className="w-5 h-5 text-pink-600" />}
+                    icon={<TrendingUp className="w-6 h-6 text-white" />}
+                    iconBg="bg-rose-500"
                     trend="-0.4% this month"
                     trendUp={false}
                 />
@@ -79,26 +81,75 @@ export default function OverviewPage() {
 
             {/* Charts Row 1 */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-sm">
-                    <h3 className="text-lg font-bold mb-6">Daily Active Users (30 Days)</h3>
-                    <div className="h-[300px] w-full">
+                {/* Line Chart Card */}
+                <div className="glass-panel p-8 rounded-3xl">
+                    <div className="flex items-center justify-between mb-8">
+                        <div>
+                            <h3 className="text-lg font-bold text-slate-800 dark:text-white">User Growth</h3>
+                            <p className="text-sm text-slate-500 dark:text-zinc-400">Daily active users over the last 30 days</p>
+                        </div>
+                        <div className="flex gap-2">
+                            <div className="px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-500/10 text-xs font-bold text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-500/20">
+                                +12.5%
+                            </div>
+                        </div>
+                    </div>
+                    <div className="h-[350px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
                             <LineChart data={data}>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                                <XAxis dataKey="name" stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
-                                <YAxis stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
-                                <Tooltip
-                                    contentStyle={{ backgroundColor: '#fff', borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                                <defs>
+                                    <linearGradient id="colorUsers" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3} />
+                                        <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
+                                    </linearGradient>
+                                </defs>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#334155" opacity={0.1} />
+                                <XAxis
+                                    dataKey="name"
+                                    stroke="#94a3b8"
+                                    fontSize={12}
+                                    tickLine={false}
+                                    axisLine={false}
+                                    dy={10}
                                 />
-                                <Line type="monotone" dataKey="users" stroke="#3b82f6" strokeWidth={3} dot={{ r: 4, fill: '#3b82f6' }} activeDot={{ r: 6 }} />
+                                <YAxis
+                                    stroke="#94a3b8"
+                                    fontSize={12}
+                                    tickLine={false}
+                                    axisLine={false}
+                                    dx={-10}
+                                />
+                                <Tooltip
+                                    contentStyle={{
+                                        backgroundColor: '#09090b',
+                                        borderRadius: '12px',
+                                        border: '1px solid rgba(255,255,255,0.1)',
+                                        boxShadow: '0 10px 40px -10px rgba(0,0,0,0.5)',
+                                        color: '#fff'
+                                    }}
+                                    itemStyle={{ color: '#fff' }}
+                                    labelStyle={{ color: '#a1a1aa' }}
+                                />
+                                <Line
+                                    type="monotone"
+                                    dataKey="users"
+                                    stroke="#6366f1"
+                                    strokeWidth={4}
+                                    dot={{ r: 4, fill: '#6366f1', strokeWidth: 2, stroke: '#fff' }}
+                                    activeDot={{ r: 8, strokeWidth: 0 }}
+                                />
                             </LineChart>
                         </ResponsiveContainer>
                     </div>
                 </div>
 
-                <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-sm">
-                    <h3 className="text-lg font-bold mb-6">Traffic Source Breakdown</h3>
-                    <div className="h-[300px] w-full flex items-center justify-center">
+                {/* Pie Chart Card */}
+                <div className="glass-panel p-8 rounded-3xl">
+                    <div className="mb-8">
+                        <h3 className="text-lg font-bold text-slate-800 dark:text-white">Traffic Sources</h3>
+                        <p className="text-sm text-slate-500 dark:text-zinc-400">Where your users are coming from</p>
+                    </div>
+                    <div className="h-[350px] w-full flex items-center justify-center relative">
                         <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
                                 <Pie
@@ -106,17 +157,40 @@ export default function OverviewPage() {
                                     cx="50%"
                                     cy="50%"
                                     innerRadius={80}
-                                    outerRadius={100}
+                                    outerRadius={110}
                                     paddingAngle={5}
                                     dataKey="value"
+                                    cornerRadius={4}
                                 >
                                     {trafficSource.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} strokeWidth={0} />
                                     ))}
                                 </Pie>
-                                <Tooltip />
+                                <Tooltip
+                                    contentStyle={{
+                                        backgroundColor: '#09090b',
+                                        borderRadius: '12px',
+                                        border: '1px solid rgba(255,255,255,0.1)',
+                                        color: '#fff'
+                                    }}
+                                    itemStyle={{ color: '#fff' }}
+                                />
                             </PieChart>
                         </ResponsiveContainer>
+                        {/* Center Text Overlay */}
+                        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                            <span className="text-3xl font-black text-slate-800 dark:text-white">100%</span>
+                            <span className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Volume</span>
+                        </div>
+                    </div>
+                    <div className="mt-4 grid grid-cols-2 gap-4">
+                        {trafficSource.map((source, index) => (
+                            <div key={source.name} className="flex items-center gap-2">
+                                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[index % COLORS.length] }} />
+                                <span className="text-sm font-medium text-slate-600 dark:text-zinc-400">{source.name}</span>
+                                <span className="ml-auto text-sm font-bold text-slate-800 dark:text-white">{source.value}%</span>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
@@ -124,30 +198,30 @@ export default function OverviewPage() {
     );
 }
 
-function StatCard({ title, value, icon, trend, trendUp }: { title: string, value: string, icon: React.ReactNode, trend: string, trendUp: boolean }) {
+function StatCard({ title, value, icon, iconBg, trend, trendUp }: { title: string, value: string, icon: React.ReactNode, iconBg?: string, trend: string, trendUp: boolean }) {
     return (
-        <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-sm hover:shadow-md transition-shadow">
-            <div className="flex items-center justify-between mb-4">
-                <div className="p-2 bg-slate-50 dark:bg-zinc-800 rounded-xl">
+        <div className="glass-card p-6 rounded-3xl group cursor-default">
+            <div className="flex items-start justify-between mb-4">
+                <div className={cn("p-3 rounded-2xl transition-transform duration-300 group-hover:scale-110", iconBg ? iconBg : "bg-slate-100 dark:bg-zinc-800")}>
                     {icon}
                 </div>
                 {trendUp ? (
-                    <div className="flex items-center text-emerald-600 text-xs font-bold leading-none">
-                        <ArrowUpRight className="w-3 h-3 mr-0.5" />
+                    <div className="flex items-center text-emerald-500 bg-emerald-500/10 px-2.5 py-1 rounded-full text-xs font-bold">
+                        <ArrowUpRight className="w-3 h-3 mr-1" />
                         {trend.split(' ')[0]}
                     </div>
                 ) : (
-                    <div className="flex items-center text-rose-600 text-xs font-bold leading-none">
-                        <ArrowDownRight className="w-3 h-3 mr-0.5" />
+                    <div className="flex items-center text-rose-500 bg-rose-500/10 px-2.5 py-1 rounded-full text-xs font-bold">
+                        <ArrowDownRight className="w-3 h-3 mr-1" />
                         {trend.split(' ')[0]}
                     </div>
                 )}
             </div>
             <div>
-                <h4 className="text-slate-500 dark:text-zinc-400 text-sm font-medium">{title}</h4>
-                <div className="text-3xl font-black text-slate-800 dark:text-white mt-1">{value}</div>
+                <h4 className="text-slate-500 dark:text-zinc-400 text-sm font-bold uppercase tracking-wide">{title}</h4>
+                <div className="text-3xl font-black text-slate-800 dark:text-white mt-2 tracking-tight group-hover:translate-x-1 transition-transform duration-300">{value}</div>
             </div>
-            <p className="mt-4 text-xs text-slate-400 dark:text-zinc-500 font-medium">
+            <p className="mt-4 text-xs font-medium text-slate-400 dark:text-zinc-500 border-t border-slate-100 dark:border-white/5 pt-4">
                 {trend}
             </p>
         </div>
@@ -156,9 +230,13 @@ function StatCard({ title, value, icon, trend, trendUp }: { title: string, value
 
 function ActivityIndicator() {
     return (
-        <div className="w-5 h-5 flex items-center justify-center relative">
-            <div className="absolute w-full h-full bg-emerald-500/20 rounded-full animate-ping" />
-            <div className="w-2 h-2 bg-emerald-500 rounded-full z-10" />
+        <div className="w-6 h-6 flex items-center justify-center relative">
+            <div className="absolute w-full h-full bg-emerald-500 rounded-full animate-ping opacity-75" />
+            <div className="w-2.5 h-2.5 bg-emerald-400 rounded-full z-10 shadow-[0_0_10px_rgba(52,211,153,0.8)]" />
         </div>
     );
+}
+
+function cn(...classes: (string | undefined | null | false)[]) {
+    return classes.filter(Boolean).join(' ');
 }
