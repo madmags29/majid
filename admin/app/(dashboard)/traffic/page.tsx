@@ -122,9 +122,15 @@ export default function TrafficAnalyticsPage() {
                         <h3 className="text-2xl font-black italic tracking-tight uppercase">Search Console Insights</h3>
                         <p className="opacity-80 text-sm font-medium">Top performing keywords driving organic traffic</p>
                     </div>
-                    <button className="bg-white/10 hover:bg-white/20 backdrop-blur-md px-4 py-2 rounded-xl text-sm font-bold transition-all border border-white/10">
+                    <a
+                        href="https://search.google.com/search-console/performance/search-analytics?resource_id=https%3A%2F%2Fweekendtravellers.com%2F"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-white/10 hover:bg-white/20 backdrop-blur-md px-4 py-2 rounded-xl text-sm font-bold transition-all border border-white/10 inline-flex items-center gap-2"
+                    >
+                        <LinkIcon className="w-4 h-4" />
                         View GSC Full Report
-                    </button>
+                    </a>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <KeywordCard label="weekend trips near me" clicks="1,240" ctr="4.2%" pos="2.1" />
