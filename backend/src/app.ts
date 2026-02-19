@@ -22,6 +22,7 @@ app.use(cors({
         'http://localhost:5173',
         'https://weekendtravellers.com',
         'https://www.weekendtravellers.com',
+        'https://admin.weekendtravellers.com',
         /\.vercel\.app$/
     ],
     credentials: true,
