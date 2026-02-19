@@ -29,7 +29,10 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: Au
                 const res = await fetch(`${API_URL}/api/auth/google`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ code: tokenResponse.code })
+                    body: JSON.stringify({
+                        code: tokenResponse.code,
+                        redirect_uri: 'postmessage'
+                    })
                 });
 
                 const data = await res.json();

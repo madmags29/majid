@@ -96,10 +96,97 @@ import { OAuth2Client } from 'google-auth-library';
 const client = new OAuth2Client(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
-    'postmessage'
+    process.env.GOOGLE_REDIRECT_URI || 'postmessage'
 );
 
-// GOOGLE LOGIN
+// GOOGLE CALLBACK (Redirect flow)
+router.get('/google/callback', async (req, res) => {
+    try {
+        const { code } = req.query;
+
+        if (!code) {
+            return res.status(400).send('Authentication code is missing');
+        }
+
+        // Determine the redirect URI used for this request
+        // It must exactly match what was sent to Google originally
+        let redirectUri = process.env.GOOGLE_REDIRECT_URI;
+
+        if (!redirectUri || redirectUri === 'postmessage') {
+            const protocol = req.protocol;
+            const host = req.get('host');
+            redirectUri = `${protocol}://${host}${req.baseUrl}${req.path}`;
+        }
+
+        console.log('Google Callback Redirect URI:', redirectUri);
+
+        // Exchange code for tokens
+        const { tokens } = await client.getToken({
+            code: code as string,
+            redirect_uri: redirectUri
+        });
+
+        // Verify the ID token
+        const ticket = await client.verifyIdToken({
+            idToken: tokens.id_token!,
+            audience: process.env.GOOGLE_CLIENT_ID
+        });
+
+        const payload = ticket.getPayload();
+        if (!payload) {
+            return res.status(401).send('Invalid Google Token');
+        }
+
+        const { email, name, picture, sub: googleId } = payload;
+
+        if (!email) {
+            return res.status(400).send('Email not provided by Google');
+        }
+
+        // Find or create user
+        let user = await User.findOne({ email });
+
+        if (!user) {
+            user = new User({
+                email,
+                name,
+                picture,
+                googleId
+            });
+            await user.save();
+        } else {
+            let updated = false;
+            if (!(user as any).googleId) {
+                (user as any).googleId = googleId;
+                updated = true;
+            }
+            if (picture && user.picture !== picture) {
+                user.picture = picture;
+                updated = true;
+            }
+            if (updated) await user.save();
+        }
+
+        const jwtToken = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '7d' });
+
+        // Build frontend redirect URL
+        const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
+        const userJson = JSON.stringify({
+            id: user._id,
+            name: user.name,
+            email: user.email,
+            picture: user.picture
+        });
+
+        const finalRedirectUrl = `${clientUrl}?token=${jwtToken}&user=${encodeURIComponent(userJson)}`;
+        res.redirect(finalRedirectUrl);
+
+    } catch (error: any) {
+        console.error('Google Callback Error:', error);
+        res.status(500).send('Authentication failed: ' + error.message);
+    }
+});
+
 router.post('/google', async (req, res) => {
     try {
         const { code } = req.body;
@@ -109,7 +196,10 @@ router.post('/google', async (req, res) => {
         }
 
         // Exchange code for tokens
-        const { tokens } = await client.getToken(code);
+        const { tokens } = await client.getToken({
+            code,
+            redirect_uri: req.body.redirect_uri || process.env.GOOGLE_REDIRECT_URI || 'postmessage'
+        });
 
         // Verify the ID token
         const ticket = await client.verifyIdToken({

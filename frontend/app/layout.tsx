@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Sacramento } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
+import { Suspense } from 'react';
 import Footer from "@/components/Footer";
 import ScrollProgress from "@/components/ScrollProgress";
+import AuthHandler from "@/components/AuthHandler";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -145,6 +147,9 @@ export default function RootLayout({
           `}
           </Script>
           {children}
+          <Suspense fallback={null}>
+            <AuthHandler />
+          </Suspense>
           <ScrollProgress />
           <Footer />
           <Toaster position="top-center" richColors toastOptions={{ className: '!z-[9999]' }} />
