@@ -171,4 +171,91 @@ router.get('/logs', async (req, res) => {
     }
 });
 
+// 7. REVENUE DASHBOARD
+router.get('/stats/revenue', async (req, res) => {
+    try {
+        const monthAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+
+        const revenue = await RevenueRecord.aggregate([
+            { $match: { timestamp: { $gte: monthAgo } } },
+            {
+                $group: {
+                    _id: { $dateToString: { format: "%Y-%m-%d", date: "$timestamp" } },
+                    total: { $sum: "$amount" },
+                    count: { $sum: 1 }
+                }
+            },
+            { $sort: { _id: 1 } }
+        ]);
+
+        const totalRevenue = await RevenueRecord.aggregate([
+            { $group: { _id: null, total: { $sum: "$amount" } } }
+        ]);
+
+        const bySource = await RevenueRecord.aggregate([
+            {
+                $group: {
+                    _id: "$source",
+                    value: { $sum: "$amount" }
+                }
+            }
+        ]);
+
+        res.json({
+            dailyRevenue: revenue,
+            total: totalRevenue[0]?.total || 0,
+            bySource
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching revenue stats' });
+    }
+});
+
+// 8. SEO ANALYTICS
+router.get('/stats/seo', async (req, res) => {
+    try {
+        // Top Pages
+        const topPages = await ActivityLog.aggregate([
+            { $match: { type: 'page_view' } },
+            { $group: { _id: "$page", views: { $sum: 1 } } },
+            { $sort: { views: -1 } },
+            { $limit: 10 }
+        ]);
+
+        // Traffic Sources (referrers from sessions)
+        const sources = await UserSession.aggregate([
+            { $group: { _id: "$referrer", count: { $sum: 1 } } },
+            { $sort: { count: -1 } },
+            { $limit: 5 }
+        ]);
+
+        res.json({ topPages, sources });
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching SEO stats' });
+    }
+});
+
+// 9. SECURITY & COMPLIANCE
+router.get('/stats/security', async (req, res) => {
+    try {
+        const failedLogins = await SystemLog.countDocuments({
+            level: 'warn',
+            context: 'AUTH',
+            message: /failed/i
+        });
+
+        const recentThreats = await SystemLog.find({ level: 'error', context: 'SECURITY' })
+            .sort({ timestamp: -1 })
+            .limit(10);
+
+        res.json({
+            failedLogins,
+            threats: recentThreats,
+            securityScore: Math.max(0, 100 - (failedLogins * 2)) // Simple mock score logic
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching security stats' });
+    }
+});
+
 export default router;
