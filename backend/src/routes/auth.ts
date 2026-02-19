@@ -55,12 +55,15 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
+        console.log('Login attempt for:', email);
 
         // Check user
         const user = await User.findOne({ email });
         if (!user) {
+            console.log('User not found in DB:', email);
             return res.status(400).json({ message: 'Invalid credentials' });
         }
+        console.log('User found:', user.email, 'ID:', user._id);
 
         // Validate password
         // If user was created via social login, they might not have a password
@@ -69,6 +72,7 @@ router.post('/login', async (req, res) => {
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
+        console.log('Password match result:', isMatch);
         if (!isMatch) {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
