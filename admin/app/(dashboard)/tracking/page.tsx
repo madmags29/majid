@@ -14,81 +14,202 @@ import {
 } from 'lucide-react';
 
 const activities = [
-    { type: 'trip_search', user: 'Majid Khan', detail: 'Paris, France (3 days)', time: '2 mins ago', icon: Search, color: 'text-blue-500' },
-    { type: 'page_view', user: 'Ananya Sharma', detail: '/explore/goa', time: '12 mins ago', icon: Eye, color: 'text-purple-500' },
-    { type: 'trip_save', user: 'Kevin Peterson', detail: 'Jaipur Heritage Tour', time: '25 mins ago', icon: Zap, color: 'text-amber-500' },
-    { type: 'trip_search', user: 'Sarah Jenkins', detail: 'Munnar Tea Gardens', time: '42 mins ago', icon: Search, color: 'text-blue-500' },
-    { type: 'contact_submit', user: 'Rahul Varma', detail: 'Custom Trip Inquiry', time: '1h 12m ago', icon: Globe, color: 'text-emerald-500' },
-    { type: 'page_view', user: 'Majid Khan', detail: '/search', time: '1h 45m ago', icon: Eye, color: 'text-purple-500' },
-];
+    'use client';
+
+import { useState, useEffect } from 'react';
+import {
+    Clock,
+    Search,
+    Eye,
+    MapPin,
+    Zap,
+    History,
+    ArrowRight,
+    UserCircle,
+    Smartphone,
+    Globe,
+    Monitor,
+    Loader2
+} from 'lucide-react';
+import api from '../../../lib/api';
+import { format } from 'date-fns';
 
 export default function UserActivityTrackingPage() {
+    const [activities, setActivities] = useState<any[]>([]);
+    const [sessions, setSessions] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [activitiesRes, sessionsRes] = await Promise.all([
+                    api.get('/tracking/activities'),
+                    api.get('/tracking/sessions')
+                ]);
+                setActivities(activitiesRes.data);
+                setSessions(sessionsRes.data);
+            } catch (error) {
+                console.error('Failed to fetch tracking data', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchData();
+        // Poll every 30 seconds for live updates
+        const interval = setInterval(fetchData, 30000);
+        return () => clearInterval(interval);
+    }, []);
+
+    const getActivityIcon = (type: string) => {
+        switch (type) {
+            case 'trip_search': return Search;
+            case 'page_view': return Eye;
+            case 'trip_save': return Zap;
+            case 'contact_submit': return Globe;
+            default: return userCircle;
+        }
+    };
+
+    const getActivityColor = (type: string) => {
+        switch (type) {
+            case 'trip_search': return 'text-blue-500';
+            case 'page_view': return 'text-purple-500';
+            case 'trip_save': return 'text-amber-500';
+            case 'contact_submit': return 'text-emerald-500';
+            default: return 'text-slate-500';
+        }
+    };
+
+    // Helper to format duration (ms or sec)
+    const formatDuration = (seconds?: number) => {
+        if (!seconds) return 'Active';
+        const m = Math.floor(seconds / 60);
+        const s = Math.floor(seconds % 60);
+        return `${m}m ${s}s`;
+    };
+
+    const userCircle = UserCircle;
+
+    if (isLoading) {
+        return (
+            <div className="flex h-96 items-center justify-center">
+                <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+            </div>
+        );
+    }
+
     return (
-        <div className="space-y-8 max-w-4xl mx-auto">
+        <div className="space-y-8 max-w-5xl mx-auto">
             <div className="border-b border-slate-200 dark:border-zinc-800 pb-6 flex justify-between items-end">
                 <div>
                     <h1 className="text-2xl font-black text-slate-800 dark:text-white uppercase tracking-tight italic">User Activity Tracking</h1>
-                    <p className="text-slate-500 dark:text-zinc-400 text-sm font-medium">Real-time timeline of user actions and interaction patterns</p>
+                    <p className="text-slate-500 dark:text-zinc-400 text-sm font-medium">Real-time timeline of user actions and full session logs</p>
                 </div>
-                <div className="flex items-center gap-2 text-blue-600 bg-blue-50 dark:bg-blue-500/10 px-3 py-1.5 rounded-lg border border-blue-200 dark:border-blue-500/20">
+                <div className="flex items-center gap-2 text-blue-600 bg-blue-50 dark:bg-blue-500/10 px-3 py-1.5 rounded-lg border border-blue-200 dark:border-blue-500/20 animate-pulse">
                     <History className="w-4 h-4" />
-                    <span className="text-xs font-black uppercase">Live Timeline</span>
+                    <span className="text-xs font-black uppercase">Live Updates On</span>
                 </div>
             </div>
 
-            {/* Live Activity Timeline */}
-            <div className="relative space-y-8 before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-200 dark:before:via-zinc-800 before:to-transparent">
-                {activities.map((item, index) => (
-                    <div key={index} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                        {/* Icon */}
-                        <div className="flex items-center justify-center w-10 h-10 rounded-full border border-white dark:border-zinc-950 bg-slate-50 dark:bg-zinc-900 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-transform group-hover:scale-125">
-                            <item.icon className={`w-5 h-5 ${item.color}`} />
-                        </div>
-                        {/* Content */}
-                        <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white dark:bg-zinc-900 p-5 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-sm hover:shadow-md transition-all group-hover:border-blue-500/30">
-                            <div className="flex items-center justify-between mb-2">
-                                <div className="font-black text-slate-800 dark:text-white uppercase text-[10px] tracking-widest italic">{item.type.replace('_', ' ')}</div>
-                                <time className="font-mono text-[10px] text-slate-400 flex items-center gap-1">
-                                    <Clock className="w-3 h-3" />
-                                    {item.time}
-                                </time>
-                            </div>
-                            <div className="flex items-center gap-2 mb-2">
-                                <UserCircle className="w-4 h-4 text-slate-400" />
-                                <span className="text-sm font-bold text-slate-700 dark:text-slate-200">{item.user}</span>
-                            </div>
-                            <div className="text-xs text-slate-500 dark:text-zinc-400 bg-slate-50 dark:bg-zinc-800/50 p-2 rounded-lg border border-slate-100 dark:border-zinc-800 flex items-center justify-between">
-                                <span className="font-medium truncate mr-2">{item.detail}</span>
-                                <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                            </div>
-                        </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Left Column: Live Activity Timeline */}
+                <div className="lg:col-span-1 space-y-6">
+                    <h3 className="font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                        <Zap className="w-4 h-4 text-amber-500" /> Recent Actions
+                    </h3>
+                    <div className="relative space-y-8 before:absolute before:inset-0 before:ml-5 before:-translate-x-px before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-200 dark:before:via-zinc-800 before:to-transparent">
+                        {activities.length === 0 ? (
+                            <p className="text-sm text-slate-400 italic pl-10">No recent activity recorded.</p>
+                        ) : activities.map((item, index) => {
+                            const Icon = getActivityIcon(item.type);
+                            const colorClass = getActivityColor(item.type);
+                            return (
+                                <div key={index} className="relative flex items-center group">
+                                    {/* Icon */}
+                                    <div className="absolute left-0 w-10 h-10 rounded-full border border-white dark:border-zinc-950 bg-slate-50 dark:bg-zinc-900 shadow flex items-center justify-center z-10">
+                                        <Icon className={`w-5 h-5 ${colorClass}`} />
+                                    </div>
+                                    {/* Content */}
+                                    <div className="ml-14 w-full bg-white dark:bg-zinc-900 p-4 rounded-xl border border-slate-200 dark:border-zinc-800 shadow-sm">
+                                        <div className="flex items-center justify-between mb-1">
+                                            <div className="font-bold text-slate-800 dark:text-white text-xs uppercase tracking-wider">{item.type.replace('_', ' ')}</div>
+                                            <time className="text-[10px] text-slate-400">{format(new Date(item.timestamp), 'HH:mm')}</time>
+                                        </div>
+                                        <div className="text-xs text-slate-500 dark:text-zinc-400 mb-2 truncate">
+                                            {item.userId?.name || 'Guest User'}
+                                        </div>
+                                        {item.details && (
+                                            <div className="text-xs bg-slate-50 dark:bg-zinc-800/50 p-2 rounded border border-slate-100 dark:border-zinc-800 truncate">
+                                                {JSON.stringify(item.details).slice(0, 50)}
+                                            </div>
+                                        )}
+                                        {item.page && (
+                                            <div className="text-xs text-blue-500 mt-1 truncate">{item.page}</div>
+                                        )}
+                                    </div>
+                                </div>
+                            );
+                        })}
                     </div>
-                ))}
-            </div>
+                </div>
 
-            {/* Session Summary Bar */}
-            <div className="bg-slate-900 rounded-2xl p-6 border border-white/5 flex flex-col md:flex-row items-center gap-8">
-                <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-blue-500/10 rounded-2xl flex items-center justify-center border border-blue-500/20">
-                        <Smartphone className="w-6 h-6 text-blue-500" />
-                    </div>
-                    <div>
-                        <div className="text-[10px] font-black uppercase text-slate-500 tracking-widest">Global Device Split</div>
-                        <div className="text-lg font-black text-white italic">72% Mobile / 28% Desk</div>
+                {/* Right Column: Full Session Logs */}
+                <div className="lg:col-span-2 space-y-6">
+                    <h3 className="font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                        <Monitor className="w-4 h-4 text-blue-500" /> User Sessions Log
+                    </h3>
+
+                    <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-slate-200 dark:border-zinc-800 overflow-hidden shadow-sm">
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left text-sm">
+                                <thead className="bg-slate-50 dark:bg-zinc-800/50 text-xs uppercase font-bold text-slate-500 dark:text-zinc-400">
+                                    <tr>
+                                        <th className="px-4 py-3">User</th>
+                                        <th className="px-4 py-3">Started</th>
+                                        <th className="px-4 py-3">Duration</th>
+                                        <th className="px-4 py-3">Device</th>
+                                        <th className="px-4 py-3">Location</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-slate-100 dark:divide-zinc-800">
+                                    {sessions.length === 0 ? (
+                                        <tr>
+                                            <td colSpan={5} className="px-4 py-8 text-center text-slate-400 italic">No sessions recorded yet.</td>
+                                        </tr>
+                                    ) : sessions.map((session) => (
+                                        <tr key={session._id} className="hover:bg-slate-50 dark:hover:bg-zinc-800/50 transition-colors">
+                                            <td className="px-4 py-3">
+                                                <div className="flex items-center gap-2">
+                                                    <div className="w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xs font-bold">
+                                                        {(session.userId?.name?.[0] || 'G').toUpperCase()}
+                                                    </div>
+                                                    <span className="font-medium text-slate-700 dark:text-slate-200">
+                                                        {session.userId?.name || 'Guest'}
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td className="px-4 py-3 text-slate-500 dark:text-zinc-400 whitespace-nowrap">
+                                                {format(new Date(session.startTime), 'MMM d, HH:mm')}
+                                            </td>
+                                            <td className="px-4 py-3 font-mono text-xs text-slate-600 dark:text-zinc-300">
+                                                {formatDuration(session.duration)}
+                                            </td>
+                                            <td className="px-4 py-3">
+                                                <span className="inline-flex items-center gap-1 text-xs text-slate-500">
+                                                    {session.device?.includes('Mobile') ? <Smartphone className="w-3 h-3" /> : <Monitor className="w-3 h-3" />}
+                                                    {session.device || 'Unknown'}
+                                                </span>
+                                            </td>
+                                            <td className="px-4 py-3 text-slate-500 text-xs truncate max-w-[150px]">
+                                                {session.location || 'Unknown'}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-                <div className="flex items-center gap-4 border-l border-white/10 pl-8">
-                    <div className="w-12 h-12 bg-purple-500/10 rounded-2xl flex items-center justify-center border border-purple-500/20">
-                        <Clock className="w-6 h-6 text-purple-500" />
-                    </div>
-                    <div>
-                        <div className="text-[10px] font-black uppercase text-slate-500 tracking-widest">Avg Session Duration</div>
-                        <div className="text-lg font-black text-white italic">5m 45s (+12%)</div>
-                    </div>
-                </div>
-                <button className="ml-auto bg-white/10 hover:bg-white text-white hover:text-slate-950 font-black uppercase italic tracking-widest text-xs px-6 py-3 rounded-xl transition-all">
-                    Full Session Logs
-                </button>
             </div>
         </div>
     );
