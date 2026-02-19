@@ -13,7 +13,7 @@ export default function LoginPage() {
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        setIsLoading(true);
+        setIsLoading(true); 
 
         try {
             // Ensure we hit the /api/auth/login endpoint correctly
