@@ -86,7 +86,8 @@ router.post('/login', async (req, res) => {
                 id: user._id,
                 name: user.name,
                 email: user.email,
-                picture: user.picture
+                picture: user.picture,
+                isAdmin: user.isAdmin
             }
         });
 
@@ -179,7 +180,8 @@ router.get('/google/callback', async (req, res) => {
             id: user._id,
             name: user.name,
             email: user.email,
-            picture: user.picture
+            picture: user.picture,
+            isAdmin: user.isAdmin
         });
 
         const finalRedirectUrl = `${clientUrl}?token=${jwtToken}&user=${encodeURIComponent(userJson)}`;
@@ -255,7 +257,8 @@ router.post('/google', async (req, res) => {
                 id: user._id,
                 name: user.name,
                 email: user.email,
-                picture: user.picture
+                picture: user.picture,
+                isAdmin: user.isAdmin
             }
         });
 
@@ -383,7 +386,8 @@ router.put('/profile', authenticateToken, async (req: any, res: any) => {
                 id: user._id,
                 name: user.name,
                 email: user.email,
-                picture: user.picture
+                picture: user.picture,
+                isAdmin: user.isAdmin
             }
         });
 
