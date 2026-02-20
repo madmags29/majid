@@ -14,6 +14,8 @@ L.Icon.Default.mergeOptions({
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
+import { formatCurrency } from '@/lib/utils';
+
 interface Activity {
     time: string;
     description: string;
@@ -150,7 +152,7 @@ export default function MapView({ itinerary, selectedActivity, isExpanded }: Map
             imageUrl: null, // Hotels might not have images in this object yet
             day: null,
             type: 'hotel',
-            url: `https://search.hotellook.com/hotels?destination=${encodeURIComponent(hotel.name + ' ' + itinerary.destination)}&marker=497779`
+            url: `https://www.agoda.com/partners/partnersearch.aspx?cid=1959241&apikey=39f409b7-2414-4680-be28-5d95979dea28&searchText=${encodeURIComponent(hotel.name + ' ' + itinerary.destination)}`
         })) || [];
 
         return [...activityLocations, ...hotelLocations];
@@ -245,7 +247,7 @@ export default function MapView({ itinerary, selectedActivity, isExpanded }: Map
 
                                         {loc.ticket_price && (
                                             <span className="text-[10px] font-bold text-green-700 bg-green-50 px-2 py-0.5 rounded border border-green-200 max-w-[50%] truncate" title={loc.ticket_price}>
-                                                {loc.ticket_price}
+                                                {formatCurrency(loc.ticket_price, (itinerary as any).trip_details?.currency || loc.ticket_price)}
                                             </span>
                                         )}
                                     </div>
@@ -260,7 +262,7 @@ export default function MapView({ itinerary, selectedActivity, isExpanded }: Map
                                             href={(locations as any).find((l: any) => l.id === loc.id)?.url}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 rounded transition-colors"
+                                            className="block w-full text-center bg-blue-600 hover:bg-blue-700 !text-white text-xs font-bold py-2 rounded transition-colors"
                                         >
                                             Book Now
                                         </a>
@@ -301,7 +303,7 @@ export default function MapView({ itinerary, selectedActivity, isExpanded }: Map
                                     <div className="flex justify-between items-start mb-2 gap-2">
                                         <h3 className="font-bold text-slate-800 text-sm leading-tight truncate flex-1" title={hotel.location}>{hotel.location}</h3>
                                         <div className="text-[10px] font-bold text-white bg-slate-900/90 backdrop-blur-sm px-2 py-1 rounded-full shadow-sm shrink-0 uppercase tracking-wide">
-                                            {hotel.ticket_price}
+                                            {formatCurrency(hotel.ticket_price, (itinerary as any).trip_details?.currency || hotel.ticket_price)}
                                         </div>
                                     </div>
 

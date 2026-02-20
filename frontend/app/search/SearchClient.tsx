@@ -677,12 +677,12 @@ function SearchClient() {
                                                                     )}>
                                                                         {hotel.tier}
                                                                     </span>
-                                                                    <span className="text-[10px] font-bold text-slate-400">{hotel.price_range}</span>
+                                                                    <span className="text-[10px] font-bold text-slate-400">{formatCurrency(hotel.price_range, (msg.content as Itinerary).trip_details?.currency || hotel.price_range)}</span>
                                                                 </div>
                                                                 <h5 className="text-sm font-bold text-slate-200 line-clamp-1 group-hover:text-blue-400 transition-colors">{hotel.name}</h5>
                                                             </div>
                                                             <a
-                                                                href={`https://www.google.com/search?q=hotels+in+${(msg.content as Itinerary).destination}+${hotel.name}`}
+                                                                href={`https://www.agoda.com/partners/partnersearch.aspx?cid=1959241&apikey=39f409b7-2414-4680-be28-5d95979dea28&searchText=${encodeURIComponent(hotel.name + ' ' + (msg.content as Itinerary).destination)}`}
                                                                 target="_blank"
                                                                 rel="noopener noreferrer"
                                                                 className="mt-2 text-[10px] text-blue-400 font-bold flex items-center gap-1 hover:underline"
@@ -723,7 +723,7 @@ function SearchClient() {
                                                                         <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">{activity.time}</div>
                                                                         {activity.ticket_price && (
                                                                             <span className="text-[10px] font-bold text-green-400 bg-green-900/20 px-2 py-0.5 rounded border border-green-500/30 max-w-[50%] truncate" title={activity.ticket_price}>
-                                                                                {activity.ticket_price}
+                                                                                {formatCurrency(activity.ticket_price, (msg.content as Itinerary).trip_details?.currency || activity.ticket_price)}
                                                                             </span>
                                                                         )}
                                                                     </div>

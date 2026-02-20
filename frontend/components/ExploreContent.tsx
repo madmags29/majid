@@ -491,7 +491,7 @@ export default function ExploreContent({ slug }: { slug: string }) {
                         </h3>
                         <div className="space-y-4">
                             {(data.trip_details?.hotel_suggestions || []).map((hotel, idx) => {
-                                const hotelUrl = `https://search.hotellook.com/hotels?destination=${encodeURIComponent(hotel.name + ' ' + data.destination)}&marker=497779`;
+                                const hotelUrl = `https://www.agoda.com/partners/partnersearch.aspx?cid=1959241&apikey=39f409b7-2414-4680-be28-5d95979dea28&searchText=${encodeURIComponent(hotel.name + ' ' + data.destination)}`;
                                 return (
                                     <a
                                         key={idx}
@@ -506,7 +506,7 @@ export default function ExploreContent({ slug }: { slug: string }) {
                                                 {hotel.tier}
                                             </span>
                                         </div>
-                                        <p className="text-xs text-slate-500 mt-1">{hotel.price_range}</p>
+                                        <p className="text-xs text-slate-500 mt-1">{formatCurrency(hotel.price_range, data.trip_details?.currency || hotel.price_range)}</p>
                                     </a>
                                 );
                             })}
