@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
 // Ensure we target the /admin subpath for all admin dashboard API calls
-const API_URL = `${BASE_URL.replace(/\/$/, '')}/admin`;
+const API_URL = `${(BASE_URL || '').replace(/\/$/, '')}/admin`;
 
 const api = axios.create({
     baseURL: API_URL,

@@ -134,7 +134,7 @@ export default function UserActivityTrackingPage() {
                                     {/* Content */}
                                     <div className="ml-14 w-full bg-white dark:bg-zinc-900 p-4 rounded-xl border border-slate-200 dark:border-zinc-800 shadow-sm">
                                         <div className="flex items-center justify-between mb-1">
-                                            <div className="font-bold text-slate-800 dark:text-white text-xs uppercase tracking-wider">{item.type.replace('_', ' ')}</div>
+                                            <div className="font-bold text-slate-800 dark:text-white text-xs uppercase tracking-wider">{(item.type || '').replace('_', ' ')}</div>
                                             <time className="text-[10px] text-slate-400">{format(new Date(item.timestamp), 'HH:mm')}</time>
                                         </div>
                                         <div className="text-xs text-slate-500 dark:text-zinc-400 mb-2 truncate">

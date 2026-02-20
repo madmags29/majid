@@ -52,7 +52,7 @@ export default function ConversionFunnelPage() {
                                 <ArrowDown className="w-6 h-6 text-slate-300 animate-bounce" />
                                 <div className="mt-2 bg-rose-50 dark:bg-rose-500/10 text-rose-500 px-3 py-1 rounded-full text-[10px] font-black uppercase flex items-center gap-1">
                                     <TrendingDown className="w-3 h-3" />
-                                    {(Number(item.percent.replace('%', '')) - Number(funnelData[index + 1].percent.replace('%', ''))).toFixed(1)}% Drop-off
+                                    {(Number((item.percent || '0%').replace('%', '')) - Number((funnelData[index + 1].percent || '0%').replace('%', ''))).toFixed(1)}% Drop-off
                                 </div>
                             </div>
                         )}
