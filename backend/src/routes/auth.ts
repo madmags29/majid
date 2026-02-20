@@ -90,9 +90,9 @@ router.post('/login', async (req, res) => {
             }
         });
 
-    } catch (error) {
+    } catch (error: any) {
         console.error('Login Error:', error);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error', error: error.message, stack: error.stack });
     }
 });
 
