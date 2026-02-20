@@ -491,7 +491,7 @@ export default function ExploreContent({ slug }: { slug: string }) {
                         </h3>
                         <div className="space-y-4">
                             {(data.trip_details?.hotel_suggestions || []).map((hotel, idx) => {
-                                const hotelUrl = `https://www.agoda.com/partners/partnersearch.aspx?cid=1959241&apikey=39f409b7-2414-4680-be28-5d95979dea28&searchText=${encodeURIComponent(hotel.name + ' ' + data.destination)}`;
+                                const hotelUrl = `https://www.agoda.com/partners/partnersearch.aspx?cid=1959241&apikey=83110ffd-89b7-4c2e-a4e9-d4a8f52de4ec&searchText=${encodeURIComponent(hotel.name + ' ' + data.destination)}`;
                                 return (
                                     <a
                                         key={idx}

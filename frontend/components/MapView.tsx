@@ -152,7 +152,7 @@ export default function MapView({ itinerary, selectedActivity, isExpanded }: Map
             imageUrl: null, // Hotels might not have images in this object yet
             day: null,
             type: 'hotel',
-            url: `https://www.agoda.com/partners/partnersearch.aspx?cid=1959241&apikey=39f409b7-2414-4680-be28-5d95979dea28&searchText=${encodeURIComponent(hotel.name + ' ' + itinerary.destination)}`
+            url: `https://www.agoda.com/partners/partnersearch.aspx?cid=1959241&apikey=83110ffd-89b7-4c2e-a4e9-d4a8f52de4ec&searchText=${encodeURIComponent(hotel.name + ' ' + itinerary.destination)}`
         })) || [];
 
         return [...activityLocations, ...hotelLocations];
