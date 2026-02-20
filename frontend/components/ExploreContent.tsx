@@ -324,7 +324,7 @@ export default function ExploreContent({ slug }: { slug: string }) {
                         antialiased">
                             <div
                                 dangerouslySetInnerHTML={{
-                                    __html: data.deep_content
+                                    __html: (data.deep_content || '')
                                         // Robust fallback: post-process HTML to ensure spacing if AI bunches text
                                         .replace(/([A-Z][a-zA-Z\s]+):/g, '<br/><br/><strong class="text-white text-lg block mb-1">$1</strong>')
                                         .replace(/<br\/><br\/>/g, '<div class="h-4"></div>') // Semantic spacer
