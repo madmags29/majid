@@ -9,6 +9,9 @@ import Script from "next/script";
 export const metadata: Metadata = {
     title: "Weekend Travellers | Admin Dashboard",
     description: "Production-ready management console for WeekendTravellers.com",
+    other: {
+        'agd-partner-manual-verification': '',
+    },
 };
 
 export default function RootLayout({
