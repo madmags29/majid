@@ -552,10 +552,10 @@ function SearchClient() {
             >
                 {/* Left Panel - Chat & Content */}
                 <div
-                    className="flex flex-col min-w-0 bg-slate-950 border-r border-slate-800 w-full"
+                    className="flex flex-col min-w-0 bg-slate-950 border-r border-slate-800 w-full relative h-full"
                     style={isDesktop ? { width: `${leftWidth}%` } : {}}
                 >
-                    <div className="flex-1 overflow-y-auto p-4 space-y-6 scroll-smooth custom-scrollbar">
+                    <div className="flex-1 overflow-y-auto p-4 space-y-6 scroll-smooth custom-scrollbar pb-32">
                         {messages.map((msg, idx) => (
                             <div key={idx} className={cn("flex gap-3", msg.role === 'assistant' ? "mr-auto w-full md:max-w-[95%]" : "ml-auto max-w-[90%] md:max-w-[80%] flex-row-reverse")}>
                                 {msg.role === 'assistant' && (
@@ -797,16 +797,16 @@ function SearchClient() {
                     </div>
 
                     {/* Input Area */}
-                    <div className="p-4 bg-slate-900 border-t border-slate-800 pb-[calc(1rem+env(safe-area-inset-bottom))]">
+                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-slate-900/90 backdrop-blur-lg border-t border-slate-800 safe-bottom">
                         <form onSubmit={handleSend} className="relative flex items-center max-w-2xl mx-auto w-full">
                             <input
                                 type="text"
                                 name="chat"
                                 autoComplete="off"
-                                placeholder="Ask for changes (e.g., 'Add 1 day more or add a vegan lunch spot')..."
+                                placeholder="Ask for changes (e.g., 'Add 1 day more')..."
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
-                                className="w-full bg-slate-800 text-white placeholder:text-slate-500 text-base rounded-xl py-5 pl-4 pr-12 focus:outline-none focus:ring-2 focus:ring-blue-500/50 border border-slate-700 transition-all hover:border-slate-600"
+                                className="w-full bg-slate-800 text-white placeholder:text-slate-500 text-sm md:text-base rounded-xl py-4 md:py-5 pl-4 pr-12 focus:outline-none focus:ring-2 focus:ring-blue-500/50 border border-slate-700 transition-all"
                             />
                             <Button
                                 type="submit"

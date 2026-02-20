@@ -221,4 +221,25 @@ body {
       font-size: 16px !important;
     }
   }
+
+  .safe-bottom {
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #334155;
 }
