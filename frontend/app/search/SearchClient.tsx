@@ -591,12 +591,12 @@ function SearchClient() {
 
                                             {/* Trip Vital Signs */}
                                             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                                                <div className="bg-slate-800/60 p-3 rounded-xl border border-slate-700 hover:border-blue-500/30 transition-colors group">
-                                                    <div className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1 group-hover:text-blue-400 transition-colors">Budget</div>
-                                                    <div className="text-sm font-bold text-slate-200">{formatCurrency(msg.content.trip_details.estimated_budget, msg.content.trip_details.currency)}</div>
+                                                <div className="bg-slate-800/60 p-3 rounded-xl border border-slate-700 hover:border-emerald-500/30 transition-colors group">
+                                                    <div className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1 group-hover:text-emerald-400 transition-colors">Budget</div>
+                                                    <div className="text-sm font-bold text-emerald-400">{formatCurrency(msg.content.trip_details.estimated_budget, msg.content.trip_details.currency)}</div>
                                                 </div>
                                                 <div className="bg-slate-800/60 p-3 rounded-xl border border-slate-700 hover:border-blue-500/30 transition-colors group">
-                                                    <div className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1 group-hover:text-blue-400 transition-colors">When</div>
+                                                    <div className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1 group-hover:text-blue-400 transition-colors">Season</div>
                                                     <div className="text-sm font-bold text-slate-200">{msg.content.trip_details.best_time_to_visit}</div>
                                                 </div>
                                                 <div className="col-span-2 bg-slate-800/60 p-3 rounded-xl border border-slate-700">
@@ -677,7 +677,7 @@ function SearchClient() {
                                                                     )}>
                                                                         {hotel.tier}
                                                                     </span>
-                                                                    <span className="text-[10px] font-bold text-slate-400">{formatCurrency(hotel.price_range, (msg.content as Itinerary).trip_details?.currency || hotel.price_range)}</span>
+                                                                    <span className="text-[10px] font-bold text-emerald-400">{formatCurrency(hotel.price_range, (msg.content as Itinerary).trip_details?.currency || hotel.price_range)}</span>
                                                                 </div>
                                                                 <h5 className="text-sm font-bold text-slate-200 line-clamp-1 group-hover:text-blue-400 transition-colors">{hotel.name}</h5>
                                                             </div>

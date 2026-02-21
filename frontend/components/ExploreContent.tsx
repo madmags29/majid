@@ -435,7 +435,7 @@ export default function ExploreContent({ slug }: { slug: string }) {
                                 </div>
                                 <div>
                                     <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Est. Budget</p>
-                                    <p className="text-lg font-bold">{formatCurrency(data.trip_details.estimated_budget, data.trip_details.currency)}</p>
+                                    <p className="text-lg font-bold text-emerald-400">{formatCurrency(data.trip_details.estimated_budget, data.trip_details.currency)}</p>
                                 </div>
                             </div>
                             <div className="flex items-center gap-4">
@@ -506,7 +506,7 @@ export default function ExploreContent({ slug }: { slug: string }) {
                                                 {hotel.tier}
                                             </span>
                                         </div>
-                                        <p className="text-xs text-slate-500 mt-1">{formatCurrency(hotel.price_range, data.trip_details?.currency || hotel.price_range)}</p>
+                                        <p className="text-xs font-bold text-emerald-400 mt-1">{formatCurrency(hotel.price_range, data.trip_details?.currency || hotel.price_range)}</p>
                                     </a>
                                 );
                             })}

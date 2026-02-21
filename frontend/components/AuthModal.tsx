@@ -7,13 +7,16 @@ import { Button } from '@/components/ui/button';
 import { siGoogle } from 'simple-icons/icons';
 import { useGoogleLogin } from '@react-oauth/google';
 
+import { GOOGLE_CLIENT_ID } from '@/lib/config';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
 interface AuthModalProps {
     isOpen: boolean;
     onClose: () => void;
     initialMode?: 'login' | 'signup';
 }
 
-export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: AuthModalProps) {
+function AuthModalContent({ isOpen, onClose, initialMode = 'login' }: AuthModalProps) {
     const [mode, setMode] = useState<'login' | 'signup' | 'forgot-password'>(initialMode);
     const [isLoading, setIsLoading] = useState(false);
     const [name, setName] = useState('');
@@ -332,5 +335,15 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }: Au
                 </div >
             </div >
         </div >
+    );
+}
+
+export default function AuthModal(props: AuthModalProps) {
+    if (!props.isOpen) return null;
+
+    return (
+        <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+            <AuthModalContent {...props} />
+        </GoogleOAuthProvider>
     );
 }
