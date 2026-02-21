@@ -15,6 +15,7 @@ L.Icon.Default.mergeOptions({
 });
 
 import { formatCurrency } from '@/lib/utils';
+import AdBanner from '@/components/AdBanner';
 
 interface Activity {
     time: string;
@@ -262,11 +263,16 @@ export default function MapView({ itinerary, selectedActivity, isExpanded }: Map
                                             href={(locations as any).find((l: any) => l.id === loc.id)?.url}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="block w-full text-center bg-blue-600 hover:bg-blue-700 !text-white text-xs font-bold py-2 rounded transition-colors"
+                                            className="block w-full text-center bg-blue-600 hover:bg-blue-700 !text-white text-xs font-bold py-2 rounded transition-colors mb-3"
                                         >
                                             Book Now
                                         </a>
                                     )}
+
+                                    {/* Ad Banner Inside Map Pin Popup */}
+                                    <div className="mt-4 pt-4 border-t border-gray-100 flex justify-center">
+                                        <AdBanner dataAdSlot="6666777788" className="!my-0 scale-90 sm:scale-100 origin-center" />
+                                    </div>
                                 </div>
                             </div>
                         </Popup>
