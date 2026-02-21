@@ -116,13 +116,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-          <Script
-            id="adsense-init"
-            async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460255466960810"
-            crossOrigin="anonymous"
-            strategy="afterInteractive"
-          />
+
           <Script
             src="https://www.googletagmanager.com/gtag/js?id=G-4FBK6YT104"
             strategy="afterInteractive"

@@ -10,13 +10,9 @@ interface AdBannerProps {
 }
 
 const AdBanner = ({
-    dataAdSlot,
-    dataAdFormat = 'auto',
-    dataFullWidthResponsive = true,
     className = '',
 }: AdBannerProps) => {
-    const adRef = useRef<HTMLModElement>(null);
-    const [isLoaded, setIsLoaded] = useState(false);
+    const adRef = useRef<HTMLDivElement>(null);
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
@@ -24,41 +20,43 @@ const AdBanner = ({
     }, []);
 
     useEffect(() => {
-        if (!mounted) return;
-        // Only run after the component is fully mounted and has a parent with width
-        const timer = setTimeout(() => {
-            if (typeof window !== 'undefined' && adRef.current) {
-                // Check if the ad is already processed
-                const isProcessed = adRef.current.getAttribute('data-adsbygoogle-status') === 'done';
+        if (!mounted || !adRef.current) return;
 
-                if (!isProcessed && !isLoaded) {
-                    try {
-                        // @ts-ignore
-                        (window.adsbygoogle = window.adsbygoogle || []).push({});
-                        setIsLoaded(true);
-                    } catch (e) {
-                        console.error('AdSense error:', e);
-                    }
-                }
-            }
-        }, 500); // Wait 500ms to ensure layout is settled
+        // Check if script is already present to prevent duplicate injections
+        if (adRef.current.querySelector('script[src*="highperformanceformat.com"]')) {
+            return;
+        }
 
-        return () => clearTimeout(timer);
-    }, [isLoaded]);
+        // 1. Create the config script block
+        const configScript = document.createElement('script');
+        configScript.type = 'text/javascript';
+        configScript.innerHTML = `
+            atOptions = {
+                'key' : '0a50b9a701d9e9ef3c83bf46726d6c61',
+                'format' : 'iframe',
+                'height' : 50,
+                'width' : 320,
+                'params' : {}
+            };
+        `;
+
+        // 2. Create the invoke script block
+        const invokeScript = document.createElement('script');
+        invokeScript.type = 'text/javascript';
+        invokeScript.src = 'https://www.highperformanceformat.com/0a50b9a701d9e9ef3c83bf46726d6c61/invoke.js';
+        invokeScript.async = true;
+
+        // Append to the specific container
+        adRef.current.appendChild(configScript);
+        adRef.current.appendChild(invokeScript);
+
+    }, [mounted]);
 
     if (!mounted) return null;
 
     return (
-        <div className={`ad-container my-6 overflow-hidden flex justify-center w-full min-h-[100px] ${className}`}>
-            <ins
-                ref={adRef}
-                className="adsbygoogle"
-                style={{ display: 'block', minWidth: '250px' }}
-                data-ad-client="ca-pub-9460255466960810"
-                data-ad-slot={dataAdSlot}
-                data-ad-format={dataAdFormat}
-                data-full-width-responsive={dataFullWidthResponsive.toString()}
-            />
+        <div className={`ad-container my-6 overflow-hidden flex justify-center w-full min-h-[50px] ${className}`}>
+            <div ref={adRef} className="hpf-ad-wrapper flex justify-center items-center w-[320px] h-[50px]" />
         </div>
     );
 };
