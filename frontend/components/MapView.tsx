@@ -6,15 +6,15 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
 // Fix for default marker icons in Next.js
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-delete (L.Icon.Default.prototype as any)._getIconUrl;
+// @ts-ignore
+delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
     iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
     iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-import { formatCurrency } from '@/lib/utils';
+import { cn, formatCurrency } from '@/lib/utils';
 import AdBanner from '@/components/AdBanner';
 
 interface Activity {
@@ -34,6 +34,20 @@ interface Day {
 interface Itinerary {
     destination: string;
     summary: string;
+    trip_details: {
+        currency: string;
+        estimated_budget: string;
+        best_time_to_visit: string;
+        hotel_suggestions: {
+            name: string;
+            tier: string;
+            price_range: string;
+        }[];
+        destination_coordinates: {
+            lat: number;
+            lng: number;
+        };
+    };
     days: Day[];
 }
 
@@ -129,32 +143,32 @@ export default function MapView({ itinerary, selectedActivity, isExpanded }: Map
 
     // Extract all locations with stable coordinates
     const locations = useMemo(() => {
-        const activityLocations = (itinerary?.days || (itinerary as any)?.itinerary || []).flatMap((day: any, dayIdx: number) =>
-            (day.activities || []).map((activity: any, actIdx: number) => ({
+        const activityLocations = (itinerary?.days || []).flatMap((day, dayIdx: number) =>
+            (day.activities || []).map((activity, actIdx: number) => ({
                 id: `${day.day}-${actIdx}`,
                 position: getCoordinates(activity.location, dayIdx, actIdx, center),
                 location: activity.location,
                 time: activity.time,
                 description: activity.description,
-                imageUrl: activity.imageUrl,
-                ticket_price: activity.ticket_price,
+                imageUrl: activity.imageUrl || null,
+                ticket_price: activity.ticket_price || null,
                 day: day.day,
-                type: 'activity'
+                type: 'activity' as const
             }))
         );
 
-        const hotelLocations = (itinerary as any).trip_details?.hotel_suggestions?.map((hotel: any, idx: number) => ({
+        const hotelLocations = (itinerary?.trip_details?.hotel_suggestions || []).map((hotel, idx: number) => ({
             id: `hotel-${idx}`,
-            position: getCoordinates(hotel.name, 99, idx, center), // Use specialized offset logic or just unique indices
+            position: getCoordinates(hotel.name, 99, idx, center),
             location: hotel.name,
             time: 'Hotel',
             description: `Tier: ${hotel.tier}`,
             ticket_price: hotel.price_range,
-            imageUrl: null, // Hotels might not have images in this object yet
+            imageUrl: null,
             day: null,
-            type: 'hotel',
-            url: `https://www.agoda.com/partners/partnersearch.aspx?cid=1959241&apikey=83110ffd-89b7-4c2e-a4e9-d4a8f52de4ec&searchText=${encodeURIComponent(hotel.name + ' ' + itinerary.destination)}`
-        })) || [];
+            type: 'hotel' as const,
+            url: `https://www.agoda.com/partners/partnersearch.aspx?cid=1959241&apikey=83110ffd-89b7-4c2e-a4e9-d4a8f52de4ec&searchText=${encodeURIComponent(hotel.name + ' ' + (itinerary?.destination || ''))}`
+        }));
 
         return [...activityLocations, ...hotelLocations];
     }, [itinerary, center]);
@@ -248,7 +262,7 @@ export default function MapView({ itinerary, selectedActivity, isExpanded }: Map
 
                                         {loc.ticket_price && (
                                             <span className="text-[10px] font-bold text-green-700 bg-green-50 px-2 py-0.5 rounded border border-green-200 max-w-[50%] truncate" title={loc.ticket_price}>
-                                                {formatCurrency(loc.ticket_price, (itinerary as any).trip_details?.currency || loc.ticket_price)}
+                                                {formatCurrency(loc.ticket_price, itinerary.trip_details?.currency || 'INR')}
                                             </span>
                                         )}
                                     </div>
@@ -258,9 +272,9 @@ export default function MapView({ itinerary, selectedActivity, isExpanded }: Map
                                     </div>
                                     <p className="text-xs text-gray-600 leading-relaxed mb-3">{loc.description}</p>
 
-                                    {loc.type === 'hotel' && (locations as any).find((l: any) => l.id === loc.id)?.url && (
+                                    {loc.type === 'hotel' && loc.url && (
                                         <a
-                                            href={(locations as any).find((l: any) => l.id === loc.id)?.url}
+                                            href={loc.url}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="block w-full text-center bg-blue-600 hover:bg-blue-700 !text-white text-xs font-bold py-2 rounded transition-colors mb-3"
@@ -296,9 +310,9 @@ export default function MapView({ itinerary, selectedActivity, isExpanded }: Map
                                     const marker = markerRefs.current[hotel.id];
                                     if (marker) {
                                         marker.openPopup();
-                                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                        const map = (marker as any).getMap();
-                                        if (map) map.setView(marker.getLatLng(), 15, { animate: true });
+                                        const map = marker.getElement()?.parentElement?.parentElement;
+                                        // Use direct leaflet map access from ref if possible, but marker.openPopup usually enough
+                                        marker.openPopup();
                                     }
                                 }}
                             >
@@ -309,7 +323,7 @@ export default function MapView({ itinerary, selectedActivity, isExpanded }: Map
                                     <div className="flex justify-between items-start mb-2 gap-2">
                                         <h3 className="font-bold text-slate-800 text-sm leading-tight truncate flex-1" title={hotel.location}>{hotel.location}</h3>
                                         <div className="text-[10px] font-bold text-white bg-slate-900/90 backdrop-blur-sm px-2 py-1 rounded-full shadow-sm shrink-0 uppercase tracking-wide">
-                                            {formatCurrency(hotel.ticket_price, (itinerary as any).trip_details?.currency || hotel.ticket_price)}
+                                            {formatCurrency(hotel.ticket_price || '0', itinerary.trip_details?.currency || 'INR')}
                                         </div>
                                     </div>
 
@@ -318,9 +332,9 @@ export default function MapView({ itinerary, selectedActivity, isExpanded }: Map
                                     </p>
 
                                     <div className="flex gap-2.5">
-                                        {(hotel as any).url && (
+                                        {hotel.url && (
                                             <a
-                                                href={(hotel as any).url}
+                                                href={hotel.url}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-bold py-2 rounded-lg text-center transition-all shadow-md hover:shadow-blue-500/25 flex items-center justify-center gap-1.5"
@@ -360,9 +374,4 @@ export default function MapView({ itinerary, selectedActivity, isExpanded }: Map
             `}</style>
         </div>
     );
-}
-
-// Helper for class names if utils not imported in this file
-function cn(...classes: (string | undefined | null | false)[]) {
-    return classes.filter(Boolean).join(' ');
 }

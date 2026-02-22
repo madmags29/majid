@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, ArrowLeft, Sparkles, Utensils, Compass, Share2, Maximize2, X, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import Image from 'next/image';
 import { cn, formatCurrency } from '@/lib/utils';
 import { toast } from 'sonner';
 
@@ -355,7 +356,7 @@ export default function ExploreContent({ slug }: { slug: string }) {
                             </h2>
 
                             <div className="space-y-12">
-                                {(data.days || (data as any).itinerary || []).map((day: any) => (
+                                {(data.days || []).map((day: Day) => (
                                     <div key={day.day} className="bg-slate-900/40 rounded-3xl border border-white/5 overflow-hidden">
                                         <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 px-8 py-6 border-b border-white/5">
                                             <h3 className="text-2xl font-bold flex items-center gap-3">
@@ -369,8 +370,14 @@ export default function ExploreContent({ slug }: { slug: string }) {
                                             {(day.activities || []).map((activity: Activity, idx: number) => (
                                                 <div key={idx} className="flex flex-col md:flex-row gap-8 group">
                                                     {activity.imageUrl && (
-                                                        <div className="w-full md:w-48 h-32 rounded-2xl overflow-hidden shrink-0">
-                                                            <img src={activity.imageUrl} alt={activity.location} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                                                        <div className="w-full md:w-48 h-32 rounded-2xl overflow-hidden shrink-0 relative">
+                                                            <Image
+                                                                src={activity.imageUrl}
+                                                                alt={activity.location}
+                                                                fill
+                                                                className="object-cover group-hover:scale-110 transition-transform duration-500"
+                                                                sizes="(max-width: 768px) 100vw, 192px"
+                                                            />
                                                         </div>
                                                     )}
                                                     <div className="flex-1">
@@ -474,7 +481,7 @@ export default function ExploreContent({ slug }: { slug: string }) {
                                 {isMapFullscreen ? <X className="w-6 h-6 text-white" /> : <Maximize2 className="w-6 h-6 text-white" />}
                             </Button>
                         </div>
-                        <MapView itinerary={data as any} selectedActivity={null} isExpanded={isMapFullscreen} />
+                        <MapView itinerary={data} selectedActivity={null} isExpanded={isMapFullscreen} />
                     </div>
 
                     {/* AdSense - Sidebar */}

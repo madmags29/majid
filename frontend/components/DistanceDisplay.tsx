@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { MapPin } from 'lucide-react';
 
 interface Coords {
@@ -10,29 +10,17 @@ interface Coords {
 
 export default function DistanceDisplay({ destinationCoords }: { destinationCoords?: Coords }) {
     const [userLocation, setUserLocation] = useState<Coords | null>(null);
-    const [distance, setDistance] = useState<number | null>(null);
-
-    useEffect(() => {
-        if ("geolocation" in navigator) {
-            navigator.geolocation.getCurrentPosition((position) => {
-                setUserLocation({
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                });
-            });
-        }
-    }, []);
-
-    useEffect(() => {
+    // Use useMemo for distance to avoid setState in useEffect
+    const distance = useMemo(() => {
         if (userLocation && destinationCoords) {
-            const calculated = calculateDistance(
+            return Math.round(calculateDistance(
                 userLocation.lat,
                 userLocation.lng,
                 destinationCoords.lat,
                 destinationCoords.lng
-            );
-            setDistance(Math.round(calculated));
+            ));
         }
+        return null;
     }, [userLocation, destinationCoords]);
 
     // Haversine formula

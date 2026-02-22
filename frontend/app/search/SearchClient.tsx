@@ -24,6 +24,7 @@ import {
 const MapView = dynamic(() => import('@/components/MapView'), { ssr: false });
 import CinematicLoader from '@/components/CinematicLoader';
 import InnerHeader from '@/components/InnerHeader';
+import ItineraryDisplay from '@/components/ItineraryDisplay';
 const AnimatedLogo = dynamic(() => import('@/components/AnimatedLogo'), { ssr: false });
 const AuthModal = dynamic(() => import('@/components/AuthModal'), { ssr: false });
 const TypewriterText = dynamic(() => import('@/components/TypewriterText'), { ssr: false });
@@ -407,7 +408,7 @@ function SearchClient() {
                         };
 
                         // Filter out duplicates (same destination)
-                        const filteredRecents = recents.filter((r: any) => r.destination.toLowerCase() !== data.destination.toLowerCase());
+                        const filteredRecents = recents.filter((r: { destination: string }) => r.destination.toLowerCase() !== data.destination.toLowerCase());
 
                         // Keep only top 20
                         const updatedRecents = [newSearch, ...filteredRecents].slice(0, 20);
@@ -615,184 +616,8 @@ function SearchClient() {
 
                                         {msg.type === 'itinerary' && typeof msg.content !== 'string' && (
                                             <div className="space-y-6 relative z-10">
-                                                {/* Summary Section */}
-                                                <div className="bg-slate-800/40 rounded-xl p-4 border border-slate-700/50">
-                                                    <h3 className="text-xl font-bold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent mb-3">
-                                                        {['Budget travel', 'Road trips', 'Hidden gems', 'Monsoon trips', 'Winter trips'].includes(destination)
-                                                            ? `Trip to ${destination} - ${msg.content.destination} `
-                                                            : `Trip to ${msg.content.destination} `
-                                                        }
-                                                    </h3>
-                                                    <p className="text-sm text-slate-300 leading-relaxed italic border-l-2 border-blue-500 pl-3">
-                                                        {msg.content.summary}
-                                                    </p>
-                                                </div>
-
-                                                {/* Trip Vital Signs */}
-                                                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                                                    <div className="bg-slate-800/60 p-3 rounded-xl border border-slate-700 hover:border-emerald-500/30 transition-colors group">
-                                                        <div className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1 group-hover:text-emerald-400 transition-colors">Budget</div>
-                                                        <div className="text-sm font-bold text-emerald-400">{formatCurrency(msg.content.trip_details.estimated_budget, msg.content.trip_details.currency)}</div>
-                                                    </div>
-                                                    <div className="bg-slate-800/60 p-3 rounded-xl border border-slate-700 hover:border-blue-500/30 transition-colors group">
-                                                        <div className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1 group-hover:text-blue-400 transition-colors">Season</div>
-                                                        <div className="text-sm font-bold text-slate-200">{msg.content.trip_details.best_time_to_visit}</div>
-                                                    </div>
-                                                    <div className="col-span-2 bg-slate-800/60 p-3 rounded-xl border border-slate-700">
-                                                        <WeatherWidget
-                                                            lat={msg.content.trip_details.destination_coordinates.lat}
-                                                            lng={msg.content.trip_details.destination_coordinates.lng}
-                                                        />
-                                                    </div>
-                                                </div>
-
-                                                {/* Distance Info */}
-                                                <DistanceDisplay destinationCoords={msg.content.trip_details.destination_coordinates} />
-
-                                                {/* Logistics */}
-                                                {msg.content.trip_details.travel_logistics && (
-                                                    <div className="bg-slate-900/40 rounded-xl p-4 border border-slate-800">
-                                                        <h4 className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-4 flex items-center gap-2">
-                                                            <Bus className="w-3 h-3" />
-                                                            Travel Times from {searchParams.get('origin') || 'Current Location'}
-                                                        </h4>
-                                                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                                                            <div className="flex items-center gap-3 group">
-                                                                <div className="w-8 h-8 rounded-lg bg-orange-500/10 flex items-center justify-center group-hover:bg-orange-500/20 transition-colors">
-                                                                    <Bus className="w-4 h-4 text-orange-400" />
-                                                                </div>
-                                                                <div>
-                                                                    <div className="text-[10px] text-slate-500 font-bold">Bus</div>
-                                                                    <div className="text-xs text-slate-300 font-semibold">{msg.content.trip_details.travel_logistics.bus}</div>
-                                                                </div>
-                                                            </div>
-                                                            <div className="flex items-center gap-3 group">
-                                                                <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-500/20 transition-colors">
-                                                                    <Train className="w-4 h-4 text-blue-400" />
-                                                                </div>
-                                                                <div>
-                                                                    <div className="text-[10px] text-slate-500 font-bold">Train</div>
-                                                                    <div className="text-xs text-slate-300 font-semibold">{msg.content.trip_details.travel_logistics.train}</div>
-                                                                </div>
-                                                            </div>
-                                                            <div className="flex items-center gap-3 group">
-                                                                <div className="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center group-hover:bg-purple-500/20 transition-colors">
-                                                                    <Plane className="w-4 h-4 text-purple-400" />
-                                                                </div>
-                                                                <div>
-                                                                    <div className="text-[10px] text-slate-500 font-bold">Flight</div>
-                                                                    <div className="text-xs text-slate-300 font-semibold">{msg.content.trip_details.travel_logistics.flight}</div>
-                                                                </div>
-                                                            </div>
-                                                            <div className="flex items-center gap-3 group">
-                                                                <div className="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center group-hover:bg-green-500/20 transition-colors">
-                                                                    <Car className="w-4 h-4 text-green-400" />
-                                                                </div>
-                                                                <div>
-                                                                    <div className="text-[10px] text-slate-500 font-bold">Car</div>
-                                                                    <div className="text-xs text-slate-300 font-semibold">{msg.content.trip_details.travel_logistics.car}</div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                )}
-
-                                                {/* Accommodations */}
-                                                <div className="space-y-3">
-                                                    <h4 className="text-[10px] text-slate-500 uppercase tracking-widest font-bold flex items-center gap-2">
-                                                        <Heart className="w-3 h-3" />
-                                                        Recommended Stays
-                                                    </h4>
-                                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                                                        {((msg.content as Itinerary).trip_details?.hotel_suggestions || []).map((hotel, hIdx) => (
-                                                            <div key={hIdx} className="bg-slate-800/60 p-3 rounded-xl border border-slate-700 flex flex-col justify-between hover:border-slate-500 transition-colors group">
-                                                                <div>
-                                                                    <div className="flex items-center justify-between mb-1">
-                                                                        <span className={cn(
-                                                                            "text-[8px] px-1.5 py-0.5 rounded uppercase font-black",
-                                                                            hotel.tier === 'Luxury' ? "bg-amber-500/20 text-amber-500" :
-                                                                                hotel.tier === 'Mid' ? "bg-blue-500/20 text-blue-500" :
-                                                                                    "bg-slate-700 text-slate-400"
-                                                                        )}>
-                                                                            {hotel.tier}
-                                                                        </span>
-                                                                        <span className="text-[10px] font-bold text-emerald-400">{formatCurrency(hotel.price_range, (msg.content as Itinerary).trip_details?.currency || hotel.price_range)}</span>
-                                                                    </div>
-                                                                    <h5 className="text-sm font-bold text-slate-200 line-clamp-1 group-hover:text-blue-400 transition-colors">{hotel.name}</h5>
-                                                                </div>
-                                                                <a
-                                                                    href={`https://www.agoda.com/partners/partnersearch.aspx?cid=1959241&apikey=83110ffd-89b7-4c2e-a4e9-d4a8f52de4ec&searchText=${encodeURIComponent(hotel.name + ' ' + (msg.content as Itinerary).destination)}`}
-                                                                    target="_blank"
-                                                                    rel="noopener noreferrer"
-                                                                    className="mt-2 text-[10px] text-blue-400 font-bold flex items-center gap-1 hover:underline"
-                                                                >
-                                                                    Book Now
-                                                                    < ArrowLeft className="w-3 h-3 rotate-180" />
-                                                                </a >
-                                                            </div >
-                                                        ))
-                                                        }
-                                                    </div >
-                                                </div >
-
-                                                {/* Daily Timeline */}
-                                                < div className="space-y-6" >
-                                                    {((msg.content as Itinerary).days || ((msg.content as any).itinerary) || []).map((day: any, dIdx: number) => (
-                                                        <div key={dIdx} className="bg-slate-900/50 rounded-2xl border border-slate-800 overflow-hidden shadow-2xl">
-                                                            <div className="bg-slate-800/80 px-4 py-3 border-b border-slate-700 flex items-center justify-between">
-                                                                <h4 className="text-sm font-black flex items-center gap-3">
-                                                                    <span className="flex items-center justify-center px-2.5 py-0.5 rounded-lg bg-blue-600/20 text-blue-400 text-xs whitespace-nowrap">
-                                                                        Day {day.day}
-                                                                    </span>
-                                                                    {day.title}
-                                                                </h4>
-                                                            </div>
-                                                            <div className="p-1 sm:p-4 space-y-4">
-                                                                {(day.activities || []).map((activity: any, aIdx: number) => (
-                                                                    <div
-                                                                        key={aIdx}
-                                                                        className={cn(
-                                                                            "p-4 rounded-xl border border-slate-800 transition-all duration-300 cursor-pointer group",
-                                                                            selectedActivity === `${day.day}-${aIdx}`
-                                                                                ? "bg-blue-600/10 border-blue-500/50 ring-1 ring-blue-500/20"
-                                                                                : "bg-slate-800/30 hover:bg-slate-800/50 hover:border-slate-700"
-                                                                        )}
-                                                                        onClick={() => setSelectedActivity(`${day.day}-${aIdx}`)}
-                                                                    >
-                                                                        <div className="flex items-start justify-between mb-2">
-                                                                            <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">{activity.time}</div>
-                                                                            {activity.ticket_price && (
-                                                                                <span className="text-[10px] font-bold text-green-400 bg-green-900/20 px-2 py-0.5 rounded border border-green-500/30 max-w-[50%] truncate" title={activity.ticket_price}>
-                                                                                    {formatCurrency(activity.ticket_price, (msg.content as Itinerary).trip_details?.currency || activity.ticket_price)}
-                                                                                </span>
-                                                                            )}
-                                                                        </div>
-                                                                        <div className="text-sm font-semibold text-slate-200 flex items-center gap-2 mb-2">
-                                                                            <MapPin className="w-3 h-3 text-blue-500 shrink-0" />
-                                                                            <span>{activity.location}</span>
-                                                                        </div>
-                                                                        {/* Activity Image */}
-                                                                        {activity.imageUrl && (
-                                                                            <div className="mt-2 mb-2 rounded-lg overflow-hidden h-32 w-full relative">
-                                                                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                                                                <img
-                                                                                    src={activity.imageUrl}
-                                                                                    alt={activity.location}
-                                                                                    className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
-                                                                                />
-                                                                            </div>
-                                                                        )}
-                                                                        <div className="text-sm text-slate-400 mt-1">{activity.description}</div>
-                                                                    </div>
-                                                                ))}
-                                                            </div>
-                                                        </div>
-                                                    ))}
-
-                                                    {/* Ad Banner after itineraries */}
-                                                    <AdBanner dataAdSlot="5821234567" className="mt-4" />
-                                                </div >
-                                            </div >
+                                                <ItineraryDisplay itinerary={msg.content as Itinerary} />
+                                            </div>
                                         )}
                                     </div >
 

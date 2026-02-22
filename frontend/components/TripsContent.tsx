@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import Image from 'next/image';
 import CinematicLoader from '@/components/CinematicLoader';
 import InnerHeader from '@/components/InnerHeader';
 
@@ -18,10 +19,9 @@ interface Trip {
     _id: string;
     destination: string;
     createdAt: string;
-    isLocal?: boolean; // Distinguish between local recent searches and saved backend trips
+    isLocal?: boolean;
     imageUrl?: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    itinerary?: any;
+    itinerary?: unknown;
 }
 
 export default function TripsContent() {
@@ -62,7 +62,7 @@ export default function TripsContent() {
                 if (res.ok) {
                     const data = await res.json();
                     // Filter out backend trips from local searches to avoid duplicates
-                    const savedDestinations = data.map((t: Trip) => t.destination.toLowerCase());
+                    const savedDestinations = data.map((t: { destination: string }) => t.destination.toLowerCase());
                     combinedTrips = combinedTrips.filter(t => !savedDestinations.includes(t.destination.toLowerCase()));
                     combinedTrips = [...data, ...combinedTrips];
                 }
@@ -215,11 +215,12 @@ export default function TripsContent() {
                                     <div className="h-40 bg-gradient-to-br from-slate-800 to-slate-900 relative p-6 flex flex-col justify-end overflow-hidden">
                                         {trip.imageUrl && (
                                             <>
-                                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                                <img
+                                                <Image
                                                     src={trip.imageUrl}
                                                     alt={trip.destination}
+                                                    fill
                                                     className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:scale-105 transition-transform duration-500"
+                                                    sizes="(max-width: 768px) 100vw, 400px"
                                                 />
                                                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-transparent" />
                                             </>
