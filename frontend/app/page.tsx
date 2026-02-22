@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, MapPin } from 'lucide-react';
+import { Search, MapPin, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 
@@ -12,6 +12,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import AnimatedLogo from '@/components/AnimatedLogo';
 import TypewriterText from '@/components/TypewriterText';
+import DateRangePicker from '@/components/DateRangePicker';
+import { format } from 'date-fns';
 
 const AuthModal = dynamic(() => import('@/components/AuthModal'));
 const CategoryBanner = dynamic(() => import('@/components/CategoryBanner'));
@@ -27,6 +29,7 @@ import {
 const VisitorCounter = dynamic(() => import('@/components/VisitorCounter'), { ssr: false });
 const FloatingDestinations = dynamic(() => import('@/components/FloatingDestinations'), { ssr: false });
 const LocationAssistant = dynamic(() => import('@/components/LocationAssistant'), { ssr: false });
+const RightMenu = dynamic(() => import('@/components/RightMenu'));
 
 import { API_URL } from '@/lib/config';
 
@@ -36,6 +39,8 @@ export default function LandingPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
   const [videoUrl, setVideoUrl] = useState<string>('');
   const [videoCredit, setVideoCredit] = useState<{ name: string, url: string } | null>(null);
   const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -130,12 +135,16 @@ export default function LandingPage() {
 
     // Navigate to search page with destination as query param
     const originParam = userLocation ? `&origin=${encodeURIComponent(userLocation)}` : '';
-    router.push(`/search?destination=${encodeURIComponent(searchQuery)}${originParam}`);
+    const startParam = startDate ? `&startDate=${format(startDate, 'yyyy-MM-dd')}` : '';
+    const endParam = endDate ? `&endDate=${format(endDate, 'yyyy-MM-dd')}` : '';
+    router.push(`/search?destination=${encodeURIComponent(searchQuery)}${originParam}${startParam}${endParam}`);
   };
 
   const handleSuggestionClick = (suggestion: string) => {
     const originParam = userLocation ? `&origin=${encodeURIComponent(userLocation)}` : '';
-    router.push(`/search?destination=${encodeURIComponent(suggestion)}${originParam}`);
+    const startParam = startDate ? `&startDate=${format(startDate, 'yyyy-MM-dd')}` : '';
+    const endParam = endDate ? `&endDate=${format(endDate, 'yyyy-MM-dd')}` : '';
+    router.push(`/search?destination=${encodeURIComponent(suggestion)}${originParam}${startParam}${endParam}`);
   };
 
   const openAuth = (mode: 'login' | 'signup') => {
@@ -230,16 +239,19 @@ export default function LandingPage() {
 
       {/* Header */}
       <header className="w-full py-4 px-6 flex justify-between items-center z-50">
-        <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
-          <AnimatedLogo className="w-8 h-8 md:w-10 md:h-10 text-blue-400" />
-          <div className="text-2xl md:text-3xl text-white drop-shadow-md">
-            <TypewriterText
-              text="weekendtravellers.com"
-              className="font-cursive text-3xl md:text-4xl"
-              delay={500}
-            />
-          </div>
-        </Link>
+        <div className="flex items-center gap-2">
+          <RightMenu />
+          <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
+            <AnimatedLogo className="w-8 h-8 md:w-10 md:h-10 text-blue-400" />
+            <div className="text-2xl md:text-3xl text-white drop-shadow-md">
+              <TypewriterText
+                text="weekendtravellers.com"
+                className="font-cursive text-3xl md:text-4xl"
+                delay={500}
+              />
+            </div>
+          </Link>
+        </div>
         <nav className="flex items-center gap-4">
           {user ? (
             <div className="flex items-center gap-3">
@@ -275,23 +287,6 @@ export default function LandingPage() {
             </div>
           ) : (
             <div className="flex items-center gap-4">
-              {/* Mobile Login | Signup */}
-              <div className="flex md:hidden items-center text-sm font-bold tracking-wide">
-                <button
-                  onClick={() => openAuth('login')}
-                  className="text-slate-200 hover:text-white transition-colors"
-                >
-                  LOGIN
-                </button>
-                <span className="mx-2 text-slate-500/50 font-light">|</span>
-                <button
-                  onClick={() => openAuth('signup')}
-                  className="text-slate-200 hover:text-white transition-colors"
-                >
-                  SIGNUP
-                </button>
-              </div>
-
               {/* Desktop Login & Sign Up */}
               <div className="hidden md:flex items-center gap-4">
                 <Button
@@ -314,7 +309,7 @@ export default function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="flex-1 flex flex-col items-center justify-center px-4 py-20 pb-32 relative z-10">
+      <section className="flex-1 flex flex-col items-center justify-center px-4 py-20 pb-32 relative z-30">
         <div className="text-center max-w-4xl z-10 w-full animate-in fade-in slide-in-from-bottom-8 duration-1000 fill-mode-both">
           <div className="flex justify-center mb-6 min-h-[40px]">
             <VisitorCounter />
@@ -328,33 +323,50 @@ export default function LandingPage() {
           </p>
 
           {/* Highlighted & Shining Glass Search Bar */}
-          <div className="relative w-full max-w-3xl mx-auto p-[1px] rounded-2xl overflow-hidden group/search-container">
+          <div className="relative w-full max-w-3xl mx-auto p-[1px] rounded-2xl group/search-container z-50">
             {/* The Border Shine/Beam Effect */}
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-400/80 to-transparent"
-              initial={{ x: '-100%' }}
-              animate={{ x: '100%' }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "linear",
-                repeatDelay: 1
-              }}
-              style={{ width: '50%', height: '100%' }}
-            />
+            <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-400/80 to-transparent"
+                initial={{ x: '-100%' }}
+                animate={{ x: '100%' }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "linear",
+                  repeatDelay: 1
+                }}
+                style={{ width: '50%', height: '100%' }}
+              />
+            </div>
 
-            <form onSubmit={handleSearch} className="relative w-full glass-panel p-3 rounded-2xl flex flex-col md:flex-row gap-3 transition-all duration-500 ease-in-out border border-white/10 hover:border-blue-500/30 shadow-[0_4px_30px_rgba(0,0,0,0.1)] group-hover/search-container:shadow-[0_0_20px_rgba(59,130,246,0.2)]">
-              <div className="flex-1 flex items-center px-4 py-3 glass-input rounded-xl">
-                <MapPin className="w-5 h-5 text-slate-300 mr-3" />
+            <form onSubmit={handleSearch} className="relative w-full glass-panel p-3 rounded-2xl flex flex-col md:flex-row gap-3 border border-white/10 hover:border-blue-500/30 shadow-[0_4px_30px_rgba(0,0,0,0.1)] group-hover/search-container:shadow-[0_0_20px_rgba(59,130,246,0.2)]">
+              <label
+                className="flex-[2] flex items-center px-4 py-3 glass-input rounded-xl focus-within:ring-1 focus-within:ring-white/10 cursor-text"
+                htmlFor="destination-input"
+              >
+                <MapPin className="w-5 h-5 text-slate-300 mr-3 shrink-0 pointer-events-none" />
                 <input
+                  id="destination-input"
                   type="text"
-                  placeholder="Where to? (e.g. Paris) or 3 days weekend trip near me?"
+                  placeholder="Where to? (e.g. Paris)"
                   className="bg-transparent w-full outline-none text-white placeholder:text-slate-400 font-medium text-base"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
-              </div>
-              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl px-8 py-3 h-auto text-lg shadow-lg shadow-blue-900/50 min-w-[140px] border border-white/10">
+              </label>
+
+              <DateRangePicker
+                className="flex-1"
+                initialStart={startDate}
+                initialEnd={endDate}
+                onRangeSelect={(start, end) => {
+                  setStartDate(start);
+                  setEndDate(end);
+                }}
+              />
+
+              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl px-8 py-3 h-auto text-lg shadow-lg shadow-blue-900/50 min-w-[140px] border border-white/10 shrink-0">
                 <Search className="w-5 h-5 mr-2" /> Search
               </Button>
             </form>

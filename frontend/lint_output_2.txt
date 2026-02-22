@@ -1,0 +1,324 @@
+
+> frontend@0.1.0 lint
+> eslint
+
+
+/Users/Majid Desk/wtrip/frontend/app/chat/ChatClient.tsx
+    5:34  warning  'Calendar' is defined but never used               @typescript-eslint/no-unused-vars
+    5:59  warning  'MapPin' is defined but never used                 @typescript-eslint/no-unused-vars
+    7:8   warning  'Link' is defined but never used                   @typescript-eslint/no-unused-vars
+   11:5   warning  'DropdownMenu' is defined but never used           @typescript-eslint/no-unused-vars
+   12:5   warning  'DropdownMenuContent' is defined but never used    @typescript-eslint/no-unused-vars
+   13:5   warning  'DropdownMenuItem' is defined but never used       @typescript-eslint/no-unused-vars
+   14:5   warning  'DropdownMenuLabel' is defined but never used      @typescript-eslint/no-unused-vars
+   15:5   warning  'DropdownMenuSeparator' is defined but never used  @typescript-eslint/no-unused-vars
+   16:5   warning  'DropdownMenuTrigger' is defined but never used    @typescript-eslint/no-unused-vars
+   20:7   warning  'RightMenu' is assigned a value but never used     @typescript-eslint/no-unused-vars
+   21:7   warning  'AuthModal' is assigned a value but never used     @typescript-eslint/no-unused-vars
+   48:12  warning  'isAuthOpen' is assigned a value but never used    @typescript-eslint/no-unused-vars
+   85:42  error    Unexpected any. Specify a different type           @typescript-eslint/no-explicit-any
+  151:11  warning  'handleLogout' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/Majid Desk/wtrip/frontend/app/contact/page.tsx
+    5:40   warning  'MapPin' is defined but never used                               @typescript-eslint/no-unused-vars
+  110:109  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  137:33   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  137:195  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+/Users/Majid Desk/wtrip/frontend/app/explore/[slug]/page.tsx
+    2:32   warning  'DestinationOption' is defined but never used                    @typescript-eslint/no-unused-vars
+    5:29   warning  'Search' is defined but never used                               @typescript-eslint/no-unused-vars
+  117:178  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/Users/Majid Desk/wtrip/frontend/app/explore/page.tsx
+  68:13  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/Majid Desk/wtrip/frontend/app/explore/page.tsx:68:13
+  66 |             );
+  67 |         } else {
+> 68 |             setLocationError(true);
+     |             ^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  69 |             setIsLocating(false);
+  70 |         }
+  71 |     }, []);  react-hooks/set-state-in-effect
+
+/Users/Majid Desk/wtrip/frontend/app/inspiration-trip/MenuClient.tsx
+    5:10  warning  'ArrowLeft' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  @typescript-eslint/no-unused-vars
+    5:21  warning  'User' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+    5:27  warning  'LogIn' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @typescript-eslint/no-unused-vars
+    5:34  warning  'Calendar' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-unused-vars
+    7:8   warning  'Link' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+   11:5   warning  'DropdownMenu' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               @typescript-eslint/no-unused-vars
+   12:5   warning  'DropdownMenuContent' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+   13:5   warning  'DropdownMenuItem' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           @typescript-eslint/no-unused-vars
+   14:5   warning  'DropdownMenuLabel' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          @typescript-eslint/no-unused-vars
+   15:5   warning  'DropdownMenuSeparator' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @typescript-eslint/no-unused-vars
+   16:5   warning  'DropdownMenuTrigger' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+   19:7   warning  'MapView' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           @typescript-eslint/no-unused-vars
+   58:12  warning  'user' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              @typescript-eslint/no-unused-vars
+   59:12  warning  'isAuthOpen' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+   59:24  warning  'setIsAuthOpen' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     @typescript-eslint/no-unused-vars
+   80:13  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/Majid Desk/wtrip/frontend/app/inspiration-trip/MenuClient.tsx:80:13
+  78 |         const userData = localStorage.getItem('user');
+  79 |         if (userData) {
+> 80 |             setUser(JSON.parse(userData));
+     |             ^^^^^^^ Avoid calling setState() directly within an effect
+  81 |         }
+  82 |     }, []);
+  83 |  react-hooks/set-state-in-effect
+  112:11  warning  'handleLogout' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @typescript-eslint/no-unused-vars
+
+/Users/Majid Desk/wtrip/frontend/app/layout.tsx
+  33:10  warning  'GOOGLE_CLIENT_ID' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/Majid Desk/wtrip/frontend/app/page.tsx
+    3:44  warning  'useRef' is defined but never used                                                                               @typescript-eslint/no-unused-vars
+    5:26  warning  'Calendar' is defined but never used                                                                             @typescript-eslint/no-unused-vars
+   52:10  warning  'lastFetchedLocation' is assigned a value but never used                                                         @typescript-eslint/no-unused-vars
+  123:6   warning  React Hook useEffect has a missing dependency: 'userLocation'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  162:10  warning  'isMobile' is assigned a value but never used                                                                    @typescript-eslint/no-unused-vars
+
+/Users/Majid Desk/wtrip/frontend/app/profile/page.tsx
+  5:8   warning  'Link' is defined but never used       @typescript-eslint/no-unused-vars
+  6:10  warning  'ArrowLeft' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/Majid Desk/wtrip/frontend/app/search/SearchClient.tsx
+    4:27  warning  'useRouter' is defined but never used           @typescript-eslint/no-unused-vars
+  109:14  error    Unexpected any. Specify a different type        @typescript-eslint/no-explicit-any
+  120:17  error    Unexpected any. Specify a different type        @typescript-eslint/no-explicit-any
+  244:12  warning  'isSharing' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  518:18  warning  'err' is defined but never used                 @typescript-eslint/no-unused-vars
+
+/Users/Majid Desk/wtrip/frontend/components/AdBanner.tsx
+  19:9  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/Majid Desk/wtrip/frontend/components/AdBanner.tsx:19:9
+  17 |
+  18 |     useEffect(() => {
+> 19 |         setMounted(true);
+     |         ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  20 |     }, []);
+  21 |
+  22 |     useEffect(() => {  react-hooks/set-state-in-effect
+
+/Users/Majid Desk/wtrip/frontend/components/CategoryBanner.tsx
+  22:9  error  Error: This value cannot be modified
+
+Modifying a variable defined outside a component or hook is not allowed. Consider using an effect.
+
+/Users/Majid Desk/wtrip/frontend/components/CategoryBanner.tsx:22:9
+  20 |     const handleCategoryClick = (category: string) => {
+  21 |         const originParam = userLocation ? `&origin=${encodeURIComponent(userLocation)}` : '';
+> 22 |         window.location.href = `/search?destination=${encodeURIComponent(category)}${originParam}`;
+     |         ^^^^^^^^^^^^^^^ value cannot be modified
+  23 |     };
+  24 |
+  25 |     return (  react-hooks/immutability
+
+/Users/Majid Desk/wtrip/frontend/components/DateRangePicker.tsx
+  58:13  error  'day' is never reassigned. Use 'const' instead  prefer-const
+
+/Users/Majid Desk/wtrip/frontend/components/DistanceDisplay.tsx
+   4:10  warning  'MapPin' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+  28:32  error    Error: Cannot access variable before it is declared
+
+`calculateDistance` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+/Users/Majid Desk/wtrip/frontend/components/DistanceDisplay.tsx:28:32
+  26 |     useEffect(() => {
+  27 |         if (userLocation && destinationCoords) {
+> 28 |             const calculated = calculateDistance(
+     |                                ^^^^^^^^^^^^^^^^^ `calculateDistance` accessed before it is declared
+  29 |                 userLocation.lat,
+  30 |                 userLocation.lng,
+  31 |                 destinationCoords.lat,
+
+/Users/Majid Desk/wtrip/frontend/components/DistanceDisplay.tsx:39:5
+  37 |
+  38 |     // Haversine formula
+> 39 |     const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 40 |         const R = 6371; // Radius of the earth in km
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 41 |         const dLat = deg2rad(lat2 - lat1);
+     …
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 49 |         return d;
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 50 |     };
+     | ^^^^^^^ `calculateDistance` is declared here
+  51 |
+  52 |     const deg2rad = (deg: number) => {
+  53 |         return deg * (Math.PI / 180);  react-hooks/immutability
+  36:8   warning  React Hook useEffect has a missing dependency: 'calculateDistance'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     react-hooks/exhaustive-deps
+
+/Users/Majid Desk/wtrip/frontend/components/ExploreContent.tsx
+   18:10  warning  'API_URL' is defined but never used                                                                                                                                                                                                                                                      @typescript-eslint/no-unused-vars
+  358:57  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  358:89  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  373:61  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  477:53  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+
+/Users/Majid Desk/wtrip/frontend/components/InnerHeader.tsx
+  6:21  warning  'User' is defined but never used    @typescript-eslint/no-unused-vars
+  6:27  warning  'LogIn' is defined but never used   @typescript-eslint/no-unused-vars
+  6:52  warning  'Heart' is defined but never used   @typescript-eslint/no-unused-vars
+  6:59  warning  'Share2' is defined but never used  @typescript-eslint/no-unused-vars
+  8:10  warning  'cn' is defined but never used      @typescript-eslint/no-unused-vars
+
+/Users/Majid Desk/wtrip/frontend/components/ItineraryDisplay.tsx
+   4:18  warning  'Calendar' is defined but never used               @typescript-eslint/no-unused-vars
+   4:59  warning  'Clock' is defined but never used                  @typescript-eslint/no-unused-vars
+  73:11  warning  'searchParams' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/Majid Desk/wtrip/frontend/components/LocationAssistant.tsx
+   28:21  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/Majid Desk/wtrip/frontend/components/LocationAssistant.tsx:28:21
+  26 |                     hasNotified.current = true;
+  27 |                     onLocationFound(name, coords);
+> 28 |                     setStatus('success');
+     |                     ^^^^^^^^^ Avoid calling setState() directly within an effect
+  29 |                     return;
+  30 |                 }
+  31 |             } catch (e) {  react-hooks/set-state-in-effect
+  118:92  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    react/no-unescaped-entities
+
+/Users/Majid Desk/wtrip/frontend/components/MapView.tsx
+  132:69   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  132:106  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  133:51   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  146:46   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  146:96   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  251:97   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  261:76   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  261:90   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  263:65   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  263:79   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  312:95   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  321:52   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  323:65   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/Majid Desk/wtrip/frontend/components/RightMenu.tsx
+  30:9  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/Majid Desk/wtrip/frontend/components/RightMenu.tsx:30:9
+  28 |
+  29 |     useEffect(() => {
+> 30 |         setMounted(true);
+     |         ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  31 |     }, []);
+  32 |
+  33 |     // Close menu when route changes                               react-hooks/set-state-in-effect
+  35:9  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/Majid Desk/wtrip/frontend/components/RightMenu.tsx:35:9
+  33 |     // Close menu when route changes
+  34 |     useEffect(() => {
+> 35 |         setIsOpen(false);
+     |         ^^^^^^^^^ Avoid calling setState() directly within an effect
+  36 |     }, [pathname]);
+  37 |
+  38 |     useEffect(() => {  react-hooks/set-state-in-effect
+
+/Users/Majid Desk/wtrip/frontend/components/TripsContent.tsx
+    4:10  warning  'useRouter' is defined but never used  @typescript-eslint/no-unused-vars
+   48:18  warning  '_e' is defined but never used         @typescript-eslint/no-unused-vars
+  103:22  warning  'e' is defined but never used          @typescript-eslint/no-unused-vars
+
+/Users/Majid Desk/wtrip/frontend/components/TypewriterText.tsx
+  31:9  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/Majid Desk/wtrip/frontend/components/TypewriterText.tsx:31:9
+  29 |
+  30 |     useEffect(() => {
+> 31 |         setIsHydrated(true);
+     |         ^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  32 |     }, []);
+  33 |
+  34 |     useEffect(() => {                                                                                  react-hooks/set-state-in-effect
+  39:9  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/Majid Desk/wtrip/frontend/components/TypewriterText.tsx:39:9
+  37 |
+  38 |         // Reset state for typing animation
+> 39 |         setDisplayedText('');
+     |         ^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  40 |         setIsComplete(false);
+  41 |         setIsVisible(true);
+  42 |         setIsDeleting(false);  react-hooks/set-state-in-effect
+
+/Users/Majid Desk/wtrip/frontend/components/VisitorCounter.tsx
+  11:9  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/Majid Desk/wtrip/frontend/components/VisitorCounter.tsx:11:9
+   9 |     useEffect(() => {
+  10 |         // Randomize on mount
+> 11 |         setCount(Math.floor(Math.random() * (200 - 100 + 1) + 100));
+     |         ^^^^^^^^ Avoid calling setState() directly within an effect
+  12 |
+  13 |         const interval = setInterval(() => {
+  14 |             setCount(prev => {  react-hooks/set-state-in-effect
+
+/Users/Majid Desk/wtrip/frontend/components/ui/textarea.tsx
+  5:18  error  An interface declaring no members is equivalent to its supertype  @typescript-eslint/no-empty-object-type
+
+✖ 95 problems (37 errors, 58 warnings)
+  1 error and 0 warnings potentially fixable with the `--fix` option.
+

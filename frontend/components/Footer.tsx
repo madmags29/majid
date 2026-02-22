@@ -142,7 +142,7 @@ const Footer = () => {
 
                 <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-slate-500">
                     <div className="flex flex-col md:flex-row gap-4 items-center">
-                        <p>&copy; {new Date().getFullYear()} Weekend Travellers. All rights reserved.</p>
+                        <p>&copy; {new Date().getFullYear()} Weekend Travellers. All rights reserved. Powered By <Link href="https://devdesigns.net" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 transition-colors font-medium">Dev Designs</Link></p>
                     </div>
                     <div className="flex space-x-6 mt-4 md:mt-0">
                         <Link href="/privacy" className="hover:text-slate-300">Privacy</Link>

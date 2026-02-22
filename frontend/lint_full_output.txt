@@ -1,0 +1,113 @@
+
+> frontend@0.1.0 lint
+> eslint
+
+
+/Users/Majid Desk/wtrip/frontend/app/chat/ChatClient.tsx
+   11:7   warning  'RightMenu' is assigned a value but never used     @typescript-eslint/no-unused-vars
+   12:7   warning  'AuthModal' is assigned a value but never used     @typescript-eslint/no-unused-vars
+   45:12  warning  '_isAuthOpen' is assigned a value but never used   @typescript-eslint/no-unused-vars
+  156:11  warning  'handleLogout' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/Majid Desk/wtrip/frontend/app/explore/[slug]/page.tsx
+  2:32  warning  'DestinationOption' is defined but never used  @typescript-eslint/no-unused-vars
+  5:29  warning  'Search' is defined but never used             @typescript-eslint/no-unused-vars
+
+/Users/Majid Desk/wtrip/frontend/app/inspiration-trip/MenuClient.tsx
+    5:10  warning  'Calendar' is defined but never used                 @typescript-eslint/no-unused-vars
+   11:7   warning  'MapView' is assigned a value but never used         @typescript-eslint/no-unused-vars
+   49:12  warning  'user' is assigned a value but never used            @typescript-eslint/no-unused-vars
+   56:12  warning  '_isAuthOpen' is assigned a value but never used     @typescript-eslint/no-unused-vars
+   56:25  warning  '_setIsAuthOpen' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  115:11  warning  'handleLogout' is assigned a value but never used    @typescript-eslint/no-unused-vars
+
+/Users/Majid Desk/wtrip/frontend/app/layout.tsx
+  33:10  warning  'GOOGLE_CLIENT_ID' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/Majid Desk/wtrip/frontend/app/page.tsx
+    3:44  warning  'useRef' is defined but never used                                                                               @typescript-eslint/no-unused-vars
+    5:26  warning  'Calendar' is defined but never used                                                                             @typescript-eslint/no-unused-vars
+   52:10  warning  'lastFetchedLocation' is assigned a value but never used                                                         @typescript-eslint/no-unused-vars
+  123:6   warning  React Hook useEffect has a missing dependency: 'userLocation'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  162:10  warning  'isMobile' is assigned a value but never used                                                                    @typescript-eslint/no-unused-vars
+
+/Users/Majid Desk/wtrip/frontend/app/profile/page.tsx
+  5:8   warning  'Link' is defined but never used       @typescript-eslint/no-unused-vars
+  6:10  warning  'ArrowLeft' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/Majid Desk/wtrip/frontend/app/search/SearchClient.tsx
+    6:54  warning  'ArrowLeft' is defined but never used                 @typescript-eslint/no-unused-vars
+    6:65  warning  'Bus' is defined but never used                       @typescript-eslint/no-unused-vars
+    6:70  warning  'Train' is defined but never used                     @typescript-eslint/no-unused-vars
+    6:77  warning  'Plane' is defined but never used                     @typescript-eslint/no-unused-vars
+    6:84  warning  'Car' is defined but never used                       @typescript-eslint/no-unused-vars
+  224:11  warning  'handleMouseDown' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/Majid Desk/wtrip/frontend/components/DistanceDisplay.tsx
+  48:13  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/Majid Desk/wtrip/frontend/components/DistanceDisplay.tsx:48:13
+  46 |                 destinationCoords.lng
+  47 |             );
+> 48 |             setDistance(Math.round(calculated));
+     |             ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  49 |         }
+  50 |     }, [userLocation, destinationCoords]);
+  51 |  react-hooks/set-state-in-effect
+  50:8   warning  React Hook useEffect has a missing dependency: 'calculateDistance'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             react-hooks/exhaustive-deps
+
+/Users/Majid Desk/wtrip/frontend/components/ExploreContent.tsx
+   18:10  warning  'API_URL' is defined but never used                                                                                                                                                                                                                                                      @typescript-eslint/no-unused-vars
+  373:61  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/Majid Desk/wtrip/frontend/components/InnerHeader.tsx
+  6:21  warning  'User' is defined but never used    @typescript-eslint/no-unused-vars
+  6:27  warning  'LogIn' is defined but never used   @typescript-eslint/no-unused-vars
+  6:52  warning  'Heart' is defined but never used   @typescript-eslint/no-unused-vars
+  6:59  warning  'Share2' is defined but never used  @typescript-eslint/no-unused-vars
+  8:10  warning  'cn' is defined but never used      @typescript-eslint/no-unused-vars
+
+/Users/Majid Desk/wtrip/frontend/components/ItineraryDisplay.tsx
+   4:18  warning  'Calendar' is defined but never used               @typescript-eslint/no-unused-vars
+   4:59  warning  'Clock' is defined but never used                  @typescript-eslint/no-unused-vars
+  73:11  warning  'searchParams' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/Majid Desk/wtrip/frontend/components/LocationAssistant.tsx
+  28:21  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/Majid Desk/wtrip/frontend/components/LocationAssistant.tsx:28:21
+  26 |                     hasNotified.current = true;
+  27 |                     onLocationFound(name, coords);
+> 28 |                     setStatus('success');
+     |                     ^^^^^^^^^ Avoid calling setState() directly within an effect
+  29 |                     return;
+  30 |                 }
+  31 |             } catch (e) {  react-hooks/set-state-in-effect
+
+/Users/Majid Desk/wtrip/frontend/components/MapView.tsx
+    9:1   warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-explicit-any')
+   42:45  error    Unexpected any. Specify a different type                                                               @typescript-eslint/no-explicit-any
+  160:43  error    Unexpected any. Specify a different type                                                               @typescript-eslint/no-explicit-any
+  161:76  error    Unexpected any. Specify a different type                                                               @typescript-eslint/no-explicit-any
+  266:97  error    Unexpected any. Specify a different type                                                               @typescript-eslint/no-explicit-any
+  276:76  error    Unexpected any. Specify a different type                                                               @typescript-eslint/no-explicit-any
+  276:90  error    Unexpected any. Specify a different type                                                               @typescript-eslint/no-explicit-any
+  278:65  error    Unexpected any. Specify a different type                                                               @typescript-eslint/no-explicit-any
+  278:79  error    Unexpected any. Specify a different type                                                               @typescript-eslint/no-explicit-any
+  327:95  error    Unexpected any. Specify a different type                                                               @typescript-eslint/no-explicit-any
+
+✖ 49 problems (11 errors, 38 warnings)
+  0 errors and 1 warning potentially fixable with the `--fix` option.
+

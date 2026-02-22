@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     default: 'Weekend Trip Planner | Personalized Travel Guide & Itineraries',
     template: '%s | Weekend Travellers',
   },
-  description: 'Plan your perfect weekend getaway with our smart trip planner. Get personalized 2 & 3 day itineraries, budget estimates, and hidden gems.',
+  description: 'Plan your perfect weekend getaway with our smart AI trip planner. Get personalized 2-3 day itineraries, budget estimates, and hidden gems for top global destinations.',
   keywords: [
     'weekend travellers',
     'weekend trip planner 2026',
@@ -100,7 +100,36 @@ export const metadata: Metadata = {
     'google-adsense-account': 'ca-pub-9460255466960810',
     'agd-partner-manual-verification': '',
   },
-}; export default function RootLayout({
+  alternates: {
+    canonical: './',
+  }
+};
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Weekend Travellers',
+  url: 'https://www.weekendtravellers.com',
+  logo: 'https://www.weekendtravellers.com/icon.svg',
+  description: 'AI-powered personalized weekend trip planner for curated 2-3 day itineraries.',
+  sameAs: [
+    'https://instagram.com/weekendtravellers.official',
+    'https://youtube.com/@weekendtravellers.official'
+  ]
+};
+
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Weekend Travellers',
+  url: 'https://www.weekendtravellers.com',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: 'https://www.weekendtravellers.com/search?destination={search_term_string}',
+    'query-input': 'required name=search_term_string'
+  }
+};
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -144,6 +173,14 @@ export const metadata: Metadata = {
               })(window, document, "clarity", "script", "vjw5h56f3v");
             `}
         </Script>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
         {children}
         <Suspense fallback={null}>
           <AuthHandler />

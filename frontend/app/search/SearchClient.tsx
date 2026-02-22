@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { MapPin, Calendar, Loader2, Send, User, Heart, Share2, Check, ArrowLeft, Bus, Train, Plane, Car, LogIn } from 'lucide-react';
 import { cn, formatCurrency } from '@/lib/utils';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { toast } from 'sonner';
@@ -22,6 +23,7 @@ import {
 // Dynamically import map to avoid SSR issues
 const MapView = dynamic(() => import('@/components/MapView'), { ssr: false });
 import CinematicLoader from '@/components/CinematicLoader';
+import InnerHeader from '@/components/InnerHeader';
 const AnimatedLogo = dynamic(() => import('@/components/AnimatedLogo'), { ssr: false });
 const AuthModal = dynamic(() => import('@/components/AuthModal'), { ssr: false });
 const TypewriterText = dynamic(() => import('@/components/TypewriterText'), { ssr: false });
@@ -296,10 +298,17 @@ function SearchClient() {
     }, [isResizing, handleMouseMove, handleMouseUp]);
 
     useEffect(() => {
-        const userData = localStorage.getItem('user');
-        if (userData) {
-            setUser(JSON.parse(userData));
-        }
+        const checkUser = () => {
+            const userData = localStorage.getItem('user');
+            if (userData) {
+                setUser(JSON.parse(userData));
+            } else {
+                setUser(null);
+            }
+        };
+        checkUser();
+        window.addEventListener('storage', checkUser);
+        return () => window.removeEventListener('storage', checkUser);
     }, []);
 
     const handleLogout = () => {
@@ -321,22 +330,93 @@ function SearchClient() {
 
     useEffect(() => {
         const fetchItinerary = async (dest: string) => {
-            const origin = searchParams.get('origin');
+            const origin = searchParams.get('origin') || '';
+            const cacheKey = `itinerary_${dest}_${origin}`;
+
+            // Check cache first
+            const cachedItinerary = localStorage.getItem(cacheKey);
+            if (cachedItinerary) {
+                try {
+                    const parsedData = JSON.parse(cachedItinerary);
+                    setCurrentItineraryData(parsedData);
+                    setMessages([
+                        {
+                            role: 'assistant',
+                            type: 'itinerary',
+                            content: parsedData
+                        }
+                    ]);
+                    setLoading(false);
+                    return;
+                } catch (e) {
+                    console.error("Failed to parse cached itinerary", e);
+                    // If parsing fails, proceed to fetch
+                }
+            }
+
             setLoading(true);
             try {
-                // Extract days from destination string if possible (e.g., "3 days in Paris")
-                const daysMatch = dest.match(/(\d+)\s*day/i);
-                const requestedDays = daysMatch ? parseInt(daysMatch[1]) : 2;
+                // Extract parameters from URL
+                const origin = searchParams.get('origin') || '';
+                const startDate = searchParams.get('startDate') || '';
+                const endDate = searchParams.get('endDate') || '';
+                const oldDate = searchParams.get('date') || ''; // Fallback for old parameter
+
+                // Calculate days from range if possible
+                let requestedDays = 2;
+                if (startDate && endDate) {
+                    const start = new Date(startDate);
+                    const end = new Date(endDate);
+                    requestedDays = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1);
+                } else {
+                    const daysMatch = dest.match(/(\d+)\s*day/i);
+                    requestedDays = daysMatch ? parseInt(daysMatch[1]) : 2;
+                }
 
                 const response = await fetch(`${API_URL}/api/search`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ destination: dest, days: requestedDays, origin }),
+                    body: JSON.stringify({
+                        destination: dest,
+                        days: requestedDays,
+                        origin,
+                        startDate: startDate || oldDate,
+                        endDate: endDate
+                    }),
                 });
 
                 if (!response.ok) throw new Error('Failed to fetch itinerary');
 
                 const data = await response.json();
+
+                // Save to itinerary cache
+                localStorage.setItem(cacheKey, JSON.stringify(data));
+
+                // Save to Recent Searches
+                if (data && data.destination && data.summary) {
+                    try {
+                        const recents = JSON.parse(localStorage.getItem('recentSearches') || '[]');
+                        // Add new search
+                        const newSearch = {
+                            _id: `local_${Date.now()}`,
+                            destination: data.destination,
+                            summary: data.summary,
+                            createdAt: new Date().toISOString(),
+                            isLocal: true,
+                            imageUrl: data.heroImage?.url || data.days?.[0]?.activities?.[0]?.imageUrl
+                        };
+
+                        // Filter out duplicates (same destination)
+                        const filteredRecents = recents.filter((r: any) => r.destination.toLowerCase() !== data.destination.toLowerCase());
+
+                        // Keep only top 20
+                        const updatedRecents = [newSearch, ...filteredRecents].slice(0, 20);
+                        localStorage.setItem('recentSearches', JSON.stringify(updatedRecents));
+                    } catch (e) {
+                        console.error('Failed to save to recent searches', e);
+                    }
+                }
+
                 setCurrentItineraryData(data);
                 setMessages([
                     {
@@ -369,6 +449,12 @@ function SearchClient() {
     const handleSend = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!input.trim() || loading || !currentItineraryData) return;
+
+        if (!user) {
+            setIsAuthOpen(true);
+            toast.error("Please login to customize your itinerary");
+            return;
+        }
 
         const userMsg = input;
         setInput('');
@@ -411,11 +497,11 @@ function SearchClient() {
         if (!currentItineraryData) return;
 
         try {
-            const response = await fetch(`${API_URL}/api/trips`, {
+            const response = await fetch(`${API_URL} /api/trips`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('token')} `
                 },
                 body: JSON.stringify(currentItineraryData),
             });
@@ -436,7 +522,7 @@ function SearchClient() {
         setIsSharing(true);
         try {
             await navigator.share({
-                title: `My Trip to ${currentItineraryData?.destination}`,
+                title: `My Trip to ${currentItineraryData?.destination} `,
                 text: currentItineraryData?.summary,
                 url: window.location.href,
             });
@@ -451,97 +537,38 @@ function SearchClient() {
 
     return (
         <div className="flex flex-col h-[100dvh] bg-slate-950 text-white overflow-hidden">
-            {/* Header */}
-            <header className="h-16 border-b border-slate-800 flex items-center justify-between px-4 bg-slate-900/50 backdrop-blur-md z-30 shrink-0">
-                <div className="flex items-center gap-4">
-                    <Link href="/" className="p-2 hover:bg-slate-800 rounded-lg transition-colors">
-                        <ArrowLeft className="w-5 h-5" />
-                    </Link>
-                    <div>
-                        <h1 className="text-sm font-bold text-slate-200 truncate max-w-[150px] md:max-w-none">
-                            {destination || 'New Trip'}
-                        </h1>
-                        <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Weekend Getaway</p>
-                    </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                    {currentItineraryData && (
-                        <>
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={handleSaveTrip}
-                                className={cn(
-                                    "flex items-center gap-2 h-9 px-4 rounded-full transition-all",
-                                    isSaved ? "bg-green-500/10 text-green-500 hover:bg-green-500/20" : "bg-slate-800 text-slate-300 hover:bg-slate-700"
-                                )}
-                            >
-                                <Heart className={cn("w-4 h-4", isSaved && "fill-current")} />
-                                <span className="hidden sm:inline font-semibold">{isSaved ? 'Saved' : 'Save'}</span>
-                            </Button>
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={handleShare}
-                                className="flex items-center gap-2 h-9 px-4 rounded-full bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all font-semibold"
-                            >
-                                <Share2 className="w-4 h-4" />
-                                <span className="hidden sm:inline">Share</span>
-                            </Button>
-                        </>
-                    )}
-
-                    <div className="h-6 w-[1px] bg-slate-800 mx-1" />
-
-                    {user ? (
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" className="relative h-9 w-9 rounded-full ring-2 ring-blue-500/20 hover:ring-blue-500/40 transition-all p-0 overflow-hidden">
-                                    <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-xs">
-                                        {user.name.charAt(0)}
-                                    </div>
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-56 bg-slate-900 border-slate-800 text-slate-200">
-                                <DropdownMenuLabel className="font-normal">
-                                    <div className="flex flex-col space-y-1">
-                                        <p className="text-sm font-medium leading-none">{user.name}</p>
-                                        <p className="text-xs leading-none text-slate-400">{user.email}</p>
-                                    </div>
-                                </DropdownMenuLabel>
-                                <DropdownMenuSeparator className="bg-slate-800" />
-                                <DropdownMenuItem asChild className="focus:bg-slate-800 focus:text-white cursor-pointer">
-                                    <Link href="/profile" className="flex items-center">
-                                        <User className="mr-2 h-4 w-4" />
-                                        <span>Profile</span>
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem asChild className="focus:bg-slate-800 focus:text-white cursor-pointer">
-                                    <Link href="/trips" className="flex items-center">
-                                        <Calendar className="mr-2 h-4 w-4" />
-                                        <span>My Trips</span>
-                                    </Link>
-                                </DropdownMenuItem>
-                                <DropdownMenuSeparator className="bg-slate-800" />
-                                <DropdownMenuItem onClick={handleLogout} className="focus:bg-red-500/10 focus:text-red-500 cursor-pointer text-red-500 font-medium">
-                                    <LogIn className="mr-2 h-4 w-4 rotate-180" />
-                                    <span>Log out</span>
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    ) : (
+            <InnerHeader
+                title={destination || 'New Trip'}
+                subtitle="Weekend Getaway"
+                showBack
+                backHref="/"
+                actions={currentItineraryData && (
+                    <div className="flex items-center gap-2">
                         <Button
-                            onClick={() => setIsAuthOpen(true)}
-                            className="hidden md:inline-flex bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25 border-0 rounded-xl px-6 transition-all transform hover:scale-105 active:scale-95"
+                            variant="ghost"
+                            size="sm"
+                            onClick={handleSaveTrip}
+                            className={cn(
+                                "flex items-center gap-2 h-9 px-4 rounded-full transition-all",
+                                isSaved ? "bg-green-500/10 text-green-500 hover:bg-green-500/20" : "bg-slate-800 text-slate-300 hover:bg-slate-700"
+                            )}
                         >
-                            Sign In
+                            <Heart className={cn("w-4 h-4", isSaved && "fill-current")} />
+                            <span className="hidden sm:inline font-semibold">{isSaved ? 'Saved' : 'Save'}</span>
                         </Button>
-                    )}
-                </div>
-            </header>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={handleShare}
+                            className="flex items-center gap-2 h-9 px-4 rounded-full bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all font-semibold"
+                        >
+                            <Share2 className="w-4 h-4" />
+                            <span className="hidden sm:inline">Share</span>
+                        </Button>
+                    </div>
+                )}
+            />
 
-            <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
 
             <div
                 ref={containerRef}
@@ -553,218 +580,232 @@ function SearchClient() {
                 {/* Left Panel - Chat & Content */}
                 <div
                     className="flex flex-col min-w-0 bg-slate-950 border-r border-slate-800 w-full relative h-full"
-                    style={isDesktop ? { width: `${leftWidth}%` } : {}}
+                    style={isDesktop ? { width: `${leftWidth}% ` } : {}}
                 >
                     <div className="flex-1 overflow-y-auto p-4 space-y-6 scroll-smooth custom-scrollbar pb-32">
-                        {messages.map((msg, idx) => (
-                            <div key={idx} className={cn("flex gap-3", msg.role === 'assistant' ? "mr-auto w-full md:max-w-[95%]" : "ml-auto max-w-[90%] md:max-w-[80%] flex-row-reverse")}>
-                                {msg.role === 'assistant' && (
-                                    <div className="hidden md:flex w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 items-center justify-center shrink-0 mt-1 overflow-hidden ring-1 ring-white/20">
-                                        <AnimatedLogo className="w-5 h-5 text-white" solid />
-                                    </div>
-                                )}
-
-                                <div className={cn(
-                                    "rounded-2xl p-4 md:p-5 shadow-xl",
-                                    msg.role === 'assistant'
-                                        ? "bg-slate-900 border border-slate-800 rounded-tl-sm text-slate-100"
-                                        : "bg-blue-600 text-white rounded-tr-sm"
-                                )}>
-                                    {msg.type === 'text' && typeof msg.content === 'string' && (
-                                        <TypingResponse content={msg.content} />
+                        <AnimatePresence initial={false}>
+                            {messages.map((msg, idx) => (
+                                <motion.div
+                                    key={idx}
+                                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    transition={{ duration: 0.3, ease: "easeOut" }}
+                                    className={cn("flex gap-3", msg.role === 'assistant' ? "mr-auto w-full md:max-w-[95%]" : "ml-auto max-w-[90%] md:max-w-[80%] flex-row-reverse")}
+                                >
+                                    {msg.role === 'assistant' && (
+                                        <div className="hidden md:flex w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 items-center justify-center shrink-0 mt-1 overflow-hidden ring-2 ring-white/10 shadow-lg">
+                                            <AnimatedLogo className="w-5 h-5 text-white" solid />
+                                        </div>
                                     )}
 
-                                    {msg.type === 'itinerary' && typeof msg.content !== 'string' && (
-                                        <div className="space-y-6">
-                                            {/* Summary Section */}
-                                            <div className="bg-slate-800/40 rounded-xl p-4 border border-slate-700/50">
-                                                <h3 className="text-xl font-bold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent mb-3">
-                                                    {['Budget travel', 'Road trips', 'Hidden gems', 'Monsoon trips', 'Winter trips'].includes(destination)
-                                                        ? `Trip to ${destination} - ${msg.content.destination}`
-                                                        : `Trip to ${msg.content.destination}`
-                                                    }
-                                                </h3>
-                                                <p className="text-sm text-slate-300 leading-relaxed italic border-l-2 border-blue-500 pl-3">
-                                                    {msg.content.summary}
-                                                </p>
+                                    <div className={cn(
+                                        "rounded-2xl p-4 md:p-5 shadow-2xl relative overflow-hidden group/bubble",
+                                        msg.role === 'assistant'
+                                            ? "bg-slate-900/40 backdrop-blur-md border border-white/10 rounded-tl-sm text-slate-100"
+                                            : "bg-gradient-to-br from-blue-600 to-indigo-700 text-white rounded-tr-sm shadow-blue-900/20"
+                                    )}>
+                                        {msg.role === 'assistant' && (
+                                            <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/5 via-transparent to-purple-500/5 pointer-events-none" />
+                                        )}
+                                        {msg.type === 'text' && typeof msg.content === 'string' && (
+                                            <div className="relative z-10">
+                                                <TypingResponse content={msg.content} />
                                             </div>
+                                        )}
 
-                                            {/* Trip Vital Signs */}
-                                            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                                                <div className="bg-slate-800/60 p-3 rounded-xl border border-slate-700 hover:border-emerald-500/30 transition-colors group">
-                                                    <div className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1 group-hover:text-emerald-400 transition-colors">Budget</div>
-                                                    <div className="text-sm font-bold text-emerald-400">{formatCurrency(msg.content.trip_details.estimated_budget, msg.content.trip_details.currency)}</div>
+                                        {msg.type === 'itinerary' && typeof msg.content !== 'string' && (
+                                            <div className="space-y-6 relative z-10">
+                                                {/* Summary Section */}
+                                                <div className="bg-slate-800/40 rounded-xl p-4 border border-slate-700/50">
+                                                    <h3 className="text-xl font-bold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent mb-3">
+                                                        {['Budget travel', 'Road trips', 'Hidden gems', 'Monsoon trips', 'Winter trips'].includes(destination)
+                                                            ? `Trip to ${destination} - ${msg.content.destination} `
+                                                            : `Trip to ${msg.content.destination} `
+                                                        }
+                                                    </h3>
+                                                    <p className="text-sm text-slate-300 leading-relaxed italic border-l-2 border-blue-500 pl-3">
+                                                        {msg.content.summary}
+                                                    </p>
                                                 </div>
-                                                <div className="bg-slate-800/60 p-3 rounded-xl border border-slate-700 hover:border-blue-500/30 transition-colors group">
-                                                    <div className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1 group-hover:text-blue-400 transition-colors">Season</div>
-                                                    <div className="text-sm font-bold text-slate-200">{msg.content.trip_details.best_time_to_visit}</div>
-                                                </div>
-                                                <div className="col-span-2 bg-slate-800/60 p-3 rounded-xl border border-slate-700">
-                                                    <WeatherWidget
-                                                        lat={msg.content.trip_details.destination_coordinates.lat}
-                                                        lng={msg.content.trip_details.destination_coordinates.lng}
-                                                    />
-                                                </div>
-                                            </div>
 
-                                            {/* Distance Info */}
-                                            <DistanceDisplay destinationCoords={msg.content.trip_details.destination_coordinates} />
+                                                {/* Trip Vital Signs */}
+                                                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                                    <div className="bg-slate-800/60 p-3 rounded-xl border border-slate-700 hover:border-emerald-500/30 transition-colors group">
+                                                        <div className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1 group-hover:text-emerald-400 transition-colors">Budget</div>
+                                                        <div className="text-sm font-bold text-emerald-400">{formatCurrency(msg.content.trip_details.estimated_budget, msg.content.trip_details.currency)}</div>
+                                                    </div>
+                                                    <div className="bg-slate-800/60 p-3 rounded-xl border border-slate-700 hover:border-blue-500/30 transition-colors group">
+                                                        <div className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1 group-hover:text-blue-400 transition-colors">Season</div>
+                                                        <div className="text-sm font-bold text-slate-200">{msg.content.trip_details.best_time_to_visit}</div>
+                                                    </div>
+                                                    <div className="col-span-2 bg-slate-800/60 p-3 rounded-xl border border-slate-700">
+                                                        <WeatherWidget
+                                                            lat={msg.content.trip_details.destination_coordinates.lat}
+                                                            lng={msg.content.trip_details.destination_coordinates.lng}
+                                                        />
+                                                    </div>
+                                                </div>
 
-                                            {/* Logistics */}
-                                            {msg.content.trip_details.travel_logistics && (
-                                                <div className="bg-slate-900/40 rounded-xl p-4 border border-slate-800">
-                                                    <h4 className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-4 flex items-center gap-2">
-                                                        <Bus className="w-3 h-3" />
-                                                        Travel Times from {searchParams.get('origin') || 'Current Location'}
-                                                    </h4>
-                                                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                                                        <div className="flex items-center gap-3 group">
-                                                            <div className="w-8 h-8 rounded-lg bg-orange-500/10 flex items-center justify-center group-hover:bg-orange-500/20 transition-colors">
-                                                                <Bus className="w-4 h-4 text-orange-400" />
+                                                {/* Distance Info */}
+                                                <DistanceDisplay destinationCoords={msg.content.trip_details.destination_coordinates} />
+
+                                                {/* Logistics */}
+                                                {msg.content.trip_details.travel_logistics && (
+                                                    <div className="bg-slate-900/40 rounded-xl p-4 border border-slate-800">
+                                                        <h4 className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-4 flex items-center gap-2">
+                                                            <Bus className="w-3 h-3" />
+                                                            Travel Times from {searchParams.get('origin') || 'Current Location'}
+                                                        </h4>
+                                                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                                                            <div className="flex items-center gap-3 group">
+                                                                <div className="w-8 h-8 rounded-lg bg-orange-500/10 flex items-center justify-center group-hover:bg-orange-500/20 transition-colors">
+                                                                    <Bus className="w-4 h-4 text-orange-400" />
+                                                                </div>
+                                                                <div>
+                                                                    <div className="text-[10px] text-slate-500 font-bold">Bus</div>
+                                                                    <div className="text-xs text-slate-300 font-semibold">{msg.content.trip_details.travel_logistics.bus}</div>
+                                                                </div>
                                                             </div>
-                                                            <div>
-                                                                <div className="text-[10px] text-slate-500 font-bold">Bus</div>
-                                                                <div className="text-xs text-slate-300 font-semibold">{msg.content.trip_details.travel_logistics.bus}</div>
+                                                            <div className="flex items-center gap-3 group">
+                                                                <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-500/20 transition-colors">
+                                                                    <Train className="w-4 h-4 text-blue-400" />
+                                                                </div>
+                                                                <div>
+                                                                    <div className="text-[10px] text-slate-500 font-bold">Train</div>
+                                                                    <div className="text-xs text-slate-300 font-semibold">{msg.content.trip_details.travel_logistics.train}</div>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div className="flex items-center gap-3 group">
-                                                            <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-500/20 transition-colors">
-                                                                <Train className="w-4 h-4 text-blue-400" />
+                                                            <div className="flex items-center gap-3 group">
+                                                                <div className="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center group-hover:bg-purple-500/20 transition-colors">
+                                                                    <Plane className="w-4 h-4 text-purple-400" />
+                                                                </div>
+                                                                <div>
+                                                                    <div className="text-[10px] text-slate-500 font-bold">Flight</div>
+                                                                    <div className="text-xs text-slate-300 font-semibold">{msg.content.trip_details.travel_logistics.flight}</div>
+                                                                </div>
                                                             </div>
-                                                            <div>
-                                                                <div className="text-[10px] text-slate-500 font-bold">Train</div>
-                                                                <div className="text-xs text-slate-300 font-semibold">{msg.content.trip_details.travel_logistics.train}</div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="flex items-center gap-3 group">
-                                                            <div className="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center group-hover:bg-purple-500/20 transition-colors">
-                                                                <Plane className="w-4 h-4 text-purple-400" />
-                                                            </div>
-                                                            <div>
-                                                                <div className="text-[10px] text-slate-500 font-bold">Flight</div>
-                                                                <div className="text-xs text-slate-300 font-semibold">{msg.content.trip_details.travel_logistics.flight}</div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="flex items-center gap-3 group">
-                                                            <div className="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center group-hover:bg-green-500/20 transition-colors">
-                                                                <Car className="w-4 h-4 text-green-400" />
-                                                            </div>
-                                                            <div>
-                                                                <div className="text-[10px] text-slate-500 font-bold">Car</div>
-                                                                <div className="text-xs text-slate-300 font-semibold">{msg.content.trip_details.travel_logistics.car}</div>
+                                                            <div className="flex items-center gap-3 group">
+                                                                <div className="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center group-hover:bg-green-500/20 transition-colors">
+                                                                    <Car className="w-4 h-4 text-green-400" />
+                                                                </div>
+                                                                <div>
+                                                                    <div className="text-[10px] text-slate-500 font-bold">Car</div>
+                                                                    <div className="text-xs text-slate-300 font-semibold">{msg.content.trip_details.travel_logistics.car}</div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            )}
+                                                )}
 
-                                            {/* Accommodations */}
-                                            <div className="space-y-3">
-                                                <h4 className="text-[10px] text-slate-500 uppercase tracking-widest font-bold flex items-center gap-2">
-                                                    <Heart className="w-3 h-3" />
-                                                    Recommended Stays
-                                                </h4>
-                                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                                                    {((msg.content as Itinerary).trip_details?.hotel_suggestions || []).map((hotel, hIdx) => (
-                                                        <div key={hIdx} className="bg-slate-800/60 p-3 rounded-xl border border-slate-700 flex flex-col justify-between hover:border-slate-500 transition-colors group">
-                                                            <div>
-                                                                <div className="flex items-center justify-between mb-1">
-                                                                    <span className={cn(
-                                                                        "text-[8px] px-1.5 py-0.5 rounded uppercase font-black",
-                                                                        hotel.tier === 'Luxury' ? "bg-amber-500/20 text-amber-500" :
-                                                                            hotel.tier === 'Mid' ? "bg-blue-500/20 text-blue-500" :
-                                                                                "bg-slate-700 text-slate-400"
-                                                                    )}>
-                                                                        {hotel.tier}
-                                                                    </span>
-                                                                    <span className="text-[10px] font-bold text-emerald-400">{formatCurrency(hotel.price_range, (msg.content as Itinerary).trip_details?.currency || hotel.price_range)}</span>
+                                                {/* Accommodations */}
+                                                <div className="space-y-3">
+                                                    <h4 className="text-[10px] text-slate-500 uppercase tracking-widest font-bold flex items-center gap-2">
+                                                        <Heart className="w-3 h-3" />
+                                                        Recommended Stays
+                                                    </h4>
+                                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                                        {((msg.content as Itinerary).trip_details?.hotel_suggestions || []).map((hotel, hIdx) => (
+                                                            <div key={hIdx} className="bg-slate-800/60 p-3 rounded-xl border border-slate-700 flex flex-col justify-between hover:border-slate-500 transition-colors group">
+                                                                <div>
+                                                                    <div className="flex items-center justify-between mb-1">
+                                                                        <span className={cn(
+                                                                            "text-[8px] px-1.5 py-0.5 rounded uppercase font-black",
+                                                                            hotel.tier === 'Luxury' ? "bg-amber-500/20 text-amber-500" :
+                                                                                hotel.tier === 'Mid' ? "bg-blue-500/20 text-blue-500" :
+                                                                                    "bg-slate-700 text-slate-400"
+                                                                        )}>
+                                                                            {hotel.tier}
+                                                                        </span>
+                                                                        <span className="text-[10px] font-bold text-emerald-400">{formatCurrency(hotel.price_range, (msg.content as Itinerary).trip_details?.currency || hotel.price_range)}</span>
+                                                                    </div>
+                                                                    <h5 className="text-sm font-bold text-slate-200 line-clamp-1 group-hover:text-blue-400 transition-colors">{hotel.name}</h5>
                                                                 </div>
-                                                                <h5 className="text-sm font-bold text-slate-200 line-clamp-1 group-hover:text-blue-400 transition-colors">{hotel.name}</h5>
+                                                                <a
+                                                                    href={`https://www.agoda.com/partners/partnersearch.aspx?cid=1959241&apikey=83110ffd-89b7-4c2e-a4e9-d4a8f52de4ec&searchText=${encodeURIComponent(hotel.name + ' ' + (msg.content as Itinerary).destination)}`}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className="mt-2 text-[10px] text-blue-400 font-bold flex items-center gap-1 hover:underline"
+                                                                >
+                                                                    Book Now
+                                                                    < ArrowLeft className="w-3 h-3 rotate-180" />
+                                                                </a >
+                                                            </div >
+                                                        ))
+                                                        }
+                                                    </div >
+                                                </div >
+
+                                                {/* Daily Timeline */}
+                                                < div className="space-y-6" >
+                                                    {((msg.content as Itinerary).days || ((msg.content as any).itinerary) || []).map((day: any, dIdx: number) => (
+                                                        <div key={dIdx} className="bg-slate-900/50 rounded-2xl border border-slate-800 overflow-hidden shadow-2xl">
+                                                            <div className="bg-slate-800/80 px-4 py-3 border-b border-slate-700 flex items-center justify-between">
+                                                                <h4 className="text-sm font-black flex items-center gap-3">
+                                                                    <span className="flex items-center justify-center px-2.5 py-0.5 rounded-lg bg-blue-600/20 text-blue-400 text-xs whitespace-nowrap">
+                                                                        Day {day.day}
+                                                                    </span>
+                                                                    {day.title}
+                                                                </h4>
                                                             </div>
-                                                            <a
-                                                                href={`https://www.agoda.com/partners/partnersearch.aspx?cid=1959241&apikey=83110ffd-89b7-4c2e-a4e9-d4a8f52de4ec&searchText=${encodeURIComponent(hotel.name + ' ' + (msg.content as Itinerary).destination)}`}
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                                className="mt-2 text-[10px] text-blue-400 font-bold flex items-center gap-1 hover:underline"
-                                                            >
-                                                                Book Now
-                                                                <ArrowLeft className="w-3 h-3 rotate-180" />
-                                                            </a>
+                                                            <div className="p-1 sm:p-4 space-y-4">
+                                                                {(day.activities || []).map((activity: any, aIdx: number) => (
+                                                                    <div
+                                                                        key={aIdx}
+                                                                        className={cn(
+                                                                            "p-4 rounded-xl border border-slate-800 transition-all duration-300 cursor-pointer group",
+                                                                            selectedActivity === `${day.day}-${aIdx}`
+                                                                                ? "bg-blue-600/10 border-blue-500/50 ring-1 ring-blue-500/20"
+                                                                                : "bg-slate-800/30 hover:bg-slate-800/50 hover:border-slate-700"
+                                                                        )}
+                                                                        onClick={() => setSelectedActivity(`${day.day}-${aIdx}`)}
+                                                                    >
+                                                                        <div className="flex items-start justify-between mb-2">
+                                                                            <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">{activity.time}</div>
+                                                                            {activity.ticket_price && (
+                                                                                <span className="text-[10px] font-bold text-green-400 bg-green-900/20 px-2 py-0.5 rounded border border-green-500/30 max-w-[50%] truncate" title={activity.ticket_price}>
+                                                                                    {formatCurrency(activity.ticket_price, (msg.content as Itinerary).trip_details?.currency || activity.ticket_price)}
+                                                                                </span>
+                                                                            )}
+                                                                        </div>
+                                                                        <div className="text-sm font-semibold text-slate-200 flex items-center gap-2 mb-2">
+                                                                            <MapPin className="w-3 h-3 text-blue-500 shrink-0" />
+                                                                            <span>{activity.location}</span>
+                                                                        </div>
+                                                                        {/* Activity Image */}
+                                                                        {activity.imageUrl && (
+                                                                            <div className="mt-2 mb-2 rounded-lg overflow-hidden h-32 w-full relative">
+                                                                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                                                <img
+                                                                                    src={activity.imageUrl}
+                                                                                    alt={activity.location}
+                                                                                    className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
+                                                                                />
+                                                                            </div>
+                                                                        )}
+                                                                        <div className="text-sm text-slate-400 mt-1">{activity.description}</div>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
                                                         </div>
                                                     ))}
-                                                </div>
+
+                                                    {/* Ad Banner after itineraries */}
+                                                    <AdBanner dataAdSlot="5821234567" className="mt-4" />
+                                                </div >
+                                            </div >
+                                        )}
+                                    </div >
+
+                                    {
+                                        msg.role === 'user' && (
+                                            <div className="w-8 h-8 rounded-full bg-slate-800 border border-white/10 flex items-center justify-center shrink-0 mt-1 shadow-lg">
+                                                <User className="w-5 h-5 text-slate-300" />
                                             </div>
-
-                                            {/* Daily Timeline */}
-                                            <div className="space-y-6">
-                                                {((msg.content as Itinerary).days || ((msg.content as any).itinerary) || []).map((day: any, dIdx: number) => (
-                                                    <div key={dIdx} className="bg-slate-900/50 rounded-2xl border border-slate-800 overflow-hidden shadow-2xl">
-                                                        <div className="bg-slate-800/80 px-4 py-3 border-b border-slate-700 flex items-center justify-between">
-                                                            <h4 className="text-sm font-black flex items-center gap-3">
-                                                                <span className="flex items-center justify-center px-2.5 py-0.5 rounded-lg bg-blue-600/20 text-blue-400 text-xs whitespace-nowrap">
-                                                                    Day {day.day}
-                                                                </span>
-                                                                {day.title}
-                                                            </h4>
-                                                        </div>
-                                                        <div className="p-1 sm:p-4 space-y-4">
-                                                            {(day.activities || []).map((activity: any, aIdx: number) => (
-                                                                <div
-                                                                    key={aIdx}
-                                                                    className={cn(
-                                                                        "p-4 rounded-xl border border-slate-800 transition-all duration-300 cursor-pointer group",
-                                                                        selectedActivity === `${day.day}-${aIdx}`
-                                                                            ? "bg-blue-600/10 border-blue-500/50 ring-1 ring-blue-500/20"
-                                                                            : "bg-slate-800/30 hover:bg-slate-800/50 hover:border-slate-700"
-                                                                    )}
-                                                                    onClick={() => setSelectedActivity(`${day.day}-${aIdx}`)}
-                                                                >
-                                                                    <div className="flex items-start justify-between mb-2">
-                                                                        <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">{activity.time}</div>
-                                                                        {activity.ticket_price && (
-                                                                            <span className="text-[10px] font-bold text-green-400 bg-green-900/20 px-2 py-0.5 rounded border border-green-500/30 max-w-[50%] truncate" title={activity.ticket_price}>
-                                                                                {formatCurrency(activity.ticket_price, (msg.content as Itinerary).trip_details?.currency || activity.ticket_price)}
-                                                                            </span>
-                                                                        )}
-                                                                    </div>
-                                                                    <div className="text-sm font-semibold text-slate-200 flex items-center gap-2 mb-2">
-                                                                        <MapPin className="w-3 h-3 text-blue-500 shrink-0" />
-                                                                        <span>{activity.location}</span>
-                                                                    </div>
-                                                                    {/* Activity Image */}
-                                                                    {activity.imageUrl && (
-                                                                        <div className="mt-2 mb-2 rounded-lg overflow-hidden h-32 w-full relative">
-                                                                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                                                                            <img
-                                                                                src={activity.imageUrl}
-                                                                                alt={activity.location}
-                                                                                className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
-                                                                            />
-                                                                        </div>
-                                                                    )}
-                                                                    <div className="text-sm text-slate-400 mt-1">{activity.description}</div>
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    </div>
-                                                ))}
-
-                                                {/* Ad Banner after itineraries */}
-                                                <AdBanner dataAdSlot="5821234567" className="mt-4" />
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-
-                                {
-                                    msg.role === 'user' && (
-                                        <div className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center shrink-0 mt-1">
-                                            <User className="w-5 h-5 text-slate-300" />
-                                        </div>
-                                    )
-                                }
-                            </div>
-                        ))}
+                                        )
+                                    }
+                                </motion.div>
+                            ))}
+                        </AnimatePresence>
 
                         {loading && (
                             <div className="absolute inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm">
@@ -782,46 +823,56 @@ function SearchClient() {
                         )}
 
                         {isTyping && (
-                            <div className="flex gap-3">
-                                <div className="hidden md:flex w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 items-center justify-center shrink-0 mt-1 overflow-hidden ring-1 ring-white/20">
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="flex gap-3"
+                            >
+                                <div className="hidden md:flex w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 items-center justify-center shrink-0 mt-1 overflow-hidden ring-2 ring-white/10 shadow-lg">
                                     <AnimatedLogo className="w-5 h-5 text-white" solid />
                                 </div>
-                                <div className="bg-slate-800 rounded-2xl px-4 py-3 rounded-tl-sm border border-slate-700 flex items-center gap-1">
-                                    <div className="w-2 h-2 bg-slate-500 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                                    <div className="w-2 h-2 bg-slate-500 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                                    <div className="w-2 h-2 bg-slate-500 rounded-full animate-bounce"></div>
+                                <div className="bg-slate-900/40 backdrop-blur-md rounded-2xl px-4 py-3 rounded-tl-sm border border-white/10 flex items-center gap-1 shadow-xl">
+                                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
                                 </div>
-                            </div>
+                            </motion.div>
                         )}
                         <div ref={messagesEndRef} />
                     </div>
 
                     {/* Input Area */}
-                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-slate-900/90 backdrop-blur-lg border-t border-slate-800 safe-bottom">
-                        <form onSubmit={handleSend} className="relative flex items-center max-w-2xl mx-auto w-full">
+                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-slate-900/40 backdrop-blur-2xl border-t border-white/5 safe-bottom z-10">
+                        <form onSubmit={handleSend} className="relative flex items-center max-w-2xl mx-auto w-full group">
+                            <div className="absolute inset-0 bg-blue-500/5 blur-xl group-focus-within:bg-blue-500/10 transition-colors rounded-2xl" />
                             <input
                                 type="text"
                                 name="chat"
                                 autoComplete="off"
-                                placeholder="Ask for changes (e.g., 'Add 1 day more')..."
+                                placeholder={user ? "Ask for changes (e.g., 'Add 1 day more')..." : "Login to customize your itinerary..."}
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
-                                className="w-full bg-slate-800 text-white placeholder:text-slate-500 text-sm md:text-base rounded-xl py-4 md:py-5 pl-4 pr-12 focus:outline-none focus:ring-2 focus:ring-blue-500/50 border border-slate-700 transition-all"
+                                className="w-full bg-slate-900/50 text-white placeholder:text-slate-500 text-sm md:text-base rounded-2xl py-4 md:py-5 pl-5 pr-14 focus:outline-none focus:ring-2 focus:ring-blue-500/40 border border-white/5 transition-all hover:bg-slate-800/80 relative z-10 font-medium"
                             />
                             <Button
                                 type="submit"
                                 size="icon"
-                                disabled={!input.trim() || loading}
-                                className="absolute right-2 text-blue-400 hover:text-white bg-transparent hover:bg-blue-600 rounded-lg w-8 h-8 transition-all"
+                                disabled={(!input.trim() && user !== null) || loading}
+                                className={cn(
+                                    "absolute right-2.5 rounded-xl w-10 h-10 transition-all shadow-lg z-20 hover:scale-105 active:scale-95 touch-manipulation",
+                                    user
+                                        ? "bg-gradient-to-br from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-blue-900/40"
+                                        : "bg-gradient-to-br from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white shadow-amber-900/40"
+                                )}
                             >
-                                <Send className="w-4 h-4" />
+                                {user ? <Send className="w-4 h-4 ml-0.5 pointer-events-none" /> : <LogIn className="w-4 h-4 pointer-events-none" />}
                             </Button>
                         </form>
                     </div>
-                </div>
+                </div >
 
                 {/* Resize Handle */}
-                <div
+                < div
                     className="hidden md:flex absolute top-0 bottom-0 z-50 w-4 cursor-col-resize items-center justify-center hover:bg-white/5 transition-colors"
                     style={{ left: `calc(${leftWidth}% - 8px)` }}
                     onMouseDown={handleMouseDown}
@@ -830,39 +881,42 @@ function SearchClient() {
                         "h-12 w-1 rounded-full transition-colors",
                         isResizing ? "bg-blue-500" : "bg-slate-700 group-hover:bg-slate-500"
                     )} />
-                </div>
+                </div >
 
                 {/* Right Panel - Map */}
-                <div
+                < div
                     className="hidden md:block bg-slate-950 relative"
                     style={isDesktop ? { width: `${100 - leftWidth}%` } : {}}
                 >
-                    {currentItineraryData ? (
-                        <MapView itinerary={currentItineraryData} selectedActivity={selectedActivity} />
-                    ) : (
-                        <div className="h-full flex flex-col items-center justify-center text-slate-500 space-y-4 bg-slate-900/20">
-                            <MapPin className="w-16 h-16 opacity-20" />
-                            <p>Map view updates with your itinerary</p>
-                        </div>
-                    )}
-                </div>
-            </div>
-
+                    {
+                        currentItineraryData ? (
+                            <MapView itinerary={currentItineraryData} selectedActivity={selectedActivity} />
+                        ) : (
+                            <div className="h-full flex flex-col items-center justify-center text-slate-500 space-y-4 bg-slate-900/20">
+                                <MapPin className="w-16 h-16 opacity-20" />
+                                <p>Map view updates with your itinerary</p>
+                            </div >
+                        )}
+                </div >
+            </div >
+            <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
             {/* Cinematic Loading Overlay */}
-            {loading && (
-                <div className="fixed inset-0 z-[100]">
-                    <CinematicLoader
-                        messages={[
-                            "Designing your perfect escape...",
-                            "Scouting the best local spots...",
-                            "Optimizing your travel route...",
-                            "Curating premium stay options...",
-                            "Finalizing your weekend adventure..."
-                        ]}
-                    />
-                </div>
-            )}
-        </div>
+            {
+                loading && (
+                    <div className="fixed inset-0 z-[100]">
+                        <CinematicLoader
+                            messages={[
+                                "Designing your perfect escape...",
+                                "Scouting the best local spots...",
+                                "Optimizing your travel route...",
+                                "Curating premium stay options...",
+                                "Finalizing your weekend adventure..."
+                            ]}
+                        />
+                    </div>
+                )
+            }
+        </div >
     );
 }
 

@@ -72,4 +72,34 @@ router.delete('/:id', authenticateToken, async (req: any, res: any) => {
     }
 });
 
+// GET PUBLIC TRIPS (For Explore Page)
+router.get('/public', async (req: any, res: any) => {
+    try {
+        const limit = parseInt((req.query.limit as string) || '50');
+        // Fetch recent trips regardless of user
+        const trips = await Trip.find({}).sort({ createdAt: -1 }).limit(limit);
+        res.json(trips);
+    } catch (error) {
+        console.error('Get Public Trips Error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// GET SINGLE TRIP BY ID (Public, for SEO viewing)
+router.get('/:id', async (req: any, res: any) => {
+    try {
+        const tripId = req.params.id;
+        const trip = await Trip.findById(tripId);
+
+        if (!trip) {
+            return res.status(404).json({ message: 'Trip not found' });
+        }
+
+        res.json(trip);
+    } catch (error) {
+        console.error('Get Single Trip Error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 export default router;

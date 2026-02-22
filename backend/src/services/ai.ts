@@ -11,11 +11,14 @@ export async function generateItinerary(
   destination: string,
   days: number = 2,
   interests?: string,
-  origin?: string
+  origin?: string,
+  startDate?: string,
+  endDate?: string
 ) {
   try {
     const prompt = `
       Create a detailed ${days}-day weekend trip itinerary for ${destination}.
+      ${startDate ? `The trip starts on ${startDate}${endDate ? ` and ends on ${endDate}` : ''}. Ensure the activities and suggestions are appropriate for this specific time of year.` : ''}
       ${origin ? `Assume the traveler is starting from ${origin}.` : 'Assume the traveler is starting from a nearby major city.'}
       ${interests ? `Focus on these interests: ${interests}.` : ''}
       
@@ -93,9 +96,16 @@ export async function generateItinerary(
 export async function generateSuggestions(location: string) {
   try {
     const prompt = `
-      Based on the starting location: "${location}", name 5 best and most popular weekend getaway destinations (towns or cities) that are within 500km distance from ${location}.
-      Provide the response as a JSON array of strings only.
-      Example: ["Destination 1", "Destination 2", "Destination 3", "Destination 4", "Destination 5"]
+      Based on the starting location: "${location}", name at least 20 best and most popular weekend getaway destinations (towns or cities) that are within a reasonable travel distance (e.g. within an 8 hour drive or short flight) from ${location}. Make sure the destinations are highly varied (coastal, mountains, cultural, etc.).
+      
+      Provide the response as a JSON array of objects, where each object has a "name" and a "tag". The "tag" should be a 2-3 word description of the vibe (e.g., "Romantic Getaway", "Cultural Hub", "Coastal Retreat").
+      
+      Example:
+      [
+        { "name": "Destination Name 1", "tag": "Romantic Getaway" },
+        { "name": "Destination Name 2", "tag": "Adventure Trail" },
+        ...20 total items
+      ]
     `;
 
     const completion = await openai.chat.completions.create({

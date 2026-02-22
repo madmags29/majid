@@ -1,50 +1,48 @@
 import express from 'express';
-import { createClient } from 'pexels';
 import Cache from '../models/Cache';
 
 const router = express.Router();
 
-const PEXELS_API_KEY = process.env.PEXELS_API_KEY;
+const PIXABAY_API_KEY = process.env.PIXABAY_API_KEY;
 
-if (!PEXELS_API_KEY) {
-    console.error('PEXELS_API_KEY is not defined in .env file');
+if (!PIXABAY_API_KEY) {
+    console.error('PIXABAY_API_KEY is not defined in .env file');
 }
 
-const client = createClient(PEXELS_API_KEY || '');
-
-// Helper to fetch videos for a query
+// Helper to fetch videos for a query from Pixabay
 async function fetchVideosForQuery(query: string): Promise<any[]> {
     try {
-        const response: any = await client.videos.search({
-            query,
-            per_page: 8, // Fetch more per query
-            orientation: 'landscape',
-            size: 'medium'
-        });
+        const encodedQuery = encodeURIComponent(query);
+        const url = `https://pixabay.com/api/videos/?key=${PIXABAY_API_KEY}&q=${encodedQuery}&per_page=8&safesearch=true`;
 
-        if ('videos' in response && response.videos.length > 0) {
-            return response.videos.map((video: any) => {
-                // Find best quality file
-                const videoFile = video.video_files.find((f: any) => f.quality === 'hd' && (f.width || 0) >= 1280) || video.video_files[0];
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.hits && data.hits.length > 0) {
+            return data.hits.map((video: any) => {
+                // Find best quality file (large or medium)
+                const fallbackUrl = video.videos.medium.url;
+                const bestUrl = video.videos.large.url || fallbackUrl;
+
                 return {
-                    url: videoFile.link,
-                    photographer: video.user.name,
-                    photographer_url: video.user.url
+                    url: bestUrl,
+                    photographer: video.user,
+                    photographer_url: `https://pixabay.com/users/${video.user}-${video.user_id}/`
                 };
             });
         }
         return [];
     } catch (error) {
-        console.error(`Error fetching for query "${query}":`, error);
+        console.error(`Error fetching Pixabay videos for query "${query}":`, error);
         return [];
     }
 }
 
 router.get('/background-video', async (req, res) => {
     try {
-        if (!PEXELS_API_KEY) {
-            console.error('CRITICAL: PEXELS_API_KEY is missing');
-            return res.status(500).json({ error: 'Server configuration error: Pexels API key missing' });
+        if (!PIXABAY_API_KEY) {
+            console.error('CRITICAL: PIXABAY_API_KEY is missing');
+            return res.status(500).json({ error: 'Server configuration error: Pixabay API key missing' });
         }
 
         const cacheKey = 'background_video_pool';
@@ -59,7 +57,7 @@ router.get('/background-video', async (req, res) => {
             videoPool = cachedPool.value;
         } else {
             // Cache miss/expired - Refresh the pool
-            console.log('Refreshing video pool from Pexels...');
+            console.log('Refreshing video pool from Pixabay...');
 
             // Expanded queries based on user request
             const queries = [

@@ -1,93 +1,92 @@
 import { MetadataRoute } from 'next';
+import { EXLPORE_DESTINATIONS } from '@/lib/destinations';
 
 export default function sitemap(): MetadataRoute.Sitemap {
     const baseUrl = 'https://www.weekendtravellers.com';
 
-    const explorationRoutes = [
+    // Categories and dynamic destinations
+    const categories = [
         'explore/india',
-        'explore/india/goa',
-        'explore/india/kerala',
-        'explore/india/rajasthan/jaipur',
-        'explore/india/uttarakhand/rishikesh',
-        'explore/india/rajasthan/udaipur',
-        'explore/india/himachal-pradesh/shimla',
-        'explore/india/himachal-pradesh/manali',
-        'explore/india/punjab/amritsar',
-        'explore/india/kerala/munnar',
         'explore/europe',
-        'explore/asia/thailand',
-        'explore/asia/japan',
-        'explore/asia/indonesia/bali',
+        'explore/asia',
+        'explore/americas',
+        'explore/middle-east'
     ];
 
-    const explorationEntries = explorationRoutes.map(route => ({
+    const categoryEntries = categories.map(route => ({
         url: `${baseUrl}/${route}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.7,
+    }));
+
+    const destinationEntries = EXLPORE_DESTINATIONS.map(dest => ({
+        url: `${baseUrl}/explore/${dest.id}`,
         lastModified: new Date(),
         changeFrequency: 'weekly' as const,
         priority: 0.6,
     }));
 
-    return [
+    const staticPages = [
         {
             url: baseUrl,
             lastModified: new Date(),
-            changeFrequency: 'daily',
+            changeFrequency: 'daily' as const,
             priority: 1,
         },
-        ...explorationEntries,
         {
             url: `${baseUrl}/search`,
             lastModified: new Date(),
-            changeFrequency: 'always',
+            changeFrequency: 'always' as const,
             priority: 0.8,
         },
         {
             url: `${baseUrl}/trips`,
             lastModified: new Date(),
-            changeFrequency: 'daily',
+            changeFrequency: 'daily' as const,
             priority: 0.8,
         },
         {
             url: `${baseUrl}/about`,
             lastModified: new Date(),
-            changeFrequency: 'monthly',
+            changeFrequency: 'monthly' as const,
             priority: 0.5,
         },
         {
             url: `${baseUrl}/contact`,
             lastModified: new Date(),
-            changeFrequency: 'monthly',
+            changeFrequency: 'monthly' as const,
             priority: 0.5,
         },
         {
             url: `${baseUrl}/faq`,
             lastModified: new Date(),
-            changeFrequency: 'monthly',
+            changeFrequency: 'monthly' as const,
             priority: 0.5,
         },
         {
             url: `${baseUrl}/privacy`,
             lastModified: new Date(),
-            changeFrequency: 'yearly',
+            changeFrequency: 'yearly' as const,
             priority: 0.3,
         },
         {
             url: `${baseUrl}/terms`,
             lastModified: new Date(),
-            changeFrequency: 'yearly',
+            changeFrequency: 'yearly' as const,
             priority: 0.3,
         },
         {
             url: `${baseUrl}/cookie-policy`,
             lastModified: new Date(),
-            changeFrequency: 'yearly',
+            changeFrequency: 'yearly' as const,
             priority: 0.3,
-        },
-        {
-            url: `${baseUrl}/reset-password`,
-            lastModified: new Date(),
-            changeFrequency: 'yearly',
-            priority: 0.1,
-        },
+        }
+    ];
+
+    return [
+        ...staticPages,
+        ...categoryEntries,
+        ...destinationEntries
     ];
 }

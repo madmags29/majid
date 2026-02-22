@@ -31,9 +31,9 @@ export default function CategoryBanner({ userLocation }: CategoryBannerProps) {
                         whileHover={{ scale: 1.05, y: -2 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={() => handleCategoryClick(cat.name)}
-                        className={`flex items-center justify-center md:justify-start gap-2.5 px-4 md:px-5 py-3 rounded-2xl backdrop-blur-md border ${cat.bg} ${cat.border} transition-all shadow-xl group cursor-pointer ${index === CATEGORIES.length - 1 ? 'col-span-2 sm:col-span-1' : ''}`}
+                        className={`flex items-center justify-center md:justify-start gap-2.5 px-4 md:px-5 py-3 rounded-2xl backdrop-blur-md border ${cat.bg} ${cat.border} transition-all shadow-xl group cursor-pointer touch-manipulation ${index === CATEGORIES.length - 1 ? 'col-span-2 sm:col-span-1' : ''}`}
                     >
-                        <cat.icon className={`w-4 h-4 md:w-5 md:h-5 ${cat.color} group-hover:scale-110 transition-transform`} />
+                        <cat.icon className={`w-4 h-4 md:w-5 md:h-5 ${cat.color} group-hover:scale-110 transition-transform pointer-events-none`} />
                         <span className="text-xs md:text-sm font-semibold text-slate-100 whitespace-nowrap">
                             {cat.name}
                         </span>
