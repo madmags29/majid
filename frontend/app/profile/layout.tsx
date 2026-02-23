@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'My Profile | Weekend Travellers',
+    title: 'User Profile | Manage Your AI Trip Plans & Getaways',
     description: 'Manage your account settings, preferences, and profile information.',
     robots: {
         index: false,

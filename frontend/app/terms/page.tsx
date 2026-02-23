@@ -3,8 +3,8 @@ import { Metadata } from 'next';
 import { SUPPORT_EMAIL } from '@/lib/config';
 
 export const metadata: Metadata = {
-    title: 'Terms & Conditions',
-    description: 'Terms of use for Weekend Travellers.',
+    title: 'Terms & Conditions | Weekend Travellers AI Trip Planner',
+    description: 'Rules and guidelines for using our AI travel planning services.',
 };
 
 export default function TermsPage() {

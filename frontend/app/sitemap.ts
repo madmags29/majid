@@ -81,6 +81,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
             lastModified: new Date(),
             changeFrequency: 'yearly' as const,
             priority: 0.3,
+        },
+        {
+            url: `${baseUrl}/chat`,
+            lastModified: new Date(),
+            changeFrequency: 'always' as const,
+            priority: 0.7,
+        },
+        {
+            url: `${baseUrl}/inspiration-trip`,
+            lastModified: new Date(),
+            changeFrequency: 'daily' as const,
+            priority: 0.7,
         }
     ];
 

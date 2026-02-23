@@ -3,8 +3,8 @@ import { Metadata } from 'next';
 import { SUPPORT_EMAIL } from '@/lib/config';
 
 export const metadata: Metadata = {
-    title: 'Cookie Policy',
-    description: 'Learn how Weekend Travellers uses cookies to improve your experience.',
+    title: 'Cookie Policy | Weekend Travellers',
+    description: 'Information about how we use cookies to improve your travel planning experience.',
 };
 
 export default function CookiePolicy() {

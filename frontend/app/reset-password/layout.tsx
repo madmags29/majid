@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Reset Password | Weekend Travellers',
-    description: 'Securely reset your Weekend Travellers account password.',
+    title: 'Reset Password | Weekend Travellers Travel App',
+    description: 'Securely reset the password for your Weekend Travellers account.',
     robots: {
         index: false,
         follow: false,

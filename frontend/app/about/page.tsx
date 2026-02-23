@@ -3,7 +3,7 @@ import { MapPin, Users, Heart, Globe } from 'lucide-react';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-    title: 'About Weekend Travellers | The Future of AI Travel Planning',
+    title: 'About Us | AI Travel Planner for Weekend Getaways',
     description: 'Discover how Weekend Travellers uses advanced AI to curate the best 2 & 3 day weekend itineraries, hidden gems, and road trip plans for 2026.',
 };
 

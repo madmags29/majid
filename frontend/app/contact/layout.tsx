@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
 
-export const metadata: Metadata = {
-    title: 'Contact Us | Weekend Travellers - AI Trip Planning Support',
-    description: 'Get in touch with the Weekend Travellers team for support, destination inquiries, or feedback on our smart travel planner.',
+export const metadata = {
+    title: 'Contact Us | AI Trip Planning & Weekend Getaway Support',
+    description: 'Need help planning your weekend trip? Contact the Weekend Travellers support team.',
 };
 
 export default function ContactLayout({

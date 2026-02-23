@@ -76,7 +76,7 @@ export default function LandingPage() {
       if (!res.ok) throw new Error('Failed to fetch suggestions');
       const data = await res.json();
       // Handle both string arrays and object arrays {name, tag}
-      const parsedSuggestions = data.map((item: any) => typeof item === 'string' ? item : item.name);
+      const parsedSuggestions = data.map((item: string | { name: string }) => typeof item === 'string' ? item : item.name);
       setSuggestions(parsedSuggestions);
     } catch (err) {
       console.error('Failed to load suggestions', err);
