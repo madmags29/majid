@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import { MapPin, Users, Heart, Globe } from 'lucide-react';
 import Link from 'next/link';
-import AdBanner from '@/components/AdBanner';
 
 export const metadata: Metadata = {
     title: 'About Weekend Travellers | The Future of AI Travel Planning',
@@ -71,8 +70,6 @@ export default function AboutPage() {
                     </Link>
                 </div>
 
-                {/* Ad Banner */}
-                <AdBanner dataAdSlot="1111222233" />
             </div>
         </div>
     );

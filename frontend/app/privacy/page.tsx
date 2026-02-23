@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import AdBanner from '@/components/AdBanner';
 import { SUPPORT_EMAIL } from '@/lib/config';
 
 export const metadata: Metadata = {
@@ -72,8 +71,6 @@ export default function PrivacyPage() {
                     </p>
                 </section>
 
-                {/* Ad Banner */}
-                <AdBanner dataAdSlot="7777888899" />
             </div>
         </div>
     );

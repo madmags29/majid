@@ -13,7 +13,7 @@ import CinematicLoader from '@/components/CinematicLoader';
 import InnerHeader from '@/components/InnerHeader';
 
 const AuthModal = dynamic(() => import('@/components/AuthModal'), { ssr: false });
-const AdBanner = dynamic(() => import('@/components/AdBanner'), { ssr: false });
+
 
 interface Trip {
     _id: string;
@@ -279,10 +279,7 @@ export default function TripsContent() {
                             ))}
                         </div>
 
-                        {/* Ad Banner after trips list */}
-                        <div className="max-w-4xl mx-auto w-full">
-                            <AdBanner dataAdSlot="7891234567" />
-                        </div>
+
                     </div>
                 )}
             </main>

@@ -6,7 +6,6 @@ import { ArrowLeft, HelpCircle, Compass, ShieldCheck, CreditCard, MessageCircle 
 import { Button } from '@/components/ui/button';
 import dynamic from 'next/dynamic';
 
-const AdBanner = dynamic(() => import('@/components/AdBanner'), { ssr: false });
 const AnimatedLogo = dynamic(() => import('@/components/AnimatedLogo'), { ssr: false });
 
 const faqs = [
@@ -132,10 +131,6 @@ export default function FAQPage() {
                     </Link>
                 </div>
 
-                {/* Ad Banner */}
-                <div className="mt-20">
-                    <AdBanner dataAdSlot="4444555566" />
-                </div>
             </main>
         </div>
     );

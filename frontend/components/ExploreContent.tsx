@@ -15,7 +15,6 @@ const MapView = dynamic(() => import('@/components/MapView'));
 const WeatherWidget = dynamic(() => import('@/components/WeatherWidget'));
 const TypewriterText = dynamic(() => import('@/components/TypewriterText'));
 import CinematicLoader from '@/components/CinematicLoader';
-import AdBanner from '@/components/AdBanner';
 import { API_URL } from '@/lib/config';
 
 interface Activity {
@@ -340,13 +339,7 @@ export default function ExploreContent({ slug }: { slug: string }) {
                             />
                         </article>
 
-                        {/* AdSense - Main Content Interstitial */}
-                        <div className="w-full flex justify-center py-8">
-                            <AdBanner
-                                dataAdSlot="8888999900"
-                                className="bg-slate-900/50 rounded-2xl border border-white/5"
-                            />
-                        </div>
+
 
                         {/* Itinerary Visualization */}
                         <div className="pt-12 border-t border-white/10">
@@ -484,11 +477,7 @@ export default function ExploreContent({ slug }: { slug: string }) {
                         <MapView itinerary={data} selectedActivity={null} isExpanded={isMapFullscreen} />
                     </div>
 
-                    {/* AdSense - Sidebar */}
-                    <AdBanner
-                        dataAdSlot="2222333344"
-                        className="bg-slate-900/50 rounded-2xl border border-white/5"
-                    />
+
 
                     {/* Where to Stay */}
                     <div className="bg-slate-900/60 backdrop-blur-xl rounded-3xl border border-white/10 p-8 shadow-2xl">

@@ -75,7 +75,9 @@ export default function LandingPage() {
       const res = await fetch(`${API_URL}/api/suggestions?location=${encodeURIComponent(location)}`);
       if (!res.ok) throw new Error('Failed to fetch suggestions');
       const data = await res.json();
-      setSuggestions(data);
+      // Handle both string arrays and object arrays {name, tag}
+      const parsedSuggestions = data.map((item: any) => typeof item === 'string' ? item : item.name);
+      setSuggestions(parsedSuggestions);
     } catch (err) {
       console.error('Failed to load suggestions', err);
       // Fallback only if no suggestions already exist

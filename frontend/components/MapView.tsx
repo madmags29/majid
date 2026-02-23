@@ -15,7 +15,7 @@ L.Icon.Default.mergeOptions({
 });
 
 import { cn, formatCurrency } from '@/lib/utils';
-import AdBanner from '@/components/AdBanner';
+
 
 interface Activity {
     time: string;
@@ -283,10 +283,6 @@ export default function MapView({ itinerary, selectedActivity, isExpanded }: Map
                                         </a>
                                     )}
 
-                                    {/* Ad Banner Inside Map Pin Popup */}
-                                    <div className="mt-4 pt-4 border-t border-gray-100 flex justify-center">
-                                        <AdBanner dataAdSlot="6666777788" className="!my-0 scale-90 sm:scale-100 origin-center" />
-                                    </div>
                                 </div>
                             </div>
                         </Popup>
