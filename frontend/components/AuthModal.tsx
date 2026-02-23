@@ -62,6 +62,12 @@ function AuthModalContent({ isOpen, onClose, initialMode = 'login' }: AuthModalP
         }
     });
 
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
     if (!isOpen) return null;
 
     const handleSocialLogin = async (provider: string) => {
@@ -158,13 +164,7 @@ function AuthModalContent({ isOpen, onClose, initialMode = 'login' }: AuthModalP
         }
     };
 
-    const [mounted, setMounted] = useState(false);
 
-    useEffect(() => {
-        setMounted(true);
-    }, []);
-
-    if (!isOpen || !mounted) return null;
 
     // Simple Icons path data wrapper for SVG component
     const IconWrapper = ({ path, className }: { path: string, className?: string }) => (

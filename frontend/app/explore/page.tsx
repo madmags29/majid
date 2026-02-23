@@ -65,8 +65,10 @@ export default function ExplorePage() {
                 { timeout: 5000 }
             );
         } else {
-            setLocationError(true);
-            setIsLocating(false);
+            setTimeout(() => {
+                setLocationError(true);
+                setIsLocating(false);
+            }, 0);
         }
     }, []);
 

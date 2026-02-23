@@ -2,21 +2,10 @@
 
 import { useState, useRef, useEffect, Suspense, useCallback } from 'react';
 import dynamic from 'next/dynamic';
-import { ArrowLeft, User, LogIn, Calendar, Loader2, MapPin, Search } from 'lucide-react';
+import { Loader2, MapPin, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
-const MapView = dynamic(() => import('@/components/MapView'), { ssr: false });
 import InnerHeader from '@/components/InnerHeader';
 
 // Mock Curated Destinations for Menu
@@ -55,8 +44,6 @@ const curatedDestinations = [
 
 function MenuClient() {
     const router = useRouter();
-    const [user, setUser] = useState<{ name: string, email: string } | null>(null);
-    const [isAuthOpen, setIsAuthOpen] = useState(false);
     const [leftWidth, setLeftWidth] = useState(50);
     const [isResizing, setIsResizing] = useState(false);
     const [isDesktop, setIsDesktop] = useState(false);
@@ -75,10 +62,10 @@ function MenuClient() {
     }, []);
 
     useEffect(() => {
-        const userData = localStorage.getItem('user');
-        if (userData) {
-            setUser(JSON.parse(userData));
-        }
+        const checkIsDesktop = () => setIsDesktop(window.innerWidth >= 768);
+        checkIsDesktop();
+        window.addEventListener('resize', checkIsDesktop);
+        return () => window.removeEventListener('resize', checkIsDesktop);
     }, []);
 
     // Resizing Logic
@@ -108,12 +95,6 @@ function MenuClient() {
             window.removeEventListener('mouseup', handleMouseUp);
         };
     }, [isResizing, handleMouseMove, handleMouseUp]);
-
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        setUser(null);
-    };
 
     const handleSearchClick = (dest: string) => {
         router.push(`/search?destination=${encodeURIComponent(dest)}`);

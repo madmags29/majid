@@ -1,24 +1,15 @@
 'use client';
 
 import { useEffect, useState, useRef, Suspense, useCallback } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
-import { MapPin, Calendar, Loader2, Send, User, Heart, Share2, Check, ArrowLeft, Bus, Train, Plane, Car, LogIn } from 'lucide-react';
-import { cn, formatCurrency } from '@/lib/utils';
+import { MapPin, Loader2, Send, User, Heart, Share2, LogIn } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 import { toast } from 'sonner';
 import { API_URL } from '@/lib/config';
 import ReactMarkdown from 'react-markdown';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 // Dynamically import map to avoid SSR issues
 const MapView = dynamic(() => import('@/components/MapView'), { ssr: false });
@@ -27,9 +18,6 @@ import InnerHeader from '@/components/InnerHeader';
 import ItineraryDisplay from '@/components/ItineraryDisplay';
 const AnimatedLogo = dynamic(() => import('@/components/AnimatedLogo'), { ssr: false });
 const AuthModal = dynamic(() => import('@/components/AuthModal'), { ssr: false });
-const TypewriterText = dynamic(() => import('@/components/TypewriterText'), { ssr: false });
-const WeatherWidget = dynamic(() => import('@/components/WeatherWidget'), { ssr: false });
-const AdBanner = dynamic(() => import('@/components/AdBanner'), { ssr: false });
 
 const TypingResponse = ({ content, onComplete }: { content: string, onComplete?: () => void }) => {
     const [displayed, setDisplayed] = useState('');
@@ -52,11 +40,11 @@ const TypingResponse = ({ content, onComplete }: { content: string, onComplete?:
         <div className="prose prose-invert prose-p:leading-relaxed prose-pre:bg-slate-800 prose-pre:p-4 prose-pre:rounded-lg max-w-none text-slate-300">
             <ReactMarkdown
                 components={{
-                    ul: ({ node, ...props }) => <ul className="list-disc pl-4 space-y-2">{props.children}</ul>,
-                    ol: ({ node, ...props }) => <ol className="list-decimal pl-4 space-y-2">{props.children}</ol>,
-                    li: ({ node, ...props }) => <li className="pl-1">{props.children}</li>,
-                    strong: ({ node, ...props }) => <span className="font-bold text-blue-400">{props.children}</span>,
-                    p: ({ node, ...props }) => <p className="leading-relaxed mb-4">{props.children}</p>,
+                    ul: ({ ...props }) => <ul className="list-disc pl-4 space-y-2">{props.children}</ul>,
+                    ol: ({ ...props }) => <ol className="list-decimal pl-4 space-y-2">{props.children}</ol>,
+                    li: ({ ...props }) => <li className="pl-1">{props.children}</li>,
+                    strong: ({ ...props }) => <span className="font-bold text-blue-400">{props.children}</span>,
+                    p: ({ ...props }) => <p className="leading-relaxed mb-4">{props.children}</p>,
                 }}
             >
                 {displayed}
@@ -121,133 +109,21 @@ interface Message {
     type: 'text' | 'itinerary';
 }
 
-function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
-    const R = 6371;
-    const dLat = deg2rad(lat2 - lat1);
-    const dLon = deg2rad(lon2 - lon1);
-    const a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return Math.round(R * c);
-}
 
-function deg2rad(deg: number) {
-    return deg * (Math.PI / 180);
-}
-
-const DistanceDisplay = ({ destinationCoords }: { destinationCoords: { lat: number, lng: number } }) => {
-    const [userLoc, setUserLoc] = useState<{ lat: number, lng: number } | null>(null);
-    const [distance, setDistance] = useState<number | null>(null);
-
-    const searchParams = useSearchParams();
-    const originParam = searchParams.get('origin');
-
-    useEffect(() => {
-        const checkLocation = async () => {
-            // 1. Check LocalStorage Cache first
-            const cached = localStorage.getItem('user_precise_location');
-            let cachedCoords = null;
-            if (cached) {
-                try {
-                    const { coords, timestamp } = JSON.parse(cached);
-                    // Use cache if it's less than 24 hours old
-                    if (Date.now() - timestamp < 86400000) {
-                        cachedCoords = coords;
-                    }
-                } catch (e) {
-                    console.error("Error parsing cached location", e);
-                }
-            }
-
-            if (originParam) {
-                if (cachedCoords) {
-                    setUserLoc(cachedCoords);
-                }
-                return;
-            }
-
-            if (cachedCoords) {
-                setUserLoc(cachedCoords);
-                return;
-            }
-
-            const fetchIPLocation = async () => {
-                try {
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 5000);
-                    const res = await fetch('https://ipapi.co/json/', { signal: controller.signal });
-                    clearTimeout(timeoutId);
-                    if (res.ok) {
-                        const data = await res.json();
-                        if (data.latitude && data.longitude) {
-                            setUserLoc({ lat: data.latitude, lng: data.longitude });
-                        }
-                    }
-                } catch (err) {
-                    console.warn("IP Location failed", err);
-                }
-            };
-
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        setUserLoc({
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude
-                        });
-                        localStorage.setItem('user_precise_location', JSON.stringify({
-                            name: 'Current Location',
-                            coords: { lat: position.coords.latitude, lng: position.coords.longitude },
-                            timestamp: Date.now()
-                        }));
-                    },
-                    (error) => {
-                        console.warn("Geolocation denied/error, falling back to IP.", error);
-                        fetchIPLocation();
-                    }
-                );
-            } else {
-                fetchIPLocation();
-            }
-        };
-
-        checkLocation();
-    }, [originParam]);
-
-    useEffect(() => {
-        if (userLoc && destinationCoords) {
-            const dist = calculateDistance(userLoc.lat, userLoc.lng, destinationCoords.lat, destinationCoords.lng);
-            setDistance(dist);
-        }
-    }, [userLoc, destinationCoords]);
-
-    if (!distance) return null;
-
-    return (
-        <div className="mb-4 bg-slate-800/50 p-2 rounded border border-slate-700 flex items-center justify-between">
-            <span className="text-xs text-slate-400">Distance from you</span>
-            <span className="text-sm font-bold text-blue-400">~{distance} km</span>
-        </div>
-    );
-};
 
 function SearchClient() {
     const searchParams = useSearchParams();
-    const router = useRouter();
     const destination = (searchParams.get('destination') || '') as string;
 
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState('');
     const [loading, setLoading] = useState(true);
     const [isTyping, setIsTyping] = useState(false);
-    const [selectedActivity, setSelectedActivity] = useState<string | null>(null);
+    const [selectedActivity] = useState<string | null>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     // Save/Share State
     const [isSaved, setIsSaved] = useState(false);
-    const [isSharing, setIsSharing] = useState(false);
     const [isAuthOpen, setIsAuthOpen] = useState(false);
     const [currentItineraryData, setCurrentItineraryData] = useState<Itinerary | null>(null);
     const [user, setUser] = useState<{ name: string, email: string } | null>(null);
@@ -311,13 +187,6 @@ function SearchClient() {
         window.addEventListener('storage', checkUser);
         return () => window.removeEventListener('storage', checkUser);
     }, []);
-
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        setUser(null);
-        toast.success('Logged out successfully');
-    };
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -520,19 +389,16 @@ function SearchClient() {
     };
 
     const handleShare = async () => {
-        setIsSharing(true);
         try {
             await navigator.share({
                 title: `My Trip to ${currentItineraryData?.destination} `,
                 text: currentItineraryData?.summary,
                 url: window.location.href,
             });
-        } catch (err) {
+        } catch {
             // Fallback: Copy to clipboard
             navigator.clipboard.writeText(window.location.href);
             toast.success('Link copied to clipboard!');
-        } finally {
-            setIsSharing(false);
         }
     };
 

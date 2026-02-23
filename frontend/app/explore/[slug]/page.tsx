@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
-import { EXLPORE_DESTINATIONS, DestinationOption } from '@/lib/destinations';
+import { EXLPORE_DESTINATIONS } from '@/lib/destinations';
 import Link from 'next/link';
 import Image from 'next/image';
-import { MapPin, ArrowLeft, Search } from 'lucide-react';
+import { MapPin, ArrowLeft } from 'lucide-react';
 import InnerHeader from '@/components/InnerHeader';
 
 import ExploreItineraryButton from '@/components/ExploreItineraryButton';
@@ -114,7 +114,7 @@ export default async function DestinationPage({ params }: Props) {
                         Why visit {destination.name}?
                     </h2>
                     <p className="text-xl text-slate-400 leading-relaxed font-light">
-                        {destination.name} is one of our hand-picked curated destinations. Known for its incredible scenery, authentic culture, and unforgettable experiences, it's the perfect spot for a weekend getaway. Click the button above to generate a highly detailed, personalized AI itinerary complete with recommended flights, hotels, and daily activities.
+                        {destination.name} is one of our hand-picked curated destinations. Known for its incredible scenery, authentic culture, and unforgettable experiences, it&apos;s the perfect spot for a weekend getaway. Click the button above to generate a highly detailed, personalized AI itinerary complete with recommended flights, hotels, and daily activities.
                     </p>
                 </section>
             </main>

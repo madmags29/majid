@@ -2,23 +2,13 @@
 
 import { useState, useRef, useEffect, Suspense, useCallback } from 'react';
 import dynamic from 'next/dynamic';
-import { ArrowLeft, User, LogIn, Calendar, Loader2, Send, MapPin } from 'lucide-react';
+import { ArrowLeft, User, LogIn, Loader2, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 const AnimatedLogo = dynamic(() => import('@/components/AnimatedLogo'), { ssr: false });
-const RightMenu = dynamic(() => import('@/components/RightMenu'), { ssr: false });
 const AuthModal = dynamic(() => import('@/components/AuthModal'), { ssr: false });
 
 import { API_URL } from '@/lib/config';
@@ -83,7 +73,7 @@ function ChatClient() {
 
                 // Format response to ensure it's an array of objects
                 const formattedData: DestinationSuggestion[] = Array.isArray(sugData)
-                    ? sugData.map((item: any) => typeof item === 'string' ? { name: item, tag: 'Popular Choice' } : item)
+                    ? sugData.map((item: string | DestinationSuggestion) => typeof item === 'string' ? { name: item, tag: 'Popular Choice' } : item)
                     : [];
 
                 setPopularDestinations(formattedData);
@@ -149,11 +139,6 @@ function ChatClient() {
         };
     }, [isResizing, handleMouseMove, handleMouseUp]);
 
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        setUser(null);
-    };
 
     const handleSend = (e: React.FormEvent) => {
         e.preventDefault();

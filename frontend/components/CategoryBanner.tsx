@@ -3,6 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Wallet, Car, Gem, CloudRain, Snowflake } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 const CATEGORIES = [
     { name: 'Budget travel', icon: Wallet, color: 'text-green-400', bg: 'bg-green-500/10', border: 'border-green-500/20' },
@@ -17,9 +18,10 @@ interface CategoryBannerProps {
 }
 
 export default function CategoryBanner({ userLocation }: CategoryBannerProps) {
+    const router = useRouter();
     const handleCategoryClick = (category: string) => {
         const originParam = userLocation ? `&origin=${encodeURIComponent(userLocation)}` : '';
-        window.location.href = `/search?destination=${encodeURIComponent(category)}${originParam}`;
+        router.push(`/search?destination=${encodeURIComponent(category)}${originParam}`);
     };
 
     return (

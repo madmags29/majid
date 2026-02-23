@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Send, Mail, Phone, MapPin, Loader2, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, Send, Mail, Phone, Loader2, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import dynamic from 'next/dynamic';
@@ -107,7 +107,7 @@ export default function ContactPage() {
                             Get in <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Touch</span>
                         </h1>
                         <p className="text-white/80 max-w-2xl mx-auto text-lg">
-                            Have questions about our smart travel planner? Need help with your itinerary? We're here to help you plan the perfect weekend escape.
+                            Have questions about our smart travel planner? Need help with your itinerary? We&apos;re here to help you plan the perfect weekend escape.
                         </p>
 
                         <div className="space-y-6">
@@ -134,7 +134,7 @@ export default function ContactPage() {
 
                         <div className="mt-12 p-8 rounded-3xl bg-slate-900/40 border border-slate-800">
                             <p className="text-sm text-slate-400 italic">
-                                "Our mission is to make every weekend count. If you encountered any issues or have suggestions to make the trip planner better, please dont hesitate to reach out."
+                                &quot;Our mission is to make every weekend count. If you encountered any issues or have suggestions to make the trip planner better, please dont hesitate to reach out.&quot;
                             </p>
                             <p className="text-sm font-bold text-white mt-4">— Team weekendtravellers.com</p>
                         </div>

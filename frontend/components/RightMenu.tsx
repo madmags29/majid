@@ -27,12 +27,12 @@ export default function RightMenu() {
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
-        setMounted(true);
+        setTimeout(() => setMounted(true), 0);
     }, []);
 
     // Close menu when route changes
     useEffect(() => {
-        setIsOpen(false);
+        setTimeout(() => setIsOpen(false), 0);
     }, [pathname]);
 
     useEffect(() => {

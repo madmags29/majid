@@ -28,7 +28,7 @@ export default function TypewriterText({
     const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
-        setIsHydrated(true);
+        setTimeout(() => setIsHydrated(true), 0);
     }, []);
 
     useEffect(() => {
@@ -36,10 +36,12 @@ export default function TypewriterText({
         let interval: NodeJS.Timeout;
 
         // Reset state for typing animation
-        setDisplayedText('');
-        setIsComplete(false);
-        setIsVisible(true);
-        setIsDeleting(false);
+        setTimeout(() => {
+            setDisplayedText('');
+            setIsComplete(false);
+            setIsVisible(true);
+            setIsDeleting(false);
+        }, 0);
 
         const typingTimeout = setTimeout(() => {
             interval = setInterval(() => {

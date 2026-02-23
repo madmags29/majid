@@ -25,7 +25,7 @@ const LocationAssistant: React.FC<LocationAssistantProps> = ({ onLocationFound }
                 if (Date.now() - timestamp < 7200000 && !hasNotified.current) {
                     hasNotified.current = true;
                     onLocationFound(name, coords);
-                    setStatus('success');
+                    setTimeout(() => setStatus('success'), 0);
                     return;
                 }
             } catch (e) {
@@ -115,7 +115,7 @@ const LocationAssistant: React.FC<LocationAssistantProps> = ({ onLocationFound }
                         </div>
                         <div className="flex-1">
                             <h4 className="text-sm font-bold text-white">Find trips near you?</h4>
-                            <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">We'll show you the best weekend getaways from your exact location.</p>
+                            <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">We&apos;ll show you the best weekend getaways from your exact location.</p>
                         </div>
                     </div>
 

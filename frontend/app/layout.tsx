@@ -35,26 +35,24 @@ import { GOOGLE_CLIENT_ID, SITE_URL } from '@/lib/config';
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Weekend Trip Planner | Personalized Travel Guide & Itineraries',
+    default: 'Weekend Travellers | Smart AI Travel Planner & Weekend Getaway Itineraries',
     template: '%s | Weekend Travellers',
   },
-  description: 'Plan your perfect weekend getaway with our smart AI trip planner. Get personalized 2-3 day itineraries, budget estimates, and hidden gems for top global destinations.',
+  description: 'Plan your perfect weekend getaway with our AI trip planner. Discover personalized 2-day and 3-day travel itineraries, road trips, and hidden gems tailored just for you.',
   keywords: [
     'weekend travellers',
-    'weekend trip planner 2026',
-    'best AI travel planner',
+    'weekend trip planner',
+    'best AI travel planner 2026',
     'personalized travel guide',
-    'smart trip planner',
     'short getaways',
     'road trip planner AI',
     'travel itinerary builder',
-    'personalized weekend trip',
-    'free AI travel assistant',
-    'smart travel planning',
+    'vacation planner',
     'AI trip creator',
     '2 day trip itineraries',
     '3 day holiday planner',
-    'best weekend getaways 2026'
+    'best weekend getaways',
+    'weekend trip ideas'
   ],
   authors: [{ name: 'Weekend Travellers Team' }],
   creator: 'Weekend Travellers',
@@ -62,8 +60,8 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: 'https://weekendtravellers.com',
-    title: 'Weekend Travellers | Best AI-Powered Weekend Trip Planner 2025',
-    description: 'Weekend Travellers is your best AI-powered companion for discovering and planning the perfect 2nd-day getaway in 2025.',
+    title: 'Weekend Travellers | Smart AI Travel Planner & Weekend Getaway Itineraries',
+    description: 'Plan your perfect short getaway with Weekend Travellers. Get instant personalized 2-to-3 day itineraries using our intelligent travel guide AI.',
     siteName: 'Weekend Travellers',
     images: [
       {
@@ -76,8 +74,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Weekend Travellers | Best AI-Powered Weekend Trip Planner 2025',
-    description: 'Weekend Travellers is your best AI-powered companion for discovering and planning the perfect 2nd-day getaway in 2025.',
+    title: 'Weekend Travellers | Smart AI Travel Planner & Weekend Getaway Itineraries',
+    description: 'Plan your perfect short getaway with Weekend Travellers. Get instant personalized 2-to-3 day itineraries using our intelligent travel guide AI.',
     images: ['/icon.svg'],
   },
   icons: {

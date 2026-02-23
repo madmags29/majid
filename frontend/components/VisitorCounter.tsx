@@ -8,7 +8,7 @@ export default function VisitorCounter() {
 
     useEffect(() => {
         // Randomize on mount
-        setCount(Math.floor(Math.random() * (200 - 100 + 1) + 100));
+        setTimeout(() => setCount(Math.floor(Math.random() * (200 - 100 + 1) + 100)), 0);
 
         const interval = setInterval(() => {
             setCount(prev => {

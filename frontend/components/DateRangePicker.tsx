@@ -59,7 +59,7 @@ export default function DateRangePicker({ onRangeSelect, initialStart, initialEn
         startDateOfCalendar.setDate(startDateOfCalendar.getDate() - startDateOfCalendar.getDay());
 
         const days = [];
-        let day = new Date(startDateOfCalendar);
+        const day = new Date(startDateOfCalendar);
 
         while (day <= monthEnd || day.getDay() !== 0) {
             const currentDay = new Date(day);
