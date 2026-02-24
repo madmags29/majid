@@ -10,6 +10,7 @@ export interface DestinationOption {
 
 export const EXLPORE_DESTINATIONS: DestinationOption[] = [
     // India
+    { id: 'india', name: 'India', country: 'India', image: 'https://images.pexels.com/photos/1007427/pexels-photo-1007427.jpeg?auto=compress&cs=tinysrgb&w=800', lat: 20.5937, lng: 78.9629, tags: ['Culture', 'Heritage', 'Nature', 'Spiritual'] },
     { id: 'manali', name: 'Manali', country: 'India', image: 'https://images.pexels.com/photos/12366139/pexels-photo-12366139.jpeg?auto=compress&cs=tinysrgb&w=800', lat: 32.2396, lng: 77.1887, tags: ['Mountains', 'Snow', 'Adventure', 'Nature'] },
     { id: 'shimla', name: 'Shimla', country: 'India', image: 'https://images.pexels.com/photos/10323348/pexels-photo-10323348.jpeg?auto=compress&cs=tinysrgb&w=800', lat: 31.1048, lng: 77.1734, tags: ['Mountains', 'Heritage', 'Nature'] },
     { id: 'goa', name: 'Goa', country: 'India', image: 'https://images.pexels.com/photos/28368721/pexels-photo-28368721.jpeg?auto=compress&cs=tinysrgb&w=800', lat: 15.2993, lng: 74.1240, tags: ['Beaches', 'Nightlife', 'Relaxation'] },
@@ -32,6 +33,7 @@ export const EXLPORE_DESTINATIONS: DestinationOption[] = [
     { id: 'doha', name: 'Doha', country: 'Qatar', image: 'https://images.pexels.com/photos/4015822/pexels-photo-4015822.jpeg?auto=compress&cs=tinysrgb&w=800', lat: 25.2854, lng: 51.5310, tags: ['City', 'Architecture', 'Culture'] },
 
     // Europe
+    { id: 'europe', name: 'Europe', country: 'Global', image: 'https://images.pexels.com/photos/672532/pexels-photo-672532.jpeg?auto=compress&cs=tinysrgb&w=800', lat: 48.8566, lng: 2.3522, tags: ['History', 'Culture', 'Architecture', 'City'] },
     { id: 'paris', name: 'Paris', country: 'France', image: 'https://images.pexels.com/photos/1308940/pexels-photo-1308940.jpeg?auto=compress&cs=tinysrgb&w=800', lat: 48.8566, lng: 2.3522, tags: ['City', 'Romance', 'Art'] },
     { id: 'london', name: 'London', country: 'UK', image: 'https://images.pexels.com/photos/460672/pexels-photo-460672.jpeg?auto=compress&cs=tinysrgb&w=800', lat: 51.5072, lng: -0.1276, tags: ['City', 'History', 'Culture'] },
     { id: 'rome', name: 'Rome', country: 'Italy', image: 'https://images.pexels.com/photos/1701595/pexels-photo-1701595.jpeg?auto=compress&cs=tinysrgb&w=800', lat: 41.9028, lng: 12.4964, tags: ['City', 'History', 'Food'] },

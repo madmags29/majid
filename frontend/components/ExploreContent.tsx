@@ -81,6 +81,7 @@ export default function ExploreContent({ slug }: { slug: string }) {
     const [error, setError] = useState<string | null>(null);
     const [isSharing, setIsSharing] = useState(false);
     const [isMapFullscreen, setIsMapFullscreen] = useState(false);
+    const [selectedActivity, setSelectedActivity] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -214,11 +215,13 @@ export default function ExploreContent({ slug }: { slug: string }) {
                 <div className="max-w-7xl mx-auto w-full flex justify-between items-center">
                     <Link href="/" className="flex items-center gap-4 hover:opacity-80 transition-opacity">
                         <ArrowLeft className="w-6 h-6 text-blue-400" />
-                        <TypewriterText
-                            text="weekendtravellers.com"
-                            className="font-cursive text-xl md:text-4xl"
-                            delay={500}
-                        />
+                        <div className="hidden md:block">
+                            <TypewriterText
+                                text="weekendtravellers.com"
+                                className="font-cursive text-xl md:text-4xl"
+                                delay={500}
+                            />
+                        </div>
                     </Link>
                     <div className="flex items-center gap-3">
                         <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/10" onClick={handleShare}>
@@ -361,7 +364,16 @@ export default function ExploreContent({ slug }: { slug: string }) {
                                         </div>
                                         <div className="p-8 space-y-8">
                                             {(day.activities || []).map((activity: Activity, idx: number) => (
-                                                <div key={idx} className="flex flex-col md:flex-row gap-8 group">
+                                                <div
+                                                    key={idx}
+                                                    className={cn(
+                                                        "flex flex-col md:flex-row gap-8 group cursor-pointer p-4 rounded-2xl transition-all duration-300",
+                                                        selectedActivity === `${day.day}-${idx}`
+                                                            ? "bg-blue-600/10 border border-blue-500/30"
+                                                            : "hover:bg-white/5"
+                                                    )}
+                                                    onClick={() => setSelectedActivity(`${day.day}-${idx}`)}
+                                                >
                                                     {activity.imageUrl && (
                                                         <div className="w-full md:w-48 h-32 rounded-2xl overflow-hidden shrink-0 relative">
                                                             <Image
@@ -474,7 +486,7 @@ export default function ExploreContent({ slug }: { slug: string }) {
                                 {isMapFullscreen ? <X className="w-6 h-6 text-white" /> : <Maximize2 className="w-6 h-6 text-white" />}
                             </Button>
                         </div>
-                        <MapView itinerary={data} selectedActivity={null} isExpanded={isMapFullscreen} />
+                        <MapView itinerary={data} selectedActivity={selectedActivity} isExpanded={isMapFullscreen} />
                     </div>
 
 

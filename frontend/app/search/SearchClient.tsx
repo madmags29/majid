@@ -119,7 +119,7 @@ function SearchClient() {
     const [input, setInput] = useState('');
     const [loading, setLoading] = useState(true);
     const [isTyping, setIsTyping] = useState(false);
-    const [selectedActivity] = useState<string | null>(null);
+    const [selectedActivity, setSelectedActivity] = useState<string | null>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     // Save/Share State
@@ -482,7 +482,11 @@ function SearchClient() {
 
                                         {msg.type === 'itinerary' && typeof msg.content !== 'string' && (
                                             <div className="space-y-6 relative z-10">
-                                                <ItineraryDisplay itinerary={msg.content as Itinerary} />
+                                                <ItineraryDisplay
+                                                    itinerary={msg.content as Itinerary}
+                                                    selectedActivity={selectedActivity}
+                                                    onActivitySelect={setSelectedActivity}
+                                                />
                                             </div>
                                         )}
                                     </div >

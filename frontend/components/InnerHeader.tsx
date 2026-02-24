@@ -81,7 +81,7 @@ export default function InnerHeader({
                 )}
 
                 <div className="flex items-center gap-2 overflow-hidden">
-                    <Link href="/" className="flex items-center gap-2 shrink-0">
+                    <Link href="/" className="hidden md:flex items-center gap-2 shrink-0">
                         <AnimatedLogo className="w-8 h-8 text-blue-500" />
                         <span className="font-black text-sm md:text-base tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-400 whitespace-nowrap">
                             Weekend Travellers
@@ -90,15 +90,15 @@ export default function InnerHeader({
 
                     {(title || subtitle) && (
                         <>
-                            <div className="h-4 w-[1px] bg-slate-800 mx-1 hidden min-[400px]:block" />
-                            <div className="hidden min-[400px]:block overflow-hidden">
+                            <div className="h-4 w-[1px] bg-slate-800 mx-1 hidden md:block" />
+                            <div className="block overflow-hidden">
                                 {title && (
-                                    <h1 className="text-xs md:text-sm font-bold text-slate-200 truncate max-w-[100px] md:max-w-[200px]">
+                                    <h1 className="text-sm md:text-sm font-bold text-slate-200 truncate max-w-[150px] md:max-w-[200px]">
                                         {title}
                                     </h1>
                                 )}
                                 {subtitle && (
-                                    <p className="text-[9px] md:text-[10px] text-slate-500 uppercase tracking-widest font-black truncate">
+                                    <p className="text-[10px] md:text-[10px] text-slate-500 uppercase tracking-widest font-black truncate">
                                         {subtitle}
                                     </p>
                                 )}

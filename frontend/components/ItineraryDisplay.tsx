@@ -50,10 +50,21 @@ interface Itinerary {
 interface ItineraryDisplayProps {
     itinerary: Itinerary;
     className?: string;
+    selectedActivity?: string | null;
+    onActivitySelect?: (activityId: string | null) => void;
 }
 
-export default function ItineraryDisplay({ itinerary, className }: ItineraryDisplayProps) {
-    const [selectedActivity, setSelectedActivity] = useState<string | null>(null);
+export default function ItineraryDisplay({ itinerary, className, selectedActivity: propSelectedActivity, onActivitySelect }: ItineraryDisplayProps) {
+    const [internalSelectedActivity, setInternalSelectedActivity] = useState<string | null>(null);
+
+    const selectedActivity = propSelectedActivity !== undefined ? propSelectedActivity : internalSelectedActivity;
+    const setSelectedActivity = (id: string | null) => {
+        if (onActivitySelect) {
+            onActivitySelect(id);
+        } else {
+            setInternalSelectedActivity(id);
+        }
+    };
 
     if (!itinerary) return null;
 
