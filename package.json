@@ -1,8 +1,12 @@
 {
     "name": "weekendtrip-root",
     "private": true,
+    "workspaces": [
+        "frontend",
+        "backend"
+    ],
     "scripts": {
-        "build": "cd frontend && npm install && npm run build"
+        "build": "npm run build --workspaces --if-present"
     },
     "dependencies": {
         "next": "16.1.6"

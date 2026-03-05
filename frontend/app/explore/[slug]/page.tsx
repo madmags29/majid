@@ -48,6 +48,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             title,
             description,
             images: [destination.image],
+        },
+        alternates: {
+            canonical: `/explore/${slug}`,
         }
     };
 }

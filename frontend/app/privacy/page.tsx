@@ -4,6 +4,9 @@ import { SUPPORT_EMAIL } from '@/lib/config';
 export const metadata: Metadata = {
     title: 'Privacy Policy | Weekend Travellers AI Trip Planner',
     description: 'Our commitment to protecting your privacy and data.',
+    alternates: {
+        canonical: '/privacy',
+    },
 };
 
 export default function PrivacyPage() {

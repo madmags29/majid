@@ -14,7 +14,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return {
         title: `${title} Weekend Itinerary | AI Travel Guide & 2-Day Planner (2026)`,
         description: `Plan your perfect ${title} getaway with our AI-powered travel guide. Get custom 2-day itineraries, hidden gems, and local tips for your next weekend trip.`,
-    }; 
+        alternates: {
+            canonical: `/explore/${slug}`,
+        }
+    };
 }
 
 export default async function ExplorePage({ params }: PageProps) {

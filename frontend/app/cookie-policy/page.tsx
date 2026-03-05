@@ -5,6 +5,9 @@ import { SUPPORT_EMAIL } from '@/lib/config';
 export const metadata: Metadata = {
     title: 'Cookie Policy | Weekend Travellers',
     description: 'Information about how we use cookies to improve your travel planning experience.',
+    alternates: {
+        canonical: '/cookie-policy',
+    },
 };
 
 export default function CookiePolicy() {
