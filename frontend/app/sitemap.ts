@@ -47,6 +47,30 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.8,
         },
         {
+            url: `${baseUrl}/profile`,
+            lastModified: new Date(),
+            changeFrequency: 'daily' as const,
+            priority: 0.8,
+        },
+        {
+            url: `${baseUrl}/admin`,
+            lastModified: new Date(),
+            changeFrequency: 'daily' as const,
+            priority: 0.6,
+        },
+        {
+            url: `${baseUrl}/signup`,
+            lastModified: new Date(),
+            changeFrequency: 'monthly' as const,
+            priority: 0.5,
+        },
+        {
+            url: `${baseUrl}/reset-password`,
+            lastModified: new Date(),
+            changeFrequency: 'monthly' as const,
+            priority: 0.3,
+        },
+        {
             url: `${baseUrl}/about`,
             lastModified: new Date(),
             changeFrequency: 'monthly' as const,
