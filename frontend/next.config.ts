@@ -17,6 +17,21 @@ const nextConfig: NextConfig = {
             }
         ],
     },
+    async redirects() {
+        return [
+            {
+                source: '/:path*',
+                has: [
+                    {
+                        type: 'host',
+                        value: 'weekendtravellers.com',
+                    },
+                ],
+                destination: 'https://www.weekendtravellers.com/:path*',
+                permanent: true,
+            },
+        ];
+    },
     async rewrites() {
         const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
         return [

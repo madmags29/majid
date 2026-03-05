@@ -14,6 +14,7 @@ import AnimatedLogo from '@/components/AnimatedLogo';
 import TypewriterText from '@/components/TypewriterText';
 import DateRangePicker from '@/components/DateRangePicker';
 import { format } from 'date-fns';
+import { EXLPORE_DESTINATIONS } from '@/lib/destinations';
 
 const AuthModal = dynamic(() => import('@/components/AuthModal'));
 const CategoryBanner = dynamic(() => import('@/components/CategoryBanner'));
@@ -50,6 +51,7 @@ export default function LandingPage() {
   const [user, setUser] = useState<{ name: string, email: string } | null>(null);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
   const [lastFetchedLocation, setLastFetchedLocation] = useState<string>('');
+  const [showAutocomplete, setShowAutocomplete] = useState(false);
 
   useEffect(() => {
     const checkUser = () => {
@@ -344,18 +346,54 @@ export default function LandingPage() {
 
             <form onSubmit={handleSearch} className="relative w-full glass-panel p-3 rounded-2xl flex flex-col md:flex-row gap-3 border border-white/10 hover:border-blue-500/30 shadow-[0_4px_30px_rgba(0,0,0,0.1)] group-hover/search-container:shadow-[0_0_20px_rgba(59,130,246,0.2)]">
               <label
-                className="flex-[2] flex items-center px-4 py-3 glass-input rounded-xl focus-within:ring-1 focus-within:ring-white/10 cursor-text"
+                className="relative flex-[2] flex items-center px-4 py-3 glass-input rounded-xl focus-within:ring-1 focus-within:ring-white/10 cursor-text"
                 htmlFor="destination-input"
               >
                 <MapPin className="w-5 h-5 text-slate-300 mr-3 shrink-0 pointer-events-none" />
                 <input
                   id="destination-input"
                   type="text"
+                  autoComplete="off"
                   placeholder="Where to? (e.g. Paris)"
                   className="bg-transparent w-full outline-none text-white placeholder:text-slate-400 font-medium text-base"
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setShowAutocomplete(true);
+                  }}
+                  onFocus={() => setShowAutocomplete(true)}
+                  onBlur={() => setTimeout(() => setShowAutocomplete(false), 200)}
                 />
+
+                {/* Autocomplete Dropdown */}
+                {searchQuery.length >= 3 && showAutocomplete && (
+                  <div className="absolute top-[110%] left-0 right-0 mt-1 bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl z-[100] max-h-60 overflow-y-auto overflow-x-hidden md:w-[120%]">
+                    {(() => {
+                      const matches = EXLPORE_DESTINATIONS.filter(d =>
+                        d.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        d.country.toLowerCase().includes(searchQuery.toLowerCase())
+                      );
+                      if (matches.length === 0) return null;
+                      return matches.map(place => (
+                        <div
+                          key={place.id}
+                          className="px-4 py-3 hover:bg-white/10 cursor-pointer flex items-center gap-3 transition-colors text-left border-b border-white/5 last:border-0"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setSearchQuery(place.name);
+                            setShowAutocomplete(false);
+                          }}
+                        >
+                          <MapPin className="w-4 h-4 text-slate-400 shrink-0" />
+                          <div>
+                            <div className="text-white font-medium text-sm">{place.name}</div>
+                            <div className="text-slate-400 text-[10px]">{place.country}</div>
+                          </div>
+                        </div>
+                      ));
+                    })()}
+                  </div>
+                )}
               </label>
 
               <DateRangePicker
