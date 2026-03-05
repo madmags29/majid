@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { EXLPORE_DESTINATIONS } from '@/lib/destinations';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = 'https://www.weekendtravellers.com';
+    const baseUrl = 'https://weekendtravellers.com';
 
     // Categories and dynamic destinations
     const categories = [

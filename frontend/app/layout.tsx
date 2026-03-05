@@ -106,8 +106,8 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'Weekend Travellers',
-  url: 'https://www.weekendtravellers.com',
-  logo: 'https://www.weekendtravellers.com/icon.svg',
+  url: 'https://weekendtravellers.com',
+  logo: 'https://weekendtravellers.com/icon.svg',
   description: 'AI-powered personalized weekend trip planner for curated 2-3 day itineraries.',
   sameAs: [
     'https://instagram.com/weekendtravellers.official',
@@ -119,10 +119,10 @@ const websiteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: 'Weekend Travellers',
-  url: 'https://www.weekendtravellers.com',
+  url: 'https://weekendtravellers.com',
   potentialAction: {
     '@type': 'SearchAction',
-    target: 'https://www.weekendtravellers.com/search?destination={search_term_string}',
+    target: 'https://weekendtravellers.com/search?destination={search_term_string}',
     'query-input': 'required name=search_term_string'
   }
 };

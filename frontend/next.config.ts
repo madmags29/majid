@@ -24,10 +24,10 @@ const nextConfig: NextConfig = {
                 has: [
                     {
                         type: 'host',
-                        value: 'weekendtravellers.com',
+                        value: 'www.weekendtravellers.com',
                     },
                 ],
-                destination: 'https://www.weekendtravellers.com/:path*',
+                destination: 'https://weekendtravellers.com/:path*',
                 permanent: true,
             },
         ];
