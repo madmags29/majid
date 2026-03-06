@@ -426,15 +426,25 @@ export default function LandingPage() {
                     ))}
                   </div>
                 ) : (
-                  suggestions.map((place) => (
-                    <button
-                      key={place}
-                      onClick={() => handleSuggestionClick(place)}
-                      className="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/10 rounded-full px-4 py-1.5 text-sm text-slate-100 transition-all hover:scale-105 active:scale-95"
-                    >
-                      {place}
-                    </button>
-                  ))
+                  <div className="flex flex-wrap justify-center gap-3">
+                    {suggestions.slice(0, 5).map((suggestion) => (
+                      <button
+                        key={suggestion}
+                        onClick={() => handleSuggestionClick(suggestion)}
+                        className="px-6 py-2.5 rounded-2xl bg-slate-900/30 backdrop-blur-md border border-white/5 hover:border-blue-500/30 hover:bg-white/5 text-slate-300 hover:text-white transition-all text-sm font-medium shadow-xl hover:shadow-blue-500/10 active:scale-95"
+                      >
+                        {suggestion}
+                      </button>
+                    ))}
+                    {suggestions.length > 5 && (
+                      <Link
+                        href="/explore/all"
+                        className="px-6 py-2.5 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 shadow-lg shadow-blue-900/40 text-white transition-all text-sm font-bold active:scale-95 flex items-center gap-2 hover:from-blue-500 hover:to-indigo-500"
+                      >
+                        More Weekend Destinations <MapPin size={14} />
+                      </Link>
+                    )}
+                  </div>
                 )}
               </div>
             )}
@@ -455,41 +465,52 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { name: 'Rishikesh', slug: 'india/uttarakhand/rishikesh', image: 'https://images.pexels.com/photos/17228392/pexels-photo-17228392/free-photo-of-lakshman-jhula-bridge-in-rishikesh-india.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Yoga capital of the world and Ganga vibes.' },
-              { name: 'Jaipur', slug: 'india/rajasthan/jaipur', image: 'https://images.pexels.com/photos/3581364/pexels-photo-3581364.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'The Pink City: Royal forts and vibrant bazaars.' },
-              { name: 'Munnar', slug: 'india/kerala/munnar', image: 'https://images.pexels.com/photos/13691355/pexels-photo-13691355.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Rolling tea gardens and misty mountain peaks.' },
-              { name: 'Udaipur', slug: 'india/rajasthan/udaipur', image: 'https://images.pexels.com/photos/11140939/pexels-photo-11140939.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'City of Lakes: Romantic palaces and boat rides.' },
-              { name: 'Shimla', slug: 'india/himachal-pradesh/shimla', image: 'https://images.pexels.com/photos/20349479/pexels-photo-20349479/free-photo-of-shimla-city-view-in-winter-captured-at-night.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Colonial charm in the heart of the Himalayas.' },
-              { name: 'Manali', slug: 'india/himachal-pradesh/manali', image: 'https://images.pexels.com/photos/20563456/pexels-photo-20563456/free-photo-of-manali-valley-himachal-pradesh.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Adventure hub and snow-capped peaks.' },
-              { name: 'Golden Temple', slug: 'india/punjab/amritsar', image: 'https://images.pexels.com/photos/14840502/pexels-photo-14840502.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Spiritual tranquility at the heart of Amritsar.' },
-              { name: 'Goa Beaches', slug: 'india/goa', image: 'https://images.pexels.com/photos/4429334/pexels-photo-4429334.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Sun, sand, and Portuguese heritage.' }
+              { name: 'Rishikesh', slug: 'rishikesh', image: 'https://images.pexels.com/photos/17228392/pexels-photo-17228392/free-photo-of-lakshman-jhula-bridge-in-rishikesh-india.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Yoga capital of the world and Ganga vibes.' },
+              { name: 'Jaipur', slug: 'jaipur', image: 'https://images.pexels.com/photos/3581364/pexels-photo-3581364.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'The Pink City: Royal forts and vibrant bazaars.' },
+              { name: 'Munnar', slug: 'munnar', image: 'https://images.pexels.com/photos/13691355/pexels-photo-13691355.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Rolling tea gardens and misty mountain peaks.' },
+              { name: 'Udaipur', slug: 'udaipur', image: 'https://images.pexels.com/photos/11140939/pexels-photo-11140939.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'City of Lakes: Romantic palaces and boat rides.' },
+              { name: 'Shimla', slug: 'shimla', image: 'https://images.pexels.com/photos/20349479/pexels-photo-20349479/free-photo-of-shimla-city-view-in-winter-captured-at-night.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Colonial charm in the heart of the Himalayas.' },
             ].map((city) => (
-              <Link key={city.slug} href={`/explore/${city.slug}`} className="group relative h-72 rounded-3xl overflow-hidden border border-white/10 hover:border-blue-500/50 transition-all shadow-2xl">
+              <Link key={city.slug} href={`/explore/${city.slug}`} className="group relative h-80 rounded-3xl overflow-hidden border border-white/10 hover:border-blue-500/50 transition-all shadow-2xl">
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent z-10" />
                 <Image
                   src={city.image}
                   alt={city.name}
                   fill
                   className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  sizes="(max-width: 768px) 100vw, 25vw"
+                  sizes="(max-width: 768px) 100vw, 33vw"
                 />
                 <div className="absolute bottom-0 left-0 p-6 z-20">
-                  <h3 className="text-xl font-black text-white italic tracking-tighter mb-1">{city.name}</h3>
-                  <p className="text-slate-300 text-[10px] mb-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2">{city.description}</p>
+                  <h3 className="text-2xl font-black text-white italic tracking-tighter mb-1">{city.name}</h3>
+                  <p className="text-slate-300 text-xs mb-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2">{city.description}</p>
                   <Button size="sm" className="bg-white text-slate-950 rounded-full font-bold px-4 h-8 text-xs group-hover:bg-blue-500 group-hover:text-white transition-colors">
                     Explore
                   </Button>
                 </div>
               </Link>
             ))}
+            {/* More Weekend Trips Card as the 6th Block */}
+            <Link
+              href="/explore/all"
+              className="group relative h-80 rounded-3xl overflow-hidden border-2 border-dashed border-blue-500/30 hover:border-blue-500 transition-all bg-gradient-to-br from-blue-600/10 to-purple-600/10 flex flex-col items-center justify-center text-center p-8 hover:bg-white/10"
+            >
+              <div className="w-16 h-16 rounded-full bg-blue-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <MapPin className="w-8 h-8 text-blue-400" />
+              </div>
+              <h3 className="text-2xl font-black text-white italic tracking-tighter mb-2 uppercase">More Weekend Trips</h3>
+              <p className="text-slate-400 text-sm mb-6">Discover 50+ hand-picked destinations tailored for your perfect mini-break.</p>
+              <div className="bg-blue-600 text-white rounded-full font-bold px-6 py-2 text-sm shadow-xl shadow-blue-900/40 transform active:scale-95 transition-all">
+                Browse All
+              </div>
+            </Link>
           </div>
         </div>
-      </section>
+      </section >
 
       {/* Explore by Region */}
-      <section className="py-24 px-6 relative z-20 border-t border-white/5 bg-slate-900/20">
+      < section className="py-24 px-6 relative z-20 border-t border-white/5 bg-slate-900/20" >
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
@@ -501,11 +522,11 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { name: 'India', slug: 'india', image: 'https://images.pexels.com/photos/1007427/pexels-photo-1007427.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'From the Himalayas to the backwaters of Kerala.' },
-              { name: 'Europe', slug: 'europe', image: 'https://images.pexels.com/photos/1530259/pexels-photo-1530259.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Timeless cities, art, and legendary landscapes.' },
-              { name: 'Thailand', slug: 'asia/thailand', image: 'https://images.pexels.com/photos/2412711/pexels-photo-2412711.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Exotic beaches, street food, and golden temples.' },
-              { name: 'Japan', slug: 'asia/japan', image: 'https://images.pexels.com/photos/1440476/pexels-photo-1440476.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Neon cities, ancient shrines, and cherry blossoms.' },
-              { name: 'Bali', slug: 'asia/indonesia/bali', image: 'https://images.pexels.com/photos/2166553/pexels-photo-2166553.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Tropical paradise, spiritual retreats, and surf.' },
-              { name: 'Goa', slug: 'india/goa', image: 'https://images.pexels.com/photos/4429334/pexels-photo-4429334.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Sun-drenched beaches and Portuguese heritage.' }
+              { name: 'Europe', slug: 'europe', image: 'https://images.pexels.com/photos/672532/pexels-photo-672532.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Timeless cities, art, and legendary landscapes.' },
+              { name: 'Thailand', slug: 'bangkok', image: 'https://images.pexels.com/photos/2412711/pexels-photo-2412711.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Exotic beaches, street food, and golden temples.' },
+              { name: 'Japan', slug: 'tokyo', image: 'https://images.pexels.com/photos/1440476/pexels-photo-1440476.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Neon cities, ancient shrines, and cherry blossoms.' },
+              { name: 'Bali', slug: 'bali', image: 'https://images.pexels.com/photos/2166553/pexels-photo-2166553.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Tropical paradise, spiritual retreats, and surf.' },
+              { name: 'Goa', slug: 'goa', image: 'https://images.pexels.com/photos/4429334/pexels-photo-4429334.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Sun-drenched beaches and Portuguese heritage.' }
             ].map((region) => (
               <Link key={region.slug} href={`/explore/${region.slug}`} className="group relative h-96 rounded-3xl overflow-hidden border border-white/10 hover:border-blue-500/50 transition-all shadow-2xl">
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent z-10" />
@@ -527,7 +548,7 @@ export default function LandingPage() {
             ))}
           </div>
         </div>
-      </section>
+      </section >
 
     </div >
   );
