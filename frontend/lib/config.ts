@@ -1,5 +1,5 @@
 export const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || (process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : 'http://localhost:3000');
+export const SITE_URL = 'https://weekendtravellers.com';
 const getGoogleClientId = () => {
     const envId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
     if (!envId) {
