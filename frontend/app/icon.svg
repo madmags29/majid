@@ -1,43 +1,16 @@
-<svg
-    viewBox="0 0 100 100"
-    xmlns="http://www.w3.org/2000/svg"
->
+<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
     <defs>
         <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stop-color="#3b82f6" />
-            <stop offset="100%" stop-color="#a855f7" />
+            <stop offset="100%" stop-color="#ec4899" />
         </linearGradient>
     </defs>
-
-    <!-- Location Pin -->
-    <path
-        d="M 50 20 C 35 20 25 30 25 45 C 25 65 50 90 50 90 C 50 90 75 65 75 45 C 75 30 65 20 50 20 Z"
-        fill="none"
-        stroke="url(#logoGradient)"
-        stroke-width="5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-    />
-    <circle
-        cx="50"
-        cy="45"
-        r="8"
-        fill="#3b82f6"
-    />
-
-    <!-- Flight Path -->
-    <path
-        d="M 10 70 Q 30 90 50 60 Q 70 30 90 50"
-        fill="none"
-        stroke="#93c5fd"
-        stroke-width="2.5"
-        stroke-dasharray="4 8"
-        opacity="0.6"
-    />
-
-    <!-- Plane -->
-    <path
-        d="M 88 48 L 98 52 L 88 56 L 90 52 Z"
-        fill="#ffffff"
-    />
+    <!-- Thicker, more visible orbit -->
+    <circle cx="50" cy="50" r="44" stroke="#3b82f6" stroke-opacity="0.15" stroke-width="3" />
+    <!-- Bolder, Larger Fluid W -->
+    <path d="M12 50 Q 31 10 50 50 Q 69 90 88 50" 
+          stroke="url(#logoGradient)" stroke-width="14" stroke-linecap="round" />
+    <!-- Bolder Voyager Tip -->
+    <path d="M88 50 L75 40 M88 50 L75 60" 
+          stroke="currentColor" stroke-width="6" stroke-linecap="round" />
 </svg>

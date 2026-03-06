@@ -16,59 +16,53 @@ export default function AnimatedLogo({ className, solid = false }: { className?:
             <svg
                 viewBox="0 0 100 100"
                 fill="none"
-                stroke="currentColor"
-                strokeWidth="5" // Increased thickness
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="w-full h-full"
+                xmlns="http://www.w3.org/2000/svg"
+                className={cn("w-full h-full transition-opacity duration-500", animate ? "opacity-100" : "opacity-0")}
             >
                 <defs>
-                    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#3b82f6" /> {/* Blue-500 */}
-                        <stop offset="100%" stopColor="#a855f7" /> {/* Purple-500 */}
+                    <linearGradient id="voyagerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#3b82f6" />
+                        <stop offset="100%" stopColor="#ec4899" />
                     </linearGradient>
                 </defs>
 
-                {/* Location Pin - Gradient Stroke */}
-                <path
-                    d="M 50 20 C 35 20 25 30 25 45 C 25 65 50 90 50 90 C 50 90 75 65 75 45 C 75 30 65 20 50 20 Z"
-                    className={cn("transition-all duration-700 ease-out opacity-0 origin-bottom", animate && "opacity-100 scale-100")}
-                    stroke={solid ? "currentColor" : "url(#logoGradient)"}
-                    strokeDasharray="200"
-                    strokeDashoffset={animate ? 0 : 200}
-                    style={{ transitionDelay: '0s', transformOrigin: '50% 90%' }}
-                />
+                {/* Orbital Path - Fades in and rotates */}
                 <circle
                     cx="50"
-                    cy="45"
-                    r="8"
+                    cy="50"
+                    r="42"
+                    stroke="currentColor"
+                    strokeOpacity="0.1"
+                    strokeWidth="1.5"
+                    strokeDasharray="8 8"
                     className={cn(
-                        "transition-all duration-500 ease-out opacity-0 delay-500",
-                        animate && "opacity-100 animate-pulse" // Added animate-pulse for fade in/out
+                        "transition-all duration-1000 delay-500",
+                        animate && "animate-[spin_20s_linear_infinite]"
                     )}
-                    fill="white" // Changed to white
-                    fillOpacity="1"
-                    stroke="none"
                 />
 
-                {/* Flight Path (Looping) - Light Blue/White */}
+                {/* Fluid W / Flight Path - Draws itself */}
                 <path
-                    d="M 10 70 Q 30 90 50 60 Q 70 30 90 50"
-                    className={cn("transition-all duration-1000 ease-in-out opacity-0", animate && "opacity-60")}
-                    stroke="#93c5fd" // Blue-300
-                    strokeWidth="2.5"
-                    style={{ transitionDelay: '0.5s' }}
-                    strokeDasharray="4 8"
+                    d="M20 50 Q 35 15 50 50 Q 65 85 80 50"
+                    stroke="url(#voyagerGradient)"
+                    strokeWidth="9"
+                    strokeLinecap="round"
+                    strokeDasharray="200"
+                    strokeDashoffset={animate ? 0 : 200}
+                    className="transition-all duration-[1.5s] ease-in-out"
                 />
 
-                {/* Alternative Plane (Static at end of path for robustness) - White */}
+                {/* Voyager Tip / Plane - Floats */}
                 <path
-                    d="M 88 48 L 98 52 L 88 56 L 90 52 Z"
-                    fill="#ffffff"
-                    stroke="#ffffff"
-                    strokeWidth="1"
-                    className={cn("transition-all duration-300 ease-out opacity-0 scale-0 origin-center", animate && "opacity-100 scale-100")}
-                    style={{ transitionDelay: '1.4s' }}
+                    d="M80 50 L70 42 M80 50 L70 58"
+                    stroke="currentColor"
+                    strokeWidth="5"
+                    strokeLinecap="round"
+                    className={cn(
+                        "transition-all duration-500 delay-1000 opacity-0",
+                        animate && "opacity-100 animate-[bounce_3s_infinite_ease-in-out]"
+                    )}
+                    style={{ transformOrigin: '80px 50px' }}
                 />
             </svg>
         </div>
