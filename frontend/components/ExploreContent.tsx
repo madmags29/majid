@@ -117,8 +117,8 @@ export default function ExploreContent({ slug }: { slug: string }) {
         if (navigator.share) {
             try {
                 await navigator.share({
-                    title: `Discover ${data.destination}`,
-                    text: `Check out this amazing guide to ${data.destination} on Weekend Travellers!`,
+                    title: `Weekend Travellers | Discover ${data.destination}`,
+                    text: `Check out this amazing 2-day guide to ${data.destination} on Weekend Travellers! 🧳✈️`,
                     url
                 });
             } catch (err) {

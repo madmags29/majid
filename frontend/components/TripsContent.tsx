@@ -130,10 +130,28 @@ export default function TripsContent() {
         }
     };
 
-    const handleShare = (destination: string) => {
+    const handleShare = async (destination: string) => {
         const url = `${window.location.origin}/search?destination=${encodeURIComponent(destination)}`;
-        navigator.clipboard.writeText(url);
-        toast.success('Trip link copied!');
+
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: `Weekend Travellers | My Trip to ${destination}`,
+                    text: `Check out my planned weekend getaway to ${destination} on Weekend Travellers! 🚗🗺️`,
+                    url
+                });
+            } catch (err) {
+                console.error('Share failed:', err);
+            }
+        } else {
+            try {
+                await navigator.clipboard.writeText(url);
+                toast.success('Trip link copied to clipboard!');
+            } catch (err) {
+                console.error('Clipboard failed:', err);
+                toast.error('Failed to copy link');
+            }
+        }
     };
 
     if (loading) {
