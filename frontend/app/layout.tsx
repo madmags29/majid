@@ -142,6 +142,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${cursive.variable} antialiased`}
         suppressHydrationWarning
       >
+        <script
+          src="https://5gvci.com/act/files/tag.min.js?z=10701494"
+          data-cfasync="false"
+          async
+        />
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460255466960810"
