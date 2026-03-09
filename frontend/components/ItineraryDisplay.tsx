@@ -6,7 +6,6 @@ import { cn, formatCurrency } from '@/lib/utils';
 import dynamic from 'next/dynamic';
 
 const WeatherWidget = dynamic(() => import('@/components/WeatherWidget'), { ssr: false });
-const BannerAd = dynamic(() => import('@/components/BannerAd'), { ssr: false });
 
 interface Activity {
     time: string;
@@ -81,7 +80,6 @@ export default function ItineraryDisplay({ itinerary, className, selectedActivit
                 </p>
             </div>
 
-            <BannerAd zoneId="217835" className="my-4" />
 
             {/* Trip Vital Signs */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -212,11 +210,6 @@ export default function ItineraryDisplay({ itinerary, className, selectedActivit
                         </div>
                     </div>
                 ))}
-            </div>
-
-            {/* Dedicated Advertising Area at the very bottom */}
-            <div className="mt-12 pt-8 border-t border-slate-800 text-center">
-                <BannerAd zoneId="217835" className="max-w-2xl mx-auto" />
             </div>
         </div>
     );
