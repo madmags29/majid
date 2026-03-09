@@ -142,11 +142,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${cursive.variable} antialiased`}
         suppressHydrationWarning
       >
-        <script
+        <Script
           src="https://quge5.com/88/tag.min.js"
           data-zone="217835"
           data-cfasync="false"
-          async
+          strategy="afterInteractive"
         />
         <Script
           async
