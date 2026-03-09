@@ -24,6 +24,12 @@ interface Trip {
     itinerary?: unknown;
 }
 
+const LOADING_MESSAGES = [
+    "Retrieving your travel memories...",
+    "Loading your saved itineraries...",
+    "Preparing your trips dashboard..."
+];
+
 export default function TripsContent() {
     const router = useRouter();
     const [user, setUser] = useState<{ name: string, email: string } | null>(null);
@@ -156,13 +162,11 @@ export default function TripsContent() {
 
     if (loading) {
         return (
-            <CinematicLoader
-                messages={[
-                    "Retrieving your travel memories...",
-                    "Loading your saved itineraries...",
-                    "Preparing your trips dashboard..."
-                ]}
-            />
+            <AnimatePresence mode="wait">
+                <CinematicLoader
+                    messages={LOADING_MESSAGES}
+                />
+            </AnimatePresence>
         );
     }
 

@@ -27,9 +27,26 @@ export default function CinematicLoader({
     const [messageIndex, setMessageIndex] = useState(0);
 
     useEffect(() => {
+        // Lock scroll when loader is active
+        // 1. Lenis-friendly way
+        document.documentElement.classList.add('lenis-stopped');
+
+        // 2. Fallback for non-Lenis pages
+        const originalOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+
+        return () => {
+            // Restore scroll when unmounted
+            document.documentElement.classList.remove('lenis-stopped');
+            document.body.style.overflow = originalOverflow;
+        };
+    }, []); // Run only once on mount/unmount
+
+    useEffect(() => {
         const timer = setInterval(() => {
-            setMessageIndex((prev) => (prev + 1) % messages.length);
+            setMessageIndex((prev) => (prev + 1) % (messages?.length || DEFAULT_MESSAGES.length));
         }, interval);
+
         return () => clearInterval(timer);
     }, [messages, interval]);
 
@@ -38,7 +55,7 @@ export default function CinematicLoader({
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.8, ease: "easeInOut" }}
-            className={cn("fixed inset-0 min-h-screen bg-slate-950 flex flex-col items-center justify-center text-white z-[100] p-6", className)}
+            className={cn("fixed inset-0 w-full h-screen bg-slate-950 flex flex-col items-center justify-center text-white z-[9999] p-6 left-0 top-0", className)}
         >
             <div className="relative mb-12">
                 <div className="absolute inset-0 bg-blue-500/20 blur-3xl animate-pulse" />

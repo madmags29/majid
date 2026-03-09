@@ -63,6 +63,14 @@ interface DestinationData {
     } | null;
 }
 
+const LOADING_MESSAGES = [
+    "Curating your ultimate exploration guide...",
+    "Sourcing high-definition travel wisdom...",
+    "Discovering hidden gems and local secrets...",
+    "Mapping out your perfect weekend escape...",
+    "Compiling 2000 words of wanderlust-worthy insights..."
+];
+
 export default function ExploreContent({ slug }: { slug: string }) {
     const [leftWidth, setLeftWidth] = useState(60); // Percentage width of left panel
     const [isResizing, setIsResizing] = useState(false);
@@ -142,13 +150,13 @@ export default function ExploreContent({ slug }: { slug: string }) {
 
     const [isMediaReady, setIsMediaReady] = useState(false);
 
-    // Prioritize CinematicLoader while loading
+    // Manage transitions manually to ensure AnimatePresence works properly
     if (loading) {
         return (
-            <AnimatePresence>
+            <AnimatePresence mode="wait">
                 <CinematicLoader
                     key="explore-loader"
-                    messages={loadingMessages}
+                    messages={LOADING_MESSAGES}
                 />
             </AnimatePresence>
         );

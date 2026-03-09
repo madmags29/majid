@@ -111,6 +111,22 @@ interface Message {
 
 
 
+const SEARCH_LOADING_MESSAGES = [
+    "Planning your trip...",
+    "Finding great spots...",
+    "Checking weather forecasts...",
+    "Optimizing your itinerary...",
+    "Finalizing details..."
+];
+
+const CUSTOMIZE_LOADING_MESSAGES = [
+    "Designing your perfect escape...",
+    "Scouting the best local spots...",
+    "Optimizing your travel route...",
+    "Curating premium stay options...",
+    "Finalizing your weekend adventure..."
+];
+
 function SearchClient() {
     const searchParams = useSearchParams();
     const destination = (searchParams.get('destination') || '') as string;
@@ -502,20 +518,16 @@ function SearchClient() {
                             ))}
                         </AnimatePresence>
 
-                        {loading && (
-                            <div className="absolute inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm">
-                                <CinematicLoader
-                                    messages={[
-                                        "Planning your trip...",
-                                        "Finding great spots...",
-                                        "Checking weather forecasts...",
-                                        "Optimizing your itinerary...",
-                                        "Finalizing details..."
-                                    ]}
-                                    className="bg-transparent"
-                                />
-                            </div>
-                        )}
+                        <AnimatePresence>
+                            {loading && (
+                                <div className="absolute inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm">
+                                    <CinematicLoader
+                                        messages={SEARCH_LOADING_MESSAGES}
+                                        className="bg-transparent"
+                                    />
+                                </div>
+                            )}
+                        </AnimatePresence>
 
                         {isTyping && (
                             <motion.div
@@ -596,21 +608,15 @@ function SearchClient() {
             </div >
             <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
             {/* Cinematic Loading Overlay */}
-            {
-                loading && (
-                    <div className="fixed inset-0 z-[100]">
+            <AnimatePresence mode="wait">
+                {loading && (
+                    <div className="fixed inset-0 z-[10010]">
                         <CinematicLoader
-                            messages={[
-                                "Designing your perfect escape...",
-                                "Scouting the best local spots...",
-                                "Optimizing your travel route...",
-                                "Curating premium stay options...",
-                                "Finalizing your weekend adventure..."
-                            ]}
+                            messages={CUSTOMIZE_LOADING_MESSAGES}
                         />
                     </div>
-                )
-            }
+                )}
+            </AnimatePresence>
         </div >
     );
 }
