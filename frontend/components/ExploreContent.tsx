@@ -25,6 +25,16 @@ interface Activity {
     ticket_price?: string;
 }
 
+const FALLBACK_IMAGES = [
+    'https://images.unsplash.com/photo-1502602861348-73599a0edabe?w=800&q=80',
+    'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&q=80',
+    'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&q=80',
+    'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5f1?w=800&q=80',
+    'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80',
+    'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=800&q=80',
+    'https://images.unsplash.com/photo-1531572753322-ad063cecc140?w=800&q=80'
+];
+
 interface Day {
     day: number;
     title: string;
@@ -390,6 +400,13 @@ export default function ExploreContent({ slug }: { slug: string }) {
                                                                 fill
                                                                 className="object-cover group-hover:scale-110 transition-transform duration-500"
                                                                 sizes="(max-width: 768px) 100vw, 192px"
+                                                                onError={(e) => {
+                                                                    const target = e.target as any;
+                                                                    const randomFallback = FALLBACK_IMAGES[Math.floor(Math.random() * FALLBACK_IMAGES.length)];
+                                                                    if (target.src !== randomFallback) {
+                                                                        target.src = randomFallback;
+                                                                    }
+                                                                }}
                                                             />
                                                         </div>
                                                     )}

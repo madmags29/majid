@@ -1,5 +1,6 @@
 import express from 'express';
 import { generateItinerary, generateSuggestions, updateItinerary } from '../services/ai';
+import { createClient } from 'pexels';
 import Cache from '../models/Cache';
 import { getFlightPrices, getHotelPrices } from '../services/travelpayouts';
 
@@ -38,27 +39,28 @@ export async function enrichmentWithTravelData(itinerary: any, origin?: string, 
 }
 
 export async function enrichmentWithImages(itinerary: any) {
-    const PIXABAY_API_KEY = process.env.PIXABAY_API_KEY;
+    const PEXELS_API_KEY = process.env.PEXELS_API_KEY;
 
-    if (PIXABAY_API_KEY) {
+    if (PEXELS_API_KEY) {
+        const client = createClient(PEXELS_API_KEY);
         const imagePromises: Promise<void>[] = [];
 
         itinerary.days.forEach((day: any) => {
             day.activities.forEach((activity: any) => {
                 // If activity already has an image, skip
                 if (activity.image_query && !activity.imageUrl) {
-                    const encodedQuery = encodeURIComponent(activity.image_query);
-                    const url = `https://pixabay.com/api/?key=${PIXABAY_API_KEY}&q=${encodedQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=3`;
-
-                    const promise = fetch(url)
-                        .then(res => res.json())
+                    const promise = client.photos.search({
+                        query: activity.image_query,
+                        per_page: 1,
+                        orientation: 'landscape'
+                    })
                         .then((data: any) => {
-                            if (data.hits && data.hits.length > 0) {
-                                // Use webformatURL or largeImageURL
-                                activity.imageUrl = data.hits[0].webformatURL;
+                            if ('photos' in data && data.photos.length > 0) {
+                                // Use medium or large2x for better balance of quality/speed
+                                activity.imageUrl = data.photos[0].src.large || data.photos[0].src.medium;
                             }
                         })
-                        .catch(err => console.error(`Failed to fetch Pixabay image for ${activity.image_query}`, err));
+                        .catch(err => console.error(`Failed to fetch Pexels image for ${activity.image_query}`, err));
 
                     imagePromises.push(promise);
                 }
@@ -95,7 +97,7 @@ router.post('/search', async (req, res) => {
         normalizedDestination = normalizedDestination.replace(/\bitinerary\b/gi, '').trim();
         normalizedDestination = normalizedDestination.replace(/,\s*$/, '').trim();
 
-        const cacheKey = `itinerary/v10:${normalizedDestination}:${requestedDays}${interests ? `:${interests}` : ''}${origin ? `:${origin.trim()}` : ''}`;
+        const cacheKey = `itinerary/v11:${normalizedDestination}:${requestedDays}${interests ? `:${interests}` : ''}${origin ? `:${origin.trim()}` : ''}`;
 
         // Check cache first
         const cachedResult = await Cache.findOne({ key: cacheKey });
