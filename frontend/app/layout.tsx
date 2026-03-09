@@ -6,6 +6,7 @@ import { Suspense } from 'react';
 import Footer from "@/components/Footer";
 import ScrollProgress from "@/components/ScrollProgress";
 import AuthHandler from "@/components/AuthHandler";
+import SmoothScroll from "@/components/SmoothScroll";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -169,12 +170,14 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
-        {children}
-        <Suspense fallback={null}>
-          <AuthHandler />
-        </Suspense>
-        <ScrollProgress />
-        <Footer />
+        <SmoothScroll>
+          {children}
+          <Suspense fallback={null}>
+            <AuthHandler />
+          </Suspense>
+          <ScrollProgress />
+          <Footer />
+        </SmoothScroll>
         <Toaster position="top-center" richColors toastOptions={{ className: '!z-[9999]' }} />
       </body>
     </html>
