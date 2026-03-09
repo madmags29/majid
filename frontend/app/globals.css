@@ -11,9 +11,10 @@
 
 @custom-variant dark (&:is(.dark *));
 
-html {
-  scroll-behavior: smooth;
-}
+/* html {
+  /* scroll-behavior: smooth; */
+/* Disabled to avoid conflict with Lenis */
+/* } */
 
 /* Lenis Recommended CSS */
 html.lenis,
@@ -87,6 +88,8 @@ html.lenis body {
 
 body {
   min-height: 100vh;
+  will-change: transform;
+  /* Hint to browser for layout optimization */
 }
 
 /* Glassmorphism Utilities */

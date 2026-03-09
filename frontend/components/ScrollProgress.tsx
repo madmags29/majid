@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { motion, useScroll, useSpring } from 'framer-motion';
+import { useState } from 'react';
+import { motion, useScroll, useSpring, useMotionValueEvent } from 'framer-motion';
 
 export default function ScrollProgress() {
-    const { scrollYProgress } = useScroll();
+    const { scrollYProgress, scrollY } = useScroll();
     const scaleX = useSpring(scrollYProgress, {
         stiffness: 100,
         damping: 30,
@@ -13,18 +13,13 @@ export default function ScrollProgress() {
 
     const [isVisible, setIsVisible] = useState(false);
 
-    useEffect(() => {
-        const handleScroll = () => {
-            if (window.scrollY > 50) {
-                setIsVisible(true);
-            } else {
-                setIsVisible(false);
-            }
-        };
-
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+    useMotionValueEvent(scrollY, "change", (latest) => {
+        if (latest > 50) {
+            setIsVisible(true);
+        } else {
+            setIsVisible(false);
+        }
+    });
 
     return (
         <motion.div

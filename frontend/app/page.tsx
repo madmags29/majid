@@ -205,7 +205,7 @@ export default function LandingPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: isVideoReady ? 1 : 0 }}
           transition={{ duration: 1 }}
-          className="fixed inset-0 w-full h-full -z-10"
+          className="fixed inset-0 w-full h-full -z-10 will-change-transform"
         >
           <div className="absolute inset-0 bg-black/80 z-10" />
           <video
