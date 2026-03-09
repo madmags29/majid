@@ -143,12 +143,6 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <Script
-          src="https://quge5.com/88/tag.min.js"
-          data-zone="217835"
-          data-cfasync="false"
-          strategy="afterInteractive"
-        />
-        <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460255466960810"
           crossOrigin="anonymous"

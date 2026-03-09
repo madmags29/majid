@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { MapPin, Calendar, Clock, Bus, Train, Plane, Car, Heart, ArrowLeft } from 'lucide-react';
 import { cn, formatCurrency } from '@/lib/utils';
 import dynamic from 'next/dynamic';
 
 const WeatherWidget = dynamic(() => import('@/components/WeatherWidget'), { ssr: false });
+const BannerAd = dynamic(() => import('@/components/BannerAd'), { ssr: false });
 
 interface Activity {
     time: string;
@@ -79,6 +80,8 @@ export default function ItineraryDisplay({ itinerary, className, selectedActivit
                     {itinerary.summary}
                 </p>
             </div>
+
+            <BannerAd zoneId="217835" className="my-4" />
 
             {/* Trip Vital Signs */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -154,62 +157,67 @@ export default function ItineraryDisplay({ itinerary, className, selectedActivit
             {/* Daily Timeline */}
             <div className="space-y-8">
                 {itinerary.days.map((day, dIdx) => (
-                    <div key={dIdx} className="bg-slate-900/50 rounded-2xl border border-slate-800 overflow-hidden shadow-2xl">
-                        <div className="bg-slate-800/80 px-6 py-4 border-b border-slate-700 flex items-center justify-between">
-                            <h4 className="text-lg font-black flex items-center gap-4">
-                                <span className="flex items-center justify-center px-3 py-1 rounded-lg bg-blue-600/20 text-blue-400 text-sm whitespace-nowrap border border-blue-500/20">
-                                    Day {day.day}
-                                </span>
-                                {day.title}
-                            </h4>
-                        </div>
-                        <div className="p-6 space-y-6">
-                            {(day.activities || []).map((activity, aIdx) => (
-                                <div
-                                    key={aIdx}
-                                    className={cn(
-                                        "p-5 rounded-xl border border-slate-800 transition-all duration-300 cursor-pointer group hover:scale-[1.01]",
-                                        selectedActivity === `${day.day}-${aIdx}`
-                                            ? "bg-blue-600/10 border-blue-500/50 ring-1 ring-blue-500/20"
-                                            : "bg-slate-800/30 hover:bg-slate-800/50 hover:border-slate-700"
-                                    )}
-                                    onClick={() => setSelectedActivity(`${day.day}-${aIdx}`)}
-                                >
-                                    <div className="flex items-start justify-between mb-3">
-                                        <div className="text-sm font-bold text-blue-400 uppercase tracking-widest flex items-center gap-2">
-                                            <Clock className="w-4 h-4" />
-                                            {activity.time}
-                                        </div>
-                                        {activity.ticket_price && (
-                                            <span className="text-xs font-bold text-green-400 bg-green-900/20 px-3 py-1 rounded-full border border-green-500/30 shadow-lg shadow-green-900/20">
-                                                {formatCurrency(activity.ticket_price, itinerary.trip_details.currency)}
-                                            </span>
+                    <React.Fragment key={dIdx}>
+                        <div className="bg-slate-900/50 rounded-2xl border border-slate-800 overflow-hidden shadow-2xl">
+                            <div className="bg-slate-800/80 px-6 py-4 border-b border-slate-700 flex items-center justify-between">
+                                <h4 className="text-lg font-black flex items-center gap-4">
+                                    <span className="flex items-center justify-center px-3 py-1 rounded-lg bg-blue-600/20 text-blue-400 text-sm whitespace-nowrap border border-blue-500/20">
+                                        Day {day.day}
+                                    </span>
+                                    {day.title}
+                                </h4>
+                            </div>
+                            <div className="p-6 space-y-6">
+                                {(day.activities || []).map((activity, aIdx) => (
+                                    <div
+                                        key={aIdx}
+                                        className={cn(
+                                            "p-5 rounded-xl border border-slate-800 transition-all duration-300 cursor-pointer group hover:scale-[1.01]",
+                                            selectedActivity === `${day.day}-${aIdx}`
+                                                ? "bg-blue-600/10 border-blue-500/50 ring-1 ring-blue-500/20"
+                                                : "bg-slate-800/30 hover:bg-slate-800/50 hover:border-slate-700"
                                         )}
-                                    </div>
-                                    <div className="text-xl font-bold text-slate-100 flex items-center gap-3 mb-3">
-                                        <MapPin className="w-5 h-5 text-blue-500 shrink-0" />
-                                        <span>{activity.location}</span>
-                                    </div>
-                                    {activity.imageUrl && (
-                                        <div className="mt-4 mb-4 rounded-xl overflow-hidden h-48 w-full relative border border-white/5">
-                                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                                            <img
-                                                src={activity.imageUrl}
-                                                alt={activity.location}
-                                                className="w-full h-full object-cover transform scale-100 group-hover:scale-110 transition-transform duration-700"
-                                            />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                        onClick={() => setSelectedActivity(`${day.day}-${aIdx}`)}
+                                    >
+                                        <div className="flex items-start justify-between mb-3">
+                                            <div className="text-sm font-bold text-blue-400 uppercase tracking-widest flex items-center gap-2">
+                                                <Clock className="w-4 h-4" />
+                                                {activity.time}
+                                            </div>
+                                            {activity.ticket_price && (
+                                                <span className="text-xs font-bold text-green-400 bg-green-900/20 px-3 py-1 rounded-full border border-green-500/30 shadow-lg shadow-green-900/20">
+                                                    {formatCurrency(activity.ticket_price, itinerary.trip_details.currency)}
+                                                </span>
+                                            )}
                                         </div>
-                                    )}
-                                    <div className="text-slate-400 text-base leading-relaxed line-clamp-3 group-hover:line-clamp-none transition-all duration-300">
-                                        {activity.description}
+                                        <div className="text-xl font-bold text-slate-100 flex items-center gap-3 mb-3">
+                                            <MapPin className="w-5 h-5 text-blue-500 shrink-0" />
+                                            <span>{activity.location}</span>
+                                        </div>
+                                        {activity.imageUrl && (
+                                            <div className="mt-4 mb-4 rounded-xl overflow-hidden h-48 w-full relative border border-white/5">
+                                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                <img
+                                                    src={activity.imageUrl}
+                                                    alt={activity.location}
+                                                    className="w-full h-full object-cover transform scale-100 group-hover:scale-110 transition-transform duration-700"
+                                                />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                            </div>
+                                        )}
+                                        <div className="text-slate-400 text-base leading-relaxed line-clamp-3 group-hover:line-clamp-none transition-all duration-300">
+                                            {activity.description}
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
-                    </div>
+                        {/* Add ad after every 2 days if it's a long trip, or just after the first day */}
+                        {(dIdx === 0 || (dIdx + 1) % 2 === 0) && (
+                            <BannerAd zoneId="217835" className="my-6" />
+                        )}
+                    </React.Fragment>
                 ))}
-
             </div>
         </div>
     );
