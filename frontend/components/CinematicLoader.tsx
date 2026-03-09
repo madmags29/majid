@@ -39,6 +39,9 @@ export default function CinematicLoader({
             // Restore scroll when unmounted
             document.documentElement.classList.remove('lenis-stopped');
             document.body.style.overflow = originalOverflow;
+            // Additional fail-safe: Ensure these are cleared
+            document.body.style.removeProperty('overflow');
+            document.body.style.removeProperty('height');
         };
     }, []); // Run only once on mount/unmount
 

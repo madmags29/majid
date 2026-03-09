@@ -153,6 +153,10 @@ function SearchClient() {
         const checkIsDesktop = () => {
             setIsDesktop(window.innerWidth >= 768);
         };
+        // Emergency fail-safe: Ensure scroll is NOT locked when search page mounts
+        document.documentElement.classList.remove('lenis-stopped');
+        document.body.style.overflow = '';
+
         checkIsDesktop();
         window.addEventListener('resize', checkIsDesktop);
         return () => window.removeEventListener('resize', checkIsDesktop);
@@ -465,7 +469,10 @@ function SearchClient() {
                     className="flex flex-col min-w-0 bg-slate-950 border-r border-slate-800 w-full relative h-full"
                     style={isDesktop ? { width: `${leftWidth}% ` } : {}}
                 >
-                    <div className="flex-1 overflow-y-auto p-4 space-y-6 scroll-smooth custom-scrollbar pb-32">
+                    <div
+                        className="flex-1 overflow-y-auto p-4 space-y-6 scroll-smooth custom-scrollbar pb-32"
+                        data-lenis-prevent
+                    >
                         <AnimatePresence initial={false}>
                             {messages.map((msg, idx) => (
                                 <motion.div
