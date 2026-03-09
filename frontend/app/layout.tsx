@@ -131,6 +131,8 @@ const websiteJsonLd = {
     'query-input': 'required name=search_term_string'
   }
 };
+import CookieConsent from "@/components/CookieConsent";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -180,6 +182,7 @@ export default function RootLayout({
           </Suspense>
           <ScrollProgress />
           <Footer />
+          <CookieConsent />
         </SmoothScroll>
         <Toaster position="top-center" richColors toastOptions={{ className: '!z-[9999]' }} />
       </body>
