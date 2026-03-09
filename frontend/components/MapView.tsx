@@ -93,10 +93,9 @@ function ChangeView({ center, zoom }: { center: [number, number]; zoom: number }
     return null;
 }
 
-// Dynamically import RoutingMachine and BannerAd to avoid SSR issues
+// Dynamically import RoutingMachine to avoid SSR issues
 import dynamic from 'next/dynamic';
 const RoutingMachine = dynamic(() => import('./RoutingMachine'), { ssr: false });
-const BannerAd = dynamic(() => import('./BannerAd'), { ssr: false });
 
 export default function MapView({ itinerary, selectedActivity, isExpanded }: MapViewProps) {
     const [center, setCenter] = useState<[number, number]>([48.8566, 2.3522]); // Default (Paris), will update
@@ -283,8 +282,6 @@ export default function MapView({ itinerary, selectedActivity, isExpanded }: Map
                                             Book Now
                                         </a>
                                     )}
-
-                                    <BannerAd zoneId="217835" className="mt-2 scale-90 origin-top" />
 
                                 </div>
                             </div>
