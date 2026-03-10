@@ -79,7 +79,7 @@ export default function BlogPostDetail() {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostSchema) }}
             />
-            <InnerHeader title="Travel Blog" subtitle={post.keyword} showBack backHref="/blog" />
+            <InnerHeader title="Weekend Travellers Blog" subtitle={post.keyword} showBack backHref="/blog" />
 
             {/* Hero Section */}
             <header className="relative w-full h-[60vh] min-h-[400px]">
@@ -101,7 +101,7 @@ export default function BlogPostDetail() {
                         </h1>
                         <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 text-sm text-slate-200 font-medium">
                             <span className="flex items-center gap-2"><User size={18} className="text-blue-400" /> {post.author}</span>
-                            <span className="flex items-center gap-2"><Calendar size={18} className="text-blue-400" /> {new Date(post.publishedDate).toLocaleDateString()}</span>
+                            <span className="flex items-center gap-2"><Calendar size={18} className="text-blue-400" /> {post.publishedDate ? new Date(post.publishedDate).toLocaleDateString() : 'Recent'}</span>
                             <span className="flex items-center gap-2"><Clock size={18} className="text-blue-400" /> {post.readingTime}</span>
                         </div>
                     </div>

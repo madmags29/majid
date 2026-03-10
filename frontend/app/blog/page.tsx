@@ -18,7 +18,9 @@ export default function BlogLandingPage() {
             try {
                 const res = await fetch(`${API_URL}/api/blog`);
                 const data = await res.json();
-                setPosts(data);
+                if (Array.isArray(data)) {
+                    setPosts(data);
+                }
             } catch (error) {
                 console.error('Failed to fetch blog posts:', error);
             } finally {
@@ -32,7 +34,7 @@ export default function BlogLandingPage() {
     const latestPosts = posts.slice(1);
     return (
         <div className="min-h-screen bg-[#020617] text-slate-200 selection:bg-blue-500/30">
-            <InnerHeader title="Travel Blog" subtitle="Stories & Guides" />
+            <InnerHeader title="Weekend Travellers Blog" subtitle="Stories & Guides" />
 
             <main className="container mx-auto px-4 py-12 md:py-20 lg:max-w-7xl">
                 {loading ? (
@@ -76,7 +78,7 @@ export default function BlogLandingPage() {
                                         </p>
                                         <div className="flex items-center gap-6 mb-8 text-sm md:text-base text-slate-300">
                                             <span className="flex items-center gap-2"><User size={18} className="text-blue-400" /> {featuredPost.author}</span>
-                                            <span className="flex items-center gap-2"><Calendar size={18} className="text-blue-400" /> {new Date(featuredPost.publishedDate).toLocaleDateString()}</span>
+                                            <span className="flex items-center gap-2"><Calendar size={18} className="text-blue-400" /> {featuredPost.publishedDate ? new Date(featuredPost.publishedDate).toLocaleDateString() : 'Recent'}</span>
                                         </div>
                                         <Link href={`/blog/${featuredPost.slug}`} className="inline-flex items-center gap-2 bg-white text-slate-950 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-blue-500 hover:text-white transition-all transform hover:scale-105 active:scale-95 shadow-xl">
                                             Read More <ArrowRight size={20} />

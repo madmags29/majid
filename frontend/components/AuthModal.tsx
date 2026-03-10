@@ -68,7 +68,7 @@ function AuthModalContent({ isOpen, onClose, initialMode = 'login' }: AuthModalP
         setMounted(true);
     }, []);
 
-    if (!isOpen) return null;
+    if (!mounted || !isOpen) return null;
 
     const handleSocialLogin = async (provider: string) => {
         if (provider === 'Google') {

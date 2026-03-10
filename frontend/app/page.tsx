@@ -114,7 +114,11 @@ export default function LandingPage() {
     // Fetch latest blog posts
     fetch(`${API_URL}/api/blog`)
       .then(res => res.json())
-      .then(data => setBlogPosts(data.slice(0, 3)))
+      .then(data => {
+        if (Array.isArray(data)) {
+          setBlogPosts(data.slice(0, 3));
+        }
+      })
       .catch(err => console.error("Failed to load blog posts", err));
     if (!userLocation) {
       fetch('https://ipapi.co/json/')
@@ -553,13 +557,16 @@ export default function LandingPage() {
                     />
                     <div className="absolute top-4 left-4">
                       <span className="px-3 py-1 bg-black/60 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-widest rounded-full border border-white/10">
-                        {post.keyword.split(' ')[0]}
+                        {post.keyword?.split(' ')[0] || 'Travel'}
                       </span>
                     </div>
                   </Link>
                   <div className="p-8 flex flex-col flex-1">
                     <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest text-slate-500 mb-4">
-                      <span className="flex items-center gap-1.5 font-bold"><Calendar size={12} className="text-blue-500" /> {new Date(post.publishedDate).toLocaleDateString()}</span>
+                      <span className="flex items-center gap-1.5 font-bold">
+                        <Calendar size={12} className="text-blue-500" /> 
+                        {post.publishedDate ? new Date(post.publishedDate).toLocaleDateString() : 'Recent'}
+                      </span>
                     </div>
                     <h4 className="text-2xl font-bold text-white mb-4 leading-snug group-hover:text-blue-400 transition-colors">
                       <Link href={`/blog/${post.slug}`}>{post.title}</Link>
