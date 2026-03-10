@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Calendar, Clock, User, ArrowRight, MessageSquare, Tag } from 'lucide-react';
 import InnerHeader from '@/components/InnerHeader';
+import { Button } from '@/components/ui/button';
 
 const BLOG_POSTS = [
     {
