@@ -10,6 +10,9 @@ import weatherRouter from './routes/weather';
 import destinationsRouter from './routes/destinations';
 import contactRouter from './routes/contact';
 import adminRouter from './routes/admin';
+import blogRouter from './routes/blog';
+import { initBlogCron } from './cron/blogCron';
+import { seedInitialKeywords } from './services/blogService';
 
 dotenv.config();
 
@@ -39,6 +42,10 @@ if (MONGODB_URI) {
         .connect(MONGODB_URI)
         .then(() => {
             console.log('Successfully connected to MongoDB Atlas');
+            // Seed keywords on startup (optional, service handles existing ones)
+            seedInitialKeywords();
+            // Start Cron
+            initBlogCron();
         })
         .catch((err) => {
             console.error('CRITICAL: MongoDB connection error:', err);
@@ -68,6 +75,7 @@ app.use('/api/trips', tripsRouter);
 app.use('/api', weatherRouter);
 app.use('/api', contactRouter);
 app.use('/api/admin', adminRouter);
+app.use('/api', blogRouter);
 
 // Global Error Handling Middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {

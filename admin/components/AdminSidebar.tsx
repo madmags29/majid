@@ -18,7 +18,8 @@ import {
     ShieldCheck,
     LogOut,
     ChevronLeft,
-    Menu
+    Menu,
+    BookOpen
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 
@@ -35,6 +36,7 @@ const menuItems = [
     { label: 'Revenue', icon: DollarSign, href: '/revenue' },
     { label: 'Growth', icon: Zap, href: '/growth' },
     { label: 'Security', icon: ShieldCheck, href: '/security' },
+    { label: 'Blog Management', icon: BookOpen, href: '/blog' },
 ];
 
 export function AdminSidebar() {

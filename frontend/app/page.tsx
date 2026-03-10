@@ -50,6 +50,7 @@ export default function LandingPage() {
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
   const [user, setUser] = useState<{ name: string, email: string } | null>(null);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
+  const [blogPosts, setBlogPosts] = useState<any[]>([]);
   const [lastFetchedLocation, setLastFetchedLocation] = useState<string>('');
   const [showAutocomplete, setShowAutocomplete] = useState(false);
 
@@ -110,7 +111,11 @@ export default function LandingPage() {
       })
       .catch(err => console.error("Failed to load video", err));
 
-    // Initial coarse location for suggestions if not already set
+    // Fetch latest blog posts
+    fetch(`${API_URL}/api/blog`)
+      .then(res => res.json())
+      .then(data => setBlogPosts(data.slice(0, 3)))
+      .catch(err => console.error("Failed to load blog posts", err));
     if (!userLocation) {
       fetch('https://ipapi.co/json/')
         .then(res => res.json())
@@ -513,10 +518,68 @@ export default function LandingPage() {
             </Link>
           </div>
         </div>
-      </section >
+      </section>
+
+      {/* Latest Blog Posts Section */}
+      {blogPosts.length > 0 && (
+        <section className="py-24 px-6 relative z-20 border-t border-white/5 bg-[#020617]">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 text-center md:text-left">
+              <div>
+                <h2 className="text-4xl md:text-5xl font-black italic tracking-tighter text-white mb-4 uppercase">Latest Stories</h2>
+                <p className="text-xl text-slate-400 max-w-2xl">Expert guides, weekend hacks, and travel inspiration from our AI writers.</p>
+              </div>
+              <Link href="/blog" className="inline-flex items-center gap-2 text-blue-400 font-bold hover:text-blue-300 transition-colors uppercase tracking-widest text-xs">
+                View All Stories <Search size={14} />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+              {blogPosts.map((post, i) => (
+                <motion.article 
+                  key={post._id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="group flex flex-col h-full bg-slate-900/30 rounded-[2rem] overflow-hidden border border-slate-800/50 hover:border-blue-500/30 transition-all shadow-xl hover:shadow-2xl"
+                >
+                  <Link href={`/blog/${post.slug}`} className="block relative aspect-[16/10] overflow-hidden">
+                    <Image
+                      src={post.heroImage}
+                      alt={post.title}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute top-4 left-4">
+                      <span className="px-3 py-1 bg-black/60 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-widest rounded-full border border-white/10">
+                        {post.keyword.split(' ')[0]}
+                      </span>
+                    </div>
+                  </Link>
+                  <div className="p-8 flex flex-col flex-1">
+                    <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest text-slate-500 mb-4">
+                      <span className="flex items-center gap-1.5 font-bold"><Calendar size={12} className="text-blue-500" /> {new Date(post.publishedDate).toLocaleDateString()}</span>
+                    </div>
+                    <h4 className="text-2xl font-bold text-white mb-4 leading-snug group-hover:text-blue-400 transition-colors">
+                      <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+                    </h4>
+                    <p className="text-slate-400 text-sm mb-8 line-clamp-3 leading-relaxed font-medium flex-1">
+                      {post.metaDescription}
+                    </p>
+                    <Link href={`/blog/${post.slug}`} className="text-blue-500 hover:text-blue-400 font-bold text-xs uppercase tracking-widest flex items-center gap-2 mt-auto">
+                      Read Story
+                    </Link>
+                  </div>
+                </motion.article>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Explore by Region */}
-      < section className="py-24 px-6 relative z-20 border-t border-white/5 bg-slate-900/20" >
+      <section className="py-24 px-6 relative z-20 border-t border-white/5 bg-slate-900/20">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
@@ -554,9 +617,8 @@ export default function LandingPage() {
             ))}
           </div>
         </div>
-      </section >
-
-    </div >
+      </section>
+    </div>
   );
 }
 

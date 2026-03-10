@@ -117,8 +117,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
             lastModified: new Date(),
             changeFrequency: 'daily' as const,
             priority: 0.7,
+        },
+        {
+            url: `${baseUrl}/blog`,
+            lastModified: new Date(),
+            changeFrequency: 'daily' as const,
+            priority: 0.9,
         }
     ];
+
+    // Note: In a production environment, you would fetch blog slugs here
+    // const blogPosts = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/blog`).then(res => res.json());
+    // const blogEntries = blogPosts.map((post: any) => ({
+    //     url: `${baseUrl}/blog/${post.slug}`,
+    //     lastModified: new Date(post.updatedAt),
+    //     changeFrequency: 'weekly' as const,
+    //     priority: 0.8,
+    // }));
 
     return [
         ...staticPages,
