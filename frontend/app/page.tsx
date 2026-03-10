@@ -293,6 +293,12 @@ export default function LandingPage() {
             <div className="flex items-center gap-4">
               {/* Desktop Login & Sign Up */}
               <div className="hidden md:flex items-center gap-4">
+                <Link
+                  href="/blog"
+                  className="text-slate-200 hover:text-white hover:bg-white/10 px-4 py-2 rounded-lg transition-all font-medium text-sm"
+                >
+                  Blog
+                </Link>
                 <Button
                   onClick={() => openAuth('login')}
                   variant="ghost"

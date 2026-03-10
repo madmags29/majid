@@ -111,6 +111,13 @@ export default function InnerHeader({
             <div className="flex items-center gap-2 shrink-0">
                 {actions}
 
+                <Link
+                    href="/blog"
+                    className="text-slate-400 hover:text-white px-3 py-1.5 rounded-lg hover:bg-slate-800 transition-all text-sm font-medium"
+                >
+                    Blog
+                </Link>
+
                 <div className="h-6 w-[1px] bg-slate-800 mx-1 hidden sm:block" />
 
                 {user ? (
