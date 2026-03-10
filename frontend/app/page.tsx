@@ -550,34 +550,6 @@ export default function LandingPage() {
         </div>
       </section >
 
-      {/* Latest from Blog Section */}
-      <section className="py-24 px-6 relative z-20 border-t border-white/5 bg-slate-950/40">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-            <div>
-              <h2 className="text-4xl md:text-5xl font-black italic tracking-tighter text-white mb-4 uppercase">Travel <span className="text-blue-400">Insights</span></h2>
-              <p className="text-xl text-slate-400 max-w-2xl">Expert guides, tips, and inspiration for your next weekend escape.</p>
-            </div>
-            <Link href="/blog">
-              <Button variant="outline" className="border-white/10 hover:bg-white/5 rounded-full px-8">
-                View All Guides <ArrowRight className="ml-2 w-4 h-4" />
-              </Button>
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-             {[1, 2, 3].map((i) => (
-                <div key={i} className="group relative h-96 rounded-3xl overflow-hidden border border-white/10 bg-slate-900/50 flex flex-col items-center justify-center p-8">
-                   <div className="text-slate-500 italic mb-4">Latest guides coming soon...</div>
-                   <Link href="/blog">
-                     <Button variant="ghost" size="sm" className="text-blue-400 hover:text-blue-300">Browse Blog</Button>
-                   </Link>
-                </div>
-             ))}
-          </div>
-        </div>
-      </section>
-
     </div >
   );
 }
