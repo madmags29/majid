@@ -90,7 +90,19 @@ export const seedInitialKeywords = async () => {
         "Jaipur shopping guide", "Rishikesh river rafting tips", "Best time to visit Kerala",
         "Goa off-season travel guide", "Backpacking Northeast India", "Hampi travel itinerary",
         "Pondicherry French colonial guide", "Spiti Valley road trip tips", "Leh Ladakh solo trip guide",
-        "Varanasi spiritual experience", "Kashmir Great Lakes trek guide", "Andaman islands honeymoon tips"
+        "Varanasi spiritual experience", "Kashmir Great Lakes trek guide", "Andaman islands honeymoon tips",
+        "Weekend getaway from Bangalore", "Hill stations near Mumbai", "Short trips from Chennai",
+        "Hidden gems in Kerala", "Exploring Rajasthan in a weekend", "Best treks in Sahyadris",
+        "Coastal road trip from Mumbai to Goa", "Waterfall hopping in North Karnataka", "Spiritual weekend in Varanasi",
+        "Pondicherry weekend itinerary", "Wine tasting in Nashik", "Bird watching in Bharatpur",
+        "Ancient ruins of Hampi in 48 hours", "Mysore weekend guide", "Coorg coffee plantation stay",
+        "Ooty vs Kodaikanal for weekend", "Mahabaleshwar monsoon guide", "Lonavala weekend trip",
+        "Alibaug beach getaway", "Kasauli weekend trip from Chandigarh", "Lansdowne peaceful getaway",
+        "Binsar wildlife and views", "Mukteshwar adventure guide", "Chopta Tungnath trek for beginners",
+        "Bir Billing paragliding weekend", "Tirthan valley hidden spots", "Jibhi weekend itinerary",
+        "Kasol vs Tosh for solo travelers", "McLeod Ganj spiritual weekend", "Dalhousie colonial charm",
+        "Auli skiing weekend", "Nainital vs Bhimtal", "Jim Corbett safari weekend",
+        "Mussoorie weekend crowd hacks", "Kanatal camping guide", "Dhanaulti snow weekend"
     ];
 
     try {
