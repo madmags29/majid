@@ -290,7 +290,7 @@ export default function BlogAdminPage() {
                     </div>
 
                     <div className="flex justify-end gap-4">
-                        <Button type="button" onClick={() => setIsEditing(false)} variant="outline">Cancel</Button>
+                        <Button type="button" onClick={() => setIsEditing(false)} variant="secondary">Cancel</Button>
                         <Button type="submit" className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-8">
                             <Save className="mr-2" /> Save Changes
                         </Button>
