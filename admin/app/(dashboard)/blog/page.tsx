@@ -25,8 +25,7 @@ import {
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
+import api from '@/lib/api';
 
 export default function BlogAdminPage() {
     const [activeTab, setActiveTab] = useState<'posts' | 'comments'>('posts');
@@ -44,12 +43,8 @@ export default function BlogAdminPage() {
 
     const fetchPosts = async () => {
         try {
-            const token = localStorage.getItem('adminToken');
-            const res = await fetch(`${API_BASE}/api/admin/blog`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            const data = await res.json();
-            if (Array.isArray(data)) setPosts(data);
+            const res = await api.get('/blog');
+            if (Array.isArray(res.data)) setPosts(res.data);
         } catch (error) {
             toast.error('Failed to fetch blog posts');
         }
@@ -57,12 +52,8 @@ export default function BlogAdminPage() {
 
     const fetchKeywords = async () => {
         try {
-            const token = localStorage.getItem('adminToken');
-            const res = await fetch(`${API_BASE}/api/admin/blog/keywords`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            const data = await res.json();
-            if (Array.isArray(data)) setKeywords(data);
+            const res = await api.get('/blog/keywords');
+            if (Array.isArray(res.data)) setKeywords(res.data);
         } catch (error) {
             toast.error('Failed to fetch keywords');
         }
@@ -70,12 +61,8 @@ export default function BlogAdminPage() {
 
     const fetchComments = async () => {
         try {
-            const token = localStorage.getItem('adminToken');
-            const res = await fetch(`${API_BASE}/api/admin/comments`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            const data = await res.json();
-            if (Array.isArray(data)) setComments(data);
+            const res = await api.get('/comments');
+            if (Array.isArray(res.data)) setComments(res.data);
         } catch (error) {
             toast.error('Failed to fetch comments');
         }
@@ -101,17 +88,9 @@ export default function BlogAdminPage() {
         toast.info(`Generating AI blog for: ${keywordToUse}. This may take a minute...`);
         
         try {
-            const token = localStorage.getItem('adminToken');
-            const res = await fetch(`${API_BASE}/api/admin/blog/generate`, {
-                method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ keyword: keywordToUse })
-            });
+            const res = await api.post('/blog/generate', { keyword: keywordToUse });
             
-            if (res.ok) {
+            if (res.status === 201 || res.status === 200) {
                 toast.success('Blog generated successfully!');
                 fetchPosts();
                 fetchKeywords();
@@ -130,11 +109,7 @@ export default function BlogAdminPage() {
         if (!confirm('Are you sure you want to delete this post?')) return;
 
         try {
-            const token = localStorage.getItem('adminToken');
-            await fetch(`${API_BASE}/api/admin/blog/${id}`, {
-                method: 'DELETE',
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
+            await api.delete(`/blog/${id}`);
             toast.success('Post deleted');
             fetchPosts();
         } catch (error) {
@@ -144,21 +119,12 @@ export default function BlogAdminPage() {
 
     const handleSavePost = async (e: React.FormEvent) => {
         e.preventDefault();
-        const token = localStorage.getItem('adminToken');
-        const method = editPost._id ? 'PUT' : 'POST';
-        const url = editPost._id ? `${API_BASE}/api/admin/blog/${editPost._id}` : `${API_BASE}/api/admin/blog`;
-
         try {
-            const res = await fetch(url, {
-                method,
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(editPost)
-            });
+            const res = editPost._id 
+                ? await api.put(`/blog/${editPost._id}`, editPost)
+                : await api.post('/blog', editPost);
 
-            if (res.ok) {
+            if (res.status === 200 || res.status === 201) {
                 toast.success(editPost._id ? 'Post updated' : 'Post created');
                 setIsEditing(false);
                 setEditPost(null);
@@ -173,17 +139,8 @@ export default function BlogAdminPage() {
 
     const handleModerateComment = async (id: string, isApproved: boolean) => {
         try {
-            const token = localStorage.getItem('adminToken');
-            const res = await fetch(`${API_BASE}/api/admin/comments/${id}`, {
-                method: 'PATCH',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ isApproved })
-            });
-
-            if (res.ok) {
+            const res = await api.patch(`/comments/${id}`, { isApproved });
+            if (res.status === 200) {
                 toast.success(isApproved ? 'Comment approved' : 'Comment rejected');
                 fetchComments();
             }
@@ -195,11 +152,7 @@ export default function BlogAdminPage() {
     const handleDeleteComment = async (id: string) => {
         if (!confirm('Delete this comment?')) return;
         try {
-            const token = localStorage.getItem('adminToken');
-            await fetch(`${API_BASE}/api/admin/comments/${id}`, {
-                method: 'DELETE',
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
+            await api.delete(`/comments/${id}`);
             toast.success('Comment deleted');
             fetchComments();
         } catch (error) {

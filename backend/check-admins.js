@@ -1,0 +1,1 @@
+const mongoose = require('mongoose'); const { User } = require('./src/models/User'); require('dotenv').config(); mongoose.connect(process.env.MONGODB_URI).then(async () => { const admins = await User.find({ isAdmin: true }); console.log('Admins found:', admins.map(a => a.email)); process.exit(0); });
