@@ -10,6 +10,7 @@ import InnerHeader from '@/components/InnerHeader';
 import { Button } from '@/components/ui/button';
 import { API_URL } from '@/lib/config';
 import ReactMarkdown from 'react-markdown';
+import CommentSection from '@/components/blog/CommentSection';
 
 export default function BlogPostDetail() {
     const { slug } = useParams();
@@ -170,6 +171,8 @@ export default function BlogPostDetail() {
                             </div>
                         </section>
                     )}
+                    {/* Comment Section */}
+                    <CommentSection postSlug={post.slug} apiUrl={API_URL} />
                 </article>
 
                 {/* Sidebar */}

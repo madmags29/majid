@@ -1,6 +1,7 @@
 import express from 'express';
 import BlogPost from '../models/BlogPost';
 import BlogKeyword from '../models/BlogKeyword';
+import Comment from '../models/Comment';
 import { generateBlogContent, fetchPexelsImages, generateBlogSlug } from '../services/blogService';
 import { adminAuth } from '../middleware/adminAuth';
 
@@ -24,6 +25,42 @@ router.get('/blog/:slug', async (req, res) => {
         res.json(post);
     } catch (error) {
         res.status(500).json({ error: 'Failed to fetch post' });
+    }
+});
+
+// Public: Get comments for a post
+router.get('/blog/:slug/comments', async (req, res) => {
+    try {
+        const post = await BlogPost.findOne({ slug: req.params.slug });
+        if (!post) return res.status(404).json({ error: 'Post not found' });
+        
+        const comments = await Comment.find({ postId: post._id, isApproved: true }).sort({ createdAt: -1 });
+        res.json(comments);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch comments' });
+    }
+});
+
+// Public: Post a comment
+router.post('/blog/:slug/comments', async (req, res) => {
+    const { userName, content } = req.body;
+    if (!userName || !content) return res.status(400).json({ error: 'Name and content are required' });
+
+    try {
+        const post = await BlogPost.findOne({ slug: req.params.slug });
+        if (!post) return res.status(404).json({ error: 'Post not found' });
+
+        const newComment = new Comment({
+            postId: post._id,
+            userName,
+            content,
+            isApproved: false // Require moderation
+        });
+
+        await newComment.save();
+        res.status(201).json({ message: 'Comment submitted for moderation', comment: newComment });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to post comment' });
     }
 });
 
@@ -68,6 +105,51 @@ router.post('/admin/blog/generate', adminAuth, async (req, res) => {
     } catch (error) {
         console.error('Manual generation failed:', error);
         res.status(500).json({ error: 'Failed to generate blog post' });
+    }
+});
+
+// Admin: Manual Create Post
+router.post('/admin/blog', adminAuth, async (req, res) => {
+    try {
+        const newPost = new BlogPost({
+            ...req.body,
+            slug: req.body.slug || generateBlogSlug(req.body.title)
+        });
+        await newPost.save();
+        res.status(201).json(newPost);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to create post' });
+    }
+});
+
+// Admin: Get all comments for moderation
+router.get('/admin/comments', adminAuth, async (req, res) => {
+    try {
+        const comments = await Comment.find().populate('postId', 'title').sort({ createdAt: -1 });
+        res.json(comments);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch comments' });
+    }
+});
+
+// Admin: Moderate Comment (Approve/Reject)
+router.patch('/admin/comments/:id', adminAuth, async (req, res) => {
+    const { isApproved } = req.body;
+    try {
+        const comment = await Comment.findByIdAndUpdate(req.params.id, { isApproved }, { new: true });
+        res.json(comment);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to moderate comment' });
+    }
+});
+
+// Admin: Delete Comment
+router.delete('/admin/comments/:id', adminAuth, async (req, res) => {
+    try {
+        await Comment.findByIdAndDelete(req.params.id);
+        res.json({ message: 'Comment deleted' });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to delete comment' });
     }
 });
 
