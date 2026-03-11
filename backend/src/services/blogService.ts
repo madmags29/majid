@@ -119,43 +119,60 @@ export const seedInitialKeywords = async () => {
     }
 };
 
-export const automateDailyPublish = async () => {
-    try {
-        const nextKeyword = await BlogKeyword.findOne({ used: false });
-        if (!nextKeyword) {
-            console.log('No unused keywords found for auto-publishing');
-            return;
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+export const automateDailyPublish = async (count: number = 5) => {
+    console.log(`Starting automated daily publish for ${count} posts...`);
+    const results = [];
+
+    for (let i = 0; i < count; i++) {
+        try {
+            const nextKeyword = await BlogKeyword.findOne({ used: false });
+            if (!nextKeyword) {
+                console.log('No more unused keywords found');
+                break;
+            }
+
+            console.log(`[${i + 1}/${count}] Generating post for: ${nextKeyword.keyword}`);
+            
+            const content = await generateBlogContent(nextKeyword.keyword);
+            const images = await fetchPexelsImages(nextKeyword.keyword, 6);
+            
+            if (!content || images.length === 0) {
+                console.error(`Failed to generate content or images for: ${nextKeyword.keyword}`);
+                continue;
+            }
+
+            const newPost = new BlogPost({
+                title: content.title,
+                slug: generateBlogSlug(content.title),
+                metaTitle: content.metaTitle,
+                metaDescription: content.metaDescription,
+                content: JSON.stringify(content),
+                heroImage: images[0],
+                images: images.slice(1),
+                keyword: nextKeyword.keyword,
+                faqs: content.faqs,
+                readingTime: content.readingTime
+            });
+
+            await newPost.save();
+            nextKeyword.used = true;
+            await nextKeyword.save();
+
+            console.log(`Successfully published: ${content.title}`);
+            results.push(newPost);
+
+            // Wait 10 seconds between posts to respect rate limits
+            if (i < count - 1) {
+                console.log('Waiting 10 seconds before next generation...');
+                await delay(10000);
+            }
+        } catch (error) {
+            console.error(`Error in automated publish loop at index ${i}:`, error);
         }
-
-        console.log(`Starting auto-publish for keyword: ${nextKeyword.keyword}`);
-        
-        const content = await generateBlogContent(nextKeyword.keyword);
-        const images = await fetchPexelsImages(nextKeyword.keyword, 6);
-        
-        if (!content || images.length === 0) {
-            throw new Error('Failed to generate content or fetch images');
-        }
-
-        const newPost = new BlogPost({
-            title: content.title,
-            slug: generateBlogSlug(content.title),
-            metaTitle: content.metaTitle,
-            metaDescription: content.metaDescription,
-            content: JSON.stringify(content), // Storing structured content for easier rendering
-            heroImage: images[0],
-            images: images.slice(1),
-            keyword: nextKeyword.keyword,
-            faqs: content.faqs,
-            readingTime: content.readingTime
-        });
-
-        await newPost.save();
-        nextKeyword.used = true;
-        await nextKeyword.save();
-
-        console.log(`Successfully published blog post: ${content.title}`);
-        return newPost;
-    } catch (error) {
-        console.error('Auto-publish failed:', error);
     }
+
+    console.log(`Daily publish job completed. Generated ${results.length} posts.`);
+    return results;
 };
