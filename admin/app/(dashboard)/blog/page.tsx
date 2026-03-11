@@ -26,7 +26,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
 
 export default function BlogAdminPage() {
     const [activeTab, setActiveTab] = useState<'posts' | 'comments'>('posts');
@@ -45,7 +45,7 @@ export default function BlogAdminPage() {
     const fetchPosts = async () => {
         try {
             const token = localStorage.getItem('adminToken');
-            const res = await fetch(`${API_BASE}/api/admin/blog`, {
+            const res = await fetch(`${API_BASE}/admin/blog`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const data = await res.json();
@@ -58,7 +58,7 @@ export default function BlogAdminPage() {
     const fetchKeywords = async () => {
         try {
             const token = localStorage.getItem('adminToken');
-            const res = await fetch(`${API_BASE}/api/admin/blog/keywords`, {
+            const res = await fetch(`${API_BASE}/admin/blog/keywords`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const data = await res.json();
@@ -71,7 +71,7 @@ export default function BlogAdminPage() {
     const fetchComments = async () => {
         try {
             const token = localStorage.getItem('adminToken');
-            const res = await fetch(`${API_BASE}/api/admin/comments`, {
+            const res = await fetch(`${API_BASE}/admin/comments`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const data = await res.json();
@@ -102,7 +102,7 @@ export default function BlogAdminPage() {
         
         try {
             const token = localStorage.getItem('adminToken');
-            const res = await fetch(`${API_BASE}/api/admin/blog/generate`, {
+            const res = await fetch(`${API_BASE}/admin/blog/generate`, {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
@@ -131,7 +131,7 @@ export default function BlogAdminPage() {
 
         try {
             const token = localStorage.getItem('adminToken');
-            await fetch(`${API_BASE}/api/admin/blog/${id}`, {
+            await fetch(`${API_BASE}/admin/blog/${id}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -146,7 +146,7 @@ export default function BlogAdminPage() {
         e.preventDefault();
         const token = localStorage.getItem('adminToken');
         const method = editPost._id ? 'PUT' : 'POST';
-        const url = editPost._id ? `${API_BASE}/api/admin/blog/${editPost._id}` : `${API_BASE}/api/admin/blog`;
+        const url = editPost._id ? `${API_BASE}/admin/blog/${editPost._id}` : `${API_BASE}/admin/blog`;
 
         try {
             const res = await fetch(url, {
@@ -174,7 +174,7 @@ export default function BlogAdminPage() {
     const handleModerateComment = async (id: string, isApproved: boolean) => {
         try {
             const token = localStorage.getItem('adminToken');
-            const res = await fetch(`${API_BASE}/api/admin/comments/${id}`, {
+            const res = await fetch(`${API_BASE}/admin/comments/${id}`, {
                 method: 'PATCH',
                 headers: { 
                     'Content-Type': 'application/json',
@@ -196,7 +196,7 @@ export default function BlogAdminPage() {
         if (!confirm('Delete this comment?')) return;
         try {
             const token = localStorage.getItem('adminToken');
-            await fetch(`${API_BASE}/api/admin/comments/${id}`, {
+            await fetch(`${API_BASE}/admin/comments/${id}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
