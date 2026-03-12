@@ -1,16 +1,20 @@
 import cron from 'node-cron';
 import { automateDailyPublish } from '../services/blogService';
+import { log } from '../utils/logger';
 
 export const initBlogCron = () => {
-    // Run daily at 1:00 AM
+    log('Blog auto-publish cron initializing...');
+    
+    // Original daily at 1:00 AM
     cron.schedule('0 1 * * *', async () => {
-        console.log('Running daily blog auto-publish job...');
+        log('Running scheduled daily blog auto-publish job (1:00 AM)...');
         try {
-            await automateDailyPublish();
-        } catch (error) {
-            console.error('Daily blog auto-publish job failed:', error);
+            await automateDailyPublish(5);
+            log('Daily blog auto-publish job completed successfully');
+        } catch (error: any) {
+            log(`Daily blog auto-publish job failed: ${error.message}`);
         }
     });
 
-    console.log('Blog auto-publish cron initialized');
+    log('Blog auto-publish cron initialized and scheduled for 1:00 AM daily');
 };

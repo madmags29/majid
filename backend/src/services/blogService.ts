@@ -3,6 +3,7 @@ import OpenAI from 'openai';
 import BlogKeyword from '../models/BlogKeyword';
 import BlogPost from '../models/BlogPost';
 import dotenv from 'dotenv';
+import { log } from '../utils/logger';
 
 dotenv.config();
 
@@ -133,13 +134,13 @@ export const automateDailyPublish = async (count: number = 5) => {
                 break;
             }
 
-            console.log(`[${i + 1}/${count}] Generating post for: ${nextKeyword.keyword}`);
+            log(`[${i + 1}/${count}] Generating post for: ${nextKeyword.keyword}`);
             
             const content = await generateBlogContent(nextKeyword.keyword);
             const images = await fetchPexelsImages(nextKeyword.keyword, 6);
             
             if (!content || images.length === 0) {
-                console.error(`Failed to generate content or images for: ${nextKeyword.keyword}`);
+                log(`Failed to generate content or images for: ${nextKeyword.keyword}`);
                 continue;
             }
 
