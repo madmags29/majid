@@ -11,7 +11,6 @@ import destinationsRouter from './routes/destinations';
 import contactRouter from './routes/contact';
 import adminRouter from './routes/admin';
 import blogRouter from './routes/blog';
-import { initBlogCron } from './cron/blogCron';
 import { seedInitialKeywords } from './services/blogService';
 
 dotenv.config();
@@ -44,8 +43,7 @@ if (MONGODB_URI) {
             console.log('Successfully connected to MongoDB Atlas');
             // Seed keywords on startup (optional, service handles existing ones)
             seedInitialKeywords();
-            // Start Cron
-            initBlogCron();
+            // Blog auto-publish is now handled by Vercel Cron Jobs (see api/generate-cron.ts)
         })
         .catch((err) => {
             console.error('CRITICAL: MongoDB connection error:', err);

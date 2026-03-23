@@ -6,6 +6,10 @@
             "use": "@vercel/node"
         },
         {
+            "src": "api/generate-cron.ts",
+            "use": "@vercel/node"
+        },
+        {
             "src": "public/**",
             "use": "@vercel/static"
         }
@@ -18,6 +22,12 @@
         {
             "source": "/(.*)",
             "destination": "public/index.html"
+        }
+    ],
+    "crons": [
+        {
+            "path": "/api/generate-cron",
+            "schedule": "0 1 * * *"
         }
     ]
 }
