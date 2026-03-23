@@ -4,8 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { MapPin, ArrowLeft } from 'lucide-react';
 import InnerHeader from '@/components/InnerHeader';
-
-import ExploreItineraryButton from '@/components/ExploreItineraryButton';
+import DirectItineraryDisplay from '@/components/DirectItineraryDisplay';
 
 interface Props {
     params: { slug: string };
@@ -31,8 +30,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
 
     const titleName = destination.name;
-    const title = `Explore ${titleName}, ${destination.country} | Weekend Travellers`;
-    const description = `Discover the best 3-day weekend itineraries and things to do in ${titleName}, ${destination.country}. Plan your perfect trip with AI-powered suggestions.`;
+    const title = `${titleName}, ${destination.country} Perfect Weekend Guide & Itinerary | Weekend Travellers`;
+    const description = `Looking for the best things to do in ${titleName}? Explore our expert AI-generated 2-day weekend itinerary for ${titleName}, ${destination.country}, including top attractions, budget estimates, flights, and hidden gems.`;
 
     return {
         title,
@@ -108,7 +107,7 @@ export default async function DestinationPage({ params }: Props) {
                             ))}
                         </div>
 
-                        <ExploreItineraryButton destinationName={destination.name} />
+                        <DirectItineraryDisplay destinationName={destination.name} />
                     </div>
                 </section>
 
@@ -117,7 +116,7 @@ export default async function DestinationPage({ params }: Props) {
                         Why visit {destination.name}?
                     </h2>
                     <p className="text-xl text-slate-400 leading-relaxed font-light">
-                        {destination.name} is one of our hand-picked curated destinations. Known for its incredible scenery, authentic culture, and unforgettable experiences, it&apos;s the perfect spot for a weekend getaway. Click the button above to generate a highly detailed, personalized AI itinerary complete with recommended flights, hotels, and daily activities.
+                        {destination.name} is one of our hand-picked curated destinations. Known for its incredible scenery, authentic culture, and unforgettable experiences, it&apos;s the perfect spot for a weekend getaway. Above is your highly detailed, personalized 2-day AI itinerary complete with recommended travel logistics, hotels, and daily activities to make the most of your trip.
                     </p>
                 </section>
             </main>
