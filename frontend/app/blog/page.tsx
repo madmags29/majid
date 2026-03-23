@@ -70,10 +70,10 @@ export default function BlogLandingPage() {
                                         <span className="inline-block px-3 py-1 bg-blue-600 text-white text-xs font-bold uppercase tracking-widest rounded-full mb-4 shadow-lg shadow-blue-500/20">
                                             Featured Story
                                         </span>
-                                        <h2 className="text-3xl md:text-5xl lg:text-6xl font-black tracking-tight text-white mb-6 leading-tight">
+                                        <h2 className="text-3xl md:text-5xl lg:text-6xl font-black tracking-tight text-white mb-6 leading-tight drop-shadow-lg">
                                             {featuredPost.title}
                                         </h2>
-                                        <p className="text-slate-200 text-base md:text-xl mb-8 line-clamp-2 font-medium opacity-90">
+                                        <p className="text-slate-200 text-base md:text-xl mb-8 font-medium opacity-90 drop-shadow-md">
                                             {featuredPost.metaDescription}
                                         </p>
                                         <div className="flex items-center gap-6 mb-8 text-sm md:text-base text-slate-300">
@@ -142,7 +142,7 @@ export default function BlogLandingPage() {
                                             <h4 className="text-2xl font-bold text-white mb-4 leading-snug group-hover:text-blue-400 transition-colors">
                                                 <Link href={`/blog/${post.slug}`}>{post.title}</Link>
                                             </h4>
-                                            <p className="text-slate-400 text-sm mb-8 line-clamp-3 leading-relaxed font-medium flex-1">
+                                            <p className="text-slate-400 text-sm mb-8 leading-relaxed font-medium flex-1">
                                                 {post.metaDescription}
                                             </p>
                                             <div className="pt-6 border-t border-slate-800 flex items-center justify-between">
