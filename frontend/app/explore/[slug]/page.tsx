@@ -107,7 +107,6 @@ export default async function DestinationPage({ params }: Props) {
                             ))}
                         </div>
 
-                        <DirectItineraryDisplay destinationName={destination.name} />
                     </div>
                 </section>
 
@@ -118,6 +117,10 @@ export default async function DestinationPage({ params }: Props) {
                     <p className="text-xl text-slate-400 leading-relaxed font-light">
                         {destination.name} is one of our hand-picked curated destinations. Known for its incredible scenery, authentic culture, and unforgettable experiences, it&apos;s the perfect spot for a weekend getaway. Above is your highly detailed, personalized 2-day AI itinerary complete with recommended travel logistics, hotels, and daily activities to make the most of your trip.
                     </p>
+                </section>
+
+                <section className="max-w-6xl mx-auto px-4 pb-24">
+                    <DirectItineraryDisplay destinationName={destination.name} />
                 </section>
             </main>
         </div>
