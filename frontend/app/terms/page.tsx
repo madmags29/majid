@@ -4,7 +4,13 @@ import { SUPPORT_EMAIL } from '@/lib/config';
 
 export const metadata: Metadata = {
     title: 'Terms & Conditions | Weekend Travellers AI Trip Planner',
-    description: 'Rules and guidelines for using our AI travel planning services.',
+    description: 'Rules and guidelines for using our AI travel planning services and website.',
+    keywords: ['terms of service', 'weekend travellers terms', 'user agreement'],
+    openGraph: {
+        title: 'Terms & Conditions | Weekend Travellers AI Trip Planner',
+        description: 'Rules and guidelines for using our AI travel planning services and website.',
+        type: 'website',
+    },
     alternates: {
         canonical: '/terms',
     },

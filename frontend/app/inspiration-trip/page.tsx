@@ -3,7 +3,13 @@ import SuspendedMenuClient from './MenuClient';
 
 export const metadata: Metadata = {
     title: 'Trip Inspiration | Discover Unique Weekend Getaways',
-    description: 'Browse curated collections of top-rated weekend getaways and hidden gems.',
+    description: 'Browse curated collections of top-rated weekend getaways and hidden gems. Find your next travel inspiration, from mountain cabins to beachside escapes.',
+    keywords: ['trip inspiration', 'unique getaways', 'hidden travel gems', 'weekend escape ideas', 'holiday inspiration'],
+    openGraph: {
+        title: 'Trip Inspiration | Discover Unique Weekend Getaways',
+        description: 'Browse curated collections of top-rated weekend getaways and hidden gems. Find your next travel inspiration, from mountain cabins to beachside escapes.',
+        type: 'website',
+    }
 };
 
 export default function WeekendMenuPage() {

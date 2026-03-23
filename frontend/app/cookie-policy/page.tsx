@@ -4,7 +4,13 @@ import { SUPPORT_EMAIL } from '@/lib/config';
 
 export const metadata: Metadata = {
     title: 'Cookie Policy | Weekend Travellers',
-    description: 'Information about how we use cookies to improve your travel planning experience.',
+    description: 'Information about how we use cookies to improve your travel planning experience and site functionality.',
+    keywords: ['cookie policy', 'website cookies', 'weekend travellers cookies'],
+    openGraph: {
+        title: 'Cookie Policy | Weekend Travellers',
+        description: 'Information about how we use cookies to improve your travel planning experience and site functionality.',
+        type: 'website',
+    },
     alternates: {
         canonical: '/cookie-policy',
     },
