@@ -47,7 +47,7 @@ export default function UserManagementPage() {
 
     useEffect(() => {
         fetchUsers();
-    }, [page, status, search]);
+    }, [fetchUsers]);
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();

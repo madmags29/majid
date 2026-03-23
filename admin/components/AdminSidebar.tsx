@@ -42,15 +42,11 @@ const menuItems = [
 export function AdminSidebar() {
     const pathname = usePathname();
     const [isCollapsed, setIsCollapsed] = useState(false);
-    const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
         const handleResize = () => {
             if (window.innerWidth < 1024) {
-                setIsMobile(true);
                 setIsCollapsed(true);
-            } else {
-                setIsMobile(false);
             }
         };
         handleResize();

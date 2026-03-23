@@ -4,34 +4,50 @@ import React, { useState, useEffect } from 'react';
 import { 
     Plus, 
     Search, 
-    Filter, 
-    MoreVertical, 
     Edit, 
     Trash2, 
-    ExternalLink, 
     Loader2, 
-    CheckCircle2, 
-    XCircle,
     BrainCircuit,
-    Image as ImageIcon,
-    Calendar,
-    Eye,
-    MessageSquare,
     Check,
-    X,
     Save,
     ArrowLeft
 } from 'lucide-react';
-import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import api from '@/lib/api';
 
+interface BlogPost {
+    _id?: string;
+    title: string;
+    slug: string;
+    keyword: string;
+    content: string;
+    heroImage: string;
+    metaTitle: string;
+    metaDescription: string;
+    isPublished: boolean;
+}
+
+interface BlogComment {
+    _id: string;
+    userName: string;
+    content: string;
+    postId: { title?: string } | string;
+    isApproved: boolean;
+}
+
+interface BlogKeywordItem {
+    _id: string;
+    keyword: string;
+    used: boolean;
+}
+
 export default function BlogAdminPage() {
     const [activeTab, setActiveTab] = useState<'posts' | 'comments'>('posts');
-    const [posts, setPosts] = useState<any[]>([]);
-    const [comments, setComments] = useState<any[]>([]);
-    const [keywords, setKeywords] = useState<any[]>([]);
+    const [posts, setPosts] = useState<BlogPost[]>([]);
+    const [comments, setComments] = useState<BlogComment[]>([]);
+    const [keywords, setKeywords] = useState<BlogKeywordItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [generating, setGenerating] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
@@ -39,13 +55,13 @@ export default function BlogAdminPage() {
     
     // Edit/Add Mode
     const [isEditing, setIsEditing] = useState(false);
-    const [editPost, setEditPost] = useState<any>(null);
+    const [editPost, setEditPost] = useState<BlogPost | null>(null);
 
     const fetchPosts = async () => {
         try {
             const res = await api.get('/blog');
             if (Array.isArray(res.data)) setPosts(res.data);
-        } catch (error) {
+        } catch {
             toast.error('Failed to fetch blog posts');
         }
     };
@@ -54,7 +70,7 @@ export default function BlogAdminPage() {
         try {
             const res = await api.get('/blog/keywords');
             if (Array.isArray(res.data)) setKeywords(res.data);
-        } catch (error) {
+        } catch {
             toast.error('Failed to fetch keywords');
         }
     };
@@ -63,7 +79,7 @@ export default function BlogAdminPage() {
         try {
             const res = await api.get('/comments');
             if (Array.isArray(res.data)) setComments(res.data);
-        } catch (error) {
+        } catch {
             toast.error('Failed to fetch comments');
         }
     };
@@ -98,7 +114,7 @@ export default function BlogAdminPage() {
             } else {
                 throw new Error('Generation failed');
             }
-        } catch (error) {
+        } catch {
             toast.error('Failed to generate blog');
         } finally {
             setGenerating(false);
@@ -112,13 +128,14 @@ export default function BlogAdminPage() {
             await api.delete(`/blog/${id}`);
             toast.success('Post deleted');
             fetchPosts();
-        } catch (error) {
+        } catch {
             toast.error('Failed to delete post');
         }
     };
 
     const handleSavePost = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!editPost) return;
         try {
             const res = editPost._id 
                 ? await api.put(`/blog/${editPost._id}`, editPost)
@@ -132,7 +149,7 @@ export default function BlogAdminPage() {
             } else {
                 toast.error('Failed to save post');
             }
-        } catch (error) {
+        } catch {
             toast.error('An error occurred');
         }
     };
@@ -144,7 +161,7 @@ export default function BlogAdminPage() {
                 toast.success(isApproved ? 'Comment approved' : 'Comment rejected');
                 fetchComments();
             }
-        } catch (error) {
+        } catch {
             toast.error('Failed to moderate comment');
         }
     };
@@ -155,12 +172,12 @@ export default function BlogAdminPage() {
             await api.delete(`/comments/${id}`);
             toast.success('Comment deleted');
             fetchComments();
-        } catch (error) {
+        } catch {
             toast.error('Failed to delete comment');
         }
     };
 
-    if (isEditing) {
+    if (isEditing && editPost) {
         return (
             <div className="p-8 max-w-5xl mx-auto space-y-10">
                 <div className="flex items-center justify-between">
@@ -377,7 +394,7 @@ export default function BlogAdminPage() {
                                         <tr key={post._id} className="hover:bg-white/5 group">
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center gap-3">
-                                                    <img src={post.heroImage} className="w-10 h-10 rounded-lg object-cover" alt="" />
+                                                    <Image src={post.heroImage} width={40} height={40} className="w-10 h-10 rounded-lg object-cover" alt="" />
                                                     <div className="min-w-0">
                                                         <p className="text-white font-bold text-sm truncate max-w-[200px]">{post.title}</p>
                                                         <p className="text-xs text-slate-500">{post.keyword}</p>
@@ -388,7 +405,7 @@ export default function BlogAdminPage() {
                                             <td className="px-6 py-4 text-right">
                                                 <div className="flex items-center justify-end gap-2">
                                                     <Button onClick={() => { setEditPost(post); setIsEditing(true); }} size="icon" variant="ghost"><Edit size={18} /></Button>
-                                                    <Button onClick={() => handleDelete(post._id)} size="icon" variant="ghost" className="text-red-500"><Trash2 size={18} /></Button>
+                                                    <Button onClick={() => post._id && handleDelete(post._id)} size="icon" variant="ghost" className="text-red-500"><Trash2 size={18} /></Button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -419,7 +436,7 @@ export default function BlogAdminPage() {
                                     <tr key={comment._id} className="hover:bg-white/5 group">
                                         <td className="px-6 py-4 text-white font-bold text-sm">{comment.userName}</td>
                                         <td className="px-6 py-4 text-slate-400 text-sm max-w-md truncate">{comment.content}</td>
-                                        <td className="px-6 py-4 text-xs text-indigo-400 font-medium">{(comment.postId as any)?.title || 'Deleted Post'}</td>
+                                        <td className="px-6 py-4 text-xs text-indigo-400 font-medium">{typeof comment.postId === 'object' && comment.postId?.title ? comment.postId.title : 'Deleted Post'}</td>
                                         <td className="px-6 py-4 text-right">
                                             <div className="flex items-center justify-end gap-2">
                                                 {!comment.isApproved && (
