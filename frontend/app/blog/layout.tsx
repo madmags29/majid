@@ -8,7 +8,10 @@ export const metadata: Metadata = {
         title: 'Travel Blog | Expert Tips, Guides & Inspiration | Weekend Travellers',
         description: 'Read the latest travel stories, expert guides, packing tips, and itinerary inspiration. Discover the best ways to maximize your weekend trips and holidays.',
         type: 'website',
-    }
+    },
+    alternates: {
+        canonical: '/blog',
+    },
 };
 
 export default function BlogLayout({ children }: { children: React.ReactNode }) {

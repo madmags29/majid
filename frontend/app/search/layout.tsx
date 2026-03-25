@@ -8,7 +8,10 @@ export const metadata: Metadata = {
         title: 'AI Trip Planner | Plan Smart Weekend Getaways & Itineraries',
         description: 'Instant AI-generated weekend itineraries tailored to your style. Explore driving routes, best hotels, and curated travel plans for the perfect 2-day trip.',
         type: 'website',
-    }
+    },
+    alternates: {
+        canonical: '/search',
+    },
 };
 
 export default function SearchLayout({

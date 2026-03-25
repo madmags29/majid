@@ -8,7 +8,10 @@ export const metadata: Metadata = {
         title: 'Explore Top Travel Destinations & Itineraries | Weekend Travellers',
         description: 'Discover the world\'s best weekend getaways. Browse curated travel destinations, view community itineraries, and find inspiration for your next short trip or vacation.',
         type: 'website',
-    }
+    },
+    alternates: {
+        canonical: '/explore',
+    },
 };
 
 export default function ExploreLayout({ children }: { children: React.ReactNode }) {

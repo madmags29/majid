@@ -9,7 +9,10 @@ export const metadata: Metadata = {
         title: 'Trip Inspiration | Discover Unique Weekend Getaways',
         description: 'Browse curated collections of top-rated weekend getaways and hidden gems. Find your next travel inspiration, from mountain cabins to beachside escapes.',
         type: 'website',
-    }
+    },
+    alternates: {
+        canonical: '/inspiration-trip',
+    },
 };
 
 export default function WeekendMenuPage() {
