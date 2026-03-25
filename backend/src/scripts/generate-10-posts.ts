@@ -3,7 +3,13 @@
  * Run: npx ts-node src/scripts/generate-10-posts.ts
  */
 import dotenv from 'dotenv';
-dotenv.config();
+import path from 'path';
+
+// Load environment variables from the root .env file, ensuring they override any existing ones
+dotenv.config({ 
+    path: path.resolve(__dirname, '../../.env'),
+    override: true 
+});
 
 import mongoose from 'mongoose';
 import { automateDailyPublish, seedInitialKeywords } from '../services/blogService';
