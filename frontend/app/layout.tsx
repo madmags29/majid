@@ -41,6 +41,12 @@ export const metadata: Metadata = {
   },
   description: 'Plan your perfect weekend getaway with our AI trip planner. Discover personalized 2-day and 3-day travel itineraries, road trips, and hidden gems tailored just for you.',
   keywords: [
+    'AI travel planner',
+    'weekend getaways',
+    'vacation itineraries',
+    'best travel app 2026',
+    'trip generator',
+    'road trip ideas',
     'weekend travellers',
     'weekend trip planner',
     'best AI travel planner 2026',
@@ -53,7 +59,9 @@ export const metadata: Metadata = {
     '2 day trip itineraries',
     '3 day holiday planner',
     'best weekend getaways',
-    'weekend trip ideas'
+    'weekend trip ideas',
+    'smart travel guide',
+    'weekend escape'
   ],
   authors: [{ name: 'Weekend Travellers Team' }],
   creator: 'Weekend Travellers',

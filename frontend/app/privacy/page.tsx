@@ -4,7 +4,7 @@ import { SUPPORT_EMAIL } from '@/lib/config';
 export const metadata: Metadata = {
     title: 'Privacy Policy | Weekend Travellers AI Trip Planner',
     description: 'Our commitment to protecting your privacy and data. Learn how Weekend Travellers handles your information.',
-    keywords: ['privacy policy', 'data protection', 'weekend travellers privacy'],
+    keywords: ['privacy policy', 'data protection', 'weekend travellers privacy', 'AI travel planner privacy', 'user data security'],
     openGraph: {
         title: 'Privacy Policy | Weekend Travellers AI Trip Planner',
         description: 'Our commitment to protecting your privacy and data. Learn how Weekend Travellers handles your information.',

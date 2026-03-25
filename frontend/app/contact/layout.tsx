@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 export const metadata = {
     title: 'Contact Us | AI Trip Planning & Weekend Getaway Support',
     description: 'Need help planning your weekend trip? Contact the Weekend Travellers support team for inquiries, bug reports, and partnership opportunities.',
-    keywords: ['contact weekend travellers', 'trip planner support', 'travel customer service'],
+    keywords: ['contact weekend travellers', 'trip planner support', 'travel customer service', 'AI travel planner contact', 'weekend getaways support'],
     openGraph: {
         title: 'Contact Us | AI Trip Planning & Weekend Getaway Support',
         description: 'Need help planning your weekend trip? Contact the Weekend Travellers support team for inquiries, bug reports, and partnership opportunities.',
