@@ -1,46 +1,34 @@
-'use client';
-
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { Calendar, Clock, User, ChevronRight, Share2, Facebook, Twitter, Linkedin, Loader2, ArrowLeft } from 'lucide-react';
+import { Calendar, Clock, User, ChevronRight, Share2, Facebook, Twitter, Linkedin } from 'lucide-react';
 import InnerHeader from '@/components/InnerHeader';
 import { Button } from '@/components/ui/button';
 import { API_URL } from '@/lib/config';
 import ReactMarkdown from 'react-markdown';
 import CommentSection from '@/components/blog/CommentSection';
 
-export default function BlogPostDetail() {
-    const { slug } = useParams();
-    const [post, setPost] = useState<any>(null);
-    const [loading, setLoading] = useState(true);
+// Configure dynamic routing handling gracefully
+interface Props {
+    params: Promise<{ slug: string }>;
+}
 
-    useEffect(() => {
-        const fetchPost = async () => {
-            try {
-                const res = await fetch(`${API_URL}/api/blog/${slug}`);
-                const data = await res.json();
-                if (data.content && typeof data.content === 'string' && data.content.startsWith('{')) {
-                    data.parsedContent = JSON.parse(data.content);
-                }
-                setPost(data);
-            } catch (error) {
-                console.error('Failed to fetch blog post:', error);
-            } finally {
-                setLoading(false);
+export default async function BlogPostDetail({ params }: Props) {
+    const { slug } = await params;
+    let post = null;
+
+    try {
+        // Explicitly fetch on the server - no 'use client' hooks locking data away!
+        const res = await fetch(`${API_URL}/api/blog/${slug}`, { next: { revalidate: 3600 } });
+        if (res.ok) {
+            const data = await res.json();
+            if (data.content && typeof data.content === 'string' && data.content.startsWith('{')) {
+                data.parsedContent = JSON.parse(data.content);
             }
-        };
-        fetchPost();
-    }, [slug]);
-
-    if (loading) {
-        return (
-            <div className="min-h-screen bg-[#020617] flex items-center justify-center">
-                <Loader2 className="w-12 h-12 text-blue-500 animate-spin" />
-            </div>
-        );
+            post = data;
+        }
+    } catch (error) {
+        console.error('Failed to fetch blog post:', error);
     }
 
     if (!post) {
@@ -80,12 +68,12 @@ export default function BlogPostDetail() {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostSchema) }}
             />
-            <InnerHeader title="Weekend Travellers Blog" subtitle={post.keyword} showBack backHref="/blog" />
+            <InnerHeader title="Weekend Travellers Blog" subtitle={post.keyword || 'Blog'} showBack backHref="/blog" />
 
             {/* Hero Section */}
             <header className="relative w-full h-[60vh] min-h-[400px]">
                 <Image
-                    src={post.heroImage}
+                    src={post.heroImage || '/placeholder.jpg'}
                     alt={post.title}
                     fill
                     className="object-cover"
@@ -95,7 +83,7 @@ export default function BlogPostDetail() {
                 <div className="absolute bottom-10 left-0 w-full px-4">
                     <div className="container mx-auto lg:max-w-4xl text-center md:text-left">
                         <span className="inline-block px-4 py-1.5 bg-blue-600 text-white text-xs font-bold uppercase tracking-widest rounded-full mb-6">
-                            {post.keyword}
+                            {post.keyword || 'TRAVEL'}
                         </span>
                         <h1 className="text-4xl md:text-6xl font-black tracking-tight text-white mb-6 leading-tight drop-shadow-2xl">
                             {post.title}
@@ -123,7 +111,7 @@ export default function BlogPostDetail() {
                             <ChevronRight className="text-blue-500" /> In this article
                         </h3>
                         <nav className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {parsedContent?.sections.map((section: any, i: number) => (
+                            {parsedContent?.sections?.map((section: any, i: number) => (
                                 <a key={i} href={`#section-${i}`} className="text-slate-400 hover:text-blue-400 transition-colors text-sm font-medium">
                                     {i + 1}. {section.heading}
                                 </a>
@@ -133,15 +121,15 @@ export default function BlogPostDetail() {
 
                     {/* Dynamic Sections */}
                     <div className="space-y-20">
-                        {parsedContent?.sections.map((section: any, i: number) => (
-                            <section key={i} id={`#section-${i}`} className="prose prose-invert prose-2xl max-w-none">
+                        {parsedContent?.sections?.map((section: any, i: number) => (
+                            <section key={i} id={`section-${i}`} className="prose prose-invert prose-2xl max-w-none">
                                 <h2 className="text-3xl md:text-4xl font-black text-white mb-6 italic tracking-tight uppercase">
                                     {section.heading}
                                 </h2>
                                 <div className="text-slate-400 leading-relaxed space-y-6">
                                     <ReactMarkdown>{section.content}</ReactMarkdown>
                                 </div>
-                                {post.images[i] && (
+                                {post.images && post.images[i] && (
                                     <div className="mt-10 relative aspect-video rounded-[2rem] overflow-hidden shadow-2xl">
                                         <Image
                                             src={post.images[i]}
@@ -171,7 +159,7 @@ export default function BlogPostDetail() {
                             </div>
                         </section>
                     )}
-                    {/* Comment Section */}
+                    {/* Comment Section (Remains a highly interactive client component!) */}
                     <CommentSection postSlug={post.slug} apiUrl={API_URL} />
                 </article>
 
@@ -181,9 +169,9 @@ export default function BlogPostDetail() {
                         {/* Author Card */}
                         <div className="p-8 bg-slate-900/50 rounded-3xl border border-slate-800 text-center">
                             <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 mx-auto mb-6 flex items-center justify-center text-white font-black text-3xl shadow-xl">
-                                {post.author.charAt(0)}
+                                {post.author ? post.author.charAt(0) : 'W'}
                             </div>
-                            <h4 className="text-xl font-bold text-white mb-2">{post.author}</h4>
+                            <h4 className="text-xl font-bold text-white mb-2">{post.author || 'Editorial'}</h4>
                             <p className="text-slate-400 text-sm mb-6">Expert Travel Writer & AI Specialist at Weekend Travellers.</p>
                             <div className="flex justify-center gap-4">
                                 <button className="p-3 bg-slate-800 rounded-xl hover:bg-blue-600 transition-colors"><Facebook size={20} /></button>

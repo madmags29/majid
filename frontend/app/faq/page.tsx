@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import Link from 'next/link';
 import { ArrowLeft, HelpCircle, Compass, ShieldCheck, CreditCard, MessageCircle } from 'lucide-react';
@@ -64,8 +62,27 @@ const faqs = [
 ];
 
 export default function FAQPage() {
+    const faqSchema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": faqs.flatMap(category => 
+            category.questions.map(faq => ({
+                "@type": "Question",
+                "name": faq.q,
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": faq.a
+                }
+            }))
+        )
+    };
+
     return (
         <div className="min-h-screen bg-slate-950 text-slate-100 font-sans">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+            />
             {/* Header / Navigation */}
             <header className="h-16 border-b border-slate-800 bg-slate-900/80 backdrop-blur-md flex items-center justify-between px-4 lg:px-6 sticky top-0 w-full z-50">
                 <div className="flex items-center gap-3">

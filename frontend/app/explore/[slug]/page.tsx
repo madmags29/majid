@@ -5,6 +5,8 @@ import Image from 'next/image';
 import { MapPin, ArrowLeft } from 'lucide-react';
 import InnerHeader from '@/components/InnerHeader';
 import DirectItineraryDisplay from '@/components/DirectItineraryDisplay';
+import ItineraryDisplay from '@/components/ItineraryDisplay';
+import RelatedDestinations from '@/components/RelatedDestinations';
 
 interface Props {
     params: { slug: string };
@@ -70,8 +72,49 @@ export default async function DestinationPage({ params }: Props) {
         );
     }
 
+    // SSR Fetch Itinerary
+    let itinerary = null;
+    try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+        const response = await fetch(`${apiUrl}/api/search`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                destination: destination.name,
+                days: 2,
+            }),
+            next: { revalidate: 604800 } // Cache for exactly 1 week
+        });
+        if (response.ok) {
+            itinerary = await response.json();
+        }
+    } catch (e) {
+        console.error("Failed to SSR itinerary", e);
+    }
+
+    const destinationSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'TouristDestination',
+        name: destination.name,
+        description: `Explore our expert AI-generated 2-day weekend itinerary for ${destination.name}, ${destination.country}, including top attractions, budget estimates, flights, and hidden gems.`,
+        image: destination.image,
+        address: {
+            '@type': 'PostalAddress',
+            addressCountry: destination.country
+        },
+        geo: {
+            '@type': 'GeoCoordinates',
+            latitude: destination.lat,
+            longitude: destination.lng
+        }
+    };
+
     return (
         <div className="min-h-screen bg-slate-950 text-white selection:bg-blue-500/30">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(destinationSchema) }}
+            />
             <InnerHeader title={destination.name} subtitle="Curated Destination" showBack backHref="/explore" />
             <main>
                 {/* Hero Section */}
@@ -79,7 +122,7 @@ export default async function DestinationPage({ params }: Props) {
                     <div className="absolute inset-0 z-0">
                         <Image
                             src={destination.image}
-                            alt={destination.name}
+                            alt={destination.imageAlt || `${destination.name}, ${destination.country} Travel Destination`}
                             fill
                             priority
                             className="object-cover"
@@ -96,8 +139,8 @@ export default async function DestinationPage({ params }: Props) {
                                 {destination.country}
                             </span>
                         </div>
-                        <h1 className="text-5xl md:text-7xl font-black text-white mb-6 drop-shadow-2xl tracking-tight">
-                            {destination.name}
+                        <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-6 drop-shadow-2xl tracking-tight leading-tight">
+                            {destination.name} <span className="block text-2xl md:text-3xl text-slate-300 font-bold mt-2">Travel Guide: Weekend Itinerary & Top Things to Do</span>
                         </h1>
                         <div className="flex flex-wrap justify-center gap-3 mb-10">
                             {destination.tags.map((tag) => (
@@ -120,7 +163,18 @@ export default async function DestinationPage({ params }: Props) {
                 </section>
 
                 <section className="max-w-6xl mx-auto px-4 pb-24">
-                    <DirectItineraryDisplay destinationName={destination.name} />
+                    {itinerary ? (
+                        <div className="mt-12 bg-slate-900/40 rounded-3xl p-6 md:p-10 border border-slate-800 shadow-2xl text-left">
+                            <h2 className="text-3xl font-black text-white mb-10 text-center tracking-tight">Your 2-Day AI Itinerary</h2>
+                            <ItineraryDisplay itinerary={itinerary} />
+                        </div>
+                    ) : (
+                        <DirectItineraryDisplay destinationName={destination.name} />
+                    )}
+                </section>
+
+                <section className="max-w-6xl mx-auto px-4 pb-20">
+                    <RelatedDestinations currentId={destination.id} lat={destination.lat} lng={destination.lng} />
                 </section>
             </main>
         </div>

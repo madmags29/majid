@@ -1,476 +1,67 @@
-'use client';
-
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Search, MapPin, Calendar } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
-
-import dynamic from 'next/dynamic';
-
+import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import AnimatedLogo from '@/components/AnimatedLogo';
-import TypewriterText from '@/components/TypewriterText';
-import DateRangePicker from '@/components/DateRangePicker';
-import { format } from 'date-fns';
-import { EXLPORE_DESTINATIONS } from '@/lib/destinations';
-
-const AuthModal = dynamic(() => import('@/components/AuthModal'));
-const CategoryBanner = dynamic(() => import('@/components/CategoryBanner'));
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
-const VisitorCounter = dynamic(() => import('@/components/VisitorCounter'), { ssr: false });
-const FloatingDestinations = dynamic(() => import('@/components/FloatingDestinations'), { ssr: false });
-const LocationAssistant = dynamic(() => import('@/components/LocationAssistant'), { ssr: false });
-const RightMenu = dynamic(() => import('@/components/RightMenu'));
-
+import { MapPin, Search, Calendar } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import HomeClient from './HomeClient';
 import { API_URL } from '@/lib/config';
 
-import CinematicLoader from '@/components/CinematicLoader';
+// Revalidate homepage every hour
+export const revalidate = 3600;
 
-export default function LandingPage() {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
-  const [videoUrl, setVideoUrl] = useState<string>('');
-  const [videoCredit, setVideoCredit] = useState<{ name: string, url: string } | null>(null);
-  const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [userLocation, setUserLocation] = useState<string>('');
-  const [isAuthOpen, setIsAuthOpen] = useState(false);
-  const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
-  const [user, setUser] = useState<{ name: string, email: string } | null>(null);
-  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
-  const [blogPosts, setBlogPosts] = useState<any[]>([]);
-  const [lastFetchedLocation, setLastFetchedLocation] = useState<string>('');
-  const [showAutocomplete, setShowAutocomplete] = useState(false);
+async function getBlogPosts() {
+  try {
+    const res = await fetch(`${API_URL}/api/blog`, { next: { revalidate: 3600 } });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return Array.isArray(data) ? data.slice(0, 3) : [];
+  } catch (error) {
+    console.error('Failed to fetch blog posts for homepage:', error);
+    return [];
+  }
+}
 
-  useEffect(() => {
-    const checkUser = () => {
-      const storedUser = localStorage.getItem('user');
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
-      } else {
-        setUser(null);
-      }
-    };
+export default async function LandingPage() {
+  const blogPosts = await getBlogPosts();
 
-    checkUser();
-    window.addEventListener('storage', checkUser);
-    return () => window.removeEventListener('storage', checkUser);
-  }, []);
-
-  const fetchDynamicSuggestions = useCallback(async (location: string) => {
-    if (!location) return;
-
-    setIsLoadingSuggestions(true);
-    setLastFetchedLocation(location);
-    try {
-      const res = await fetch(`${API_URL}/api/suggestions?location=${encodeURIComponent(location)}`);
-      if (!res.ok) throw new Error('Failed to fetch suggestions');
-      const data = await res.json();
-      // Handle both string arrays and object arrays {name, tag}
-      const parsedSuggestions = data.map((item: string | { name: string }) => typeof item === 'string' ? item : item.name);
-      setSuggestions(parsedSuggestions);
-    } catch (err) {
-      console.error('Failed to load suggestions', err);
-      // Fallback only if no suggestions already exist
-      setSuggestions(prev => prev.length > 0 ? prev : ['Paris', 'Tokyo', 'Bali', 'New York', 'Santorini']);
-    } finally {
-      setIsLoadingSuggestions(false);
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Weekend Travellers",
+    "url": "https://weekendtravellers.com",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://weekendtravellers.com/search?destination={search_term_string}",
+      "query-input": "required name=search_term_string"
     }
-  }, []); // Remove dependencies to prevent loop
-
-  const handleLocationFound = useCallback((location: string) => {
-    setUserLocation(prev => {
-      if (prev === location) return prev;
-      return location;
-    });
-  }, []);
-
-  // 2. Fetch background video and other one-time data
-  useEffect(() => {
-    fetch(`${API_URL}/api/background-video`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.url) {
-          setVideoUrl(data.url);
-          if (data.photographer) {
-            setVideoCredit({ name: data.photographer, url: data.photographer_url });
-          }
-        }
-      })
-      .catch(err => console.error("Failed to load video", err));
-
-    // Fetch latest blog posts
-    fetch(`${API_URL}/api/blog`)
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data)) {
-          setBlogPosts(data.slice(0, 3));
-        }
-      })
-      .catch(err => console.error("Failed to load blog posts", err));
-    if (!userLocation) {
-      fetch('https://ipapi.co/json/')
-        .then(res => res.json())
-        .then(data => {
-          const location = data.city ? `${data.city}, ${data.country_name}` : data.country_name;
-          setUserLocation(prev => prev || location);
-        })
-        .catch(() => {
-          if (!userLocation) {
-            setSuggestions(prev => prev.length > 0 ? prev : ['Paris', 'Tokyo', 'Bali', 'New York', 'Santorini']);
-          }
-        });
-    }
-  }, []); // Truly mount-only
-
-  // 3. React to userLocation changes to fetch suggestions
-  useEffect(() => {
-    if (userLocation) {
-      fetchDynamicSuggestions(userLocation);
-    }
-  }, [userLocation, fetchDynamicSuggestions]);
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!searchQuery) return;
-
-    // Navigate to search page with destination as query param
-    const originParam = userLocation ? `&origin=${encodeURIComponent(userLocation)}` : '';
-    const startParam = startDate ? `&startDate=${format(startDate, 'yyyy-MM-dd')}` : '';
-    const endParam = endDate ? `&endDate=${format(endDate, 'yyyy-MM-dd')}` : '';
-    router.push(`/search?destination=${encodeURIComponent(searchQuery)}${originParam}${startParam}${endParam}`);
   };
 
-  const handleSuggestionClick = (suggestion: string) => {
-    const originParam = userLocation ? `&origin=${encodeURIComponent(userLocation)}` : '';
-    const startParam = startDate ? `&startDate=${format(startDate, 'yyyy-MM-dd')}` : '';
-    const endParam = endDate ? `&endDate=${format(endDate, 'yyyy-MM-dd')}` : '';
-    router.push(`/search?destination=${encodeURIComponent(suggestion)}${originParam}${startParam}${endParam}`);
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Weekend Travellers",
+    "url": "https://weekendtravellers.com",
+    "logo": "https://weekendtravellers.com/logo.png",
+    "sameAs": [
+      "https://facebook.com/weekendtravellers",
+      "https://twitter.com/weekendtravellrs"
+    ]
   };
-
-  const openAuth = (mode: 'login' | 'signup') => {
-    setAuthMode(mode);
-    setIsAuthOpen(true);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    setUser(null);
-    window.dispatchEvent(new Event('storage')); // Notify other tabs/components
-  };
-
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  const [isVideoReady, setIsVideoReady] = useState(false);
-
-  useEffect(() => {
-    // Simulate minimal loading delay - significantly reduced for mobile FCP
-    const delay = window.innerWidth < 768 ? 800 : 2500;
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, delay);
-    return () => clearTimeout(timer);
-  }, []);
 
   return (
-    <div className="min-h-screen text-white flex flex-col relative">
-      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} initialMode={authMode} />
+    <div className="min-h-screen text-white flex flex-col relative overflow-x-hidden">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
+      
+      <HomeClient initialBlogPosts={blogPosts} />
 
-      <AnimatePresence mode="wait">
-        {isLoading && <CinematicLoader key="loader" />}
-      </AnimatePresence>
-
-      {/* Base Background Color (Always present, sits behind video) */}
-      <div className="fixed inset-0 bg-[#0f172a] -z-30" />
-
-      {/* Preload critical LCP assets */}
-      {videoUrl && (
-        <link rel="preload" as="image" href="/video-poster.png" />
-      )}
-
-      {/* Video Background */}
-      {videoUrl && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isVideoReady ? 1 : 0 }}
-          transition={{ duration: 1 }}
-          className="fixed inset-0 w-full h-full -z-10 will-change-transform"
-        >
-          <div className="absolute inset-0 bg-black/80 z-10" />
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            onLoadedData={() => setIsVideoReady(true)}
-            className="w-full h-full object-cover"
-            key={videoUrl}
-            poster="/video-poster.png"
-            title="Destination background"
-          >
-            <source src={videoUrl} type="video/mp4" />
-          </video>
-          {videoCredit && (
-            <div className="absolute bottom-4 right-4 z-20 text-[10px] text-slate-400 bg-black/40 px-2 py-1 rounded backdrop-blur-sm pointer-events-auto">
-              Video by <a href={videoCredit.url} target="_blank" rel="noopener noreferrer" className="text-slate-300 hover:text-white underline decoration-dashed">{videoCredit.name}</a> on Pexels
-            </div>
-          )}
-        </motion.div>
-      )}
-
-      {/* Fallback Background Gradients (only if no video) */}
-      {!videoUrl && (
-        <div className="fixed inset-0 pointer-events-none -z-20">
-          <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-purple-500/20 rounded-full blur-[120px]"></div>
-          <div className="absolute top-[20%] right-[-10%] w-[40%] h-[40%] bg-blue-500/20 rounded-full blur-[100px]"></div>
-          <div className="absolute bottom-[-10%] left-[20%] w-[40%] h-[40%] bg-indigo-500/20 rounded-full blur-[120px]"></div>
-        </div>
-      )}
-
-      <FloatingDestinations />
-      <LocationAssistant onLocationFound={handleLocationFound} />
-
-      {/* Header */}
-      <header className="w-full py-4 px-6 flex justify-between items-center z-50">
-        <div className="flex items-center gap-2">
-          <RightMenu />
-          <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
-            <AnimatedLogo className="w-8 h-8 md:w-10 md:h-10 text-blue-400" />
-            <div className="text-2xl md:text-3xl text-white drop-shadow-md">
-              <TypewriterText
-                text="weekendtravellers.com"
-                className="font-cursive text-3xl md:text-4xl"
-                delay={500}
-              />
-            </div>
-          </Link>
-        </div>
-        <nav className="flex items-center gap-4">
-          {user ? (
-            <div className="flex items-center gap-3">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full bg-slate-800/50 border border-slate-700/50 hover:bg-slate-700/50">
-                    <div className="flex h-full w-full items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-500 text-white font-bold text-xs shadow-lg shadow-blue-500/20">
-                      {user.name.charAt(0).toUpperCase()}
-                    </div>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56 bg-slate-900 border-slate-800 text-slate-100" align="end">
-                  <DropdownMenuLabel>
-                    <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">{user.name}</p>
-                      <p className="text-xs leading-none text-slate-400">{user.email}</p>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator className="bg-slate-800" />
-                  <DropdownMenuItem asChild className="focus:bg-slate-800 focus:text-white cursor-pointer hover:bg-slate-800">
-                    <Link href="/profile">My Profile</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator className="bg-slate-800" />
-                  <DropdownMenuItem asChild className="focus:bg-slate-800 focus:text-white cursor-pointer hover:bg-slate-800">
-                    <Link href="/trips">My Trips</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator className="bg-slate-800" />
-                  <DropdownMenuItem onClick={handleLogout} className="text-red-400 focus:text-red-300 focus:bg-slate-800 cursor-pointer hover:bg-slate-800">
-                    Log out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          ) : (
-            <div className="flex items-center gap-4">
-              {/* Desktop Login & Sign Up */}
-              <div className="hidden md:flex items-center gap-4">
-                <Link
-                  href="/blog"
-                  className="text-slate-200 hover:text-white hover:bg-white/10 px-4 py-2 rounded-lg transition-all font-medium text-sm"
-                >
-                  Blog
-                </Link>
-                <Button
-                  onClick={() => openAuth('login')}
-                  variant="ghost"
-                  className="text-slate-200 hover:text-white hover:bg-white/10 transition-all font-medium"
-                >
-                  Login
-                </Button>
-                <Button
-                  onClick={() => openAuth('signup')}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25 border-0 rounded-xl px-6 transition-all transform hover:scale-105 active:scale-95"
-                >
-                  Sign Up
-                </Button>
-              </div>
-            </div>
-          )}
-        </nav>
-      </header>
-
-      {/* Hero Section */}
-      <section className="flex-1 flex flex-col items-center justify-center px-4 py-20 pb-32 relative z-30">
-        <div className="text-center max-w-4xl z-10 w-full animate-in fade-in slide-in-from-bottom-8 duration-1000 fill-mode-both">
-          <div className="flex justify-center mb-6 min-h-[40px]">
-            <VisitorCounter />
-          </div>
-          <h1 className="text-3xl md:text-7xl font-extrabold text-white tracking-tight mb-6 drop-shadow-2xl">
-            Discover Your Perfect <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200">Weekend Getaway</span>
-          </h1>
-          <p className="text-lg md:text-xl text-slate-100 mb-12 max-w-2xl mx-auto leading-relaxed drop-shadow-md font-medium">
-            Just tell us where you want to go, or let us surprise you.
-          </p>
-
-          {/* Highlighted & Shining Glass Search Bar */}
-          <div className="relative w-full max-w-3xl mx-auto p-[1px] rounded-2xl group/search-container z-50">
-            {/* The Border Shine/Beam Effect */}
-            <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-400/80 to-transparent"
-                initial={{ x: '-100%' }}
-                animate={{ x: '100%' }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "linear",
-                  repeatDelay: 1
-                }}
-                style={{ width: '50%', height: '100%' }}
-              />
-            </div>
-
-            <form onSubmit={handleSearch} className="relative w-full glass-panel p-3 rounded-2xl flex flex-col md:flex-row gap-3 border border-white/10 hover:border-blue-500/30 shadow-[0_4px_30px_rgba(0,0,0,0.1)] group-hover/search-container:shadow-[0_0_20px_rgba(59,130,246,0.2)]">
-              <label
-                className="relative flex-[2] flex items-center px-4 py-3 glass-input rounded-xl focus-within:ring-1 focus-within:ring-white/10 cursor-text"
-                htmlFor="destination-input"
-              >
-                <MapPin className="w-5 h-5 text-slate-300 mr-3 shrink-0 pointer-events-none" />
-                <input
-                  id="destination-input"
-                  type="text"
-                  autoComplete="off"
-                  placeholder="Where to? (e.g. Paris)"
-                  className="bg-transparent w-full outline-none text-white placeholder:text-slate-400 font-medium text-base"
-                  value={searchQuery}
-                  onChange={(e) => {
-                    setSearchQuery(e.target.value);
-                    setShowAutocomplete(true);
-                  }}
-                  onFocus={() => setShowAutocomplete(true)}
-                  onBlur={() => setTimeout(() => setShowAutocomplete(false), 200)}
-                />
-
-                {/* Autocomplete Dropdown */}
-                {searchQuery.length >= 3 && showAutocomplete && (
-                  <div className="absolute top-[110%] left-0 right-0 mt-1 bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl z-[100] max-h-60 overflow-y-auto overflow-x-hidden md:w-[120%]">
-                    {(() => {
-                      const matches = EXLPORE_DESTINATIONS.filter(d =>
-                        d.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        d.country.toLowerCase().includes(searchQuery.toLowerCase())
-                      );
-                      if (matches.length === 0) return null;
-                      return matches.map(place => (
-                        <div
-                          key={place.id}
-                          className="px-4 py-3 hover:bg-white/10 cursor-pointer flex items-center gap-3 transition-colors text-left border-b border-white/5 last:border-0"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setSearchQuery(place.name);
-                            setShowAutocomplete(false);
-                          }}
-                        >
-                          <MapPin className="w-4 h-4 text-slate-400 shrink-0" />
-                          <div>
-                            <div className="text-white font-medium text-sm">{place.name}</div>
-                            <div className="text-slate-400 text-[10px]">{place.country}</div>
-                          </div>
-                        </div>
-                      ));
-                    })()}
-                  </div>
-                )}
-              </label>
-
-              <DateRangePicker
-                className="flex-1"
-                initialStart={startDate}
-                initialEnd={endDate}
-                onRangeSelect={(start, end) => {
-                  setStartDate(start);
-                  setEndDate(end);
-                }}
-              />
-
-              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl px-8 py-3 h-auto text-lg shadow-lg shadow-blue-900/50 min-w-[140px] border border-white/10 shrink-0">
-                <Search className="w-5 h-5 mr-2" /> Search
-              </Button>
-            </form>
-          </div>
-
-          {/* Suggestions */}
-          <div className="min-h-[100px] mt-8">
-            {(suggestions.length > 0 || isLoadingSuggestions) && (
-              <div className="flex flex-wrap justify-center gap-3 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
-                <span className="text-slate-300 text-sm font-medium mr-2 self-center">
-                  {isLoadingSuggestions ? 'Finding best trips for you...' : (userLocation ? `Popular in ${userLocation}:` : 'Trending:')}
-                </span>
-                {isLoadingSuggestions ? (
-                  <div className="flex gap-2">
-                    {[1, 2, 3].map(i => (
-                      <div key={i} className="h-8 w-24 bg-white/10 rounded-full animate-pulse border border-white/5" />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="flex flex-wrap justify-center gap-3">
-                    {suggestions.slice(0, 5).map((suggestion) => (
-                      <button
-                        key={suggestion}
-                        onClick={() => handleSuggestionClick(suggestion)}
-                        className="px-6 py-2.5 rounded-2xl bg-slate-900/30 backdrop-blur-md border border-white/5 hover:border-blue-500/30 hover:bg-white/5 text-slate-300 hover:text-white transition-all text-sm font-medium shadow-xl hover:shadow-blue-500/10 active:scale-95"
-                      >
-                        {suggestion}
-                      </button>
-                    ))}
-                    {suggestions.length > 5 && (
-                      <Link
-                        href="/explore/all"
-                        className="px-6 py-2.5 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 shadow-lg shadow-blue-900/40 text-white transition-all text-sm font-bold active:scale-95 flex items-center gap-2 hover:from-blue-500 hover:to-indigo-500"
-                      >
-                        More Weekend Destinations <MapPin size={14} />
-                      </Link>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-          {/* Travel Categories */}
-          <CategoryBanner userLocation={userLocation} />
-        </div>
-      </section>
-
-
-      {/* Discover India */}
+      {/* Discover India - Server Rendered for SEO */}
       <section className="py-24 px-6 relative z-20 border-t border-white/5 bg-slate-900/10">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
@@ -492,21 +83,20 @@ export default function LandingPage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent z-10" />
                 <Image
                   src={city.image}
-                  alt={city.name}
+                  alt={`${city.name} Travel Guide - Weekend Travellers`}
                   fill
                   className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   sizes="(max-width: 768px) 100vw, 33vw"
                 />
                 <div className="absolute bottom-0 left-0 p-6 z-20">
                   <h3 className="text-2xl font-black text-white italic tracking-tighter mb-1">{city.name}</h3>
-                  <p className="text-slate-300 text-xs mb-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 line-clamp-2">{city.description}</p>
+                  <p className="text-slate-300 text-xs mb-3 line-clamp-2">{city.description}</p>
                   <Button size="sm" className="bg-white text-slate-950 rounded-full font-bold px-4 h-8 text-xs group-hover:bg-blue-500 group-hover:text-white transition-colors">
                     Explore
                   </Button>
                 </div>
               </Link>
             ))}
-            {/* More Weekend Trips Card as the 6th Block */}
             <Link
               href="/explore/all"
               className="group relative h-80 rounded-3xl overflow-hidden border-2 border-dashed border-blue-500/30 hover:border-blue-500 transition-all bg-gradient-to-br from-blue-600/10 to-purple-600/10 flex flex-col items-center justify-center text-center p-8 hover:bg-white/10"
@@ -516,7 +106,7 @@ export default function LandingPage() {
               </div>
               <h3 className="text-2xl font-black text-white italic tracking-tighter mb-2 uppercase">More Weekend Trips</h3>
               <p className="text-slate-400 text-sm mb-6">Discover 50+ hand-picked destinations tailored for your perfect mini-break.</p>
-              <div className="bg-blue-600 text-white rounded-full font-bold px-6 py-2 text-sm shadow-xl shadow-blue-900/40 transform active:scale-95 transition-all">
+              <div className="bg-blue-600 text-white rounded-full font-bold px-6 py-2 text-sm shadow-xl shadow-blue-900/40 transition-all">
                 Browse All
               </div>
             </Link>
@@ -524,7 +114,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Latest Blog Posts Section */}
+      {/* Latest Stories - Server Rendered for SEO */}
       {blogPosts.length > 0 && (
         <section className="py-24 px-6 relative z-20 border-t border-white/5 bg-[#020617]">
           <div className="max-w-7xl mx-auto">
@@ -539,13 +129,9 @@ export default function LandingPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-              {blogPosts.map((post, i) => (
-                <motion.article 
+              {blogPosts.map((post: any) => (
+                <article 
                   key={post._id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
                   className="group flex flex-col h-full bg-slate-900/30 rounded-[2rem] overflow-hidden border border-slate-800/50 hover:border-blue-500/30 transition-all shadow-xl hover:shadow-2xl"
                 >
                   <Link href={`/blog/${post.slug}`} className="block relative aspect-[16/10] overflow-hidden">
@@ -578,14 +164,14 @@ export default function LandingPage() {
                       Read Story
                     </Link>
                   </div>
-                </motion.article>
+                </article>
               ))}
             </div>
           </div>
         </section>
       )}
 
-      {/* Explore by Region */}
+      {/* Explore by Region - Server Rendered for SEO */}
       <section className="py-24 px-6 relative z-20 border-t border-white/5 bg-slate-900/20">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
@@ -599,7 +185,7 @@ export default function LandingPage() {
             {[
               { name: 'India', slug: 'india', image: 'https://images.pexels.com/photos/1007427/pexels-photo-1007427.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'From the Himalayas to the backwaters of Kerala.' },
               { name: 'Europe', slug: 'europe', image: 'https://images.pexels.com/photos/672532/pexels-photo-672532.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Timeless cities, art, and legendary landscapes.' },
-              { name: 'Thailand', slug: 'bangkok', image: 'https://images.pexels.com/photos/2412711/pexels-photo-2412711.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Exotic beaches, street food, and golden temples.' },
+              { name: 'Thailand', slug: 'thailand-bangkok', image: 'https://images.pexels.com/photos/2412711/pexels-photo-2412711.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Exotic beaches, street food, and golden temples.' },
               { name: 'Japan', slug: 'tokyo', image: 'https://images.pexels.com/photos/1440476/pexels-photo-1440476.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Neon cities, ancient shrines, and cherry blossoms.' },
               { name: 'Bali', slug: 'bali', image: 'https://images.pexels.com/photos/2166553/pexels-photo-2166553.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Tropical paradise, spiritual retreats, and surf.' },
               { name: 'Goa', slug: 'goa', image: 'https://images.pexels.com/photos/4429334/pexels-photo-4429334.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Sun-drenched beaches and Portuguese heritage.' }
@@ -608,14 +194,14 @@ export default function LandingPage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent z-10" />
                 <Image
                   src={region.image}
-                  alt={region.name}
+                  alt={`${region.name} Tourism Guide - Weekend Travellers`}
                   fill
                   className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   sizes="(max-width: 768px) 100vw, 33vw"
                 />
                 <div className="absolute bottom-0 left-0 p-8 z-20">
                   <h3 className="text-3xl font-black text-white italic tracking-tighter mb-2">{region.name}</h3>
-                  <p className="text-slate-300 text-sm mb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">{region.description}</p>
+                  <p className="text-slate-300 text-sm mb-4 line-clamp-3">{region.description}</p>
                   <Button className="bg-white text-slate-950 rounded-full font-bold px-6 group-hover:bg-blue-500 group-hover:text-white transition-colors">
                     Explore Guide
                   </Button>
@@ -628,4 +214,3 @@ export default function LandingPage() {
     </div>
   );
 }
-

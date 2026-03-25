@@ -25,9 +25,10 @@ Weekend Travellers is an advanced AI-powered travel planner that generates custo
 
 ## SEO Strategy (Aggressively Optimized)
 - High-volume exact-match keywords: "AI travel planner", "weekend getaways", "vacation itineraries".
-- Dynamic Next.js `generateMetadata` implemented on `/explore/[slug]`, `/trip/[id]`, and `/search`.
+- Dynamic Next.js `generateMetadata` implemented on `/explore/[slug]`, `/blog/[slug]`, and `/search`.
 - Fully automated Weekly Dynamic Sitemap (`app/sitemap.ts`) querying `/api/trips/public` and `/api/blog`.
-- Valid OpenGraph, Twitter Cards, Semantic JSON-LD schemas, and absolute canonical links implemented globally.
+- Valid OpenGraph, Twitter Cards, Semantic JSON-LD schemas (`WebSite`, `Organization`, `TouristDestination`, `BlogPosting`, `FAQPage`), and absolute canonical links implemented globally.
+- Architectural fix: All route-level components for content (Blog, Explore, FAQ, Home) are strict Server Components for 100% SEO visibility.
 
 ## Development Patterns
 - Server Components used extensively for data fetching (`fetch(..., { next: { revalidate: ... } })`).
