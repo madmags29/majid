@@ -51,7 +51,7 @@ export default function BlogLandingPage() {
                     <>
                         {/* Hero section with Featured Post */}
                         {featuredPost && (
-                            <section className="relative rounded-[2.5rem] overflow-hidden mb-20 aspect-[16/9] md:aspect-[21/9] group shadow-2xl">
+                            <section className="relative flex flex-col justify-end rounded-[2.5rem] overflow-hidden mb-20 min-h-[500px] lg:min-h-[600px] group shadow-2xl">
                                 <Image
                                     src={featuredPost.heroImage}
                                     alt={featuredPost.title}
@@ -61,7 +61,7 @@ export default function BlogLandingPage() {
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
                                 
-                                <div className="absolute bottom-0 left-0 p-6 md:p-12 w-full md:max-w-3xl">
+                                <div className="relative z-10 p-6 md:p-12 w-full md:max-w-3xl mt-auto">
                                     <motion.div
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
