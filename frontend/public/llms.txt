@@ -1,0 +1,35 @@
+# Weekend Travellers - LLM Context File
+
+## Overview
+Weekend Travellers is an advanced AI-powered travel planner that generates customized 2 to 3-day weekend itineraries. The platform features curated travel guides, road trips, and an intelligent backend that tailors holiday plans to individual styles.
+
+## System Architecture
+
+### Frontend (Next.js App Router)
+- **Framework:** Next.js (App Router paradigm) with React and TypeScript.
+- **Styling:** Tailwind CSS with comprehensive custom classes, sophisticated gradients, and glassmorphism.
+- **Animation:** Framer Motion for heavy micro-interactions, page transitions, and immersive scroll effects.
+- **UI Components:** Uses Lucide React icons, Sonner for toast notifications, and custom built modular components.
+
+### Backend (Node.js/Express)
+- **Framework:** Express.js with TypeScript in the `/backend` directory.
+- **Database:** MongoDB and Mongoose schemas (e.g., `User`, `Trip`, `Blog`).
+- **Authentication:** JWT (JSON Web Tokens) with a robust authentication middleware protecting endpoints.
+- **AI Integration:** AI services layer dedicated to dynamically generating itineraries.
+
+## Core Features
+1. **Dynamic Trip Generation:** Users can search any destination and the AI generates a multi-day itinerary complete with budgets, hotels, and activities.
+2. **Explore & Inspiration:** 50+ hand-curated high-density travel guides with rich media.
+3. **Blog Engine:** Dynamic, SEO-rich travel articles using generative AI.
+4. **Community System:** Users can authenticate, save trips, and view public itineraries.
+
+## SEO Strategy (Aggressively Optimized)
+- High-volume exact-match keywords: "AI travel planner", "weekend getaways", "vacation itineraries".
+- Dynamic Next.js `generateMetadata` implemented on `/explore/[slug]`, `/trip/[id]`, and `/search`.
+- Fully automated Weekly Dynamic Sitemap (`app/sitemap.ts`) querying `/api/trips/public` and `/api/blog`.
+- Valid OpenGraph, Twitter Cards, Semantic JSON-LD schemas, and absolute canonical links implemented globally.
+
+## Development Patterns
+- Server Components used extensively for data fetching (`fetch(..., { next: { revalidate: ... } })`).
+- Client Components (`'use client'`) strictly used for interactive regions (Animations, Modals, Forms).
+- The primary stylistic focus is a sleek, premium dark-mode interface designed to visually excel.
