@@ -36,10 +36,10 @@ import { GOOGLE_CLIENT_ID, SITE_URL } from '@/lib/config';
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Weekend Travellers | Smart AI Travel Planner & Weekend Getaway Itineraries',
+    default: 'Weekend Travellers | AI Travel Planner & Trip Itineraries',
     template: '%s | Weekend Travellers',
   },
-  description: 'Plan your perfect weekend getaway with our AI trip planner. Discover personalized 2-day and 3-day travel itineraries, road trips, and hidden gems tailored just for you.',
+  description: 'Plan your perfect weekend getaway with our intelligent AI trip planner. Instantly generate customized 2-day and 3-day travel itineraries and road trips.',
   keywords: [
     'AI travel planner',
     'weekend getaways',
@@ -69,8 +69,8 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: 'https://weekendtravellers.com',
-    title: 'Weekend Travellers | Smart AI Travel Planner & Weekend Getaway Itineraries',
-    description: 'Plan your perfect short getaway with Weekend Travellers. Get instant personalized 2-to-3 day itineraries using our intelligent travel guide AI.',
+    title: 'Weekend Travellers | AI Travel Planner & Trip Itineraries',
+    description: 'Plan your perfect weekend getaway with our intelligent AI trip planner. Instantly generate customized 2-day and 3-day travel itineraries and road trips.',
     siteName: 'Weekend Travellers',
     images: [
       {
@@ -83,8 +83,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Weekend Travellers | Smart AI Travel Planner & Weekend Getaway Itineraries',
-    description: 'Plan your perfect short getaway with Weekend Travellers. Get instant personalized 2-to-3 day itineraries using our intelligent travel guide AI.',
+    title: 'Weekend Travellers | AI Travel Planner & Trip Itineraries',
+    description: 'Plan your perfect weekend getaway with our intelligent AI trip planner. Instantly generate customized 2-day and 3-day travel itineraries and road trips.',
     images: ['/icon.svg'],
   },
   icons: {
