@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 import { EXLPORE_DESTINATIONS } from '@/lib/destinations';
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = 'https://weekendtravellers.com';
 
     // Categories and dynamic destinations
@@ -126,18 +126,43 @@ export default function sitemap(): MetadataRoute.Sitemap {
         }
     ];
 
-    // Note: In a production environment, you would fetch blog slugs here
-    // const blogPosts = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/blog`).then(res => res.json());
-    // const blogEntries = blogPosts.map((post: any) => ({
-    //     url: `${baseUrl}/blog/${post.slug}`,
-    //     lastModified: new Date(post.updatedAt),
-    //     changeFrequency: 'weekly' as const,
-    //     priority: 0.8,
-    // }));
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+    let blogEntries: any[] = [];
+    let tripEntries: any[] = [];
+
+    try {
+        const blogPosts = await fetch(`${apiUrl}/api/blog`, { next: { revalidate: 3600 } }).then(res => res.json());
+        if (Array.isArray(blogPosts)) {
+            blogEntries = blogPosts.map((post: any) => ({
+                url: `${baseUrl}/blog/${post.slug}`,
+                lastModified: new Date(post.updatedAt || post.publishedDate || Date.now()),
+                changeFrequency: 'weekly' as const,
+                priority: 0.8,
+            }));
+        }
+    } catch (e) {
+        console.warn('Could not fetch blog posts for sitemap');
+    }
+
+    try {
+        const publicTrips = await fetch(`${apiUrl}/api/trips/public?limit=500`, { next: { revalidate: 3600 } }).then(res => res.json());
+        if (Array.isArray(publicTrips)) {
+            tripEntries = publicTrips.map((trip: any) => ({
+                url: `${baseUrl}/trip/${trip._id}`,
+                lastModified: new Date(trip.createdAt || Date.now()),
+                changeFrequency: 'monthly' as const,
+                priority: 0.6,
+            }));
+        }
+    } catch (e) {
+        console.warn('Could not fetch public trips for sitemap');
+    }
 
     return [
         ...staticPages,
         ...categoryEntries,
-        ...destinationEntries
+        ...destinationEntries,
+        ...blogEntries,
+        ...tripEntries
     ];
 }

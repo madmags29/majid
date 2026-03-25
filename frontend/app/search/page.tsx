@@ -20,6 +20,14 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
     return {
         title,
         description,
+        openGraph: {
+            title,
+            description,
+            type: 'website',
+        },
+        alternates: {
+            canonical: destination ? `/search?destination=${encodeURIComponent(destination as string)}` : '/search',
+        }
     };
 }
 
