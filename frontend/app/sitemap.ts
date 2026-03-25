@@ -1,6 +1,8 @@
 import { MetadataRoute } from 'next';
 import { EXLPORE_DESTINATIONS } from '@/lib/destinations';
 
+export const revalidate = 604800; // Auto-update sitemap exactly every week (7 days)
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = 'https://weekendtravellers.com';
 
@@ -131,7 +133,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     let tripEntries: any[] = [];
 
     try {
-        const blogPosts = await fetch(`${apiUrl}/api/blog`, { next: { revalidate: 3600 } }).then(res => res.json());
+        const blogPosts = await fetch(`${apiUrl}/api/blog`, { next: { revalidate: 604800 } }).then(res => res.json());
         if (Array.isArray(blogPosts)) {
             blogEntries = blogPosts.map((post: any) => ({
                 url: `${baseUrl}/blog/${post.slug}`,
@@ -145,7 +147,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
 
     try {
-        const publicTrips = await fetch(`${apiUrl}/api/trips/public?limit=500`, { next: { revalidate: 3600 } }).then(res => res.json());
+        const publicTrips = await fetch(`${apiUrl}/api/trips/public?limit=500`, { next: { revalidate: 604800 } }).then(res => res.json());
         if (Array.isArray(publicTrips)) {
             tripEntries = publicTrips.map((trip: any) => ({
                 url: `${baseUrl}/trip/${trip._id}`,
