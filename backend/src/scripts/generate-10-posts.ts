@@ -5,11 +5,16 @@
 import dotenv from 'dotenv';
 import path from 'path';
 
-// Load environment variables from the root .env file, ensuring they override any existing ones
-dotenv.config({ 
-    path: path.resolve(__dirname, '../../.env'),
-    override: true 
-});
+// Load environment variables. In local dev, this loads from .env.
+// In CI environments like GitHub Actions, it will skip if the file is missing and use shell variables.
+const envPath = path.resolve(__dirname, '../../.env');
+dotenv.config({ path: envPath });
+
+// Log for debugging (only showing variable presence, not values)
+console.log('Environment configuration:');
+console.log(`- MONGODB_URI: ${process.env.MONGODB_URI ? 'SET' : 'MISSING'}`);
+console.log(`- .env file path: ${envPath}`);
+
 
 import mongoose from 'mongoose';
 import { automateDailyPublish, seedInitialKeywords } from '../services/blogService';
