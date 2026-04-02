@@ -321,7 +321,7 @@ function SearchClient() {
                     {
                         role: 'assistant',
                         type: 'text',
-                        content: "I couldn't generate an itinerary for that destination. Please try again or check your connection."
+                        content: `I couldn't generate a specific itinerary for "${dest}" right now. Our AI is constantly learning new routes! \n\n**While we work on that, why not explore these popular weekend favorites?**\n\n*   **Jaipur, India** - The Pink City, perfect for a 2-day heritage immersion.\n*   **Manali, India** - A classic mountain escape for adventure and peace.\n*   **Goa, India** - Coastal vibes and vibrant nightlife.\n*   **Rishikesh, India** - Spiritual rejuvenation by the Ganges.\n\nYou can also try adjusting your search terms or checking our [Inspiration Page](/inspiration-trip) for more ideas.`
                     }
                 ]);
             } finally {

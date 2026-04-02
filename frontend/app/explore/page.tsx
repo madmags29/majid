@@ -200,6 +200,46 @@ export default function ExplorePage() {
                         </div>
                     </section>
                 )}
+                {/* AdSense Ready - Contextual Text Section */}
+                <section className="pt-20 border-t border-slate-800/50">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+                        <div className="space-y-8">
+                            <h2 className="text-4xl font-black text-white italic tracking-tighter uppercase">The Science of <span className="text-blue-400">Weekend Travel</span></h2>
+                            <p className="text-slate-400 leading-relaxed text-lg">
+                                At Weekend Travellers, we believe that travel shouldn&apos;t require a 14-day sabbatical. In the modern, fast-paced world of 2026, the <strong>&quot;Micro-Vacation&quot;</strong> has become a vital tool for mental health and exploration. Our platform is built on the philosophy that a well-planned 48-hour trip can provide as much rejuvenation as a two-week holiday, provided the logistics are handled with precision.
+                            </p>
+                            <p className="text-slate-400 leading-relaxed text-lg">
+                                We curate our destination directory based on a strict set of criteria: accessibility (within a 4-6 hour travel window from major hubs), cultural density (high number of attractions per square mile), and unique &quot;vibe&quot; profiles. Whether we are highlighting the spiritual ghats of Rishikesh or the neon-soaked streets of Shinjuku, our goal is to maximize your experience while minimizing planning fatigue.
+                            </p>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className="p-8 bg-slate-900/40 rounded-3xl border border-slate-800 hover:border-blue-500/30 transition-all">
+                                <h3 className="text-xl font-bold text-white mb-4">AI-Driven Curation</h3>
+                                <p className="text-sm text-slate-500 leading-relaxed">
+                                    Our proprietary AI analysis engine cross-references thousands of data points including local event calendars, seasonal weather patterns, and real-time transit logistics to ensure our featured destinations are always &quot;trip-ready&quot;.
+                                </p>
+                            </div>
+                            <div className="p-8 bg-slate-900/40 rounded-3xl border border-slate-800 hover:border-purple-500/30 transition-all">
+                                <h3 className="text-xl font-bold text-white mb-4">Authentic Insights</h3>
+                                <p className="text-sm text-slate-500 leading-relaxed">
+                                    We prioritize hidden gems and local-favorite spots over generic tourist traps. Every curated guide is designed to give you a localized perspective, helping you blend into the culture rather than just observing it from the outside.
+                                </p>
+                            </div>
+                            <div className="p-8 bg-slate-900/40 rounded-3xl border border-slate-800 hover:border-pink-500/30 transition-all">
+                                <h3 className="text-xl font-bold text-white mb-4">2026 Ready</h3>
+                                <p className="text-sm text-slate-500 leading-relaxed">
+                                    As travel norms evolve, so do our guides. We include the latest information on digital nomad facilities, sustainable travel options, and modern booking tips to keep your weekend trips efficient and responsible.
+                                </p>
+                            </div>
+                            <div className="p-8 bg-slate-900/40 rounded-3xl border border-slate-800 hover:border-green-500/30 transition-all">
+                                <h3 className="text-xl font-bold text-white mb-4">Global Reach</h3>
+                                <p className="text-sm text-slate-500 leading-relaxed">
+                                    While we have a deep focus on the Indian subcontinent, our directory spans Europe, Asia, and the Americas, providing a truly global perspective on the perfect weekend escape.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </main>
         </div>
     );

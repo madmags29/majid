@@ -136,6 +136,47 @@ export default function BlogClientPage({ posts }: { posts: any[] }) {
                     </>
                 )}
 
+                {/* AdSense Ready - Editorial Vision Contextual Text */}
+                <section className="py-24 border-t border-slate-800/50">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+                        <div className="space-y-8">
+                            <h3 className="text-4xl font-black text-white italic tracking-tighter uppercase">Our <span className="text-purple-400">Editorial</span> Vision</h3>
+                            <p className="text-slate-400 leading-relaxed text-lg">
+                                In an era of generic travel advice, the Weekend Travellers blog stands as a beacon for the modern Explorer. We recognize that the most valuable commodity for our readers in 2026 isn&apos;t just information—it&apos;s <strong>curation</strong>. Our blog is more than just a collection of stories; it is a tactical manual for reclaiming your time and discovering the world in bite-sized, high-impact adventures.
+                            </p>
+                            <p className="text-slate-400 leading-relaxed text-lg">
+                                Every guide, itinerary, and travel hack published on our platform undergoes a rigorous assessment process. We combine the computational power of Large Language Models (LLMs) with the human intuition of seasoned travelers. This hybrid approach allows us to identify emerging trends, localized events, and &quot;anti-tourist&quot; routes that standard algorithms often miss.
+                            </p>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className="p-10 bg-slate-900/40 rounded-[2.5rem] border border-slate-800 flex flex-col items-center text-center space-y-4">
+                                <span className="text-3xl font-black text-white italic tracking-tighter">AI+Human</span>
+                                <p className="text-sm text-slate-500 leading-relaxed">
+                                    We leverage advanced AI to synthesize vast amounts of logistical data, while our human editors ensure every story resonates with authentic emotion and practical reliability.
+                                </p>
+                            </div>
+                            <div className="p-10 bg-slate-900/40 rounded-[2.5rem] border border-slate-800 flex flex-col items-center text-center space-y-4">
+                                <span className="text-3xl font-black text-white italic tracking-tighter">Micro-Focus</span>
+                                <p className="text-sm text-slate-500 leading-relaxed">
+                                    We specialize exclusively in 2-4 day travel cycles. We don&apos;t care about gap years; we care about making your next Saturday and Sunday legendary.
+                                </p>
+                            </div>
+                            <div className="p-10 bg-slate-900/40 rounded-[2.5rem] border border-slate-800 flex flex-col items-center text-center space-y-4">
+                                <span className="text-3xl font-black text-white italic tracking-tighter">Verified</span>
+                                <p className="text-sm text-slate-500 leading-relaxed">
+                                    Every hotel recommendation and transit route is cross-checked against current 2026 availability and user-verified reliability scores.
+                                </p>
+                            </div>
+                            <div className="p-10 bg-slate-900/40 rounded-[2.5rem] border border-slate-800 flex flex-col items-center text-center space-y-4">
+                                <span className="text-3xl font-black text-white italic tracking-tighter">Future</span>
+                                <p className="text-sm text-slate-500 leading-relaxed">
+                                    Our vision is to build the world&apos;s largest repository of &quot;perfect weekends,&quot; helping millions of travelers escape the mundane without a passport stamp required.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
                 {/* Newsletter */}
                 <section className="mt-32 relative rounded-[3rem] overflow-hidden p-1 p-px bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-pink-500/20 shadow-2xl">
                     <div className="bg-slate-950/90 backdrop-blur-xl rounded-[2.9rem] px-8 py-16 md:px-20 md:py-24 text-center">

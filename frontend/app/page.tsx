@@ -211,6 +211,83 @@ export default async function LandingPage() {
           </div>
         </div>
       </section>
+      {/* How it Works - Text Rich Section for SEO */}
+      <section className="py-24 px-6 relative z-20 border-t border-white/5 bg-slate-950">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <h2 className="text-4xl md:text-5xl font-black italic tracking-tighter text-white mb-8 uppercase">How It Works</h2>
+              <div className="space-y-8">
+                <div className="flex gap-6">
+                  <div className="w-12 h-12 rounded-2xl bg-blue-600/20 flex items-center justify-center shrink-0 border border-blue-500/20">
+                    <span className="text-xl font-black text-blue-400 font-cursive italic">01</span>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-white mb-2">Define Your Weekend</h3>
+                    <p className="text-slate-400 leading-relaxed">
+                      Simply enter your destination or a general region you&apos;d like to explore. Our AI analyzes your starting point to suggest local gems within a 2-4 day travel radius. Whether it&apos;s a quick mountain escape or a coastal retreat, we find the perfect spot based on seasonal trends and travel logistics.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex gap-6">
+                  <div className="w-12 h-12 rounded-2xl bg-purple-600/20 flex items-center justify-center shrink-0 border border-purple-500/20">
+                    <span className="text-xl font-black text-purple-400 font-cursive italic">02</span>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-white mb-2">Smart Itinerary Generation</h3>
+                    <p className="text-slate-400 leading-relaxed">
+                      Our advanced AI travel engine instantly builds a comprehensive, hour-by-hour itinerary. Unlike generic travel guides, we include hidden local secrets, the best times to visit specific attractions to avoid crowds, and curated food recommendations that reflect the authentic culture of the destination.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex gap-6">
+                  <div className="w-12 h-12 rounded-2xl bg-pink-600/20 flex items-center justify-center shrink-0 border border-pink-500/20">
+                    <span className="text-xl font-black text-pink-400 font-cursive italic">03</span>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-white mb-2">Customize & Book</h3>
+                    <p className="text-slate-400 leading-relaxed">
+                      Refine your plan using our interactive chat—request more adventure, better budget options, or family-friendly activities. Once satisfied, save your trip to your profile or use our integrated booking tools to secure the best-rated hotels and travel connections for your selected dates.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-gradient-to-br from-blue-600/10 to-purple-600/10 p-1 rounded-[3rem] border border-white/10 shadow-2xl">
+              <div className="bg-slate-900/60 backdrop-blur-3xl p-10 rounded-[2.8rem] space-y-8">
+                <h3 className="text-3xl font-black italic tracking-tighter text-white uppercase">Why Choose Weekend Travellers?</h3>
+                <p className="text-slate-300 leading-relaxed italic">
+                  &quot;In 2026, travel shouldn&apos;t be a chore. We built Weekend Travellers to solve the &apos;planning fatigue&apos; that ruins short getaways. By leveraging real-time data and advanced LLMs, we provide value that static blogs can&apos;t: personalization, accuracy, and speed.&quot;
+                </p>
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <div className="text-2xl font-black text-blue-400">50K+</div>
+                    <div className="text-xs uppercase tracking-widest font-bold text-slate-500">Trips Planned</div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="text-2xl font-black text-purple-400">AI Driven</div>
+                    <div className="text-xs uppercase tracking-widest font-bold text-slate-500">Real-time Data</div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="text-2xl font-black text-pink-400">2026 Ready</div>
+                    <div className="text-xs uppercase tracking-widest font-bold text-slate-500">Latest Trends</div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="text-2xl font-black text-green-400">100% Free</div>
+                    <div className="text-xs uppercase tracking-widest font-bold text-slate-500">No Hidden Fees</div>
+                  </div>
+                </div>
+                <div className="pt-4">
+                  <p className="text-sm text-slate-400 leading-relaxed">
+                    We specialize in 2-day and 3-day itineraries, focusing on maximizing your experience without the burnout of long-distance travel. Our mission is to make every weekend feel like a full vacation.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
     </div>
   );
 }

@@ -46,10 +46,19 @@ export default function CookiePolicy() {
                 </section>
 
                 <section className="space-y-4">
-                    <h2 className="text-2xl font-semibold text-white">3. Third-Party Cookies</h2>
+                    <h2 className="text-2xl font-semibold text-white">3. Third-Party Cookies & Advertising</h2>
                     <p className="text-slate-300 leading-relaxed">
                         In addition to our own cookies, we may also use various third-parties cookies to report usage statistics of the Service, deliver advertisements on and through the Service, and so on.
                     </p>
+                    <div className="bg-blue-900/20 p-6 rounded-2xl border border-blue-500/30 space-y-4 mt-4">
+                        <h3 className="text-xl font-bold text-white">Google AdSense & DoubleClick</h3>
+                        <p className="text-sm text-slate-300 leading-relaxed">
+                            Google, as a third party vendor, uses cookies to serve ads on our site. Google&apos;s use of the DoubleClick cookie enables it and its partners to serve ads to our users based on their visit to our sites and/or other sites on the Internet.
+                        </p>
+                        <p className="text-sm text-slate-300 leading-relaxed">
+                            Users may opt out of the use of the DoubleClick cookie for interest-based advertising by visiting the <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 underline font-bold">Google Ads Settings</a> page. Alternatively, users can opt out of a third-party vendor&apos;s use of cookies for interest-based advertising by visiting <a href="https://www.aboutads.info" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 underline font-bold">aboutads.info</a>.
+                        </p>
+                    </div>
                 </section>
 
                 <section className="space-y-4">

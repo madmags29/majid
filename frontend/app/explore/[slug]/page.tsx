@@ -153,13 +153,45 @@ export default async function DestinationPage({ params }: Props) {
                     </div>
                 </section>
 
-                <section className="max-w-4xl mx-auto px-4 py-20 text-center">
-                    <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-200 to-slate-400 mb-6">
-                        Why visit {destination.name}?
-                    </h2>
-                    <p className="text-xl text-slate-400 leading-relaxed font-light">
-                        {destination.name} is one of our hand-picked curated destinations. Known for its incredible scenery, authentic culture, and unforgettable experiences, it&apos;s the perfect spot for a weekend getaway. Above is your highly detailed, personalized 2-day AI itinerary complete with recommended travel logistics, hotels, and daily activities to make the most of your trip.
-                    </p>
+                <section className="max-w-4xl mx-auto px-4 py-20">
+                    <div className="text-center mb-16">
+                        <h2 className="text-3xl md:text-5xl font-black text-white mb-6 tracking-tight uppercase italic">
+                            Experience {destination.name}
+                        </h2>
+                        <p className="text-xl text-slate-400 leading-relaxed font-light">
+                            {destination.name} is a premier destination curated by our expert travel team. Known for its distinct {destination.tags.join(', ')} vibes, it offers a perfect blend of relaxation and discovery for those seeking a premium weekend break in 2026.
+                        </p>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-12 text-left">
+                        <div className="space-y-6">
+                            <h3 className="text-2xl font-bold text-blue-400">Why It&apos;s a Weekend Favorite</h3>
+                            <p className="text-slate-300 leading-relaxed">
+                                {destination.name} excels as a short-stay destination due to its accessibility and high density of attractions. Whether you&apos;re a solo traveler, a couple on a romantic escape, or a family looking for a quick adventure, the city provides a diverse range of activities that can be comfortably covered in a 2 to 3-day window.
+                            </p>
+                        </div>
+                        <div className="space-y-6">
+                            <h3 className="text-2xl font-bold text-purple-400">Cultural Context & Local Vibe</h3>
+                            <p className="text-slate-300 leading-relaxed">
+                                Visiting {destination.name} is about more than just sightseeing; it&apos;s about soaking in the unique local atmosphere. From the traditional architecture to the modern culinary scene, every corner tells a story. Our AI-curated plan below ensures you hit the most authentic spots that represent the true heart of {destination.country}.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="mt-16 p-8 rounded-3xl bg-slate-900/50 border border-slate-800 grid md:grid-cols-3 gap-8 text-center">
+                        <div>
+                            <div className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-2">Best Time to Visit</div>
+                            <div className="text-lg font-bold text-white">Spring & Autumn</div>
+                        </div>
+                        <div>
+                            <div className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-2">Top Highlight</div>
+                            <div className="text-lg font-bold text-white">Authentic {destination.tags[0]}</div>
+                        </div>
+                        <div>
+                            <div className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-2">Travel Style</div>
+                            <div className="text-lg font-bold text-white">Premium/Boutique</div>
+                        </div>
+                    </div>
                 </section>
 
                 <section className="max-w-6xl mx-auto px-4 pb-24">

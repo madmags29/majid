@@ -150,6 +150,21 @@ function MenuClient() {
                                 </div>
                             ))}
                         </div>
+                        <div className="pt-12 border-t border-slate-800/50 mt-12 space-y-6">
+                            <h3 className="text-xl font-bold text-white tracking-widest uppercase">The Inspiration <span className="text-blue-400">Architecture</span></h3>
+                            <p className="text-sm text-slate-400 leading-relaxed">
+                                Our &quot;Inspirational Trip&quot; categories are not just lists; they are curated clusters of destinations that share a specific emotional resonance. We understand that a &quot;weekend&quot; is a precious window, and our curation focuses on maximizing your journey&apos;s impact. 
+                            </p>
+                            <p className="text-sm text-slate-400 leading-relaxed">
+                                From the thermal currents of the Himalayas to the saline breezes of the Arabian Sea, every destination featured here is verified for 3-day feasibility. We prioritize locations with stable infrastructure, diverse culinary scenes, and safe environments for solo and group travelers alike.
+                            </p>
+                            <div className="p-6 bg-slate-900/30 rounded-2xl border border-slate-800 group hover:border-blue-500/20 transition-all font-medium">
+                                <h4 className="text-sm font-bold text-white mb-2">Why these collections?</h4>
+                                <p className="text-xs text-slate-500 leading-relaxed">
+                                    Our AI analyzes flight patterns and train schedules to ensure these regional highlights are &quot;easy wins&quot; for short-duration planning. Explore our categories to find a vibe that matches your current state of mind.
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
