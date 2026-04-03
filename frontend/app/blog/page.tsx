@@ -14,7 +14,7 @@ export default async function BlogLandingPage() {
         } else {
             // Run fetch on the Server during SSR/SSG
             const res = await fetch(`${API_URL}/api/blog`, { 
-                next: { revalidate: 3600 }
+                cache: 'no-store' // Force fresh fetch, bypassing any stuck Next.js Data Cache
             });
             if (res.ok) {
                 posts = await res.json();
