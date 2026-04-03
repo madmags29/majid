@@ -14,8 +14,7 @@ export default async function BlogLandingPage() {
         } else {
             // Run fetch on the Server during SSR/SSG
             const res = await fetch(`${API_URL}/api/blog`, { 
-                next: { revalidate: 3600 },
-                signal: AbortSignal.timeout(5000) // 5s timeout
+                next: { revalidate: 3600 }
             });
             if (res.ok) {
                 posts = await res.json();

@@ -24,8 +24,7 @@ export default async function BlogPostDetail({ params }: Props) {
         } else {
             // Explicitly fetch on the server - no 'use client' hooks locking data away!
             const res = await fetch(`${API_URL}/api/blog/${slug}`, { 
-                next: { revalidate: 3600 },
-                signal: AbortSignal.timeout(5000) // 5s timeout
+                next: { revalidate: 3600 }
             });
             if (res.ok) {
                 const data = await res.json();

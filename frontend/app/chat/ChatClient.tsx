@@ -59,10 +59,17 @@ function ChatClient() {
     const fetchLocationAndDestinations = useCallback(async () => {
         setIsLoadingDestinations(true);
         try {
-            // 1. Get Location
-            const locRes = await fetch('https://ipapi.co/json/');
-            const locData = await locRes.json();
-            const locationStr = locData.city ? `${locData.city}, ${locData.country_name}` : locData.country_name || 'Global';
+            // 1. Get Location safely
+            let locationStr = 'Global';
+            try {
+                const locRes = await fetch('https://ipapi.co/json/');
+                if (locRes.ok) {
+                    const locData = await locRes.json();
+                    locationStr = locData.city ? `${locData.city}, ${locData.country_name}` : locData.country_name || 'Global';
+                }
+            } catch (locErr) {
+                console.warn('Geolocation failed, defaulting to Global:', locErr);
+            }
             setUserLocation(locationStr);
 
             // 2. Fetch Suggestions based on Location

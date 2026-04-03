@@ -88,8 +88,7 @@ export default async function DestinationPage({ params }: Props) {
                     destination: destination.name,
                     days: 2,
                 }),
-                next: { revalidate: 604800 }, // Cache for exactly 1 week
-                signal: AbortSignal.timeout(5000) // 5s timeout
+                next: { revalidate: 604800 }
             });
             if (response.ok) {
                 itinerary = await response.json();

@@ -18,8 +18,7 @@ async function getBlogPosts() {
 
   try {
     const res = await fetch(`${API_URL}/api/blog`, { 
-      next: { revalidate: 3600 },
-      signal: AbortSignal.timeout(5000) // 5s timeout to prevent build hangs
+      next: { revalidate: 3600 }
     });
     if (!res.ok) return [];
     const data = await res.json();
