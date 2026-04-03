@@ -195,25 +195,25 @@ function ChatClient() {
                                     className={cn("flex gap-3", msg.role === 'assistant' ? "mr-auto w-full md:max-w-[85%]" : "ml-auto max-w-[85%] flex-row-reverse")}
                                 >
                                     {msg.role === 'assistant' && (
-                                        <div className="hidden md:flex w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 items-center justify-center shrink-0 mt-1 overflow-hidden ring-2 ring-white/10 shadow-lg">
+                                        <div className="flex w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600 items-center justify-center shrink-0 mt-1 overflow-hidden ring-2 ring-white/10 shadow-xl shadow-blue-900/40">
                                             <AnimatedLogo className="w-5 h-5 text-white" solid />
                                         </div>
                                     )}
 
                                     <div className={cn(
-                                        "rounded-2xl px-5 py-4 shadow-2xl relative overflow-hidden group/bubble",
+                                        "rounded-2xl px-5 py-4 shadow-2xl relative overflow-hidden group/bubble transition-all duration-300",
                                         msg.role === 'assistant'
-                                            ? "bg-slate-900/40 backdrop-blur-md border border-white/10 rounded-tl-sm text-slate-200"
-                                            : "bg-gradient-to-br from-blue-600 to-indigo-700 text-white rounded-tr-sm shadow-blue-900/20"
+                                            ? "bg-white/[0.03] backdrop-blur-md border border-white/10 rounded-tl-sm text-slate-200 hover:bg-white/[0.05]"
+                                            : "bg-gradient-to-br from-blue-600 via-blue-600 to-indigo-700 text-white rounded-tr-sm shadow-blue-900/40 border border-white/5"
                                     )}>
                                         {msg.role === 'assistant' && (
-                                            <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/5 via-transparent to-purple-500/5 pointer-events-none" />
+                                            <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 via-transparent to-purple-500/10 pointer-events-none opacity-50" />
                                         )}
-                                        <p className="leading-relaxed text-sm md:text-base font-medium relative z-10">{msg.content}</p>
+                                        <p className="leading-relaxed text-sm md:text-base font-medium relative z-10 selection:bg-blue-400/30">{msg.content}</p>
                                     </div>
 
                                     {msg.role === 'user' && (
-                                        <div className="w-8 h-8 rounded-full bg-slate-800 border border-white/10 flex items-center justify-center shrink-0 mt-1 shadow-lg">
+                                        <div className="w-8 h-8 rounded-full bg-slate-800 border border-white/10 flex items-center justify-center shrink-0 mt-1 shadow-lg ring-2 ring-white/5">
                                             <User className="w-5 h-5 text-slate-300" />
                                         </div>
                                     )}
@@ -223,18 +223,23 @@ function ChatClient() {
                         <div ref={messagesEndRef} />
 
                         {/* AdSense Optimization: High-Value Content Section */}
-                        <div className="mt-20 pt-10 border-t border-white/5 opacity-40 hover:opacity-100 transition-opacity pb-10">
-                            <h3 className="text-sm font-bold text-white mb-4 uppercase tracking-widest italic">Conversational Strategy</h3>
-                            <div className="space-y-4 text-[10px] md:text-xs text-slate-500 leading-relaxed max-w-xl">
-                                <p>
+                        <div className="mt-32 p-8 md:p-10 bg-white/[0.02] border border-white/5 rounded-[2rem] backdrop-blur-sm group/adsense transition-all hover:bg-white/[0.04] hover:border-white/10">
+                            <div className="flex items-center gap-3 mb-6">
+                                <span className="p-2 rounded-lg bg-blue-500/10 text-blue-400">
+                                    <RefreshCw className="w-4 h-4" />
+                                </span>
+                                <h3 className="text-sm font-black text-white uppercase tracking-[0.2em] italic">Conversational Strategy</h3>
+                            </div>
+                            <div className="space-y-6 text-[11px] md:text-xs text-slate-500 leading-relaxed max-w-2xl">
+                                <p className="group-hover/adsense:text-slate-400 transition-colors">
                                     Our conversational interface is the primary entry point for personalized 2026 micro-vacation planning. When you input a destination or a &quot;vibe&quot; into this chat, our natural language processing models immediately begin deconstructing your request into actionable travel parameters. This isn&apos;t just a simple search; it&apos;s a multi-layered query that cross-references your current geographical location with global travel trends and seasonal logistics.
                                 </p>
-                                <p>
-                                    <strong>The Generative Advantage</strong><br/>
+                                <p className="group-hover/adsense:text-slate-400 transition-colors">
+                                    <strong className="text-slate-300">The Generative Advantage</strong><br/>
                                     By using generative AI, Weekend Travellers moves beyond the limitations of static brochures. The itineraries generated through this interface are structurally sound—meaning they account for closing times, travel distances, and pedestrian-friendly routing. Whether you are looking for a &quot;quiet retreat&quot; or a &quot;high-energy city break,&quot; the intelligence behind this chat adapts its lexical weights to prioritize the results that most closely align with your stated mood.
                                 </p>
-                                <p>
-                                    <strong>Scaling Your Adventure</strong><br/>
+                                <p className="group-hover/adsense:text-slate-400 transition-colors">
+                                    <strong className="text-slate-300">Scaling Your Adventure</strong><br/>
                                     Every interaction in this chat helps refine our destination index. By analyzing the nuanced requests of thousands of travelers, we can identify emerging hotspots and &quot;hidden gems&quot; before they reach mainstream saturation. Our commitment to ethical AI ensures that your specific travel dreams are matched with verified, safe, and high-quality local vendors, promoting sustainable tourism one weekend at a time.
                                 </p>
                             </div>
@@ -242,10 +247,10 @@ function ChatClient() {
                     </div>
 
                     {/* Input Area */}
-                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-slate-900/40 backdrop-blur-2xl border-t border-white/5 safe-bottom z-10">
+                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-slate-950/60 backdrop-blur-3xl border-t border-white/10 safe-bottom z-10 shadow-[0_-20px_40px_-15px_rgba(0,0,0,0.5)]">
                         {user ? (
                             <form onSubmit={handleSend} className="relative flex items-center max-w-3xl mx-auto w-full group">
-                                <div className="absolute inset-0 bg-blue-500/5 blur-xl group-focus-within:bg-blue-500/10 transition-colors rounded-2xl" />
+                                <div className="absolute inset-0 bg-blue-500/5 blur-2xl group-focus-within:bg-blue-500/10 transition-colors rounded-2xl" />
                                 <input
                                     type="text"
                                     name="chat"
@@ -253,26 +258,26 @@ function ChatClient() {
                                     placeholder="E.g., A relaxing weekend trip to Bali..."
                                     value={input}
                                     onChange={(e) => setInput(e.target.value)}
-                                    className="w-full bg-slate-900/50 text-white placeholder:text-slate-500 text-sm md:text-base rounded-2xl py-4 pl-5 pr-14 focus:outline-none focus:ring-2 focus:ring-blue-500/40 border border-white/5 transition-all hover:bg-slate-800/80 relative z-10"
+                                    className="w-full bg-slate-900 border border-white/10 text-white placeholder:text-slate-500 text-sm md:text-base rounded-2xl py-4 pl-5 pr-14 outline-none focus:ring-1 focus:ring-blue-500/40 transition-all hover:bg-slate-800/80 relative z-10 shadow-inner"
                                 />
                                 <Button
                                     type="submit"
                                     size="icon"
                                     disabled={!input.trim()}
-                                    className="absolute right-2 text-white bg-gradient-to-br from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 rounded-xl w-10 h-10 transition-all shadow-lg shadow-blue-900/20 disabled:opacity-50 disabled:grayscale z-20 hover:scale-105 active:scale-95 touch-manipulation"
+                                    className="absolute right-2 text-white bg-gradient-to-br from-blue-600 via-blue-600 to-indigo-600 hover:via-blue-500 rounded-xl w-10 h-10 transition-all shadow-lg shadow-blue-500/20 disabled:opacity-50 disabled:grayscale z-20 hover:scale-105 active:scale-95 group-hover:shadow-blue-500/40"
                                 >
-                                    <Send className="w-4 h-4 ml-0.5 pointer-events-none" />
+                                    <Send className="w-4 h-4 ml-0.5" />
                                 </Button>
                             </form>
                         ) : (
                             <div className="relative flex items-center max-w-3xl mx-auto w-full group">
-                                <div className="absolute inset-0 bg-blue-500/5 blur-xl group-hover:bg-blue-500/10 transition-colors rounded-2xl" />
+                                <div className="absolute inset-0 bg-blue-500/5 blur-2xl group-hover:bg-blue-500/10 transition-colors rounded-2xl" />
                                 <button
                                     onClick={() => setIsAuthOpen(true)}
-                                    className="w-full bg-slate-900/50 text-slate-300 text-sm md:text-base rounded-2xl py-4 font-bold hover:text-white border border-white/5 transition-all hover:bg-slate-800/80 flex items-center justify-center gap-2 shadow-lg relative z-10 hover:border-blue-500/30 group/btn touch-manipulation"
+                                    className="w-full bg-slate-900/60 backdrop-blur-md text-slate-300 text-sm md:text-base rounded-2xl py-4 font-black uppercase tracking-widest hover:text-white border border-white/10 transition-all hover:bg-slate-800/80 flex items-center justify-center gap-3 shadow-2xl relative z-10 hover:border-blue-500/40 group/btn"
                                 >
                                     <LogIn className="w-5 h-5 text-blue-400 group-hover/btn:scale-110 transition-transform pointer-events-none" />
-                                    Log in to start planning your perfect weekend
+                                    Sign In to start planning
                                 </button>
                             </div>
                         )}
@@ -281,14 +286,18 @@ function ChatClient() {
 
                 {/* Resize Handle */}
                 <div
-                    className="hidden md:flex absolute top-0 bottom-0 z-50 w-4 cursor-col-resize items-center justify-center hover:bg-white/5 transition-colors"
-                    style={{ left: `calc(${leftWidth}% - 8px)` }}
+                    className="hidden md:flex absolute top-0 bottom-0 z-50 w-6 cursor-col-resize items-center justify-center hover:bg-white/5 transition-colors group/resize"
+                    style={{ left: `calc(${leftWidth}% - 12px)` }}
                     onMouseDown={handleMouseDown}
                 >
                     <div className={cn(
-                        "h-12 w-1 rounded-full transition-colors",
-                        isResizing ? "bg-blue-500" : "bg-slate-700 hover:bg-slate-500"
-                    )} />
+                        "h-20 w-1.5 rounded-full transition-all duration-300 flex flex-col items-center justify-center gap-1.5 px-0.5",
+                        isResizing ? "bg-blue-500 h-24" : "bg-slate-800 group-hover/resize:bg-slate-700"
+                    )}>
+                        <div className="w-0.5 h-0.5 rounded-full bg-white/20" />
+                        <div className="w-0.5 h-0.5 rounded-full bg-white/20" />
+                        <div className="w-0.5 h-0.5 rounded-full bg-white/20" />
+                    </div>
                 </div>
 
                 {/* Right Panel - Popular Destinations */}
@@ -326,28 +335,28 @@ function ChatClient() {
                                     <button
                                         key={idx}
                                         onClick={() => handleDestinationClick(dest.name)}
-                                        className="group relative h-48 lg:h-56 rounded-3xl overflow-hidden focus:outline-none focus:ring-4 focus:ring-blue-500/50 transition-all transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-500/20 text-left w-full border border-slate-800/50 hover:border-slate-700"
+                                        className="group relative h-48 lg:h-56 rounded-3xl overflow-hidden focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-all transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-500/30 text-left w-full border border-white/5 hover:border-blue-500/40 bg-slate-900"
                                     >
-                                        <div className="absolute inset-0 bg-slate-900">
+                                        <div className="absolute inset-0 bg-slate-950">
                                             {/* eslint-disable-next-line @next/next/no-img-element */}
                                             <img
                                                 src={fallbackImages[idx % fallbackImages.length]}
                                                 alt={dest.name}
-                                                className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-500 group-hover:scale-110 grayscale group-hover:grayscale-0"
+                                                className="w-full h-full object-cover opacity-30 group-hover:opacity-70 transition-all duration-700 group-hover:scale-105 saturate-[0.8] brightness-[0.8] group-hover:saturate-[1.2] group-hover:brightness-100"
                                             />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-slate-900/20" />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent opacity-80 group-hover:opacity-40 transition-opacity" />
                                         </div>
 
-                                        <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                                            <div className="flex items-center gap-2 mb-2">
-                                                <span className="text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded bg-blue-500/20 backdrop-blur-md text-blue-200 border border-blue-500/30 group-hover:border-blue-400 group-hover:bg-blue-500/40 transition-colors">
+                                        <div className="absolute inset-0 p-8 flex flex-col justify-end">
+                                            <div className="flex items-center gap-2 mb-3">
+                                                <span className="text-[10px] uppercase font-black tracking-[0.2em] px-3 py-1 rounded-lg bg-blue-600/20 backdrop-blur-md text-blue-400 border border-blue-500/20 transition-all group-hover:bg-blue-600/40">
                                                     {dest.tag}
                                                 </span>
                                             </div>
-                                            <h3 className="text-2xl lg:text-3xl font-bold text-white group-hover:text-white transition-colors flex items-center justify-between">
+                                            <h3 className="text-2xl lg:text-4xl font-black italic text-white leading-tight uppercase tracking-tighter group-hover:text-blue-400 transition-colors flex items-end justify-between drop-shadow-lg">
                                                 {dest.name}
-                                                <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all transform translate-x-4 group-hover:translate-x-0 shadow-lg shadow-blue-500/50">
-                                                    <ArrowLeft className="w-4 h-4 text-white rotate-180" />
+                                                <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500 shadow-xl shadow-blue-500/50">
+                                                    <ArrowLeft className="w-5 h-5 text-white rotate-180" />
                                                 </div>
                                             </h3>
                                         </div>
