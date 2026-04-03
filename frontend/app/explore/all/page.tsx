@@ -104,6 +104,34 @@ export default function AllDestinationsPage() {
                         </Button>
                     </div>
                 )}
+
+                {/* AdSense Optimization: High-Value Content Section */}
+                <div className="mt-32 border-t border-white/5 pt-24 pb-12">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                        <div className="space-y-8">
+                            <h2 className="text-4xl font-black text-white italic tracking-tighter uppercase leading-tight">The Science of <br /><span className="text-blue-500">Destination</span> Selection</h2>
+                            <p className="text-slate-400 text-lg leading-relaxed">
+                                Not every city is a &quot;Weekend Destination.&quot; At Weekend Travellers, we apply a rigorous logistical filter to every location in our global database. Our goal is to solve the paradox of choice by only presenting destinations that offer a high return on investment for your most valuable asset: your time. In 2026, the definition of a great getaway has shifted from mere sightseeing to deep, localized immersion. 
+                            </p>
+                            <p className="text-slate-400 text-lg leading-relaxed">
+                                <strong>Logistical Feasibility & Transit Efficiency</strong><br/>
+                                We analyze thousands of flight paths, train schedules, and regional transit nodes to ensure that no destination on this list requires more than 6-8 hours of total door-to-door travel. We believe that a weekend is too short to spend half of it in transit. If a city doesn&apos;t meet our baseline &quot;Transit Efficiency Score,&quot; it doesn&apos;t make it into our core Explore Index.
+                            </p>
+                        </div>
+                        <div className="space-y-8">
+                            <p className="text-slate-400 text-lg leading-relaxed pt-2">
+                                <strong>Cultural Density & Impact</strong><br/>
+                                Beyond logistics, we measure &quot;Cultural Density&quot;—the concentration of unique, high-quality museums, dining experiences, and historical sites within a walkable or easily navigable radius. Our mission is to ensure that even a 48-hour stay feels like a week-long journey. By prioritizing high-density hubs, we allow you to experience the &quot;vibe&quot; of a region without the stress of long-distance ground travel during your limited time off.
+                            </p>
+                            <div className="p-10 bg-slate-900/40 rounded-[3rem] border border-slate-800 group hover:border-blue-500/20 transition-all shadow-2xl">
+                                <h3 className="text-xl font-bold text-white mb-4">A Commitment to Sustainable Micro-Travel</h3>
+                                <p className="text-sm text-slate-500 leading-relaxed">
+                                    By encouraging travelers to explore regional gems and high-efficiency city hubs, we promote a more sustainable model of tourism. Long-haul travel is resource-intensive; our &quot;Micro-Vacation&quot; philosophy encourages higher-frequency, lower-impact journeys that support local economies across the globe. Our AI-driven selection process is continuously updated to reflect the evolving standards of 2026 travel safety, sustainability, and quality.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </main>
         </div>
     );

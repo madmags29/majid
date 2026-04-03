@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Calendar, Clock, User, ArrowRight, Loader2 } from 'lucide-react';
 import InnerHeader from '@/components/InnerHeader';
+import AdBanner from '@/components/AdBanner';
 
 export default function BlogClientPage({ posts }: { posts: any[] }) {
     const featuredPost = posts[0];
@@ -137,6 +138,11 @@ export default function BlogClientPage({ posts }: { posts: any[] }) {
                 )}
 
                 {/* AdSense Ready - Editorial Vision Contextual Text */}
+                <AdBanner
+                    dataAdSlot="8765432109"
+                    dataAdFormat="auto"
+                    dataFullWidthResponsive={true}
+                />
                 <section className="py-24 border-t border-slate-800/50">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
                         <div className="space-y-8">

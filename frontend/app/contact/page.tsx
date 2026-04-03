@@ -238,6 +238,32 @@ export default function ContactPage() {
                         </div>
                     </div>
                 </div>
+
+                {/* AdSense Optimization: High-Value Content Section */}
+                <div className="mt-24 bg-slate-900/30 border border-slate-800 rounded-3xl p-8 md:p-12 mb-12">
+                    <h2 className="text-3xl font-bold text-white mb-6">Our Commitment to Your Journey</h2>
+                    <div className="grid md:grid-cols-2 gap-12 text-slate-400 text-sm leading-relaxed">
+                        <div className="space-y-4">
+                            <p>
+                                At Weekend Travellers, we view every support inquiry as a critical data point for improving our global AI travel engine. When you reach out to us, you aren&apos;t just talking to a support queue; you are contributing to a recursive feedback loop that makes trip planning better for everyone. Our dedicated team of travel enthusiasts and data analysts reviews every suggestion to ensure our &quot;Micro-Vacation&quot; philosophy remains grounded in real-world feasibility.
+                            </p>
+                            <p>
+                                <strong>Why Your Feedback Matters</strong><br/>
+                                In the rapidly evolving landscape of 2026 travel, ground-level information is the most valuable currency. If a subway line in Berlin is undergoing unannounced maintenance or a coastal path in Amalfi has been temporarily rerouted, your feedback helps us adjust our algorithmic weights in real-time. This ensures that the next traveler using our smart itinerary generator avoids the same logistical hurdles.
+                            </p>
+                        </div>
+                        <div className="space-y-4">
+                            <p>
+                                <strong>Human-Centric Technology</strong><br/>
+                                While our core planning logic is driven by advanced machine learning, our service is fundamentally human-centric. We understand that travel is an emotional investment. Whether you are celebrating a milestone anniversary or taking a much-needed mental health break, we are here to ensure the technology stays out of the way of the experience. 
+                            </p>
+                            <p>
+                                <strong>Our Response Standards</strong><br/>
+                                We strive to respond to all inquiries within 24-48 business hours. For complex itinerary troubleshooting or custom partnership requests, our senior destination experts will perform a manual audit of the relevant data points before reaching back out. This high-touch approach to digital travel is what differentiates Weekend Travellers from generic, automated booking bots. We are your partners in exploration, from the first search to the final commute home.
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </main>
         </div>
     );

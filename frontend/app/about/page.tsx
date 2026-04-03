@@ -61,24 +61,38 @@ export default function AboutPage() {
                         </div>
                     </div>
 
-                    <section className="space-y-8">
-                        <h2 className="text-3xl font-bold text-white border-l-4 border-purple-500 pl-6">Why Trust Us? (E-E-A-T)</h2>
-                        <p className="text-lg text-slate-300 leading-relaxed">
-                            We don&apos;t just generate text; we curate experiences. Our AI engine is trained on verified travel data, local blogs, and real-time transit information. Every recommendation is cross-referenced for quality and relevance. 
-                        </p>
-                        <ul className="grid md:grid-cols-2 gap-6 list-none p-0">
-                            <li className="flex gap-4 items-start">
+                    <section className="space-y-8 mt-12 bg-slate-900/30 p-8 md:p-12 rounded-[2.5rem] border border-slate-800">
+                        <h2 className="text-3xl font-bold text-white border-l-4 border-purple-500 pl-6">Why Trust Us? (E-E-A-T Methodology)</h2>
+                        <div className="space-y-6 text-slate-300 leading-relaxed text-lg">
+                            <p>
+                                In 2026, the internet is flooded with unverified travel lists and automated content. At Weekend Travellers, we strictly adhere to Google's E-E-A-T guidelines (Experience, Expertise, Authoritativeness, and Trustworthiness). We don&apos;t just generate text; we curate verified, actionable experiences. Our AI engine is trained on thousands of hours of local travel journalism, user-verified reviews, and real-time transit data. Every recommendation is cross-referenced for quality, ensuring you don't end up at a closed restaurant or a tourist trap.
+                            </p>
+                            <p>
+                                <strong>Algorithmic Transparency & Data Sourcing</strong><br/>
+                                Our engine does not randomly pick attractions from a map. We use a proprietary ranking system that scores destinations based on &quot;Weekend Viability.&quot; This score calculates factors such as airport proximity to downtown cores, the density of top-rated local dining within walking distance, and the average time spent in transit versus time spent exploring. If a destination requires too much logistical friction for a 48-hour trip, our algorithm filters it out.
+                            </p>
+                            <p>
+                                <strong>Human-in-the-Loop Editorial Process</strong><br/>
+                                While AI provides the data backbone, human expertise ensures the soul of travel remains intact. Our global network of destination experts regularly audits our AI-generated itineraries. They adjust the pacing to ensure you aren't rushing from landmark to landmark, and they verify that the &quot;hidden gems&quot; recommended are genuinely authentic and culturally respectful. We firmly believe that AI should assist human curation, not replace it.
+                            </p>
+                            <p>
+                                <strong>Commitment to Sustainable Travel</strong><br/>
+                                Weekend getaways have historically contributed to high carbon footprints per day of travel. We are committed to changing this narrative. Our platform actively promotes train travel and public transit networks where available, and our hotel recommendations prioritize properties with verified eco-certifications. We also work to combat overtourism by highlighting secondary cities and off-season windows, ensuring your visit supports local economies without straining infrastructure.
+                            </p>
+                        </div>
+                        <ul className="grid md:grid-cols-2 gap-6 list-none p-0 mt-8">
+                            <li className="flex gap-4 items-start bg-slate-950/50 p-6 rounded-2xl border border-slate-800">
                                 <div className="bg-blue-500/10 p-2 rounded-lg mt-1"><Users className="w-5 h-5 text-blue-400" /></div>
                                 <div>
-                                    <span className="block font-bold text-white">Community First</span>
-                                    <span className="text-sm text-slate-400">Our logs are refined by feedback from thousands of real travelers.</span>
+                                    <span className="block font-bold text-white">Community Driven</span>
+                                    <span className="text-sm text-slate-400">Our geographical data is refined by continuous feedback and active reviews from thousands of weekend travelers worldwide.</span>
                                 </div>
                             </li>
-                            <li className="flex gap-4 items-start">
+                            <li className="flex gap-4 items-start bg-slate-950/50 p-6 rounded-2xl border border-slate-800">
                                 <div className="bg-purple-500/10 p-2 rounded-lg mt-1"><MapPin className="w-5 h-5 text-purple-400" /></div>
                                 <div>
-                                    <span className="block font-bold text-white">Hyper-Local Data</span>
-                                    <span className="text-sm text-slate-400">We prioritize &quot;hidden gems&quot; over typical tourist traps for a unique vibe.</span>
+                                    <span className="block font-bold text-white">Hyper-Local Logistics</span>
+                                    <span className="text-sm text-slate-400">We prioritize local transit efficiency and pedestrian-friendly zones to maximize your time exploring over time spent commuting.</span>
                                 </div>
                             </li>
                         </ul>

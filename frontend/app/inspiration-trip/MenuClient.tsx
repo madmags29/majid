@@ -150,18 +150,29 @@ function MenuClient() {
                                 </div>
                             ))}
                         </div>
-                        <div className="pt-12 border-t border-slate-800/50 mt-12 space-y-6">
+                        <div className="pt-12 border-t border-slate-800/50 mt-12 space-y-8">
                             <h3 className="text-xl font-bold text-white tracking-widest uppercase">The Inspiration <span className="text-blue-400">Architecture</span></h3>
-                            <p className="text-sm text-slate-400 leading-relaxed">
-                                Our &quot;Inspirational Trip&quot; categories are not just lists; they are curated clusters of destinations that share a specific emotional resonance. We understand that a &quot;weekend&quot; is a precious window, and our curation focuses on maximizing your journey&apos;s impact. 
-                            </p>
-                            <p className="text-sm text-slate-400 leading-relaxed">
-                                From the thermal currents of the Himalayas to the saline breezes of the Arabian Sea, every destination featured here is verified for 3-day feasibility. We prioritize locations with stable infrastructure, diverse culinary scenes, and safe environments for solo and group travelers alike.
-                            </p>
+                            <div className="space-y-6 text-sm text-slate-400 leading-relaxed">
+                                <p>
+                                    Our &quot;Inspirational Trip&quot; categories are not just lists; they are curated clusters of destinations that share a specific emotional resonance. We understand that a &quot;weekend&quot; is a precious window, and our curation focuses on maximizing your journey&apos;s impact. Every single location featured in our database undergoes a multi-layered vetting process to ensure it meets our 2026 travel standards.
+                                </p>
+                                <p>
+                                    <strong>The Vetting Process</strong><br/>
+                                    We analyze global transit infrastructure, local safety indices, and seasonal weather trends through our proprietary AI engine before a destination is added to these collections. From the thermal currents of the Himalayas in our Mountain Retreats to the saline breezes of the Arabian Sea in our Coastal Getaways, every destination is verified for 3-day feasibility. We prioritize locations with stable infrastructure, diverse culinary scenes, and safe environments for solo and group travelers alike.
+                                </p>
+                                <p>
+                                    <strong>Emotional Archetypes of Travel</strong><br/>
+                                    We categorize inspiration by &quot;Archetypes&quot; because we know that the motivation for travel changes weekly. Sometimes you need the silent isolation of a desert dune to reset your mental health; other times, you crave the high-density cultural feedback of a heritage city like Jaipur or Hampi. Our algorithm maps these destinations based on &quot;Vibe Profiles,&quot; cross-referencing user feedback with real-time events to ensure you aren&apos;t just visiting a place, but experiencing its current pulse.
+                                </p>
+                                <p>
+                                    <strong>Logistical Ease & Accessibility</strong><br/>
+                                    A common barrier to spontaneous travel is the fear of logistical friction. To combat this, our Inspiration Index only displays destinations that are reachable within a 4-8 hour total travel window from major regional hubs. We believe that if you spend half your weekend in a middle-seat, the rejuvenation is lost. By focusing on regional excellence, we promote a more sustainable, high-frequency travel habit that supports local economies and reduces the traditional carbon footprint of long-haul aviation.
+                                </p>
+                            </div>
                             <div className="p-6 bg-slate-900/30 rounded-2xl border border-slate-800 group hover:border-blue-500/20 transition-all font-medium">
                                 <h4 className="text-sm font-bold text-white mb-2">Why these collections?</h4>
                                 <p className="text-xs text-slate-500 leading-relaxed">
-                                    Our AI analyzes flight patterns and train schedules to ensure these regional highlights are &quot;easy wins&quot; for short-duration planning. Explore our categories to find a vibe that matches your current state of mind.
+                                    Our AI analyzes flight patterns and train schedules to ensure these regional highlights are &quot;easy wins&quot; for short-duration planning. Explore our categories to find a vibe that matches your current state of mind and let our generative engine build the perfect 48-hour blueprint.
                                 </p>
                             </div>
                         </div>

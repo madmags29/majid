@@ -315,6 +315,51 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
             </div>
           </div>
           <CategoryBanner userLocation={userLocation} />
+
+          {/* AdSense Optimization: High-Value Content Section */}
+          <div className="mt-32 text-left bg-slate-900/40 border border-slate-800 rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden max-w-5xl mx-auto">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl" />
+            <div className="relative z-10">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 tracking-tight flex items-center gap-3">
+                <span className="w-8 h-1 bg-blue-500 rounded-full"></span>
+                How Our AI Travel Engine Works
+              </h2>
+              <div className="space-y-6 text-slate-300 leading-relaxed text-lg">
+                <p>
+                  Planning a vacation should be the start of your relaxation, not an administrative chore. At <strong>Weekend Travellers</strong>, our proprietary AI itinerary generator revolutionizes short-term travel by transforming the chaotic web of flight schedules, hotel availability, and local attraction reviews into a single, cohesive weekend plan in under sixty seconds.
+                </p>
+                <div className="grid md:grid-cols-2 gap-8 my-8">
+                  <div className="space-y-2">
+                    <h3 className="text-xl font-bold text-blue-400">1. Data Aggregation & Contextualization</h3>
+                    <p className="text-sm">
+                        While traditional travel agencies rely on static databases, our machine learning models constantly analyze millions of data points across global events, local weather patterns, transit delays, and real-time crowd densities. This ensures that every 48-hour or 72-hour micro-vacation we recommend is structurally sound and seasonally appropriate.
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="text-xl font-bold text-purple-400">2. The "Micro-Vacation" Philosophy</h3>
+                    <p className="text-sm">
+                        As remote work and digital nomadism blur the lines between leisure and labor, the concept of the two-week annual holiday is becoming obsolete. We specialize exclusively in the <em>Weekend Getaway</em> methodology. By minimizing transit times and maximizing high-impact cultural experiences, we help travelers reset their mental health without draining their PTO reserves.
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="text-xl font-bold text-pink-400">3. Algorithmic Personalization</h3>
+                    <p className="text-sm">
+                        No two travelers are identical. Whether you are a solo backpacker searching for underground speakeasies in Tokyo or a family needing stroller-friendly paths in Rome, our generative AI scales its recommendations dynamically. The tool cross-references your inputted preferences against verified, hyper-local editorial content rather than generic tourist traps.
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="text-xl font-bold text-indigo-400">4. Commitment to Sustainability</h3>
+                    <p className="text-sm">
+                        Overtourism is a critical issue in 2026. Therefore, our engine actively penalizes overcrowded districts in favor of sustainable, secondary markets. By distributing tourist density and promoting verified eco-friendly vendors, Weekend Travellers acts not just as a planner, but as a responsible steward of global communities.
+                    </p>
+                  </div>
+                </div>
+                <p>
+                  By synthesizing this vast logistical complexity into actionable, readable itineraries, we bridge the gap between spontaneous wanderlust and organized execution. Stop spending hours juggling browser tabs and navigating conflicting TripAdvisor reviews. Welcome to the future of the smart weekend getaway. Explore responsibly, travel smartly, and make every hour of your weekend count.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </>

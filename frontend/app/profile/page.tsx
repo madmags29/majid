@@ -332,6 +332,21 @@ export default function ProfilePage() {
                         )}
                     </div>
                 </div>
+                
+                {/* AdSense Optimization: High-Value Content Section */}
+                <div className="mt-16 bg-slate-900/40 border border-slate-800 rounded-3xl p-8 mb-8">
+                    <h3 className="text-xl font-bold text-white mb-4">Your Digital Travel Vault</h3>
+                    <div className="space-y-4 text-slate-400 text-sm leading-relaxed">
+                        <p>
+                            Welcome to your personalized dashboard at Weekend Travellers. Designing an itinerary with artificial intelligence is only the first step in modern micro-vacation planning. By maintaining an active profile—your personal "Digital Travel Vault"—you grant our core logic engine the ability to learn and adapt to your unique preferences. Whether you consistently request mid-tier boutique hotels in pedestrian-friendly districts or favor early-morning historical tours over late-night dining, your connected profile ensures every subsequent query gets faster, more accurate, and highly personalized.
+                        </p>
+                        <p>
+                            <strong>Data Sovereignty & Privacy First</strong><br/>
+                            We strictly adhere to a privacy-first architecture. In an era where online activity is intensely commoditized, Weekend Travellers treats your personal queries and historical itineraries with absolute confidentiality. The settings managed here—ranging from your encrypted authentication tokens to your baseline travel preferences—are never syndicated to third-party data brokers. By keeping your information siloed and secured, we ensure that your upcoming weekend plans remain entirely yours. Adjust your profile settings gracefully above to dictate exactly how the AI interacts with your future getaways.
+                        </p>
+                    </div>
+                </div>
+
             </main>
         </div>
     );

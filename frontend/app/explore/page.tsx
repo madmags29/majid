@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { API_URL } from '@/lib/config';
 import InnerHeader from '@/components/InnerHeader';
+import AdBanner from '@/components/AdBanner';
 
 interface UserTrip {
     _id: string;
@@ -201,6 +202,11 @@ export default function ExplorePage() {
                     </section>
                 )}
                 {/* AdSense Ready - Contextual Text Section */}
+                <AdBanner
+                    dataAdSlot="1234567890"
+                    dataAdFormat="auto"
+                    dataFullWidthResponsive={true}
+                />
                 <section className="pt-20 border-t border-slate-800/50">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
                         <div className="space-y-8">
@@ -210,6 +216,10 @@ export default function ExplorePage() {
                             </p>
                             <p className="text-slate-400 leading-relaxed text-lg">
                                 We curate our destination directory based on a strict set of criteria: accessibility (within a 4-6 hour travel window from major hubs), cultural density (high number of attractions per square mile), and unique &quot;vibe&quot; profiles. Whether we are highlighting the spiritual ghats of Rishikesh or the neon-soaked streets of Shinjuku, our goal is to maximize your experience while minimizing planning fatigue.
+                            </p>
+                            <p className="text-slate-400 leading-relaxed text-lg">
+                                <strong>How We Identify Trending Destinations</strong><br/>
+                                Our &quot;Destination Graph&quot; actively monitors flight pricing algorithms, social media check-ins, and seasonal weather forecasts to predict the viability of a city for an upcoming weekend. Unlike typical travel blogs that recycle the same Top 10 lists year after year, our dynamic directory shifts constantly. If Paris is experiencing an unprecedented transit strike, it drops down our rankings. If a secondary city like Valencia announces a massive cultural festival with cheap incoming regional flights, it skyrockets to the top. This guarantees that our &quot;Trending Destinations&quot; section is not just aspirational, but fundamentally actionable and highly relevant to the present moment.
                             </p>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

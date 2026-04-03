@@ -30,6 +30,7 @@ const cursive = Sacramento({
 
 
 import Script from "next/script";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 import { GOOGLE_CLIENT_ID, SITE_URL } from '@/lib/config';
 
@@ -149,31 +150,17 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460255466960810"
-          crossOrigin="anonymous"
-        />
-        <script
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=G-4FBK6YT104"
-        />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-
-              gtag('config', 'G-4FBK6YT104');
-            `,
-          }}
-        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${cursive.variable} antialiased`}
         suppressHydrationWarning
       >
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460255466960810"
+          crossOrigin="anonymous"
+        />
+        <GoogleAnalytics gaId="G-4FBK6YT104" />
 
         <script
           type="application/ld+json"
