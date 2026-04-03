@@ -53,8 +53,7 @@ export default function WeatherWidget({ lat, lng, className }: WeatherWidgetProp
         const fetchWeather = async () => {
             try {
                 setLoading(true);
-                const { API_URL } = await import('@/lib/config');
-                const res = await fetch(`${API_URL}/api/weather?lat=${lat}&lng=${lng}`);
+                const res = await fetch(`/api/weather?lat=${lat}&lng=${lng}`);
                 if (!res.ok) throw new Error('Failed to fetch weather');
                 const data = await res.json();
                 setWeather(data);
