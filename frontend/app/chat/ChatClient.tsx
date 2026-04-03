@@ -294,7 +294,7 @@ function ChatClient() {
                 {/* Right Panel - Popular Destinations */}
 
                 <div
-                    className="hidden md:flex flex-col bg-slate-950/80 relative overflow-y-auto custom-scrollbar"
+                    className="hidden md:flex flex-col bg-slate-950/80 relative overflow-y-auto custom-scrollbar h-full min-h-0"
                     style={isDesktop ? { width: `${100 - leftWidth}%` } : {}}
                 >
                     <div className="p-8 lg:p-12 w-full max-w-5xl mx-auto">
