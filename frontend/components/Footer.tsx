@@ -146,7 +146,7 @@ const Footer = () => {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/reset-password" name="reset-password-link" className="text-slate-400 hover:text-blue-400 transition-colors">
+                                    <Link href="/reset-password" className="text-slate-400 hover:text-blue-400 transition-colors">
                                         Secure Password Reset
                                     </Link>
                                 </li>
