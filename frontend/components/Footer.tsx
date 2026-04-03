@@ -34,7 +34,7 @@ const Footer = () => {
                     </div>
 
                     {/* Links Section */}
-                    <div className="flex-1 grid grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+                    <div className="flex-1 grid grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8">
                         {/* Plan Your Trip */}
                         <div>
                             <h3 className="text-white font-bold mb-6 text-xs tracking-[0.2em] uppercase italic">Plan Your Trip</h3>
@@ -89,9 +89,9 @@ const Footer = () => {
                             </ul>
                         </div>
 
-                        {/* Destinations */}
+                        {/* India Trips */}
                         <div>
-                            <h3 className="text-white font-bold mb-6 text-xs tracking-[0.2em] uppercase italic">Destinations</h3>
+                            <h3 className="text-white font-bold mb-6 text-xs tracking-[0.2em] uppercase italic">India Trips</h3>
                             <ul className="space-y-3 text-sm">
                                 <li>
                                     <Link href="/explore/india" className="text-slate-400 hover:text-blue-400 transition-colors">
@@ -116,20 +116,42 @@ const Footer = () => {
                             </ul>
                         </div>
 
-                        {/* Account & Legal */}
+                        {/* International Trips */}
                         <div>
-                            <h3 className="text-white font-bold mb-6 text-xs tracking-[0.2em] uppercase italic">Account & Legal</h3>
+                            <h3 className="text-white font-bold mb-6 text-xs tracking-[0.2em] uppercase italic">International</h3>
                             <ul className="space-y-3 text-sm">
                                 <li>
-                                    <Link href="/profile" className="text-slate-400 hover:text-blue-400 transition-colors">
-                                        My Profile
+                                    <Link href="/explore/europe" className="text-slate-400 hover:text-blue-400 transition-colors">
+                                        Europe Escapes
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/trips" className="text-slate-400 hover:text-blue-400 transition-colors">
-                                        My Saved Trips
+                                    <Link href="/explore/asia/thailand" className="text-slate-400 hover:text-blue-400 transition-colors">
+                                        Thailand Beaches
                                     </Link>
                                 </li>
+                                <li>
+                                    <Link href="/explore/asia/japan" className="text-slate-400 hover:text-blue-400 transition-colors">
+                                        Japan Culture
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/explore/asia/indonesia/bali" className="text-slate-400 hover:text-blue-400 transition-colors">
+                                        Bali Islands
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/explore/asia/uae/dubai" className="text-slate-400 hover:text-blue-400 transition-colors">
+                                        Dubai Luxury
+                                    </Link>
+                                </li>
+                            </ul>
+                        </div>
+
+                        {/* Legal */}
+                        <div>
+                            <h3 className="text-white font-bold mb-6 text-xs tracking-[0.2em] uppercase italic">Legal</h3>
+                            <ul className="space-y-3 text-sm">
                                 <li>
                                     <Link href="/terms" className="text-slate-400 hover:text-blue-400 transition-colors">
                                         Terms of Service
@@ -143,11 +165,6 @@ const Footer = () => {
                                 <li>
                                     <Link href="/cookie-policy" className="text-slate-400 hover:text-blue-400 transition-colors">
                                         Cookie Policy
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link href="/reset-password" className="text-slate-400 hover:text-blue-400 transition-colors">
-                                        Secure Password Reset
                                     </Link>
                                 </li>
                             </ul>
