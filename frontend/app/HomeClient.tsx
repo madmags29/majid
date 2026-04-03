@@ -67,7 +67,7 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
     if (!location) return;
     setIsLoadingSuggestions(true);
     try {
-      const res = await fetch(`${API_URL}/api/suggestions?location=${encodeURIComponent(location)}`);
+      const res = await fetch(`/api/suggestions?location=${encodeURIComponent(location)}`);
       if (!res.ok) throw new Error('Failed to fetch suggestions');
       const data = await res.json();
       const parsedSuggestions = data.map((item: string | { name: string }) => typeof item === 'string' ? item : item.name);
@@ -85,7 +85,7 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
   }, []);
 
   useEffect(() => {
-    fetch(`${API_URL}/api/background-video`)
+    fetch(`/api/background-video`)
       .then(res => res.json())
       .then(data => {
         if (data.url) {
@@ -99,14 +99,18 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
 
     if (!userLocation) {
       fetch('https://ipapi.co/json/')
-        .then(res => res.json())
+        .then(async res => {
+            if (!res.ok) throw new Error('ipapi rate limit or error');
+            return res.json();
+        })
         .then(data => {
-          const location = data.city ? `${data.city}, ${data.country_name}` : data.country_name;
+          const location = data.city ? `${data.city}, ${data.country_name}` : data.country_name || 'Global';
           setUserLocation(prev => prev || location);
         })
-        .catch(() => {
+        .catch(err => {
+          console.warn("Geolocation failed on Home:", err);
           if (!userLocation) {
-            setSuggestions(prev => prev.length > 0 ? prev : ['Paris', 'Tokyo', 'Bali', 'New York', 'Santorini']);
+             setUserLocation('Global'); // Trigger suggestion fetch with 'Global'
           }
         });
     }
