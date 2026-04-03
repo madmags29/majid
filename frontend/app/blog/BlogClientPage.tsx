@@ -7,10 +7,22 @@ import { motion } from 'framer-motion';
 import { Calendar, Clock, User, ArrowRight, Loader2 } from 'lucide-react';
 import InnerHeader from '@/components/InnerHeader';
 import AdBanner from '@/components/AdBanner';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 export default function BlogClientPage({ posts }: { posts: any[] }) {
+    const [selectedCategory, setSelectedCategory] = React.useState<string | null>(null);
+
     const featuredPost = posts[0];
     const latestPosts = posts.slice(1);
+
+    const filteredPosts = React.useMemo(() => {
+        if (!selectedCategory) return latestPosts;
+        return latestPosts.filter(post => 
+            (post.keyword && post.keyword.toLowerCase().includes(selectedCategory.toLowerCase())) ||
+            (post.title && post.title.toLowerCase().includes(selectedCategory.toLowerCase()))
+        );
+    }, [latestPosts, selectedCategory]);
 
     return (
         <div className="min-h-screen bg-[#020617] text-slate-200 selection:bg-blue-500/30">
@@ -65,16 +77,41 @@ export default function BlogClientPage({ posts }: { posts: any[] }) {
 
                         {/* Popular Categories */}
                         <section className="mb-20">
-                            <div className="flex items-center justify-between mb-10">
+                            <div className="flex flex-col md:flex-row items-center justify-between mb-10 gap-6">
                                 <h3 className="text-2xl md:text-4xl font-black italic uppercase tracking-tighter text-white">Popular Topics</h3>
+                                {selectedCategory && (
+                                    <Button 
+                                        variant="ghost" 
+                                        onClick={() => setSelectedCategory(null)}
+                                        className="text-blue-400 hover:text-white"
+                                    >
+                                        Clear Filter
+                                    </Button>
+                                )}
                             </div>
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                 {['Destinations', 'Travel Tips', 'Itineraries', 'Photography'].map((cat) => (
-                                    <div key={cat} 
-                                        className="group relative overflow-hidden rounded-3xl p-8 bg-slate-900/50 border border-slate-800 transition-all text-center">
-                                        <div className="absolute inset-0 bg-blue-600/0 transition-colors" />
-                                        <span className="relative z-10 text-lg font-bold text-slate-300 group-hover:text-white">{cat}</span>
-                                    </div>
+                                    <button 
+                                        key={cat} 
+                                        onClick={() => setSelectedCategory(cat === selectedCategory ? null : cat)}
+                                        className={cn(
+                                            "group relative overflow-hidden rounded-3xl p-8 border transition-all text-center",
+                                            selectedCategory === cat 
+                                                ? "bg-blue-600 border-blue-500 shadow-lg shadow-blue-500/20" 
+                                                : "bg-slate-900/50 border-slate-800 hover:border-slate-600"
+                                        )}
+                                    >
+                                        <div className={cn(
+                                            "absolute inset-0 transition-colors",
+                                            selectedCategory === cat ? "bg-blue-600/10" : "bg-blue-600/0"
+                                        )} />
+                                        <span className={cn(
+                                            "relative z-10 text-lg font-bold transition-colors",
+                                            selectedCategory === cat ? "text-white" : "text-slate-300 group-hover:text-white"
+                                        )}>
+                                            {cat}
+                                        </span>
+                                    </button>
                                 ))}
                             </div>
                         </section>
@@ -89,7 +126,8 @@ export default function BlogClientPage({ posts }: { posts: any[] }) {
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                                {latestPosts.map((post, index) => (
+                                {filteredPosts.length > 0 ? (
+                                    filteredPosts.map((post, index) => (
                                     <motion.article 
                                         key={post._id || post.slug}
                                         initial={{ opacity: 0, y: 20 }}
@@ -131,7 +169,13 @@ export default function BlogClientPage({ posts }: { posts: any[] }) {
                                             </div>
                                         </div>
                                     </motion.article>
-                                ))}
+                                    ))
+                                ) : (
+                                    <div className="col-span-full py-20 text-center bg-slate-900/20 rounded-[2.5rem] border border-slate-800/50">
+                                        <h4 className="text-xl font-bold text-white mb-2">No posts found in this category</h4>
+                                        <p className="text-slate-400">Try a different category or clear the filter.</p>
+                                    </div>
+                                )}
                             </div>
                         </section>
                     </>
