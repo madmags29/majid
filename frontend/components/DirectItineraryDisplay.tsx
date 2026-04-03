@@ -26,7 +26,8 @@ export default function DirectItineraryDisplay({ destinationName }: { destinatio
             }
 
             try {
-                const response = await fetch(`${API_URL}/api/search`, {
+                // Use relative path to leverage Next.js rewrites and avoid CORS/port issues on client
+                const response = await fetch(`/api/search`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({

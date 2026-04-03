@@ -67,7 +67,7 @@ function ChatClient() {
                 setUserLocation(locationStr);
 
                 // 2. Fetch Suggestions based on Location
-                const sugRes = await fetch(`${API_URL}/api/suggestions?location=${encodeURIComponent(locationStr)}`);
+                const sugRes = await fetch(`/api/suggestions?location=${encodeURIComponent(locationStr)}`);
                 if (!sugRes.ok) throw new Error('Failed to fetch suggestions');
                 const sugData = await sugRes.json();
 

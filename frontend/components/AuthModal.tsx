@@ -30,7 +30,7 @@ function AuthModalContent({ isOpen, onClose, initialMode = 'login' }: AuthModalP
             setIsLoading(true);
             try {
                 const { API_URL } = await import('@/lib/config');
-                const res = await fetch(`${API_URL}/api/auth/google`, {
+                const res = await fetch(`/api/auth/google`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -88,7 +88,7 @@ function AuthModalContent({ isOpen, onClose, initialMode = 'login' }: AuthModalP
             };
 
             const { API_URL } = await import('@/lib/config');
-            const res = await fetch(`${API_URL}/api/auth/social-login`, {
+            const res = await fetch(`/api/auth/social-login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(mockProfile)
@@ -120,7 +120,7 @@ function AuthModalContent({ isOpen, onClose, initialMode = 'login' }: AuthModalP
             const { API_URL } = await import('@/lib/config');
 
             if (mode === 'forgot-password') {
-                const res = await fetch(`${API_URL}/api/auth/forgot-password`, {
+                const res = await fetch(`/api/auth/forgot-password`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email })
@@ -139,7 +139,7 @@ function AuthModalContent({ isOpen, onClose, initialMode = 'login' }: AuthModalP
                 ? { email, password }
                 : { email, password, name };
 
-            const res = await fetch(`${API_URL}${endpoint}`, {
+            const res = await fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body)
