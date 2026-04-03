@@ -4,14 +4,23 @@ import Image from 'next/image';
 import { MapPin, Search, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import HomeClient from './HomeClient';
-import { API_URL } from '@/lib/config';
+import { API_URL, IS_BUILD } from '@/lib/config';
 
 // Revalidate homepage every hour
 export const revalidate = 3600;
 
 async function getBlogPosts() {
+  // During build, if pointing to local, skip fetching to avoid ECONNREFUSED/timeout
+  if (IS_BUILD && API_URL.includes('localhost')) {
+    console.log('Skipping blog post fetch during build to prevent timeout...');
+    return [];
+  }
+
   try {
-    const res = await fetch(`${API_URL}/api/blog`, { next: { revalidate: 3600 } });
+    const res = await fetch(`${API_URL}/api/blog`, { 
+      next: { revalidate: 3600 },
+      signal: AbortSignal.timeout(5000) // 5s timeout to prevent build hangs
+    });
     if (!res.ok) return [];
     const data = await res.json();
     return Array.isArray(data) ? data.slice(0, 3) : [];

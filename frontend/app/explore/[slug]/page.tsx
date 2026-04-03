@@ -75,18 +75,25 @@ export default async function DestinationPage({ params }: Props) {
     // SSR Fetch Itinerary
     let itinerary = null;
     try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-        const response = await fetch(`${apiUrl}/api/search`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                destination: destination.name,
-                days: 2,
-            }),
-            next: { revalidate: 604800 } // Cache for exactly 1 week
-        });
-        if (response.ok) {
-            itinerary = await response.json();
+        const { API_URL, IS_BUILD } = require('@/lib/config');
+
+        // During build, if pointing to local, skip fetching to avoid ECONNREFUSED/timeout
+        if (IS_BUILD && (API_URL.includes('localhost') || API_URL.includes('127.0.0.1'))) {
+            console.log(`Skipping itinerary fetch for ${destination.name} during build...`);
+        } else {
+            const response = await fetch(`${API_URL}/api/search`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    destination: destination.name,
+                    days: 2,
+                }),
+                next: { revalidate: 604800 }, // Cache for exactly 1 week
+                signal: AbortSignal.timeout(5000) // 5s timeout
+            });
+            if (response.ok) {
+                itinerary = await response.json();
+            }
         }
     } catch (e) {
         console.error("Failed to SSR itinerary", e);

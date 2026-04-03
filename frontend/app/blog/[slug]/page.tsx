@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Calendar, Clock, User, ChevronRight, Share2, Facebook, Twitter, Linkedin } from 'lucide-react';
 import InnerHeader from '@/components/InnerHeader';
 import { Button } from '@/components/ui/button';
-import { API_URL } from '@/lib/config';
+import { API_URL, IS_BUILD } from '@/lib/config';
 import ReactMarkdown from 'react-markdown';
 import CommentSection from '@/components/blog/CommentSection';
 
@@ -18,14 +18,22 @@ export default async function BlogPostDetail({ params }: Props) {
     let post = null;
 
     try {
-        // Explicitly fetch on the server - no 'use client' hooks locking data away!
-        const res = await fetch(`${API_URL}/api/blog/${slug}`, { next: { revalidate: 3600 } });
-        if (res.ok) {
-            const data = await res.json();
-            if (data.content && typeof data.content === 'string' && data.content.startsWith('{')) {
-                data.parsedContent = JSON.parse(data.content);
+        // During build, if pointing to local, skip fetching to avoid ECONNREFUSED/timeout
+        if (IS_BUILD && API_URL.includes('localhost')) {
+            console.log(`Skipping blog post fetch for ${slug} during build...`);
+        } else {
+            // Explicitly fetch on the server - no 'use client' hooks locking data away!
+            const res = await fetch(`${API_URL}/api/blog/${slug}`, { 
+                next: { revalidate: 3600 },
+                signal: AbortSignal.timeout(5000) // 5s timeout
+            });
+            if (res.ok) {
+                const data = await res.json();
+                if (data.content && typeof data.content === 'string' && data.content.startsWith('{')) {
+                    data.parsedContent = JSON.parse(data.content);
+                }
+                post = data;
             }
-            post = data;
         }
     } catch (error) {
         console.error('Failed to fetch blog post:', error);

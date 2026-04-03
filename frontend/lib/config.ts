@@ -1,5 +1,9 @@
-export const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
+export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 export const SITE_URL = 'https://weekendtravellers.com';
+
+// Helpful for skipping background tasks/fetches during the Next.js build phase
+export const IS_BUILD = process.env.NEXT_PHASE === 'phase-production-build';
+
 const getGoogleClientId = () => {
     const envId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
     if (!envId) {
