@@ -17,14 +17,17 @@ export default async function BlogPostDetail({ params }: Props) {
     const { slug } = await params;
     let post = null;
 
+    // For SSR on Vercel: rewrites only apply to browser requests, NOT server-side fetch.
+    const backendUrl = process.env.BACKEND_URL
+        || process.env.NEXT_PUBLIC_API_URL
+        || 'https://backend-flax-eight-93.vercel.app';
+
     try {
-        // During build, if pointing to local, skip fetching to avoid ECONNREFUSED/timeout
-        if (IS_BUILD && API_URL.includes('localhost')) {
+        if (IS_BUILD && backendUrl.includes('localhost')) {
             console.log(`Skipping blog post fetch for ${slug} during build...`);
         } else {
-            // Explicitly fetch on the server - no 'use client' hooks locking data away!
-            const res = await fetch(`${API_URL}/api/blog/${slug}`, { 
-                next: { revalidate: 3600 }
+            const res = await fetch(`${backendUrl}/api/blog/${slug}`, { 
+                cache: 'no-store'
             });
             if (res.ok) {
                 const data = await res.json();

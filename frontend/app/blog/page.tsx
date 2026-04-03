@@ -8,16 +8,23 @@ export const revalidate = 3600;
 export default async function BlogLandingPage() {
     let posts = [];
     try {
-        // During build, if pointing to local, skip fetching to avoid ECONNREFUSED/timeout
-        if (IS_BUILD && API_URL.includes('localhost')) {
-            console.log('Skipping blog posts fetch during build to prevent timeout...');
+        // For SSR on Vercel: next.config.ts rewrites only apply to browser/client requests.
+        // Server-side fetch MUST use the absolute backend URL directly.
+        const backendUrl = process.env.BACKEND_URL 
+            || process.env.NEXT_PUBLIC_API_URL 
+            || 'https://backend-flax-eight-93.vercel.app';
+        
+        // Skip fetching during local builds pointing to localhost (avoids ECONNREFUSED)
+        if (IS_BUILD && backendUrl.includes('localhost')) {
+            console.log('Skipping blog posts fetch during build (localhost not available)...');
         } else {
-            // Run fetch on the Server during SSR/SSG
-            const res = await fetch(`${API_URL}/api/blog`, { 
+            const res = await fetch(`${backendUrl}/api/blog`, { 
                 cache: 'no-store' // Force fresh fetch, bypassing any stuck Next.js Data Cache
             });
             if (res.ok) {
                 posts = await res.json();
+            } else {
+                console.error('Blog API returned non-OK status:', res.status);
             }
         }
     } catch (error) {

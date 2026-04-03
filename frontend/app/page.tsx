@@ -10,15 +10,20 @@ import { API_URL, IS_BUILD } from '@/lib/config';
 export const revalidate = 3600;
 
 async function getBlogPosts() {
-  // During build, if pointing to local, skip fetching to avoid ECONNREFUSED/timeout
-  if (IS_BUILD && API_URL.includes('localhost')) {
+  // For SSR on Vercel: rewrites only apply to browser requests, NOT server-side fetch.
+  // We must use the absolute backend URL here.
+  const backendUrl = process.env.BACKEND_URL
+    || process.env.NEXT_PUBLIC_API_URL
+    || 'https://backend-flax-eight-93.vercel.app';
+
+  if (IS_BUILD && backendUrl.includes('localhost')) {
     console.log('Skipping blog post fetch during build to prevent timeout...');
     return [];
   }
 
   try {
-    const res = await fetch(`${API_URL}/api/blog`, { 
-      next: { revalidate: 3600 }
+    const res = await fetch(`${backendUrl}/api/blog`, { 
+      cache: 'no-store'
     });
     if (!res.ok) return [];
     const data = await res.json();
