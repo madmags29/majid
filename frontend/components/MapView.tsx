@@ -359,7 +359,7 @@ export default function MapView({ itinerary, selectedActivity, isExpanded }: Map
                 </div>
             </div>
 
-            <style jsx>{`
+            <style dangerouslySetInnerHTML={{ __html: `
                 .no-scrollbar::-webkit-scrollbar {
                     display: none;
                 }
@@ -367,7 +367,7 @@ export default function MapView({ itinerary, selectedActivity, isExpanded }: Map
                     -ms-overflow-style: none;
                     scrollbar-width: none;
                 }
-            `}</style>
+            `}} />
         </div>
     );
 }
