@@ -184,7 +184,10 @@ function ChatClient() {
                     className="flex flex-col min-w-0 bg-slate-950 border-r border-slate-800 w-full relative h-full"
                     style={isDesktop ? { width: `${leftWidth}%` } : {}}
                 >
-                    <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 scroll-smooth custom-scrollbar pb-32">
+                    <div 
+                        className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 scroll-smooth custom-scrollbar pb-32"
+                        data-lenis-prevent
+                    >
                         <AnimatePresence initial={false}>
                             {messages.map((msg, idx) => (
                                 <motion.div
@@ -305,6 +308,7 @@ function ChatClient() {
                 <div
                     className="hidden md:flex flex-col bg-slate-950/80 relative overflow-y-auto custom-scrollbar h-full min-h-0"
                     style={isDesktop ? { width: `${100 - leftWidth}%` } : {}}
+                    data-lenis-prevent
                 >
                     <div className="p-8 lg:p-12 w-full max-w-5xl mx-auto">
                         <div className="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
