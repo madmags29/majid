@@ -206,7 +206,7 @@ function ChatClient() {
                                     <div className={cn(
                                         "rounded-2xl px-5 py-4 shadow-2xl relative overflow-hidden group/bubble transition-all duration-300",
                                         msg.role === 'assistant'
-                                            ? "bg-white/[0.03] backdrop-blur-md border border-white/10 rounded-tl-sm text-slate-200 hover:bg-white/[0.05]"
+                                            ? "bg-white/[0.03] backdrop-blur-md border border-white/10 rounded-tl-sm text-slate-200 hover:bg-blue-500/5 hover:border-blue-500/30 transition-all"
                                             : "bg-gradient-to-br from-blue-600 via-blue-600 to-indigo-700 text-white rounded-tr-sm shadow-blue-900/40 border border-white/5"
                                     )}>
                                         {msg.role === 'assistant' && (
@@ -226,7 +226,7 @@ function ChatClient() {
                         <div ref={messagesEndRef} />
 
                         {/* AdSense Optimization: High-Value Content Section */}
-                        <div className="mt-32 p-8 md:p-10 bg-white/[0.02] border border-white/5 rounded-[2rem] backdrop-blur-sm group/adsense transition-all hover:bg-white/[0.04] hover:border-white/10">
+                        <div className="mt-32 p-8 md:p-10 bg-white/[0.02] border border-white/5 rounded-[2rem] backdrop-blur-sm group/adsense transition-all hover:bg-blue-500/5 hover:border-blue-500/30">
                             <div className="flex items-center gap-3 mb-6">
                                 <span className="p-2 rounded-lg bg-blue-500/10 text-blue-400">
                                     <RefreshCw className="w-4 h-4" />
@@ -277,7 +277,7 @@ function ChatClient() {
                                 <div className="absolute inset-0 bg-blue-500/5 blur-2xl group-hover:bg-blue-500/10 transition-colors rounded-2xl" />
                                 <button
                                     onClick={() => setIsAuthOpen(true)}
-                                    className="w-full bg-slate-900/60 backdrop-blur-md text-slate-300 text-sm md:text-base rounded-2xl py-4 font-black uppercase tracking-widest hover:text-white border border-white/10 transition-all hover:bg-slate-800/80 flex items-center justify-center gap-3 shadow-2xl relative z-10 hover:border-blue-500/40 group/btn"
+                                    className="w-full bg-slate-900/60 backdrop-blur-md text-slate-300 text-sm md:text-base rounded-2xl py-4 font-black uppercase tracking-widest hover:text-blue-300 border border-white/10 transition-all hover:bg-blue-500/10 flex items-center justify-center gap-3 shadow-2xl relative z-10 hover:border-blue-500/60 group/btn"
                                 >
                                     <LogIn className="w-5 h-5 text-blue-400 group-hover/btn:scale-110 transition-transform pointer-events-none" />
                                     Sign In to start planning
@@ -289,7 +289,7 @@ function ChatClient() {
 
                 {/* Resize Handle */}
                 <div
-                    className="hidden md:flex absolute top-0 bottom-0 z-50 w-6 cursor-col-resize items-center justify-center hover:bg-white/5 transition-colors group/resize"
+                    className="hidden md:flex absolute top-0 bottom-0 z-50 w-6 cursor-col-resize items-center justify-center hover:bg-blue-500/5 transition-colors group/resize"
                     style={{ left: `calc(${leftWidth}% - 12px)` }}
                     onMouseDown={handleMouseDown}
                 >
@@ -321,7 +321,7 @@ function ChatClient() {
                                 size="sm" 
                                 onClick={fetchLocationAndDestinations}
                                 disabled={isLoadingDestinations}
-                                className="bg-slate-900/50 border-slate-700 hover:bg-slate-800 text-slate-300 w-fit"
+                                className="bg-slate-900/50 border-slate-700 hover:bg-blue-500/10 hover:border-blue-500/50 hover:text-blue-300 text-slate-300 w-fit transition-all"
                             >
                                 <RefreshCw className={cn("w-4 h-4 mr-2", isLoadingDestinations && "animate-spin")} />
                                 {userLocation ? `Near ${userLocation}` : 'Locate Me'}
@@ -339,7 +339,7 @@ function ChatClient() {
                                     <button
                                         key={idx}
                                         onClick={() => handleDestinationClick(dest.name)}
-                                        className="group relative h-48 lg:h-56 rounded-3xl overflow-hidden focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-all transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-500/30 text-left w-full border border-white/5 hover:border-blue-500/40 bg-slate-900"
+                                        className="group relative h-48 lg:h-56 rounded-3xl overflow-hidden focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-all transform hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-500/30 text-left w-full border border-white/5 hover:border-blue-500/60 bg-slate-900"
                                     >
                                         <div className="absolute inset-0 bg-slate-950">
                                             {/* eslint-disable-next-line @next/next/no-img-element */}

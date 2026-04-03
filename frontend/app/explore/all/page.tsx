@@ -30,7 +30,7 @@ export default function AllDestinationsPage() {
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                         <input
                             type="text"
-                            placeholder="Search 50+ destinations..."
+                            placeholder="Search 75+ global destinations..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-10 pr-4 text-white placeholder:text-slate-500 outline-none focus:ring-1 focus:ring-blue-500/50 transition-all text-sm"

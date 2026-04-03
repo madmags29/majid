@@ -34,110 +34,120 @@ const Footer = () => {
                     </div>
 
                     {/* Links Section */}
-                    <div className="grid grid-cols-2 gap-8 md:flex md:gap-24">
-                        {/* Discover India */}
+                    <div className="flex-1 grid grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+                        {/* Plan Your Trip */}
                         <div>
-                            <h3 className="text-white font-semibold mb-4 text-xs tracking-widest uppercase">Discover India</h3>
-                            <ul className="space-y-2 text-sm">
+                            <h3 className="text-white font-bold mb-6 text-xs tracking-[0.2em] uppercase italic">Plan Your Trip</h3>
+                            <ul className="space-y-3 text-sm">
                                 <li>
-                                    <Link href="/explore/india" className="hover:text-blue-400 transition-colors">
-                                        All India
+                                    <Link href="/chat" className="text-slate-400 hover:text-blue-400 transition-colors flex items-center gap-2">
+                                        <span className="w-1 h-1 bg-blue-500 rounded-full"></span> AI Weekend Planner
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/explore/india/goa" className="hover:text-blue-400 transition-colors">
-                                        Goa
+                                    <Link href="/inspiration-trip" className="text-slate-400 hover:text-blue-400 transition-colors flex items-center gap-2">
+                                        <span className="w-1 h-1 bg-purple-500 rounded-full"></span> Inspiration Trip
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/explore/india/rajasthan/jaipur" className="hover:text-blue-400 transition-colors">
-                                        Jaipur
+                                    <Link href="/explore/all" className="text-slate-400 hover:text-blue-400 transition-colors flex items-center gap-2">
+                                        <span className="w-1 h-1 bg-pink-500 rounded-full"></span> Explore All
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/explore/india/kerala" className="hover:text-blue-400 transition-colors">
-                                        Kerala
+                                    <Link href="/search" className="text-slate-400 hover:text-blue-400 transition-colors flex items-center gap-2">
+                                        <span className="w-1 h-1 bg-indigo-500 rounded-full"></span> Smart Search
                                     </Link>
                                 </li>
                             </ul>
                         </div>
 
-                        {/* Discover World */}
+                        {/* Resources */}
                         <div>
-                            <h3 className="text-white font-semibold mb-4 text-xs tracking-widest uppercase">Discover World</h3>
-                            <ul className="space-y-2 text-sm">
+                            <h3 className="text-white font-bold mb-6 text-xs tracking-[0.2em] uppercase italic">Company</h3>
+                            <ul className="space-y-3 text-sm">
                                 <li>
-                                    <Link href="/explore/europe" className="hover:text-blue-400 transition-colors">
-                                        Europe
+                                    <Link href="/blog" className="text-slate-400 hover:text-blue-400 transition-colors">
+                                        Travel Blog
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/explore/asia/thailand" className="hover:text-blue-400 transition-colors">
-                                        Thailand
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link href="/explore/asia/japan" className="hover:text-blue-400 transition-colors">
-                                        Japan
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link href="/explore/asia/indonesia/bali" className="hover:text-blue-400 transition-colors">
-                                        Bali
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link href="/explore/asia/uae/dubai" className="hover:text-blue-400 transition-colors">
-                                        Dubai
-                                    </Link>
-                                </li>
-                            </ul>
-                        </div>
-
-                        {/* Support */}
-                        <div>
-                            <h3 className="text-white font-semibold mb-4">Support</h3>
-                            <ul className="space-y-2 text-sm">
-                                <li>
-                                    <Link href="/blog" className="hover:text-white transition-colors">
-                                        Blog
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link href="/about" className="hover:text-white transition-colors">
+                                    <Link href="/about" className="text-slate-400 hover:text-blue-400 transition-colors">
                                         About Us
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/contact" className="hover:text-white transition-colors">
-                                        Contact
+                                    <Link href="/contact" className="text-slate-400 hover:text-blue-400 transition-colors">
+                                        Contact Us
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/faq" className="hover:text-white transition-colors">
-                                        FAQ
+                                    <Link href="/faq" className="text-slate-400 hover:text-blue-400 transition-colors">
+                                        Travel FAQ
                                     </Link>
                                 </li>
                             </ul>
                         </div>
 
-                        {/* Legal */}
+                        {/* Destinations */}
                         <div>
-                            <h3 className="text-white font-semibold mb-4">Legal</h3>
-                            <ul className="space-y-2 text-sm">
+                            <h3 className="text-white font-bold mb-6 text-xs tracking-[0.2em] uppercase italic">Destinations</h3>
+                            <ul className="space-y-3 text-sm">
                                 <li>
-                                    <Link href="/terms" className="hover:text-white transition-colors">
-                                        Terms & Conditions
+                                    <Link href="/explore/india" className="text-slate-400 hover:text-blue-400 transition-colors">
+                                        All India Guides
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/privacy" className="hover:text-white transition-colors">
+                                    <Link href="/explore/india/goa" className="text-slate-400 hover:text-blue-400 transition-colors">
+                                        Goa Weekends
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/explore/india/rajasthan" className="text-slate-400 hover:text-blue-400 transition-colors">
+                                        Rajasthan Heritage
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/explore/india/kerala" className="text-slate-400 hover:text-blue-400 transition-colors">
+                                        Kerala Backwaters
+                                    </Link>
+                                </li>
+                            </ul>
+                        </div>
+
+                        {/* Account & Legal */}
+                        <div>
+                            <h3 className="text-white font-bold mb-6 text-xs tracking-[0.2em] uppercase italic">Account & Legal</h3>
+                            <ul className="space-y-3 text-sm">
+                                <li>
+                                    <Link href="/profile" className="text-slate-400 hover:text-blue-400 transition-colors">
+                                        My Profile
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/trips" className="text-slate-400 hover:text-blue-400 transition-colors">
+                                        My Saved Trips
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/terms" className="text-slate-400 hover:text-blue-400 transition-colors">
+                                        Terms of Service
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/privacy" className="text-slate-400 hover:text-blue-400 transition-colors">
                                         Privacy Policy
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/cookie-policy" className="hover:text-white transition-colors">
+                                    <Link href="/cookie-policy" className="text-slate-400 hover:text-blue-400 transition-colors">
                                         Cookie Policy
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/reset-password" name="reset-password-link" className="text-slate-400 hover:text-blue-400 transition-colors">
+                                        Secure Password Reset
                                     </Link>
                                 </li>
                             </ul>

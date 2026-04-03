@@ -125,7 +125,7 @@ function MenuClient() {
 
                         <div className="space-y-6">
                             {curatedDestinations.map((category, idx) => (
-                                <div key={idx} className="bg-slate-900/50 rounded-2xl border border-slate-800 p-5 hover:border-slate-700 transition-colors">
+                                <div key={idx} className="bg-slate-900/50 rounded-2xl border border-slate-800 p-5 hover:border-blue-500/30 hover:bg-blue-500/5 transition-all duration-300">
                                     <div className="flex items-center gap-3 mb-3">
                                         <span className="text-2xl">{category.icon}</span>
                                         <h3 className="text-lg font-bold text-slate-200">{category.title}</h3>
@@ -140,7 +140,7 @@ function MenuClient() {
                                                 size="sm"
                                                 onClick={() => handleSearchClick(dest)}
                                                 onMouseEnter={() => setActiveLocation(dest)}
-                                                className="bg-slate-800/50 border-slate-700 text-slate-300 hover:bg-blue-600 hover:text-white rounded-full transition-all group"
+                                                className="bg-slate-800/50 border-slate-700 text-slate-300 hover:bg-blue-600 hover:text-white hover:border-blue-500 rounded-full transition-all group"
                                             >
                                                 {dest}
                                                 <Search className="w-3 h-3 ml-2 opacity-50 group-hover:opacity-100 transition-opacity" />
@@ -181,7 +181,7 @@ function MenuClient() {
 
                 {/* Resize Handle */}
                 <div
-                    className="hidden md:flex absolute top-0 bottom-0 z-50 w-4 cursor-col-resize items-center justify-center hover:bg-white/5 transition-colors"
+                    className="hidden md:flex absolute top-0 bottom-0 z-50 w-4 cursor-col-resize items-center justify-center hover:bg-blue-500/5 transition-colors"
                     style={{ left: `calc(${leftWidth}% - 8px)` }}
                     onMouseDown={handleMouseDown}
                 >

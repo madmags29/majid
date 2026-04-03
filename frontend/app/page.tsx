@@ -112,7 +112,7 @@ export default async function LandingPage() {
             ))}
             <Link
               href="/explore/all"
-              className="group relative h-80 rounded-3xl overflow-hidden border-2 border-dashed border-blue-500/30 hover:border-blue-500 transition-all bg-gradient-to-br from-blue-600/10 to-purple-600/10 flex flex-col items-center justify-center text-center p-8 hover:bg-white/10"
+              className="group relative h-80 rounded-3xl overflow-hidden border-2 border-dashed border-blue-500/30 hover:border-blue-500 transition-all bg-gradient-to-br from-blue-600/10 to-purple-600/10 flex flex-col items-center justify-center text-center p-8 hover:bg-blue-500/5"
             >
               <div className="w-16 h-16 rounded-full bg-blue-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <MapPin className="w-8 h-8 text-blue-400" />
@@ -145,7 +145,7 @@ export default async function LandingPage() {
               {blogPosts.map((post: any) => (
                 <article 
                   key={post._id}
-                  className="group flex flex-col h-full bg-slate-900/30 rounded-[2rem] overflow-hidden border border-slate-800/50 hover:border-blue-500/30 transition-all shadow-xl hover:shadow-2xl"
+                  className="group flex flex-col h-full bg-slate-900/30 rounded-[2rem] overflow-hidden border border-slate-800/50 hover:border-blue-500/50 transition-all shadow-xl hover:shadow-2xl hover:shadow-blue-500/5"
                 >
                   <Link href={`/blog/${post.slug}`} className="block relative aspect-[16/10] overflow-hidden">
                     <Image

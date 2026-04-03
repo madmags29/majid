@@ -182,7 +182,7 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
             </video>
             {videoCredit && (
                 <div className="absolute bottom-4 right-4 z-20 text-[10px] text-slate-400 bg-black/40 px-2 py-1 rounded backdrop-blur-sm pointer-events-auto">
-                    Video by <a href={videoCredit.url} target="_blank" rel="noopener noreferrer" className="text-slate-300 hover:text-white underline decoration-dashed">{videoCredit.name}</a> on Pexels
+                    Video by <a href={videoCredit.url} target="_blank" rel="noopener noreferrer" className="text-slate-300 hover:text-blue-400 underline decoration-dashed">{videoCredit.name}</a> on Pexels
                 </div>
             )}
         </motion.div>
@@ -194,9 +194,9 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
       <header className="w-full py-4 px-6 flex justify-between items-center z-50">
         <div className="flex items-center gap-2">
           <RightMenu />
-          <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
-            <AnimatedLogo className="w-8 h-8 md:w-10 md:h-10 text-blue-400" />
-            <div className="text-2xl md:text-3xl text-white drop-shadow-md font-cursive">
+          <Link href="/" className="flex items-center gap-2 hover:opacity-100 group/logo transition-all">
+            <AnimatedLogo className="w-8 h-8 md:w-10 md:h-10 text-blue-400 group-hover/logo:scale-110 transition-transform" />
+            <div className="text-2xl md:text-3xl text-white drop-shadow-md font-cursive group-hover/logo:text-blue-400 transition-colors">
               weekendtravellers.com
             </div>
           </Link>
@@ -205,7 +205,7 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full bg-slate-800/50 border border-slate-700/50 hover:bg-slate-700/50">
+                <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full bg-slate-800/50 border border-slate-700/50 hover:bg-blue-500/10 hover:border-blue-500/50 transition-all">
                   <div className="flex h-full w-full items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-500 text-white font-bold text-xs shadow-lg shadow-blue-500/20">
                     {user.name.charAt(0).toUpperCase()}
                   </div>
@@ -227,7 +227,7 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
             </DropdownMenu>
           ) : (
             <div className="hidden md:flex items-center gap-4">
-              <Link href="/blog" className="text-slate-200 hover:text-white px-4 py-2 rounded-lg font-medium text-sm">Blog</Link>
+              <Link href="/blog" className="text-slate-200 hover:text-blue-400 px-4 py-2 rounded-lg font-medium text-sm transition-colors">Blog</Link>
               <Button onClick={() => {setAuthMode('login'); setIsAuthOpen(true);}} variant="ghost" className="text-slate-200">Login</Button>
               <Button onClick={() => {setAuthMode('signup'); setIsAuthOpen(true);}} className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl px-6">Sign Up</Button>
             </div>
@@ -266,7 +266,7 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
                 {searchQuery.length >= 3 && showAutocomplete && (
                   <div className="absolute top-[110%] left-0 right-0 mt-1 bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl z-[100] max-h-60 overflow-y-auto">
                     {EXLPORE_DESTINATIONS.filter(d => d.name.toLowerCase().includes(searchQuery.toLowerCase()) || d.country.toLowerCase().includes(searchQuery.toLowerCase())).map(place => (
-                      <div key={place.id} className="px-4 py-3 hover:bg-white/10 cursor-pointer flex items-center gap-3 transition-colors text-left border-b border-white/5 last:border-0" onClick={() => { setSearchQuery(place.name); setShowAutocomplete(false); }}>
+                      <div key={place.id} className="px-4 py-3 hover:bg-blue-500/10 cursor-pointer flex items-center gap-3 transition-colors text-left border-b border-white/5 last:border-0" onClick={() => { setSearchQuery(place.name); setShowAutocomplete(false); }}>
                         <MapPin className="w-4 h-4 text-slate-400 shrink-0" />
                         <div>
                           <div className="text-white font-medium text-sm">{place.name}</div>
@@ -303,7 +303,7 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
               ) : (
                 <div className="flex flex-wrap justify-center gap-3">
                   {suggestions.slice(0, 5).map((suggestion) => (
-                    <button key={suggestion} onClick={() => handleSuggestionClick(suggestion)} className="px-6 py-2.5 rounded-2xl bg-slate-900/30 backdrop-blur-md border border-white/5 hover:border-blue-500/30 hover:bg-white/5 text-slate-300 hover:text-white transition-all text-sm font-medium">
+                    <button key={suggestion} onClick={() => handleSuggestionClick(suggestion)} className="px-6 py-2.5 rounded-2xl bg-slate-900/30 backdrop-blur-md border border-white/5 hover:border-blue-500/50 hover:bg-blue-500/10 text-slate-300 hover:text-blue-300 transition-all text-sm font-medium">
                       {suggestion}
                     </button>
                   ))}

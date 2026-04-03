@@ -97,8 +97,8 @@ export default function BlogClientPage({ posts }: { posts: any[] }) {
                                         className={cn(
                                             "group relative overflow-hidden rounded-3xl p-8 border transition-all text-center",
                                             selectedCategory === cat 
-                                                ? "bg-blue-600 border-blue-500 shadow-lg shadow-blue-500/20" 
-                                                : "bg-slate-900/50 border-slate-800 hover:border-slate-600"
+                                                ? "bg-blue-600 border-blue-500 shadow-md shadow-blue-500/20" 
+                                                : "bg-slate-900/50 border-slate-800 hover:border-blue-500/50 hover:bg-blue-500/5"
                                         )}
                                     >
                                         <div className={cn(
@@ -107,7 +107,7 @@ export default function BlogClientPage({ posts }: { posts: any[] }) {
                                         )} />
                                         <span className={cn(
                                             "relative z-10 text-lg font-bold transition-colors",
-                                            selectedCategory === cat ? "text-white" : "text-slate-300 group-hover:text-white"
+                                            selectedCategory === cat ? "text-white" : "text-slate-300 group-hover:text-blue-400"
                                         )}>
                                             {cat}
                                         </span>
@@ -133,7 +133,7 @@ export default function BlogClientPage({ posts }: { posts: any[] }) {
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: index * 0.1 }}
-                                        className="group flex flex-col h-full bg-slate-900/30 rounded-[2rem] overflow-hidden border border-slate-800/50 hover:border-blue-500/30 transition-all shadow-xl hover:shadow-2xl"
+                                        className="group flex flex-col h-full bg-slate-900/40 rounded-[2rem] overflow-hidden border border-slate-800/50 hover:border-blue-500/50 transition-all shadow-xl hover:shadow-2xl hover:shadow-blue-500/5"
                                     >
                                         <Link href={`/blog/${post.slug}`} className="block relative aspect-[16/10] overflow-hidden">
                                             <Image
@@ -239,7 +239,7 @@ export default function BlogClientPage({ posts }: { posts: any[] }) {
                                 placeholder="Your email address" 
                                 className="flex-1 bg-slate-900 border border-slate-800 focus:border-blue-500 outline-none rounded-2xl px-6 py-4 text-white placeholder:text-slate-500 transition-all shadow-inner"
                             />
-                            <button type="button" className="bg-blue-600 hover:bg-blue-700 text-white font-black uppercase tracking-widest text-xs px-10 py-4 rounded-2xl transition-all shadow-lg shadow-blue-900/40 active:scale-95">
+                            <button type="button" className="bg-blue-600 hover:bg-blue-500 text-white font-black uppercase tracking-widest text-xs px-10 py-4 rounded-2xl transition-all shadow-lg shadow-blue-900/40 active:scale-95">
                                 Subscribe
                             </button>
                         </form>
