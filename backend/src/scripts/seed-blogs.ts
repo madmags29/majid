@@ -25,8 +25,9 @@ async function runSeeding() {
 
         for (let i = 1; i <= count; i++) {
             console.log(`--- Generating Post ${i}/${count} ---`);
-            const post = await automateDailyPublish();
-            if (post) {
+            const postArray = await automateDailyPublish(1);
+            if (postArray && postArray.length > 0) {
+                const post = postArray[0];
                 console.log(`[Success] Generated: ${post.title}`);
             } else {
                 console.log(`[Skipped/Failed] Post ${i} could not be generated.`);

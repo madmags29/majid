@@ -7,6 +7,7 @@ import InnerHeader from '@/components/InnerHeader';
 import DirectItineraryDisplay from '@/components/DirectItineraryDisplay';
 import ItineraryDisplay from '@/components/ItineraryDisplay';
 import RelatedDestinations from '@/components/RelatedDestinations';
+import { API_URL, IS_BUILD } from '@/lib/config';
 
 interface Props {
     params: { slug: string };
@@ -75,8 +76,6 @@ export default async function DestinationPage({ params }: Props) {
     // SSR Fetch Itinerary
     let itinerary = null;
     try {
-        const { API_URL, IS_BUILD } = require('@/lib/config');
-
         // During build, if pointing to local, skip fetching to avoid ECONNREFUSED/timeout
         if (IS_BUILD && (API_URL.includes('localhost') || API_URL.includes('127.0.0.1'))) {
             console.log(`Skipping itinerary fetch for ${destination.name} during build...`);
@@ -173,7 +172,7 @@ export default async function DestinationPage({ params }: Props) {
                         <div className="space-y-6">
                             <h3 className="text-2xl font-bold text-blue-400">Why It&apos;s a Weekend Favorite</h3>
                             <p className="text-slate-300 leading-relaxed">
-                                {destination.name} excels as a short-stay destination due to its accessibility and high density of attractions. Whether you&apos;re a solo traveler, a couple on a romantic escape, or a family looking for a quick adventure, the city provides a diverse range of activities that can be comfortably covered in a 2 to 3-day window.
+                                {destination.name} excels as a short-stay destination due to its accessibility and high density of attractions. Whether you&rsquo;re a solo traveler, a couple on a romantic escape, or a family looking for a quick adventure, the city provides a diverse range of activities that can be comfortably covered in a 2 to 3-day window.
                             </p>
                         </div>
                         <div className="space-y-6">

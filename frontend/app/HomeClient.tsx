@@ -336,7 +336,7 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
                     </p>
                   </div>
                   <div className="space-y-2">
-                    <h3 className="text-xl font-bold text-purple-400">2. The "Micro-Vacation" Philosophy</h3>
+                    <h3 className="text-xl font-bold text-purple-400">2. The &ldquo;Micro-Vacation&rdquo; Philosophy</h3>
                     <p className="text-sm">
                         As remote work and digital nomadism blur the lines between leisure and labor, the concept of the two-week annual holiday is becoming obsolete. We specialize exclusively in the <em>Weekend Getaway</em> methodology. By minimizing transit times and maximizing high-impact cultural experiences, we help travelers reset their mental health without draining their PTO reserves.
                     </p>
