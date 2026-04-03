@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, Suspense, useCallback } from 'react';
 import dynamic from 'next/dynamic';
-import { ArrowLeft, User, LogIn, Loader2, Send } from 'lucide-react';
+import { ArrowLeft, User, LogIn, Loader2, Send, RefreshCw, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
@@ -56,41 +56,42 @@ function ChatClient() {
     const [isLoadingDestinations, setIsLoadingDestinations] = useState(true);
     const [userLocation, setUserLocation] = useState<string>('');
 
-    // Fetch User Location and then Destinations
+    const fetchLocationAndDestinations = useCallback(async () => {
+        setIsLoadingDestinations(true);
+        try {
+            // 1. Get Location
+            const locRes = await fetch('https://ipapi.co/json/');
+            const locData = await locRes.json();
+            const locationStr = locData.city ? `${locData.city}, ${locData.country_name}` : locData.country_name || 'Global';
+            setUserLocation(locationStr);
+
+            // 2. Fetch Suggestions based on Location
+            const sugRes = await fetch(`/api/suggestions?location=${encodeURIComponent(locationStr)}`);
+            if (!sugRes.ok) throw new Error('Failed to fetch suggestions');
+            const sugData = await sugRes.json();
+
+            // Format response to ensure it's an array of objects
+            const formattedData: DestinationSuggestion[] = Array.isArray(sugData)
+                ? sugData.map((item: string | DestinationSuggestion) => typeof item === 'string' ? { name: item, tag: 'Popular Choice' } : item)
+                : [];
+
+            setPopularDestinations(formattedData);
+        } catch (err) {
+            console.error("Failed to load local destinations:", err);
+            // Fallback
+            setPopularDestinations([
+                { name: 'Paris', tag: 'Romantic Getaway' },
+                { name: 'Bali', tag: 'Tropical Escape' },
+                { name: 'Tokyo', tag: 'Cultural Hub' },
+                { name: 'New York', tag: 'City Vibes' }
+            ]);
+        } finally {
+            setIsLoadingDestinations(false);
+        }
+    }, []);
+
+    // Fetch User Location and then Destinations initially
     useEffect(() => {
-        const fetchLocationAndDestinations = async () => {
-            try {
-                // 1. Get Location
-                const locRes = await fetch('https://ipapi.co/json/');
-                const locData = await locRes.json();
-                const locationStr = locData.city ? `${locData.city}, ${locData.country_name}` : locData.country_name || 'Global';
-                setUserLocation(locationStr);
-
-                // 2. Fetch Suggestions based on Location
-                const sugRes = await fetch(`/api/suggestions?location=${encodeURIComponent(locationStr)}`);
-                if (!sugRes.ok) throw new Error('Failed to fetch suggestions');
-                const sugData = await sugRes.json();
-
-                // Format response to ensure it's an array of objects
-                const formattedData: DestinationSuggestion[] = Array.isArray(sugData)
-                    ? sugData.map((item: string | DestinationSuggestion) => typeof item === 'string' ? { name: item, tag: 'Popular Choice' } : item)
-                    : [];
-
-                setPopularDestinations(formattedData);
-            } catch (err) {
-                console.error("Failed to load local destinations:", err);
-                // Fallback
-                setPopularDestinations([
-                    { name: 'Paris', tag: 'Romantic Getaway' },
-                    { name: 'Bali', tag: 'Tropical Escape' },
-                    { name: 'Tokyo', tag: 'Cultural Hub' },
-                    { name: 'New York', tag: 'City Vibes' }
-                ]);
-            } finally {
-                setIsLoadingDestinations(false);
-            }
-        };
-
         fetchLocationAndDestinations();
 
         const checkIsDesktop = () => setIsDesktop(window.innerWidth >= 768);
@@ -272,9 +273,21 @@ function ChatClient() {
                     style={isDesktop ? { width: `${100 - leftWidth}%` } : {}}
                 >
                     <div className="p-8 lg:p-12 w-full max-w-5xl mx-auto">
-                        <div className="mb-8">
-                            <h2 className="text-2xl lg:text-3xl font-black text-white tracking-tight mb-2">Popular Destinations</h2>
-                            <p className="text-slate-400">Not sure where to go? Get inspired by these top weekend picks.</p>
+                        <div className="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                            <div>
+                                <h2 className="text-2xl lg:text-3xl font-black text-white tracking-tight mb-2">Popular Destinations</h2>
+                                <p className="text-slate-400">Not sure where to go? Get inspired by these top weekend picks.</p>
+                            </div>
+                            <Button 
+                                variant="outline" 
+                                size="sm" 
+                                onClick={fetchLocationAndDestinations}
+                                disabled={isLoadingDestinations}
+                                className="bg-slate-900/50 border-slate-700 hover:bg-slate-800 text-slate-300 w-fit"
+                            >
+                                <RefreshCw className={cn("w-4 h-4 mr-2", isLoadingDestinations && "animate-spin")} />
+                                {userLocation ? `Near ${userLocation}` : 'Locate Me'}
+                            </Button>
                         </div>
 
                         <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 lg:gap-6 pb-20">

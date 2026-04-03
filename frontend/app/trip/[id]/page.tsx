@@ -10,7 +10,7 @@ interface Props {
 }
 
 async function getTrip(id: string) {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
     const res = await fetch(`${apiUrl}/api/trips/${id}`, { next: { revalidate: 3600 } });
 
     if (!res.ok) {
