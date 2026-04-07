@@ -146,7 +146,7 @@ export default function ItineraryDisplay({ itinerary, className, selectedActivit
                                     </span>
                                     <span className="text-xs font-bold text-emerald-400">{formatCurrency(hotel.price_range, itinerary.trip_details.currency)}</span>
                                 </div>
-                                <h5 className="text-base font-bold text-slate-200 line-clamp-1 group-hover:text-blue-400 transition-colors uppercase tracking-tight">{hotel.name}</h5>
+                                <h5 className="text-base font-bold text-slate-200 sm:line-clamp-1 group-hover:line-clamp-none transition-colors uppercase tracking-tight">{hotel.name}</h5>
                             </div>
                             <a
                                 href={`https://www.agoda.com/partners/partnersearch.aspx?cid=1959241&apikey=83110ffd-89b7-4c2e-a4e9-d4a8f52de4ec&searchText=${encodeURIComponent(hotel.name + ' ' + itinerary.destination)}`}
@@ -219,7 +219,7 @@ export default function ItineraryDisplay({ itinerary, className, selectedActivit
                                             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                                         </div>
                                     )}
-                                    <div className="text-slate-400 text-sm sm:text-base leading-relaxed line-clamp-3 group-hover:line-clamp-none transition-all duration-300">
+                                    <div className="text-slate-400 text-sm sm:text-base leading-relaxed sm:line-clamp-3 group-hover:line-clamp-none transition-all duration-300">
                                         {activity.description}
                                     </div>
                                 </div>
