@@ -82,8 +82,9 @@ export default async function TripPage({ params }: Props) {
                 showBack
                 backHref="/explore"
                 actions={
-                    <button className="flex items-center gap-2 px-4 py-2 bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 border border-blue-500/20 rounded-full text-sm font-bold transition-colors">
-                        <Share2 className="w-4 h-4" /> Share Trip
+                    <button className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 border border-blue-500/20 rounded-full text-xs sm:text-sm font-bold transition-colors">
+                        <Share2 className="w-4 h-4" />
+                        <span className="hidden sm:inline">Share Trip</span>
                     </button>
                 }
             />

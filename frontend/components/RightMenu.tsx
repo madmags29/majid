@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, MessageSquare, Map, Compass, Sparkles, LogIn, UserPlus, LogOut } from 'lucide-react';
+import { Menu, X, MessageSquare, Map, Compass, Sparkles, LogIn, UserPlus, LogOut, BookOpen } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import dynamic from 'next/dynamic';
@@ -16,6 +16,7 @@ const menuItems = [
     { name: 'Your Trips', href: '/trips', icon: Map },
     { name: 'Inspirational Trip', href: '/inspiration-trip', icon: Sparkles },
     { name: 'Explore', href: '/explore', icon: Compass },
+    { name: 'Blog', href: '/blog', icon: BookOpen },
 ];
 
 export default function RightMenu() {

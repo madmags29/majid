@@ -63,7 +63,7 @@ export default function InnerHeader({
     };
 
     return (
-        <header className="h-16 border-b border-slate-800 flex items-center justify-between px-4 bg-slate-900/80 backdrop-blur-xl z-50 shrink-0 sticky top-0">
+        <header className="h-16 border-b border-slate-800 flex items-center justify-between px-2 sm:px-4 bg-slate-900/80 backdrop-blur-xl z-50 shrink-0 sticky top-0">
             <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
 
             <div className="flex items-center gap-2 md:gap-4 overflow-hidden">
@@ -93,7 +93,7 @@ export default function InnerHeader({
                             <div className="h-4 w-[1px] bg-slate-800 mx-1 hidden md:block" />
                             <div className="block overflow-hidden">
                                 {title && (
-                                    <h1 className="text-sm md:text-sm font-bold text-slate-200 truncate max-w-[150px] md:max-w-[200px]">
+                                    <h1 className="text-sm md:text-sm font-bold text-slate-200 truncate max-w-[100px] xs:max-w-[150px] md:max-w-[200px]">
                                         {title}
                                     </h1>
                                 )}
@@ -113,7 +113,7 @@ export default function InnerHeader({
 
                 <Link
                     href="/blog"
-                    className="text-slate-400 hover:text-white px-3 py-1.5 rounded-lg hover:bg-slate-800 transition-all text-sm font-medium"
+                    className="hidden sm:block text-slate-400 hover:text-white px-3 py-1.5 rounded-lg hover:bg-slate-800 transition-all text-sm font-medium"
                 >
                     Blog
                 </Link>
@@ -153,9 +153,10 @@ export default function InnerHeader({
                 ) : (
                     <Button
                         onClick={() => setIsAuthOpen(true)}
-                        className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg shadow-blue-500/25 border-0 rounded-xl px-4 md:px-6 h-9 transition-all text-xs font-bold"
+                        className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg shadow-blue-500/25 border-0 rounded-xl px-3 sm:px-4 md:px-6 h-9 transition-all text-[10px] sm:text-xs font-bold"
                     >
-                        Sign In
+                        <span className="sm:hidden">Login</span>
+                        <span className="hidden sm:inline">Sign In</span>
                     </Button>
                 )}
             </div>

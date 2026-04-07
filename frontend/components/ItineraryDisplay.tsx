@@ -179,7 +179,7 @@ export default function ItineraryDisplay({ itinerary, className, selectedActivit
                                 <div
                                     key={aIdx}
                                     className={cn(
-                                        "p-5 rounded-xl border border-slate-800 transition-all duration-300 cursor-pointer group hover:scale-[1.01]",
+                                        "p-4 sm:p-5 rounded-xl border border-slate-800 transition-all duration-300 cursor-pointer group hover:scale-[1.01]",
                                         selectedActivity === `${day.day}-${aIdx}`
                                             ? "bg-blue-600/10 border-blue-500/50 ring-1 ring-blue-500/20"
                                             : "bg-slate-800/30 hover:bg-slate-800/50 hover:border-slate-700"
@@ -197,7 +197,7 @@ export default function ItineraryDisplay({ itinerary, className, selectedActivit
                                             </span>
                                         )}
                                     </div>
-                                    <div className="text-xl font-bold text-slate-100 flex items-center gap-3 mb-3">
+                                    <div className="text-lg sm:text-xl font-bold text-slate-100 flex items-center gap-3 mb-3">
                                         <MapPin className="w-5 h-5 text-blue-500 shrink-0" />
                                         <span>{activity.location}</span>
                                     </div>
@@ -219,7 +219,7 @@ export default function ItineraryDisplay({ itinerary, className, selectedActivit
                                             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                                         </div>
                                     )}
-                                    <div className="text-slate-400 text-base leading-relaxed line-clamp-3 group-hover:line-clamp-none transition-all duration-300">
+                                    <div className="text-slate-400 text-sm sm:text-base leading-relaxed line-clamp-3 group-hover:line-clamp-none transition-all duration-300">
                                         {activity.description}
                                     </div>
                                 </div>
