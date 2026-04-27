@@ -47,23 +47,8 @@ export const metadata: Metadata = {
     'road trips in India', 'AI travel guide India', 'best weekend destinations India',
     'travel planner 2026', 'weekend escape India'
   ],
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
   authors: [{ name: 'Weekend Travellers Team' }],
   creator: 'Weekend Travellers',
-  icons: {
-    icon: '/favicon.ico',
-    apple: '/apple-touch-icon.png',
-  },
   openGraph: {
     type: 'website',
     locale: 'en_IN',
@@ -92,7 +77,7 @@ export const metadata: Metadata = {
       { url: '/icon.svg', type: 'image/svg+xml' },
     ],
     shortcut: '/favicon.ico',
-    apple: '/icon.svg',
+    apple: '/apple-touch-icon.png',
   },
   robots: {
     index: true,
