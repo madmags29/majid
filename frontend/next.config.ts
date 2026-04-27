@@ -8,7 +8,15 @@ const nextConfig: NextConfig = {
                 hostname: 'pexels.com',
             },
             {
+                protocol: 'http',
+                hostname: 'pexels.com',
+            },
+            {
                 protocol: 'https',
+                hostname: '**.pexels.com',
+            },
+            {
+                protocol: 'http',
                 hostname: '**.pexels.com',
             },
             {
@@ -16,7 +24,15 @@ const nextConfig: NextConfig = {
                 hostname: 'pixabay.com',
             },
             {
+                protocol: 'http',
+                hostname: 'pixabay.com',
+            },
+            {
                 protocol: 'https',
+                hostname: '**.pixabay.com',
+            },
+            {
+                protocol: 'http',
                 hostname: '**.pixabay.com',
             },
             {
