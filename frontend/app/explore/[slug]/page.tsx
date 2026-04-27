@@ -99,6 +99,15 @@ export default async function DestinationPage({ params }: Props) {
     const itinerary = exploreData?.days || exploreData?.itinerary;
     const deepContent = exploreData?.deep_content;
 
+    // Safety check for trip_details during build/SSR to prevent "Cannot read properties of undefined (reading 'estimated_budget')"
+    const tripDetails = exploreData?.trip_details || {
+        estimated_budget: 'Moderate',
+        currency: 'USD',
+        best_time_to_visit: 'Year-round',
+        destination_coordinates: { lat: destination.lat, lng: destination.lng },
+        hotel_suggestions: []
+    };
+
     const destinationSchema = {
         '@context': 'https://schema.org',
         '@type': 'TouristDestination',
@@ -227,7 +236,7 @@ export default async function DestinationPage({ params }: Props) {
                     {itinerary ? (
                         <div className="mt-12 bg-slate-900/40 rounded-3xl p-6 md:p-10 border border-slate-800 shadow-2xl text-left">
                             <h2 className="text-3xl font-black text-white mb-10 text-center tracking-tight">Your 2-Day AI Itinerary</h2>
-                            <ItineraryDisplay itinerary={itinerary} />
+                            <ItineraryDisplay itinerary={{ ...exploreData, days: itinerary, trip_details: tripDetails }} />
                         </div>
                     ) : (
                         <DirectItineraryDisplay destinationName={destination.name} />

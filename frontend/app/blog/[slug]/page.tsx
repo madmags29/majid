@@ -28,7 +28,7 @@ export default async function BlogPostDetail({ params }: Props) {
             console.log(`Skipping blog post fetch for ${slug} during build...`);
         } else {
             const res = await fetch(`${backendUrl}/api/blog/${slug}`, { 
-                cache: 'no-store'
+                next: { revalidate: 3600 }
             });
             if (res.ok) {
                 const data = await res.json();

@@ -19,7 +19,7 @@ export default async function BlogLandingPage() {
             console.log('Skipping blog posts fetch during build (localhost not available)...');
         } else {
             const res = await fetch(`${backendUrl}/api/blog`, { 
-                cache: 'no-store' // Force fresh fetch, bypassing any stuck Next.js Data Cache
+                next: { revalidate: 3600 } 
             });
             if (res.ok) {
                 posts = await res.json();
