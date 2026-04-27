@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { API_URL, IS_BUILD } from '@/lib/config';
 import ReactMarkdown from 'react-markdown';
 import CommentSection from '@/components/blog/CommentSection';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 // Configure dynamic routing handling gracefully
 interface Props {
@@ -79,6 +80,15 @@ export default async function BlogPostDetail({ params }: Props) {
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostSchema) }}
             />
             <InnerHeader title="Weekend Travellers Blog" subtitle={post.keyword || 'Blog'} showBack backHref="/blog" />
+
+            <div className="container mx-auto px-4 pt-6 lg:max-w-6xl">
+                <Breadcrumbs 
+                    items={[
+                        { label: 'Travel Blog', href: '/blog' },
+                        { label: post.title, href: `/blog/${post.slug}`, active: true }
+                    ]} 
+                />
+            </div>
 
             {/* Hero Section */}
             <header className="relative w-full h-[60vh] min-h-[400px]">
@@ -210,15 +220,11 @@ export default async function BlogPostDetail({ params }: Props) {
                     <h2 className="text-2xl font-black text-white mb-6 uppercase tracking-tight italic">Structural Quality & Editorial Integrity</h2>
                     <div className="space-y-6 text-slate-400 text-sm leading-relaxed">
                         <p>
-                            At Weekend Travellers, we believe that travel journalism in 2026 demands a higher standard of accuracy and logistical verification. Every article published under our &quot;Editorial&quot; banner—including the guide you just read—is subjected to a comprehensive multi-point audit. We dont just scrape data; we synthesize real-world transit maps, current weather heuristics, and verified local feedback to ensure that our recommendations are both actionable and safe.
-                        </p>
-                        <p>
-                            <strong>The Role of Generative Curation</strong><br/>
-                            While we utilize advanced generative models to help organize and scale our travel repository, the core value of our content lies in its human-led curation. Our destination experts (like the author of this post) provide the essential &quot;vibe-check&quot; that standard algorithms lack. We prioritize sustainable travel habits, favoring regional exploration that supports local economies and reduces the environmental impact of traditional long-haul tourism.
+                            At Weekend Travellers, we believe that travel journalism in 2026 demands a higher standard of accuracy and logistical verification. Every article published under our &quot;Editorial&quot; banner—including this guide—is subjected to a comprehensive multi-point audit combining computational data and human expertise.
                         </p>
                         <p>
                             <strong>A Commitment to E-E-A-T</strong><br/>
-                            This content is designed to meet the highest standards of Experience, Expertise, Authoritativeness, and Trustworthiness (E-E-A-T). Whether we are discussing the best coastal paths in Gokarna or the hidden jazz bars of Tokyo, we aim to provide the granular, first-hand details that help you avoid common tourist traps. We appreciate your trust in our platform as you plan your next high-impact 48-hour escape.
+                            This content is designed to meet the highest standards of Experience, Expertise, Authoritativeness, and Trustworthiness (E-E-A-T). For more details on how we curate our weekend itineraries and verify local gems, please visit our <Link href="/about" className="text-blue-400 hover:underline">About Us</Link> page.
                         </p>
                     </div>
                 </div>

@@ -23,6 +23,23 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function ExplorePage({ params }: PageProps) {
     const resolvedParams = await params;
     const slug = resolvedParams.slug.join('/');
+    
+    let initialData = null;
+    try {
+        const backendUrl = process.env.BACKEND_URL 
+            || process.env.NEXT_PUBLIC_API_URL 
+            || 'https://backend-flax-eight-93.vercel.app';
+            
+        const res = await fetch(`${backendUrl}/api/explore?slug=${encodeURIComponent(slug)}`, {
+            next: { revalidate: 604800 } // Cache for 7 days
+        });
+        
+        if (res.ok) {
+            initialData = await res.json();
+        }
+    } catch (e) {
+        console.error('Explore SSR fetch error:', e);
+    }
 
-    return <ExploreContent slug={slug} />;
+    return <ExploreContent slug={slug} initialData={initialData} />;
 }

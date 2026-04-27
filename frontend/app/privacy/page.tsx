@@ -60,21 +60,31 @@ export default function PrivacyPage() {
                 </section>
 
                 <section className="space-y-4">
-                    <h2 className="text-2xl font-semibold text-white">4. Data Security</h2>
+                    <h2 className="text-2xl font-semibold text-white">4. Third-Party Advertising</h2>
+                    <p className="text-slate-300 leading-relaxed">
+                        We use third-party advertising companies to serve ads when you visit our website. These companies may use information (not including your name, address, email address, or telephone number) about your visits to this and other websites in order to provide advertisements about goods and services of interest to you.
+                    </p>
+                    <p className="text-slate-300 leading-relaxed">
+                        Specifically, <strong>Google AdSense</strong> uses cookies to serve ads on our site. Google&apos;s use of advertising cookies enables it and its partners to serve ads to our users based on their visit to our sites and/or other sites on the Internet. Users may opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">Ads Settings</a>.
+                    </p>
+                </section>
+
+                <section className="space-y-4">
+                    <h2 className="text-2xl font-semibold text-white">5. Data Security</h2>
                     <p className="text-slate-300 leading-relaxed">
                         We have put in place appropriate security measures to prevent your personal data from being accidentally lost, used or accessed in an unauthorized way, altered or disclosed. In addition, we limit access to your personal data to those employees, agents, contractors and other third parties who have a business need to know.
                     </p>
                 </section>
 
                 <section className="space-y-4">
-                    <h2 className="text-2xl font-semibold text-white">5. Your Legal Rights</h2>
+                    <h2 className="text-2xl font-semibold text-white">6. Your Legal Rights</h2>
                     <p className="text-slate-300 leading-relaxed">
                         Under certain circumstances, you have rights under data protection laws in relation to your personal data, including the right to request access, correction, erasure, restriction, transfer, to object to processing, to portability of data and (where the lawful ground of processing is consent) to withdraw consent.
                     </p>
                 </section>
 
                 <section className="space-y-4">
-                    <h2 className="text-2xl font-semibold text-white">6. Contact Us</h2>
+                    <h2 className="text-2xl font-semibold text-white">7. Contact Us</h2>
                     <p className="text-slate-300 leading-relaxed">
                         If you have any questions about this privacy policy or our privacy practices, please contact us at: {SUPPORT_EMAIL}.
                     </p>

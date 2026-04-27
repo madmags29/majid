@@ -16,6 +16,7 @@ const WeatherWidget = dynamic(() => import('@/components/WeatherWidget'));
 const TypewriterText = dynamic(() => import('@/components/TypewriterText'));
 import CinematicLoader from '@/components/CinematicLoader';
 import { API_URL } from '@/lib/config';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 interface Activity {
     time: string;
@@ -82,7 +83,7 @@ const LOADING_MESSAGES = [
     "Compiling 2000 words of wanderlust-worthy insights..."
 ];
 
-export default function ExploreContent({ slug }: { slug: string }) {
+export default function ExploreContent({ slug, initialData }: { slug: string, initialData?: DestinationData | null }) {
     const [leftWidth, setLeftWidth] = useState(60); // Percentage width of left panel
     const [isResizing, setIsResizing] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -95,16 +96,22 @@ export default function ExploreContent({ slug }: { slug: string }) {
         return () => window.removeEventListener('resize', checkDesktop);
     }, []);
 
-    const [data, setData] = useState<DestinationData | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [data, setData] = useState<DestinationData | null>(initialData || null);
+    const [loading, setLoading] = useState(!initialData);
     const [error, setError] = useState<string | null>(null);
     const [isSharing, setIsSharing] = useState(false);
     const [isMapFullscreen, setIsMapFullscreen] = useState(false);
     const [selectedActivity, setSelectedActivity] = useState<string | null>(null);
 
     useEffect(() => {
+        if (initialData) {
+            setLoading(false);
+            return;
+        }
+
         const fetchData = async () => {
             try {
+                setLoading(true);
                 // Use relative path to leverage Next.js rewrites (more robust for CORS)
                 const fetchUrl = `/api/explore?slug=${encodeURIComponent(slug)}`;
                 const res = await fetch(fetchUrl);
@@ -119,7 +126,7 @@ export default function ExploreContent({ slug }: { slug: string }) {
             }
         };
         fetchData();
-    }, [slug]);
+    }, [slug, initialData]);
 
     const loadingMessages = [
         "Curating your ultimate exploration guide...",
@@ -252,6 +259,20 @@ export default function ExploreContent({ slug }: { slug: string }) {
                     </div>
                 </div>
             </header>
+
+            {/* Breadcrumbs Section */}
+            <div className="pt-24 px-6 max-w-7xl mx-auto w-full">
+                <Breadcrumbs 
+                    items={[
+                        { label: 'Explore', href: '/explore' },
+                        ...slug.split('/').map((part, i, arr) => ({
+                            label: part.charAt(0).toUpperCase() + part.slice(1).replace(/-/g, ' '),
+                            href: `/explore/${arr.slice(0, i + 1).join('/')}`,
+                            active: i === arr.length - 1
+                        }))
+                    ]} 
+                />
+            </div>
 
             {/* Hero Section */}
             <section className="relative h-[70vh] w-full pt-20 overflow-hidden">

@@ -150,16 +150,17 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460255466960810"
+          crossOrigin="anonymous"
+          strategy="lazyOnload"
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${cursive.variable} antialiased`}
         suppressHydrationWarning
       >
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460255466960810"
-          crossOrigin="anonymous"
-        />
         <GoogleAnalytics gaId="G-4FBK6YT104" />
 
         <script

@@ -8,6 +8,7 @@ import DirectItineraryDisplay from '@/components/DirectItineraryDisplay';
 import ItineraryDisplay from '@/components/ItineraryDisplay';
 import RelatedDestinations from '@/components/RelatedDestinations';
 import { API_URL, IS_BUILD } from '@/lib/config';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 interface Props {
     params: { slug: string };
@@ -73,29 +74,30 @@ export default async function DestinationPage({ params }: Props) {
         );
     }
 
-    // SSR Fetch Itinerary
-    let itinerary = null;
+    // SSR Fetch Deep Explore Content (includes itinerary and long-form SEO text)
+    let exploreData = null;
     try {
+        const backendUrl = process.env.BACKEND_URL 
+            || process.env.NEXT_PUBLIC_API_URL 
+            || 'https://backend-flax-eight-93.vercel.app';
+
         // During build, if pointing to local, skip fetching to avoid ECONNREFUSED/timeout
-        if (IS_BUILD && (API_URL.includes('localhost') || API_URL.includes('127.0.0.1'))) {
-            console.log(`Skipping itinerary fetch for ${destination.name} during build...`);
+        if (IS_BUILD && (backendUrl.includes('localhost') || backendUrl.includes('127.0.0.1'))) {
+            console.log(`Skipping explore fetch for ${destination.name} during build...`);
         } else {
-            const response = await fetch(`${API_URL}/api/search`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    destination: destination.name,
-                    days: 2,
-                }),
+            const response = await fetch(`${backendUrl}/api/explore?slug=${encodeURIComponent(destination.id)}`, {
                 next: { revalidate: 604800 }
             });
             if (response.ok) {
-                itinerary = await response.json();
+                exploreData = await response.json();
             }
         }
     } catch (e) {
-        console.error("Failed to SSR itinerary", e);
+        console.error("Failed to SSR explore data", e);
     }
+
+    const itinerary = exploreData?.days || exploreData?.itinerary;
+    const deepContent = exploreData?.deep_content;
 
     const destinationSchema = {
         '@context': 'https://schema.org',
@@ -121,6 +123,16 @@ export default async function DestinationPage({ params }: Props) {
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(destinationSchema) }}
             />
             <InnerHeader title={destination.name} subtitle="Curated Destination" showBack backHref="/explore" />
+            
+            <div className="max-w-6xl mx-auto px-4 pt-4">
+                <Breadcrumbs 
+                    items={[
+                        { label: 'Explore', href: '/explore' },
+                        { label: destination.name, href: `/explore/${destination.id}`, active: true }
+                    ]} 
+                />
+            </div>
+            
             <main>
                 {/* Hero Section */}
                 <section className="relative h-[60vh] w-full flex items-center justify-center overflow-hidden">
@@ -182,6 +194,18 @@ export default async function DestinationPage({ params }: Props) {
                             </p>
                         </div>
                     </div>
+
+                    {/* Dynamic Deep Content (SEO Rich Text) */}
+                    {deepContent && (
+                        <div 
+                            className="mt-20 prose prose-invert max-w-none 
+                            prose-h2:text-3xl prose-h2:font-black prose-h2:text-blue-400 prose-h2:italic prose-h2:uppercase
+                            prose-p:text-slate-400 prose-p:leading-relaxed"
+                            dangerouslySetInnerHTML={{ 
+                                __html: deepContent.replace(/<br\/><br\/>/g, '<div class="h-4"></div>') 
+                            }} 
+                        />
+                    )}
 
                     <div className="mt-16 p-8 rounded-3xl bg-slate-900/50 border border-slate-800 grid md:grid-cols-3 gap-8 text-center">
                         <div>
