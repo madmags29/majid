@@ -5,7 +5,15 @@ const nextConfig: NextConfig = {
         remotePatterns: [
             {
                 protocol: 'https',
+                hostname: 'pexels.com',
+            },
+            {
+                protocol: 'https',
                 hostname: '**.pexels.com',
+            },
+            {
+                protocol: 'https',
+                hostname: 'pixabay.com',
             },
             {
                 protocol: 'https',
@@ -13,7 +21,15 @@ const nextConfig: NextConfig = {
             },
             {
                 protocol: 'https',
+                hostname: 'unsplash.com',
+            },
+            {
+                protocol: 'https',
                 hostname: '**.unsplash.com',
+            },
+            {
+                protocol: 'https',
+                hostname: '**.googleusercontent.com',
             }
         ],
     },
