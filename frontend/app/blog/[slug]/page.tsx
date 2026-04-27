@@ -1,4 +1,5 @@
 import React from 'react';
+import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Calendar, Clock, User, ChevronRight, Share2, Facebook, Twitter, Linkedin } from 'lucide-react';
@@ -12,6 +13,39 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 // Configure dynamic routing handling gracefully
 interface Props {
     params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const { slug } = await params;
+    
+    const backendUrl = process.env.BACKEND_URL
+        || process.env.NEXT_PUBLIC_API_URL
+        || 'https://backend-flax-eight-93.vercel.app';
+
+    let post = null;
+    try {
+        const res = await fetch(`${backendUrl}/api/blog/${slug}`);
+        if (res.ok) post = await res.json();
+    } catch (e) {}
+
+    if (!post) return { title: 'Blog Post Not Found' };
+
+    return {
+        title: post.title,
+        description: post.metaDescription,
+        keywords: [post.keyword, 'weekend getaway India', 'travel guide India', 'trip planning'],
+        openGraph: {
+            title: post.title,
+            description: post.metaDescription,
+            images: [post.heroImage],
+            type: 'article',
+            publishedTime: post.publishedDate,
+            authors: [post.author],
+        },
+        alternates: {
+            canonical: `/blog/${slug}`,
+        }
+    };
 }
 
 export default async function BlogPostDetail({ params }: Props) {

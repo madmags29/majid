@@ -61,6 +61,37 @@ export default async function LandingPage() {
     ]
   };
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What are the best weekend getaways in India?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The best weekend getaways in India depend on your starting city. From Delhi, popular spots include Rishikesh, Agra, and Jaipur. From Mumbai, Lonavala and Mahabaleshwar are top choices. Bangalore travelers often visit Coorg and Mysore."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does an AI trip planner work for Indian destinations?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Our AI trip planner analyzes real-time data, local transit, and seasonal trends in India to generate a 2-day or 3-day itinerary instantly. It includes hidden gems, food recommendations, and logistical advice tailored to your preferences."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What are some budget-friendly 2-day trips in India?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Budget-friendly options include Gokarna for beach lovers, Hampi for history enthusiasts, and Munnar for nature seekers. Our AI can customize itineraries to fit your specific budget needs."
+        }
+      }
+    ]
+  };
+
   return (
     <div className="min-h-screen text-white flex flex-col relative overflow-x-hidden">
       <script
@@ -70,6 +101,10 @@ export default async function LandingPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       
       <HomeClient initialBlogPosts={blogPosts} />
