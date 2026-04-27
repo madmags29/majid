@@ -18,8 +18,9 @@ export default async function BlogLandingPage() {
         if (IS_BUILD && backendUrl.includes('localhost')) {
             console.log('Skipping blog posts fetch during build (localhost not available)...');
         } else {
-            const res = await fetch(`${backendUrl}/api/blog`, { 
-                next: { revalidate: 3600 } 
+            const res = await fetch(`${backendUrl}/api/blog?t=${Date.now()}`, { 
+                cache: 'no-store',
+                next: { revalidate: 0 } 
             });
             if (res.ok) {
                 posts = await res.json();

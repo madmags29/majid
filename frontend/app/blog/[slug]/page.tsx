@@ -61,8 +61,9 @@ export default async function BlogPostDetail({ params }: Props) {
         if (IS_BUILD && backendUrl.includes('localhost')) {
             console.log(`Skipping blog post fetch for ${slug} during build...`);
         } else {
-            const res = await fetch(`${backendUrl}/api/blog/${slug}`, { 
-                next: { revalidate: 3600 }
+            const res = await fetch(`${backendUrl}/api/blog/${slug}?t=${Date.now()}`, { 
+                cache: 'no-store',
+                next: { revalidate: 0 }
             });
             if (res.ok) {
                 const data = await res.json();

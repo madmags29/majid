@@ -22,8 +22,9 @@ async function getBlogPosts() {
   }
 
   try {
-    const res = await fetch(`${backendUrl}/api/blog`, { 
-      cache: 'no-store'
+    const res = await fetch(`${backendUrl}/api/blog?t=${Date.now()}`, { 
+      cache: 'no-store',
+      next: { revalidate: 0 }
     });
     if (!res.ok) return [];
     const data = await res.json();
