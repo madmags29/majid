@@ -37,38 +37,35 @@ import { GOOGLE_CLIENT_ID, SITE_URL } from '@/lib/config';
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Weekend Travellers | AI Travel Planner & Weekend Getaways in India',
+    default: 'Weekend Travellers | Global AI Travel Planner & Weekend Getaways',
     template: '%s | Weekend Travellers',
   },
-  description: 'Plan your perfect weekend getaway in India with our AI trip planner. Customized 2-day itineraries from Delhi, Mumbai, Bangalore & more. Discover hidden gems and short road trips.',
+  description: 'Plan your perfect weekend getaway globally with our AI trip planner. Generate customized travel itineraries, discover hidden gems, and explore worldwide destinations seamlessly.',
   keywords: [
-    'weekend travellers', 'AI trip planner India', 'weekend getaways from Delhi', 
-    'short trips from Mumbai', 'weekend itineraries Bangalore', '2 day trip India', 
-    'road trips in India', 'AI travel guide India', 'best weekend destinations India',
-    'travel planner 2026', 'weekend escape India'
-  ],
+        'AI travel planner', 'AI trip planner', 'best AI travel planner', 'vacation itinerary generator', 'custom travel itineraries', 'holiday planner AI', 'weekend getaway planner', 'weekend trip generator', 'global travel planner', 'AI travel guide', 'free AI travel planner', 'weekend travellers', 'road trip planner AI', 'AI travel assistant', 'smart travel itinerary', 'travel planner 2026', 'best travel destinations globally', 'AI trip planner destinations', 'top vacation spots worldwide', 'global weekend getaways'
+    ],
   authors: [{ name: 'Weekend Travellers Team' }],
   creator: 'Weekend Travellers',
   openGraph: {
     type: 'website',
-    locale: 'en_IN',
+    locale: 'en_US',
     url: 'https://weekendtravellers.com',
-    title: 'Weekend Travellers | AI Travel Planner & Weekend Getaways in India',
-    description: 'Plan your perfect weekend getaway in India with our AI trip planner. Customized 2-day itineraries from Delhi, Mumbai, Bangalore & more.',
+    title: 'Weekend Travellers | Global AI Travel Planner & Weekend Getaways',
+    description: 'Plan your perfect weekend getaway globally with our AI trip planner. Generate customized travel itineraries and discover hidden gems worldwide.',
     siteName: 'Weekend Travellers',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Weekend Travellers India',
+        alt: 'Weekend Travellers Global',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Weekend Travellers | AI Travel Planner India',
-    description: 'Plan your perfect weekend getaway in India with our AI trip planner.',
+    title: 'Weekend Travellers | Global AI Travel Planner',
+    description: 'Plan your perfect weekend getaway globally with our AI trip planner.',
     images: ['/og-image.png'],
   },
   icons: {

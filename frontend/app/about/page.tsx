@@ -5,7 +5,9 @@ import Link from 'next/link';
 export const metadata: Metadata = {
     title: 'About Us | AI Travel Planner for Weekend Getaways',
     description: 'Discover how Weekend Travellers uses advanced AI to curate the best 2 & 3 day weekend itineraries, hidden gems, and road trip plans for 2026.',
-    keywords: ['about weekend travellers', 'AI travel team', 'travel planner mission', 'our story', 'AI travel planner', 'weekend getaways team', 'smart travel itineraries'],
+    keywords: [
+        'AI travel planner', 'AI trip planner', 'best AI travel planner', 'vacation itinerary generator', 'custom travel itineraries', 'holiday planner AI', 'weekend getaway planner', 'weekend trip generator', 'global travel planner', 'AI travel guide', 'free AI travel planner', 'weekend travellers', 'road trip planner AI', 'AI travel assistant', 'smart travel itinerary', 'travel planner 2026', 'best travel destinations globally', 'AI trip planner destinations', 'top vacation spots worldwide', 'global weekend getaways'
+    ],
     openGraph: {
         title: 'About Us | AI Travel Planner for Weekend Getaways',
         description: 'Discover how Weekend Travellers uses advanced AI to curate the best 2 & 3 day weekend itineraries, hidden gems, and road trip plans for 2026.',

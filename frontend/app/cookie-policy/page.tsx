@@ -5,7 +5,9 @@ import { SUPPORT_EMAIL } from '@/lib/config';
 export const metadata: Metadata = {
     title: 'Cookie Policy | Weekend Travellers',
     description: 'Information about how we use cookies to improve your travel planning experience and site functionality.',
-    keywords: ['cookie policy', 'website cookies', 'weekend travellers cookies', 'AI travel planner cookies', 'user tracking policy'],
+    keywords: [
+        'AI travel planner', 'AI trip planner', 'best AI travel planner', 'vacation itinerary generator', 'custom travel itineraries', 'holiday planner AI', 'weekend getaway planner', 'weekend trip generator', 'global travel planner', 'AI travel guide', 'free AI travel planner', 'weekend travellers', 'road trip planner AI', 'AI travel assistant', 'smart travel itinerary', 'travel planner 2026', 'best travel destinations globally', 'AI trip planner destinations', 'top vacation spots worldwide', 'global weekend getaways'
+    ],
     openGraph: {
         title: 'Cookie Policy | Weekend Travellers',
         description: 'Information about how we use cookies to improve your travel planning experience and site functionality.',
