@@ -28,7 +28,7 @@ async function getBlogPosts() {
     });
     if (!res.ok) return [];
     const data = await res.json();
-    return Array.isArray(data) ? data.slice(0, 3) : [];
+    return Array.isArray(data) ? data.slice(0, 10) : [];
   } catch (error) {
     console.error('Failed to fetch blog posts for homepage:', error);
     return [];
