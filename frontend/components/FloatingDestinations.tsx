@@ -11,7 +11,8 @@ const DESTINATIONS = [
     "Bora Bora", "Venice", "Prague", "Amsterdam", "San Francisco", "Queenstown",
     "Reykjavik", "Marrakech", "Seville", "Florence", "Lisbon", "Edinburgh",
     "Hawaii", "Las Vegas", "Miami", "Singapore", "Hong Kong", "Seoul", "Mumbai",
-    "Goa", "Jaipur", "Cusco", "Lima", "Buenos Aires", "Vancouver", "Toronto"
+    "Goa", "Jaipur", "Cusco", "Lima", "Buenos Aires", "Vancouver", "Toronto",
+    "Kuala Lumpur", "Hanoi", "New Delhi", "Agra"
 ];
 
 interface FloatingText {

@@ -94,6 +94,13 @@ export const EXLPORE_DESTINATIONS: DestinationOption[] = [
 
     // Oceania
     { id: 'sydney', name: 'Sydney', country: 'Australia', image: 'https://images.pexels.com/photos/995765/pexels-photo-995765.jpeg?auto=compress&cs=tinysrgb&w=800', imageAlt: 'Iconic Sydney Opera House and Harbour Bridge catching the sunrise in Australia', lat: -33.8688, lng: 151.2093, tags: ['Harbour', 'City', 'Modern'] },
+    
+    // New Global Additions
+    { id: 'istanbul', name: 'Istanbul', country: 'Turkey', image: 'https://images.pexels.com/photos/1549326/pexels-photo-1549326.jpeg?auto=compress&cs=tinysrgb&w=800', imageAlt: 'Stunning mosques and historic architecture of Istanbul, Turkey', lat: 41.0082, lng: 28.9784, tags: ['History', 'Culture', 'Architecture'] },
+    { id: 'kualalumpur', name: 'Kuala Lumpur', country: 'Malaysia', image: 'https://images.pexels.com/photos/433989/pexels-photo-433989.jpeg?auto=compress&cs=tinysrgb&w=800', imageAlt: 'Petronas Twin Towers illuminating the Kuala Lumpur skyline at night', lat: 3.1390, lng: 101.6869, tags: ['City', 'Modern', 'Food'] },
+    { id: 'hanoi', name: 'Hanoi', country: 'Vietnam', image: 'https://images.pexels.com/photos/2034335/pexels-photo-2034335.jpeg?auto=compress&cs=tinysrgb&w=800', imageAlt: 'Traditional boats and bustling streets in the Old Quarter of Hanoi, Vietnam', lat: 21.0285, lng: 105.8542, tags: ['Culture', 'Street Food', 'History'] },
+    { id: 'maldives', name: 'Maldives', country: 'Maldives', image: 'https://images.pexels.com/photos/1483053/pexels-photo-1483053.jpeg?auto=compress&cs=tinysrgb&w=800', imageAlt: 'Overwater bungalows and crystal clear turquoise water in the Maldives', lat: 3.2028, lng: 73.2207, tags: ['Beaches', 'Luxury', 'Romance'] },
+    { id: 'queenstown', name: 'Queenstown', country: 'New Zealand', image: 'https://images.pexels.com/photos/2881269/pexels-photo-2881269.jpeg?auto=compress&cs=tinysrgb&w=800', imageAlt: 'Stunning alpine lake and mountain views of Queenstown, New Zealand', lat: -45.0312, lng: 168.6626, tags: ['Adventure', 'Mountains', 'Nature'] },
 ];
 
 export function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
