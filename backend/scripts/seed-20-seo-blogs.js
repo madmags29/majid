@@ -2,7 +2,11 @@ const mongoose = require('mongoose');
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://Vercel-Admin-weekendtrip:M7KAp6M7XIxp8nQL@weekendtrip.tyv7qgd.mongodb.net/?retryWrites=true&w=majority";
+const MONGODB_URI = process.env.MONGODB_URI;
+if (!MONGODB_URI) {
+    console.error('Error: MONGODB_URI environment variable is required.');
+    process.exit(1);
+}
 
 const BlogPostSchema = new mongoose.Schema({
     title: { type: String, required: true },
