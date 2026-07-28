@@ -120,6 +120,35 @@ const websiteJsonLd = {
     'query-input': 'required name=search_term_string'
   }
 };
+
+const webAppJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Weekend Travellers AI Trip Planner',
+  url: 'https://weekendtravellers.com',
+  applicationCategory: 'TravelApplication',
+  operatingSystem: 'All',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD'
+  },
+  description: 'Free AI travel itinerary generator providing hour-by-hour 2-day to 4-day travel plans worldwide.',
+  browserRequirements: 'Requires JavaScript. Requires HTML5.'
+};
+
+const serviceJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  serviceType: 'AI Travel Itinerary Generation & Route Planning',
+  provider: {
+    '@type': 'Organization',
+    name: 'Weekend Travellers',
+    url: 'https://weekendtravellers.com'
+  },
+  areaServed: 'Worldwide'
+};
+
 import CookieConsent from "@/components/CookieConsent";
 
 export default function RootLayout({
@@ -135,6 +164,8 @@ export default function RootLayout({
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460255466960810"
           crossOrigin="anonymous"
         />
+        <link rel="author" href="https://weekendtravellers.com/about" />
+        <link rel="help" href="https://weekendtravellers.com/llms.txt" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${cursive.variable} antialiased`}
@@ -149,6 +180,14 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
         />
         <SmoothScroll>
           {children}

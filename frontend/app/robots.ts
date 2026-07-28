@@ -11,10 +11,27 @@ export default function robots(): MetadataRoute.Robots {
                 disallow: [],
             },
             {
-                userAgent: 'Mediapartners-Google',
+                userAgent: [
+                    'GPTBot',
+                    'ChatGPT-User',
+                    'PerplexityBot',
+                    'ClaudeBot',
+                    'Claude-Web',
+                    'Google-Extended',
+                    'Applebot-Extended',
+                    'Amazonbot',
+                    'Bytespider',
+                    'Cohere-ai',
+                    'Diffbot',
+                    'Omgilibot',
+                    'Mediapartners-Google'
+                ],
                 allow: '/',
             },
         ],
-        sitemap: `${baseUrl}/sitemap.xml`,
+        sitemap: [
+            `${baseUrl}/sitemap.xml`,
+            `${baseUrl}/llms.txt`
+        ],
     };
 }

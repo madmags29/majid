@@ -122,6 +122,24 @@ export default async function DestinationPage({ params }: Props) {
             '@type': 'GeoCoordinates',
             latitude: destination.lat,
             longitude: destination.lng
+        },
+        touristType: ['Weekend Travelers', 'Backpackers', 'Couples', 'Solo Travelers'],
+        speakable: {
+            '@type': 'SpeakableSpecification',
+            cssSelector: ['h1', '.destination-summary-text']
+        }
+    };
+
+    const tripSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'TouristTrip',
+        name: `Weekend Trip to ${destination.name}`,
+        description: `Customized 2-3 day weekend travel itinerary for ${destination.name}, ${destination.country}.`,
+        touristType: 'Weekend Trip',
+        offers: {
+            '@type': 'Offer',
+            price: '0',
+            priceCurrency: tripDetails.currency || 'USD'
         }
     };
 
@@ -130,6 +148,10 @@ export default async function DestinationPage({ params }: Props) {
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(destinationSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(tripSchema) }}
             />
             <InnerHeader title={destination.name} subtitle="Curated Destination" showBack backHref="/explore" />
             

@@ -98,15 +98,42 @@ export default async function BlogPostDetail({ params }: Props) {
         datePublished: post.publishedDate,
         dateModified: post.updatedAt || post.publishedDate,
         author: {
-            '@type': 'Person',
-            name: post.author,
+            '@type': 'Organization',
+            name: post.author || 'Weekend Travellers',
+            url: 'https://weekendtravellers.com'
+        },
+        publisher: {
+            '@type': 'Organization',
+            name: 'Weekend Travellers',
+            logo: {
+                '@type': 'ImageObject',
+                url: 'https://weekendtravellers.com/icon.svg'
+            }
         },
         description: post.metaDescription,
         mainEntityOfPage: {
             '@type': 'WebPage',
             '@id': `https://weekendtravellers.com/blog/${post.slug}`,
         },
+        speakable: {
+            '@type': 'SpeakableSpecification',
+            cssSelector: ['h1', '.blog-intro-text']
+        }
     };
+
+    const faqsList = post.faqs || parsedContent?.faqs || [];
+    const faqSchema = faqsList.length > 0 ? {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: faqsList.map((f: any) => ({
+            '@type': 'Question',
+            name: f.question,
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: f.answer
+            }
+        }))
+    } : null;
 
     return (
         <main className="min-h-screen bg-[#020617] text-slate-200 pb-20">
@@ -114,6 +141,12 @@ export default async function BlogPostDetail({ params }: Props) {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostSchema) }}
             />
+            {faqSchema && (
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+                />
+            )}
             <InnerHeader title="Weekend Travellers Blog" subtitle={post.keyword || 'Blog'} showBack backHref="/blog" />
 
             <div className="container mx-auto px-4 pt-6 lg:max-w-6xl">
