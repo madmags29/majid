@@ -12,19 +12,20 @@ export const revalidate = 3600;
 async function getBlogPosts() {
   // For SSR on Vercel: rewrites only apply to browser requests, NOT server-side fetch.
   // We must use the absolute backend URL here.
-  const backendUrl = process.env.BACKEND_URL
+  const rawBackendUrl = process.env.BACKEND_URL
     || process.env.NEXT_PUBLIC_API_URL
     || 'https://backend-flax-eight-93.vercel.app';
+  const backendUrl = rawBackendUrl.replace('localhost', '127.0.0.1');
 
-  if (IS_BUILD && backendUrl.includes('localhost')) {
+  if (IS_BUILD && (backendUrl.includes('localhost') || backendUrl.includes('127.0.0.1'))) {
     console.log('Skipping blog post fetch during build to prevent timeout...');
     return [];
   }
 
   try {
-    const res = await fetch(`${backendUrl}/api/blog?t=${Date.now()}`, { 
-      cache: 'no-store',
-      next: { revalidate: 0 }
+    const res = await fetch(`${backendUrl}/api/blog`, { 
+      next: { revalidate: 60 },
+      signal: AbortSignal.timeout(3000)
     });
     if (!res.ok) return [];
     const data = await res.json();

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --hostname localhost",
+    "dev": "next dev --hostname localhost --webpack",
     "build": "next build",
     "vercel-build": "next build",
     "start": "next start",

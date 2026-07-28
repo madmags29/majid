@@ -97,20 +97,30 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
       })
       .catch(err => console.error("Failed to load video", err));
 
-    if (!userLocation) {
-      fetch('https://ipapi.co/json/')
+    const cachedLoc = typeof window !== 'undefined' ? sessionStorage.getItem('userLocation') : null;
+    if (cachedLoc) {
+      setUserLocation(cachedLoc);
+    } else if (!userLocation) {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 2000);
+
+      fetch('https://ipapi.co/json/', { signal: controller.signal })
         .then(async res => {
             if (!res.ok) throw new Error('ipapi rate limit or error');
             return res.json();
         })
         .then(data => {
+          clearTimeout(timeoutId);
           const location = data.city ? `${data.city}, ${data.country_name}` : data.country_name || 'Global';
           setUserLocation(prev => prev || location);
+          if (typeof window !== 'undefined') sessionStorage.setItem('userLocation', location);
         })
         .catch(err => {
+          clearTimeout(timeoutId);
           console.warn("Geolocation failed on Home:", err);
           if (!userLocation) {
-             setUserLocation('Global'); // Trigger suggestion fetch with 'Global'
+             setUserLocation('Global');
+             if (typeof window !== 'undefined') sessionStorage.setItem('userLocation', 'Global');
           }
         });
     }
@@ -146,8 +156,15 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
   };
 
   useEffect(() => {
+    if (typeof window !== 'undefined' && sessionStorage.getItem('hasSeenCinematicLoader')) {
+      setIsLoading(false);
+      return;
+    }
     const delay = window.innerWidth < 768 ? 800 : 2500;
-    const timer = setTimeout(() => setIsLoading(false), delay);
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+      if (typeof window !== 'undefined') sessionStorage.setItem('hasSeenCinematicLoader', 'true');
+    }, delay);
     return () => clearTimeout(timer);
   }, []);
 
