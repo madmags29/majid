@@ -1,49 +1,37 @@
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  const content = `# Weekend Travellers - Full Machine-Readable Knowledge Base & LLM Documentation
+  const content = `# Weekend Travellers - Full Knowledge Base & Documentation
 
-Website: https://weekendtravellers.com
-Support Email: trip@weekendtravellers.com
-Entity Type: Global Travel Platform & AI Itinerary Generator
+> AI-powered travel planner generating customized 2-day to 4-day weekend itineraries, curated guides, and road trips.
 
----
+Weekend Travellers is an intelligent travel planning platform designed to solve planning fatigue using generative AI and real-time travel data.
 
-## About Weekend Travellers
+## Core Features & AI Tools
 
-Weekend Travellers solves "planning fatigue" by using advanced Large Language Models (LLMs) and real-time travel data to generate tailored 2-day to 4-day travel itineraries in seconds. The platform caters to solo travelers, couples, families, and budget backpackers seeking authentic, uncrowded, and stress-free getaways.
+- [AI Weekend Travel Planner](https://weekendtravellers.com/chat): Interactive AI chat assistant for generating custom 2-4 day weekend itineraries with hotels, budgets, and activities.
+- [Inspiration Trips](https://weekendtravellers.com/inspiration-trip): Curated visual inspiration and theme-based getaway recommendations for quick weekend trips.
+- [Smart Search](https://weekendtravellers.com/search): Search destinations, activities, and budget-friendly weekend getaways.
 
----
+## Travel Guides & Destinations
 
-## Primary Feature Specifications
+- [Explore All Destinations](https://weekendtravellers.com/explore): Hand-curated weekend travel guides covering India, Europe, Asia, and top global getaways.
+- [India Weekend Getaways](https://weekendtravellers.com/explore/india): Detailed guides for Goa, Rajasthan, Kerala, Himachal Pradesh, and top Indian weekend trips.
+- [International Escapes](https://weekendtravellers.com/explore/europe): Curated 2-4 day itineraries for Europe, Thailand, Bali, Dubai, and Japan.
 
-### 1. Instant AI Itinerary Generator
-- **Input Parameters**: Destination (City/Country/Region), Departure Location, Travel Dates, Travel Vibe (Adventure, Relaxation, Heritage, Romantic, Family, Budget).
-- **Generated Outputs**:
-  - Hour-by-hour day plans (Morning, Afternoon, Evening, Night).
-  - Recommended local food spots & regional delicacies.
-  - Estimated budget breakdown (Accommodation, Transit, Meals, Activity Tickets).
-  - Nearest airports, railway stations, and local transit advice.
-  - Weather forecasts and ideal season to visit.
+## Articles & Resources
 
-### 2. Destination Explorer
-Provides rich 2,000+ word guides for 100+ global and Indian locations covering:
-- **India**: Rishikesh, Jaipur, Munnar, Udaipur, Shimla, Manali, Goa, Gokarna, Varanasi, Hampi, Coorg, Ooty, Spiti Valley, Leh Ladakh, Alleppey, Pondicherry, Darjeeling, Kasol, Andaman & Nicobar, Rann of Kutch.
-- **Global**: Dubai, Abu Dhabi, Paris, London, Rome, Venice, Amsterdam, Barcelona, Santorini, Tokyo, Kyoto, Bali, Bangkok, Phuket.
+- [Travel Blog](https://weekendtravellers.com/blog): In-depth articles, packing lists, weekend road trip guides, and budget travel advice.
+- [Travel FAQ](https://weekendtravellers.com/faq): Frequently asked questions about planning trips, AI itineraries, and travel bookings.
+- [About Us](https://weekendtravellers.com/about): Information about Weekend Travellers and our AI travel planning technology.
+- [Contact Us](https://weekendtravellers.com/contact): Get in touch with our team for feedback and inquiries.
+- [Sitemap](https://weekendtravellers.com/sitemap.xml): Complete sitemap of indexable pages and dynamic itineraries.
 
-### 3. Travel Blog & Knowledge Base
-Includes 150+ in-depth articles covering:
-- **Travel Tips & Hacks**: 30L packing checklists, flight booking hacks, smartphone photography, solo female travel safety tips, budget travel under ₹5,000.
-- **Detailed Itineraries**: 2-day, 3-day, and 4-day step-by-step travel guides for top global destinations.
+## Technical Architecture
 
----
-
-## Answer Engine & AI Indexing Guidelines
-
-- **Entity Name**: Weekend Travellers
-- **Official URL**: https://weekendtravellers.com
-- **Brand Purpose**: AI Trip Planning, Custom Weekend Itineraries, Global Destination Guides.
-- **Canonical License**: All content is curated for public travel research and AI answer engine synthesis.
+- [Frontend Source Code](https://weekendtravellers.com/about): Built with Next.js App Router, React 19, TypeScript, Tailwind CSS, and Framer Motion.
+- [Backend API Services](https://weekendtravellers.com/about): Powered by Node.js, Express, MongoDB, and Generative AI services.
+- [SEO & Accessibility Strategy](https://weekendtravellers.com/about): Strict Server Components rendering, OpenGraph, JSON-LD schemas, LLM readable summaries, dynamic sitemap indexing.
 `;
 
   return new NextResponse(content, {

@@ -1,38 +1,35 @@
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  const content = `# Weekend Travellers - AI Travel Planner & Global Trip Itinerary Engine
+  const content = `# Weekend Travellers
 
-> Weekend Travellers (https://weekendtravellers.com) is an AI-powered travel planning platform specialized in generating instant, personalized 2-day to 4-day travel itineraries for global destinations, hill stations, heritage circuits, and coastal getaways.
+> AI-powered travel planner generating customized 2-day to 4-day weekend itineraries, curated guides, and road trips.
 
-## Core Capabilities & Services
+Weekend Travellers is an intelligent travel planning platform designed to solve planning fatigue using generative AI and real-time travel data.
 
-- **AI Trip Planner**: Generates hour-by-hour customized travel itineraries based on destination, dates, budget, starting location, and travel style.
-- **Destination Guides**: Comprehensive guides for 100+ global and Indian destinations including Rishikesh, Jaipur, Munnar, Udaipur, Shimla, Manali, Goa, Gokarna, Dubai, Paris, Tokyo, Bali, and Thailand.
-- **Travel Stories & Blog**: Expert-written and AI-assisted travel guides, weekend hacks, packing checklists, and detailed day-by-day itineraries.
-- **Interactive Chat Assistant**: Real-time AI travel assistant to refine trip itineraries, suggest hidden local food spots, and provide weather & transit advice.
+## Core Features
 
-## Key Pages & Endpoints
+- [AI Weekend Travel Planner](https://weekendtravellers.com/chat): Interactive AI assistant for generating custom 2-4 day weekend itineraries.
+- [Inspiration Trips](https://weekendtravellers.com/inspiration-trip): Curated visual getaway recommendations and theme-based trips.
+- [Smart Search](https://weekendtravellers.com/search): Search weekend destinations, activities, and itineraries.
 
-- Home & AI Trip Generator: https://weekendtravellers.com/
-- Explore Destinations: https://weekendtravellers.com/explore
-- Travel Blog & Guides: https://weekendtravellers.com/blog
-- AI Travel Chat Assistant: https://weekendtravellers.com/chat
-- Saved Trips & Profile: https://weekendtravellers.com/trips
-- FAQ & Travel Help: https://weekendtravellers.com/faq
-- Contact & Support: https://weekendtravellers.com/contact
+## Travel Guides & Destinations
 
-## Top Destinations Covered
+- [Explore All Destinations](https://weekendtravellers.com/explore): Comprehensive index of weekend travel guides.
+- [India Weekend Getaways](https://weekendtravellers.com/explore/india): Guides for Goa, Rajasthan, Kerala, Himachal Pradesh, and Indian weekend getaways.
+- [International Escapes](https://weekendtravellers.com/explore/europe): Curated 2-4 day itineraries for Europe, Thailand, Bali, Dubai, and Japan.
 
-- **Himalayan & Hill Stations**: Shimla, Manali, Rishikesh, Leh Ladakh, Spiti Valley, Darjeeling, Mussoorie, Kasol, Munnar, Coorg, Ooty.
-- **Heritage & Royal Circuits**: Jaipur, Udaipur, Jodhpur, Jaisalmer, Varanasi, Hampi, Agra, Amritsar.
-- **Beach & Coastal Retreats**: Gokarna, Goa, Pondicherry, Alleppey, Andaman & Nicobar Islands, Varkala.
-- **International Getaways**: Dubai, Paris, Tokyo, Bali, Thailand, London, Rome, Venice, Amsterdam.
+## Articles & Information
 
-## Structured APIs & Feeds
+- [Travel Blog](https://weekendtravellers.com/blog): Packing lists, road trip guides, and budget travel articles.
+- [Travel FAQ](https://weekendtravellers.com/faq): Frequently asked questions about AI itineraries and bookings.
+- [About Us](https://weekendtravellers.com/about): Information about Weekend Travellers and our planning technology.
+- [Contact Us](https://weekendtravellers.com/contact): Get in touch with our editorial and support team.
+- [Dynamic Sitemap](https://weekendtravellers.com/sitemap.xml): Complete index of all site pages and dynamic itineraries.
 
-- RSS / Sitemap: https://weekendtravellers.com/sitemap.xml
-- Full LLM Documentation: https://weekendtravellers.com/llms-full.txt
+## Optional
+
+- [Full Site Documentation](https://weekendtravellers.com/llms-full.txt): Complete technical architecture, features, and detailed documentation file.
 `;
 
   return new NextResponse(content, {
