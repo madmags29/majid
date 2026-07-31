@@ -1,6 +1,20 @@
-# Weekend Travellers
+# Weekend Travellers - Full Documentation
 
 > Weekend Travellers is an advanced AI-powered travel planner that generates customized 2-day to 3-day weekend itineraries, curated travel guides, and road trips.
+
+## System Architecture
+
+### Frontend (Next.js App Router)
+- **Framework:** Next.js (App Router paradigm) with React and TypeScript.
+- **Styling:** Tailwind CSS with custom classes, gradients, and glassmorphism.
+- **Animation:** Framer Motion for micro-interactions, page transitions, and smooth scroll effects.
+- **UI Components:** Lucide React icons, Sonner toast notifications, custom-built modular components.
+
+### Backend (Node.js/Express)
+- **Framework:** Express.js with TypeScript in the `/backend` directory.
+- **Database:** MongoDB and Mongoose schemas (`User`, `Trip`, `Blog`).
+- **Authentication:** JWT (JSON Web Tokens) with authentication middleware.
+- **AI Integration:** Service layer dedicated to dynamically generating itineraries.
 
 ## Core Features & AI Tools
 
@@ -21,9 +35,3 @@
 - [About Us](https://weekendtravellers.com/about): Information about Weekend Travellers and our AI travel planning technology.
 - [Contact Us](https://weekendtravellers.com/contact): Get in touch with our team for feedback and inquiries.
 - [Sitemap](https://weekendtravellers.com/sitemap.xml): Complete sitemap of indexable pages and dynamic itineraries.
-
-## Technical Details
-
-- **Frontend:** Next.js (App Router), React, TypeScript, Tailwind CSS, Framer Motion.
-- **Backend:** Node.js, Express, MongoDB, Generative AI services.
-- **SEO & Accessibility:** Strict Server Components for rendering, OpenGraph, JSON-LD schemas, LLM readable summaries, dynamic sitemap indexing.

@@ -176,13 +176,17 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
       </AnimatePresence>
 
       <div className="fixed inset-0 bg-[#0f172a] -z-30" />
+      <div
+        className="fixed inset-0 bg-[#0f172a] -z-30 md:hidden bg-cover bg-center opacity-30 pointer-events-none"
+        style={{ backgroundImage: 'url("/video-poster.png")' }}
+      />
 
       {videoUrl && (
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: isVideoReady ? 1 : 0 }}
             transition={{ duration: 1 }}
-            className="fixed inset-0 w-full h-full -z-10 will-change-transform"
+            className="fixed inset-0 w-full h-full -z-10 will-change-transform hidden md:block"
         >
             <div className="absolute inset-0 bg-black/80 z-10" />
             <video
@@ -222,7 +226,7 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full bg-slate-800/50 border border-slate-700/50 hover:bg-blue-500/10 hover:border-blue-500/50 transition-all">
+                <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full bg-slate-800/50 border border-slate-700/50 hover:bg-blue-500/10 hover:border-blue-500/50 transition-all" aria-label="User profile menu">
                   <div className="flex h-full w-full items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-500 text-white font-bold text-xs shadow-lg shadow-blue-500/20">
                     {user.name.charAt(0).toUpperCase()}
                   </div>
@@ -267,7 +271,7 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
 
           <div className="relative w-full max-w-3xl mx-auto p-[1px] rounded-2xl z-50">
             <form onSubmit={handleSearch} className="relative w-full glass-panel p-3 rounded-2xl flex flex-col md:flex-row gap-3 border border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
-              <label className="relative flex-[2] flex items-center px-4 py-3 glass-input rounded-xl cursor-text" htmlFor="destination-input">
+              <label className="relative flex-[2] flex items-center px-4 py-3 glass-input rounded-xl cursor-text min-h-[48px]" htmlFor="destination-input">
                 <MapPin className="w-5 h-5 text-slate-300 mr-3 shrink-0" />
                 <input
                   id="destination-input"
@@ -283,11 +287,11 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
                 {searchQuery.length >= 3 && showAutocomplete && (
                   <div className="absolute top-[110%] left-0 right-0 mt-1 bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl z-[100] max-h-60 overflow-y-auto">
                     {EXLPORE_DESTINATIONS.filter(d => d.name.toLowerCase().includes(searchQuery.toLowerCase()) || d.country.toLowerCase().includes(searchQuery.toLowerCase())).map(place => (
-                      <div key={place.id} className="px-4 py-3 hover:bg-blue-500/10 cursor-pointer flex items-center gap-3 transition-colors text-left border-b border-white/5 last:border-0" onClick={() => { setSearchQuery(place.name); setShowAutocomplete(false); }}>
+                      <div key={place.id} className="px-4 py-3 hover:bg-blue-500/10 cursor-pointer flex items-center gap-3 transition-colors text-left border-b border-white/5 last:border-0 min-h-[44px]" onClick={() => { setSearchQuery(place.name); setShowAutocomplete(false); }}>
                         <MapPin className="w-4 h-4 text-slate-400 shrink-0" />
                         <div>
                           <div className="text-white font-medium text-sm">{place.name}</div>
-                          <div className="text-slate-400 text-[10px]">{place.country}</div>
+                          <div className="text-slate-400 text-xs">{place.country}</div>
                         </div>
                       </div>
                     ))}
@@ -302,7 +306,7 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
                 onRangeSelect={(start, end) => { setStartDate(start); setEndDate(end); }}
               />
 
-              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl px-8 py-3 h-auto text-lg shadow-lg">
+              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl px-8 py-3 min-h-[48px] text-lg shadow-lg">
                 <Search className="w-5 h-5 mr-2" /> Search
               </Button>
             </form>

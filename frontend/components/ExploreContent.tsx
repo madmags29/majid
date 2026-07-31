@@ -250,7 +250,7 @@ export default function ExploreContent({ slug, initialData }: { slug: string, in
                         </div>
                     </Link>
                     <div className="flex items-center gap-3">
-                        <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/10" onClick={handleShare}>
+                        <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/10" onClick={handleShare} aria-label="Share guide">
                             {isSharing ? <Check className="w-5 h-5 text-green-400" /> : <Share2 className="w-5 h-5" />}
                         </Button>
                         <Link href={`/search?destination=${encodeURIComponent(data.destination)}`}>

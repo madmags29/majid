@@ -262,9 +262,9 @@ export default async function BlogPostDetail({ params }: Props) {
                             <h4 className="text-xl font-bold text-white mb-2">{post.author || 'Editorial'}</h4>
                             <p className="text-slate-400 text-sm mb-6">Expert Travel Writer & AI Specialist at Weekend Travellers.</p>
                             <div className="flex justify-center gap-4">
-                                <button className="p-3 bg-slate-800 rounded-xl hover:bg-blue-600 transition-colors"><Facebook size={20} /></button>
-                                <button className="p-3 bg-slate-800 rounded-xl hover:bg-blue-400 transition-colors"><Twitter size={20} /></button>
-                                <button className="p-3 bg-slate-800 rounded-xl hover:bg-blue-700 transition-colors"><Linkedin size={20} /></button>
+                                <button className="p-3 bg-slate-800 rounded-xl hover:bg-blue-600 transition-colors" aria-label="Share on Facebook"><Facebook size={20} /></button>
+                                <button className="p-3 bg-slate-800 rounded-xl hover:bg-blue-400 transition-colors" aria-label="Share on Twitter"><Twitter size={20} /></button>
+                                <button className="p-3 bg-slate-800 rounded-xl hover:bg-blue-700 transition-colors" aria-label="Share on LinkedIn"><Linkedin size={20} /></button>
                             </div>
                         </div>
 

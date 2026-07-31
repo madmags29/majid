@@ -23,11 +23,11 @@ const Footer = () => {
                         <p className="text-sm text-slate-400 mb-4">
                             Discover your perfect weekend getaway. Plan, save, and share your adventures with ease.
                         </p>
-                        <div className="flex space-x-4">
-                            <Link href="https://instagram.com/weekendtravellers.official" target="_blank" rel="noopener noreferrer" className="hover:text-pink-500 transition-colors">
+                        <div className="flex space-x-2">
+                            <Link href="https://instagram.com/weekendtravellers.official" target="_blank" rel="noopener noreferrer" className="hover:text-pink-500 transition-colors p-2.5 rounded-lg hover:bg-white/5 min-w-[44px] min-h-[44px] flex items-center justify-center" aria-label="Follow Weekend Travellers on Instagram">
                                 <Instagram size={24} />
                             </Link>
-                            <Link href="https://youtube.com/@weekendtravellers.official" target="_blank" rel="noopener noreferrer" className="hover:text-red-500 transition-colors">
+                            <Link href="https://youtube.com/@weekendtravellers.official" target="_blank" rel="noopener noreferrer" className="hover:text-red-500 transition-colors p-2.5 rounded-lg hover:bg-white/5 min-w-[44px] min-h-[44px] flex items-center justify-center" aria-label="Subscribe to Weekend Travellers on YouTube">
                                 <Youtube size={24} />
                             </Link>
                         </div>
@@ -172,14 +172,14 @@ const Footer = () => {
                     </div>
                 </div>
 
-                <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-slate-500">
-                    <div className="flex flex-col md:flex-row gap-4 items-center">
+                <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-slate-400">
+                    <div className="flex flex-col md:flex-row gap-4 items-center text-center md:text-left">
                         <p>&copy; {new Date().getFullYear()} Weekend Travellers. All rights reserved. Powered By <Link href="https://devdesigns.net" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 transition-colors font-medium">Dev Designs</Link></p>
                     </div>
                     <div className="flex space-x-6 mt-4 md:mt-0">
-                        <Link href="/privacy" className="hover:text-slate-300">Privacy</Link>
-                        <Link href="/terms" className="hover:text-slate-300">Terms</Link>
-                        <Link href="/sitemap.xml" className="hover:text-slate-300">Sitemap</Link>
+                        <Link href="/privacy" className="hover:text-slate-200 py-1.5 px-2">Privacy</Link>
+                        <Link href="/terms" className="hover:text-slate-200 py-1.5 px-2">Terms</Link>
+                        <Link href="/sitemap.xml" className="hover:text-slate-200 py-1.5 px-2">Sitemap</Link>
                     </div>
                 </div>
             </div>

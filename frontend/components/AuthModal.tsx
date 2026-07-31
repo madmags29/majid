@@ -194,6 +194,7 @@ function AuthModalContent({ isOpen, onClose, initialMode = 'login' }: AuthModalP
                     <button
                         onClick={onClose}
                         className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white rounded-full hover:bg-white/10 transition-colors z-10"
+                        aria-label="Close authentication modal"
                     >
                         <X className="w-5 h-5" />
                     </button>

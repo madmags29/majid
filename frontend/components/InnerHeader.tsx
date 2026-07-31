@@ -75,6 +75,7 @@ export default function InnerHeader({
                     <Link
                         href={backHref || '/'}
                         className="p-2 hover:bg-slate-800 rounded-lg transition-colors text-slate-400 hover:text-white"
+                        aria-label="Go back"
                     >
                         <ArrowLeft className="w-5 h-5" />
                     </Link>

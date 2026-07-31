@@ -115,7 +115,7 @@ export default function DateRangePicker({ onRangeSelect, initialStart, initialEn
                 tabIndex={0}
                 onClick={() => setIsOpen(!isOpen)}
                 onKeyDown={(e) => e.key === 'Enter' && setIsOpen(!isOpen)}
-                className="flex items-center w-full px-4 py-3 glass-input rounded-xl focus:ring-2 focus:ring-blue-500/50 outline-none transition-all cursor-pointer group"
+                className="flex items-center w-full px-4 py-3 glass-input rounded-xl focus:ring-2 focus:ring-blue-500/50 outline-none transition-all cursor-pointer group min-h-[48px]"
             >
                 <Calendar className="w-5 h-5 text-slate-300 mr-3 shrink-0 group-hover:text-blue-400 transition-colors pointer-events-none" />
                 <span className={cn(
@@ -132,7 +132,9 @@ export default function DateRangePicker({ onRangeSelect, initialStart, initialEn
                             setEndDate(null);
                             onRangeSelect(null, null);
                         }}
-                        className="ml-2 p-1.5 hover:bg-white/10 rounded-full transition-colors cursor-pointer relative z-20"
+                        className="ml-2 p-2 hover:bg-white/10 rounded-full transition-colors cursor-pointer relative z-20 min-w-[36px] min-h-[36px] flex items-center justify-center"
+                        role="button"
+                        aria-label="Clear dates"
                     >
                         <X className="w-3.5 h-3.5 text-slate-400" />
                     </div>
@@ -145,13 +147,14 @@ export default function DateRangePicker({ onRangeSelect, initialStart, initialEn
                         initial={{ opacity: 0, y: 10, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                        className="absolute top-full left-0 mt-2 z-[9999] bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-2xl w-[280px]"
+                        className="absolute top-full left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0 mt-2 z-[9999] bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-2xl w-[280px] max-w-[calc(100vw-2rem)]"
                     >
                         <div className="flex items-center justify-between mb-4">
                             <button
                                 type="button"
                                 onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1))}
-                                className="p-1.5 hover:bg-white/10 rounded-lg text-slate-400"
+                                className="p-2 hover:bg-white/10 rounded-lg text-slate-400 min-w-[40px] min-h-[40px] flex items-center justify-center"
+                                aria-label="Previous month"
                             >
                                 <ChevronLeft className="w-4 h-4" />
                             </button>
@@ -161,7 +164,8 @@ export default function DateRangePicker({ onRangeSelect, initialStart, initialEn
                             <button
                                 type="button"
                                 onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1))}
-                                className="p-1.5 hover:bg-white/10 rounded-lg text-slate-400"
+                                className="p-2 hover:bg-white/10 rounded-lg text-slate-400 min-w-[40px] min-h-[40px] flex items-center justify-center"
+                                aria-label="Next month"
                             >
                                 <ChevronRight className="w-4 h-4" />
                             </button>
@@ -177,14 +181,14 @@ export default function DateRangePicker({ onRangeSelect, initialStart, initialEn
                                     handleDateClick(nextFri);
                                     handleDateClick(addDays(nextFri, 2));
                                 }}
-                                className="flex-1 text-[10px] font-bold bg-white/5 hover:bg-white/10 text-slate-300 py-2 rounded-lg border border-white/5 transition-colors"
+                                className="flex-1 text-xs font-bold bg-white/5 hover:bg-white/10 text-slate-300 py-2.5 rounded-lg border border-white/5 transition-colors min-h-[40px]"
                             >
                                 This Weekend
                             </button>
                             <button
                                 type="button"
                                 onClick={() => setIsOpen(false)}
-                                className="flex-1 text-[10px] font-bold bg-blue-600 hover:bg-blue-500 text-white py-2 rounded-lg shadow-lg shadow-blue-500/20 transition-colors"
+                                className="flex-1 text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white py-2.5 rounded-lg shadow-lg shadow-blue-500/20 transition-colors min-h-[40px]"
                             >
                                 Done
                             </button>

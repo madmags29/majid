@@ -13,7 +13,7 @@ export default function FaqHeader() {
         <header className="h-16 border-b border-slate-800 bg-slate-900/80 backdrop-blur-md flex items-center justify-between px-4 lg:px-6 sticky top-0 w-full z-50">
             <div className="flex items-center gap-3">
                 <Link href="/">
-                    <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/10">
+                    <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/10" aria-label="Back to home">
                         <ArrowLeft className="w-5 h-5 text-slate-300" />
                     </Button>
                 </Link>

@@ -85,7 +85,7 @@ export default function RightMenu() {
             {/* Header Toggle Button */}
             <motion.button
                 onClick={toggleMenu}
-                className="bg-transparent border border-white/10 hover:border-slate-700/50 p-2 rounded-xl hover:bg-white/5 transition-colors group flex items-center justify-center mr-2 md:mr-3"
+                className="bg-transparent border border-white/10 hover:border-slate-700/50 p-2.5 rounded-xl hover:bg-white/5 transition-colors group flex items-center justify-center mr-2 md:mr-3 min-w-[44px] min-h-[44px]"
                 transition={{ type: 'spring', stiffness: 200, damping: 20 }}
                 aria-label="Open Navigation Menu"
             >
@@ -116,7 +116,7 @@ export default function RightMenu() {
                                 animate={{ x: 0 }}
                                 exit={{ x: '-100%' }}
                                 transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                                className="fixed top-0 left-0 h-full w-80 bg-slate-900/95 backdrop-blur-xl border-r border-slate-800 shadow-2xl z-[9999] flex flex-col"
+                                className="fixed top-0 left-0 h-full w-[85vw] max-w-80 bg-slate-900/95 backdrop-blur-xl border-r border-slate-800 shadow-2xl z-[9999] flex flex-col"
                             >
                                 <div className="p-6 flex justify-between items-center border-b border-slate-800/50">
                                     <div className="flex items-center gap-2">
@@ -127,7 +127,7 @@ export default function RightMenu() {
                                     </div>
                                     <button
                                         onClick={toggleMenu}
-                                        className="p-2 rounded-full hover:bg-slate-800/80 text-slate-400 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                                        className="p-2.5 rounded-full hover:bg-slate-800/80 text-slate-400 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500/50 min-w-[44px] min-h-[44px] flex items-center justify-center"
                                         aria-label="Close Menu"
                                     >
                                         <X className="w-6 h-6" />
