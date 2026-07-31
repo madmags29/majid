@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { API_URL, IS_BUILD } from '@/lib/config';
 import ReactMarkdown from 'react-markdown';
 import CommentSection from '@/components/blog/CommentSection';
+import BlogSidebar from '@/components/blog/BlogSidebar';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
 // Configure dynamic routing handling gracefully
@@ -252,34 +253,7 @@ export default async function BlogPostDetail({ params }: Props) {
                 </article>
 
                 {/* Sidebar */}
-                <aside className="lg:w-1/3">
-                    <div className="sticky top-32 space-y-12">
-                        {/* Author Card */}
-                        <div className="p-8 bg-slate-900/50 rounded-3xl border border-slate-800 text-center">
-                            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 mx-auto mb-6 flex items-center justify-center text-white font-black text-3xl shadow-xl">
-                                {post.author ? post.author.charAt(0) : 'W'}
-                            </div>
-                            <h4 className="text-xl font-bold text-white mb-2">{post.author || 'Editorial'}</h4>
-                            <p className="text-slate-400 text-sm mb-6">Expert Travel Writer & AI Specialist at Weekend Travellers.</p>
-                            <div className="flex justify-center gap-4">
-                                <button className="p-3 bg-slate-800 rounded-xl hover:bg-blue-600 transition-colors" aria-label="Share on Facebook"><Facebook size={20} /></button>
-                                <button className="p-3 bg-slate-800 rounded-xl hover:bg-blue-400 transition-colors" aria-label="Share on Twitter"><Twitter size={20} /></button>
-                                <button className="p-3 bg-slate-800 rounded-xl hover:bg-blue-700 transition-colors" aria-label="Share on LinkedIn"><Linkedin size={20} /></button>
-                            </div>
-                        </div>
-
-                        {/* Share Card */}
-                        <div className="p-8 bg-gradient-to-br from-blue-600/10 to-indigo-600/10 rounded-3xl border border-blue-500/20">
-                            <h4 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                                <Share2 size={20} className="text-blue-500" /> Share this Guide
-                            </h4>
-                            <p className="text-slate-400 text-sm mb-6">Help your friends plan their next getaway by sharing this expert guide.</p>
-                            <Button className="w-full bg-white text-slate-950 hover:bg-blue-500 hover:text-white font-bold rounded-2xl py-6 transition-all shadow-xl">
-                                Copy Article Link
-                            </Button>
-                        </div>
-                    </div>
-                </aside>
+                <BlogSidebar author={post.author} title={post.title} slug={post.slug} />
             </main>
 
             {/* AdSense Optimization: High-Value Content Section */}
