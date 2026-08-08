@@ -149,6 +149,35 @@ const serviceJsonLd = {
   areaServed: 'Worldwide'
 };
 
+const travelAgencyJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'TravelAgency',
+  name: 'Weekend Travellers',
+  url: 'https://weekendtravellers.com',
+  logo: 'https://weekendtravellers.com/icon.svg',
+  image: 'https://weekendtravellers.com/og-image.png',
+  description: 'Global AI travel planner and intelligent weekend getaway generator for custom 2-4 day itineraries.',
+  telephone: '',
+  priceRange: '$$',
+  address: {
+    '@type': 'PostalAddress',
+    addressCountry: 'US'
+  },
+  sameAs: [
+    'https://instagram.com/weekendtravellers.official',
+    'https://youtube.com/@weekendtravellers.official'
+  ]
+};
+
+const brandJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Brand',
+  name: 'Weekend Travellers',
+  url: 'https://weekendtravellers.com',
+  logo: 'https://weekendtravellers.com/icon.svg',
+  description: 'AI-powered micro-vacation & weekend getaway planner platform.'
+};
+
 import CookieConsent from "@/components/CookieConsent";
 
 export default function RootLayout({
@@ -166,6 +195,7 @@ export default function RootLayout({
         />
         <link rel="author" href="https://weekendtravellers.com/about" />
         <link rel="help" href="https://weekendtravellers.com/llms.txt" />
+        <link rel="help" href="https://weekendtravellers.com/llms-full.txt" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${cursive.variable} antialiased`}
@@ -188,6 +218,14 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(travelAgencyJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(brandJsonLd) }}
         />
         <SmoothScroll>
           {children}

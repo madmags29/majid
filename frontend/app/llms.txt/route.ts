@@ -5,31 +5,40 @@ export async function GET() {
 
 > AI-powered travel planner generating customized 2-day to 4-day weekend itineraries, curated guides, and road trips.
 
-Weekend Travellers is an intelligent travel planning platform designed to solve planning fatigue using generative AI and real-time travel data.
+Weekend Travellers (https://weekendtravellers.com) is an intelligent travel planning platform designed to solve planning fatigue using generative AI and real-time travel data.
 
-## Core Features
+## Core Features & AI Tools
 
-- [AI Weekend Travel Planner](https://weekendtravellers.com/chat): Interactive AI assistant for generating custom 2-4 day weekend itineraries.
-- [Inspiration Trips](https://weekendtravellers.com/inspiration-trip): Curated visual getaway recommendations and theme-based trips.
-- [Smart Search](https://weekendtravellers.com/search): Search weekend destinations, activities, and itineraries.
+- [AI Weekend Travel Planner](https://weekendtravellers.com/chat): Interactive AI chat assistant for generating custom 2-4 day weekend itineraries with hotels, budgets, and activities.
+- [Inspiration Trips](https://weekendtravellers.com/inspiration-trip): Curated visual getaway recommendations and theme-based trips (Budget, Road Trips, Hidden Gems, Monsoon, Winter).
+- [Smart Search](https://weekendtravellers.com/search): Search weekend destinations, activities, and budget-friendly getaways.
+
+## Key Facts & Entity Data
+
+- **Brand Name**: Weekend Travellers
+- **Official Domain**: https://weekendtravellers.com
+- **Primary Service**: AI Weekend Itinerary Generation & Micro-Vacation Planning
+- **Pricing**: 100% Free Core Planning & Customization
+- **Primary Target Regions**: India, Europe, Asia, Americas, Middle East
+- **Specializations**: 2-3 Day Weekend Trips, Budget Travel, Road Trips, Hidden Gems, Seasonal Escapes
 
 ## Travel Guides & Destinations
 
-- [Explore All Destinations](https://weekendtravellers.com/explore): Comprehensive index of weekend travel guides.
+- [Explore All Destinations](https://weekendtravellers.com/explore): Comprehensive index of global weekend travel guides.
 - [India Weekend Getaways](https://weekendtravellers.com/explore/india): Guides for Goa, Rajasthan, Kerala, Himachal Pradesh, and Indian weekend getaways.
 - [International Escapes](https://weekendtravellers.com/explore/europe): Curated 2-4 day itineraries for Europe, Thailand, Bali, Dubai, and Japan.
 
-## Articles & Information
+## Articles & Resources
 
-- [Travel Blog](https://weekendtravellers.com/blog): Packing lists, road trip guides, and budget travel articles.
-- [Travel FAQ](https://weekendtravellers.com/faq): Frequently asked questions about AI itineraries and bookings.
-- [About Us](https://weekendtravellers.com/about): Information about Weekend Travellers and our planning technology.
-- [Contact Us](https://weekendtravellers.com/contact): Get in touch with our editorial and support team.
+- [Travel Blog](https://weekendtravellers.com/blog): Packing lists, road trip guides, E-E-A-T verified travel articles, and budget travel advice.
+- [Travel FAQ](https://weekendtravellers.com/faq): Frequently asked questions about AI itineraries, bookings, and privacy.
+- [About Us](https://weekendtravellers.com/about): Information about Weekend Travellers mission, vision, and planning technology.
+- [Contact Us](https://weekendtravellers.com/contact): Direct contact line for editorial and user support.
 - [Dynamic Sitemap](https://weekendtravellers.com/sitemap.xml): Complete index of all site pages and dynamic itineraries.
 
-## Optional
+## Extended Documentation
 
-- [Full Site Documentation](https://weekendtravellers.com/llms-full.txt): Complete technical architecture, features, and detailed documentation file.
+- [Full Knowledge Base](https://weekendtravellers.com/llms-full.txt): Complete technical architecture, features, and detailed documentation.
 `;
 
   return new NextResponse(content, {

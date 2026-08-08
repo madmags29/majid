@@ -19,8 +19,28 @@ export const metadata: Metadata = {
 };
 
 export default function AboutPage() {
+    const aboutPageSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'AboutPage',
+        name: 'About Weekend Travellers',
+        url: 'https://weekendtravellers.com/about',
+        description: 'Discover how Weekend Travellers uses advanced AI to curate the best 2 & 3 day weekend itineraries, hidden gems, and road trip plans.',
+        mainEntity: {
+            '@type': 'Organization',
+            name: 'Weekend Travellers',
+            url: 'https://weekendtravellers.com',
+            logo: 'https://weekendtravellers.com/icon.svg',
+            foundingDate: '2024',
+            description: 'Global AI travel planner and intelligent weekend getaway generator.'
+        }
+    };
+
     return (
         <div className="min-h-screen bg-slate-950 text-slate-100 py-20 px-6">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutPageSchema) }}
+            />
             <div className="max-w-4xl mx-auto space-y-16">
                 {/* Header */}
                 <div className="text-center space-y-6">

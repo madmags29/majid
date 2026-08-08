@@ -31,7 +31,8 @@ export default function robots(): MetadataRoute.Robots {
         ],
         sitemap: [
             `${baseUrl}/sitemap.xml`,
-            `${baseUrl}/llms.txt`
+            `${baseUrl}/llms.txt`,
+            `${baseUrl}/llms-full.txt`
         ],
     };
 }

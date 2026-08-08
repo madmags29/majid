@@ -24,6 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { url: `${baseUrl}/terms`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.3 },
         { url: `${baseUrl}/cookie-policy`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.3 },
         { url: `${baseUrl}/inspiration-trip`, lastModified: new Date(), changeFrequency: 'daily' as const, priority: 0.7 },
+        { url: `${baseUrl}/chat`, lastModified: new Date(), changeFrequency: 'daily' as const, priority: 0.9 },
     ];
 
     // 2. Categories
