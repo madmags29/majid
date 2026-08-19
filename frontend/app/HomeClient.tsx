@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import Image from 'next/image';
 import AnimatedLogo from '@/components/AnimatedLogo';
 import TypewriterText from '@/components/TypewriterText';
 import DateRangePicker from '@/components/DateRangePicker';
@@ -33,7 +34,7 @@ import {
 
 export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any[] }) {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -181,10 +182,16 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
       </AnimatePresence>
 
       <div className="fixed inset-0 bg-[#0f172a] -z-30" />
-      <div
-        className="fixed inset-0 bg-[#0f172a] -z-30 md:hidden bg-cover bg-center opacity-30 pointer-events-none"
-        style={{ backgroundImage: 'url("/video-poster.png")' }}
-      />
+      <div className="fixed inset-0 bg-[#0f172a] -z-30 md:hidden pointer-events-none">
+        <Image
+          src="/video-poster.png"
+          alt="Destination background"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover opacity-30"
+        />
+      </div>
 
       {videoUrl && (
         <motion.div
