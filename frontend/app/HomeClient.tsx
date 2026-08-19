@@ -86,19 +86,36 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
   }, []);
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.innerWidth >= 768) {
-      fetch(`/api/background-video`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.url) {
-            setVideoUrl(data.url);
-            if (data.photographer) {
-              setVideoCredit({ name: data.photographer, url: data.photographer_url });
-            }
+    fetch(`/api/background-video`)
+      .then(res => {
+        if (!res.ok) throw new Error('API non-200');
+        return res.json();
+      })
+      .then(data => {
+        if (data && data.url) {
+          setVideoUrl(data.url);
+          if (data.photographer) {
+            setVideoCredit({ name: data.photographer, url: data.photographer_url });
           }
-        })
-        .catch(err => console.error("Failed to load video", err));
-    }
+        }
+      })
+      .catch(err => {
+        console.warn("Local API video fetch failed, trying production backend fallback:", err);
+        fetch(`https://backend-flax-eight-93.vercel.app/api/background-video`)
+          .then(res => res.json())
+          .then(data => {
+            if (data && data.url) {
+              setVideoUrl(data.url);
+              if (data.photographer) {
+                setVideoCredit({ name: data.photographer, url: data.photographer_url });
+              }
+            }
+          })
+          .catch(() => {
+            setVideoUrl('https://images.pexels.com/video-files/3015510/3015510-hd_1920_1080_24fps.mp4');
+            setVideoCredit({ name: 'Pexels', url: 'https://pexels.com' });
+          });
+      });
 
     const cachedLoc = typeof window !== 'undefined' ? sessionStorage.getItem('userLocation') : null;
     if (cachedLoc) {
@@ -207,6 +224,7 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
                 muted
                 playsInline
                 onLoadedData={() => setIsVideoReady(true)}
+                onCanPlay={() => setIsVideoReady(true)}
                 className="w-full h-full object-cover"
                 poster="/video-poster.png"
                 title="Destination background"

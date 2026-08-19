@@ -166,7 +166,7 @@ export default function ExploreContent({ slug, initialData }: { slug: string, in
         }
     };
 
-    const [isMediaReady, setIsMediaReady] = useState(false);
+    const [isMediaReady, setIsMediaReady] = useState(true);
 
     // Manage transitions manually to ensure AnimatePresence works properly
     if (loading) {
@@ -293,6 +293,7 @@ export default function ExploreContent({ slug, initialData }: { slug: string, in
                             muted
                             playsInline
                             onLoadedData={() => setIsMediaReady(true)}
+                            onCanPlay={() => setIsMediaReady(true)}
                             className="w-full h-full object-cover"
                             poster={data.heroImage?.url}
                         >
@@ -302,7 +303,6 @@ export default function ExploreContent({ slug, initialData }: { slug: string, in
                         <div
                             className="w-full h-full bg-cover bg-center"
                             style={{ backgroundImage: `url(${data.heroImage?.url || 'https://images.pexels.com/photos/2044434/pexels-photo-2044434.jpeg'})` }}
-                            onLoad={() => setIsMediaReady(true)}
                         />
                     )}
                 </motion.div>

@@ -387,11 +387,11 @@ function SearchClient() {
         if (!currentItineraryData) return;
 
         try {
-            const response = await fetch(`${API_URL} /api/trips`, {
+            const response = await fetch(`${API_URL}/api/trips`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')} `
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
                 },
                 body: JSON.stringify(currentItineraryData),
             });
