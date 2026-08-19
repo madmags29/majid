@@ -38,58 +38,58 @@ export default function CookieConsent() {
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: 100, opacity: 0 }}
                     transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                    className="fixed bottom-4 left-4 right-4 md:left-auto md:right-8 md:max-w-md z-[10000]"
+                    className="fixed bottom-2 left-2 right-2 sm:bottom-4 sm:left-4 sm:right-4 md:left-auto md:right-8 md:max-w-md z-[10000]"
                 >
-                    <div className="relative overflow-hidden rounded-2xl bg-slate-900/90 backdrop-blur-xl border border-white/10 shadow-2xl p-5 md:p-6">
+                    <div className="relative overflow-hidden rounded-2xl bg-slate-900/95 sm:bg-slate-900/90 backdrop-blur-md sm:backdrop-blur-xl border border-white/10 shadow-2xl p-4 sm:p-5 md:p-6">
                         {/* Decorative Background */}
-                        <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-blue-500/10 blur-3xl rounded-full" />
-                        <div className="absolute bottom-0 left-0 -ml-8 -mb-8 w-32 h-32 bg-purple-500/10 blur-3xl rounded-full" />
+                        <div className="hidden sm:block absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-blue-500/10 blur-3xl rounded-full" />
+                        <div className="hidden sm:block absolute bottom-0 left-0 -ml-8 -mb-8 w-32 h-32 bg-purple-500/10 blur-3xl rounded-full" />
 
-                        <div className="relative flex flex-col gap-4">
-                            <div className="flex items-start justify-between">
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-blue-500/20 rounded-lg">
-                                        <Cookie className="w-5 h-5 text-blue-400" />
+                        <div className="relative flex flex-col gap-2.5 sm:gap-4">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2.5 sm:gap-3">
+                                    <div className="p-1.5 sm:p-2 bg-blue-500/20 rounded-lg">
+                                        <Cookie className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" />
                                     </div>
-                                    <h3 className="text-lg font-semibold text-white">Cookie Settings</h3>
+                                    <h3 className="text-base sm:text-lg font-semibold text-white">Cookie Settings</h3>
                                 </div>
                                 <button
                                     onClick={() => setIsVisible(false)}
-                                    className="p-2 hover:bg-white/10 rounded-full transition-colors text-slate-400 min-w-[44px] min-h-[44px] flex items-center justify-center"
+                                    className="p-1.5 sm:p-2 hover:bg-white/10 rounded-full transition-colors text-slate-400 min-w-[40px] min-h-[40px] flex items-center justify-center"
                                     aria-label="Close cookie consent banner"
                                 >
-                                    <X className="w-5 h-5" />
+                                    <X className="w-4 h-4 sm:w-5 sm:h-5" />
                                 </button>
                             </div>
 
-                            <p className="text-slate-300 text-sm leading-relaxed">
+                            <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
                                 We use cookies to enhance your experience, analyze site traffic, and serve personalized ads via Google AdSense.
                                 By clicking &ldquo;Accept&rdquo;, you consent to our use of cookies.
                             </p>
 
-                            <div className="flex flex-col sm:flex-row gap-3 mt-2">
+                            <div className="flex flex-row gap-2.5 sm:gap-3 mt-1 sm:mt-2">
                                 <button
                                     onClick={handleAccept}
-                                    className="flex-1 px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white rounded-xl font-medium transition-all shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2 min-h-[48px]"
+                                    className="flex-1 px-3 py-2.5 sm:px-4 sm:py-3 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white rounded-xl text-xs sm:text-sm font-medium transition-all shadow-lg shadow-blue-500/25 flex items-center justify-center gap-1.5 sm:gap-2 min-h-[44px] sm:min-h-[48px]"
                                 >
-                                    <Check className="w-4 h-4" />
+                                    <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                     Accept All
                                 </button>
                                 <button
                                     onClick={handleDecline}
-                                    className="flex-1 px-4 py-3 bg-white/5 hover:bg-white/10 text-slate-300 rounded-xl font-medium border border-white/10 transition-all flex items-center justify-center gap-2 min-h-[48px]"
+                                    className="flex-1 px-3 py-2.5 sm:px-4 sm:py-3 bg-white/5 hover:bg-white/10 text-slate-300 rounded-xl text-xs sm:text-sm font-medium border border-white/10 transition-all flex items-center justify-center gap-1.5 sm:gap-2 min-h-[44px] sm:min-h-[48px]"
                                 >
                                     Reject
                                 </button>
                             </div>
 
-                            <div className="flex items-center justify-center gap-4 text-xs text-slate-400 mt-1">
-                                <Link href="/privacy" className="hover:text-blue-400 transition-colors flex items-center gap-1 min-h-[44px]">
-                                    <ShieldCheck className="w-3.5 h-3.5" />
+                            <div className="flex items-center justify-center gap-3 sm:gap-4 text-[10px] sm:text-xs text-slate-400 mt-0.5 sm:mt-1">
+                                <Link href="/privacy" className="hover:text-blue-400 transition-colors flex items-center gap-1 min-h-[36px]">
+                                    <ShieldCheck className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                                     Privacy Policy
                                 </Link>
                                 <span>•</span>
-                                <Link href="/cookie-policy" className="hover:text-blue-400 transition-colors flex items-center min-h-[44px]">
+                                <Link href="/cookie-policy" className="hover:text-blue-400 transition-colors flex items-center min-h-[36px]">
                                     Cookie Policy
                                 </Link>
                             </div>

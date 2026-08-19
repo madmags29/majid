@@ -85,17 +85,19 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
   }, []);
 
   useEffect(() => {
-    fetch(`/api/background-video`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.url) {
-          setVideoUrl(data.url);
-          if (data.photographer) {
-            setVideoCredit({ name: data.photographer, url: data.photographer_url });
+    if (typeof window !== 'undefined' && window.innerWidth >= 768) {
+      fetch(`/api/background-video`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.url) {
+            setVideoUrl(data.url);
+            if (data.photographer) {
+              setVideoCredit({ name: data.photographer, url: data.photographer_url });
+            }
           }
-        }
-      })
-      .catch(err => console.error("Failed to load video", err));
+        })
+        .catch(err => console.error("Failed to load video", err));
+    }
 
     const cachedLoc = typeof window !== 'undefined' ? sessionStorage.getItem('userLocation') : null;
     if (cachedLoc) {
@@ -160,7 +162,7 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
       setIsLoading(false);
       return;
     }
-    const delay = window.innerWidth < 768 ? 800 : 2500;
+    const delay = window.innerWidth < 768 ? 400 : 2500;
     const timer = setTimeout(() => {
       setIsLoading(false);
       if (typeof window !== 'undefined') sessionStorage.setItem('hasSeenCinematicLoader', 'true');
@@ -212,12 +214,12 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
       <FloatingDestinations />
       <LocationAssistant onLocationFound={handleLocationFound} />
 
-      <header className="w-full py-4 px-6 flex justify-between items-center z-50">
-        <div className="flex items-center gap-2">
+      <header className="w-full py-3 px-4 sm:py-4 sm:px-6 flex justify-between items-center z-50">
+        <div className="flex items-center gap-1.5 sm:gap-2 overflow-hidden">
           <RightMenu />
-          <Link href="/" className="flex items-center gap-2 hover:opacity-100 group/logo transition-all">
-            <AnimatedLogo className="w-8 h-8 md:w-10 md:h-10 text-blue-400 group-hover/logo:scale-110 transition-transform" />
-            <div className="text-2xl md:text-3xl text-white drop-shadow-md font-cursive group-hover/logo:text-blue-400 transition-colors">
+          <Link href="/" className="flex items-center gap-2 hover:opacity-100 group/logo transition-all shrink-0">
+            <AnimatedLogo className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-blue-400 group-hover/logo:scale-110 transition-transform shrink-0" />
+            <div className="text-lg sm:text-2xl md:text-3xl text-white drop-shadow-md font-cursive group-hover/logo:text-blue-400 transition-colors truncate max-w-[180px] xs:max-w-none">
               weekendtravellers.com
             </div>
           </Link>
@@ -261,17 +263,17 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
           <div className="flex justify-center mb-6 min-h-[40px]">
             <VisitorCounter />
           </div>
-          <h1 className="text-3xl md:text-7xl font-extrabold text-white tracking-tight mb-6 drop-shadow-2xl">
+          <h1 className="text-3xl sm:text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-4 sm:mb-6 drop-shadow-2xl">
             Discover Your Perfect <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200">Weekend Getaway</span>
           </h1>
-          <p className="text-lg md:text-xl text-slate-100 mb-12 max-w-2xl mx-auto leading-relaxed drop-shadow-md font-medium">
+          <p className="text-base sm:text-lg md:text-xl text-slate-100 mb-8 sm:mb-12 max-w-2xl mx-auto leading-relaxed drop-shadow-md font-medium px-2">
             Just tell us where you want to go, or let us surprise you.
           </p>
 
           <div className="relative w-full max-w-3xl mx-auto p-[1px] rounded-2xl z-50">
-            <form onSubmit={handleSearch} className="relative w-full glass-panel p-3 rounded-2xl flex flex-col md:flex-row gap-3 border border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
-              <label className="relative flex-[2] flex items-center px-4 py-3 glass-input rounded-xl cursor-text min-h-[48px]" htmlFor="destination-input">
+            <form onSubmit={handleSearch} className="relative w-full glass-panel p-2.5 sm:p-3 rounded-2xl flex flex-col md:flex-row gap-2.5 sm:gap-3 border border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
+              <label className="relative flex-[2] flex items-center px-3.5 sm:px-4 py-2.5 sm:py-3 glass-input rounded-xl cursor-text min-h-[46px] sm:min-h-[48px]" htmlFor="destination-input">
                 <MapPin className="w-5 h-5 text-slate-300 mr-3 shrink-0" />
                 <input
                   id="destination-input"

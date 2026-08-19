@@ -29,7 +29,6 @@ const cursive = Sacramento({
 
 
 
-import Script from "next/script";
 import { GoogleAnalytics } from "@next/third-parties/google";
 
 import { GOOGLE_CLIENT_ID, SITE_URL } from '@/lib/config';
@@ -188,11 +187,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460255466960810"
-          crossOrigin="anonymous"
-        />
         <link rel="author" href="https://weekendtravellers.com/about" />
         <link rel="help" href="https://weekendtravellers.com/llms.txt" />
         <link rel="help" href="https://weekendtravellers.com/llms-full.txt" />
@@ -201,6 +195,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${cursive.variable} antialiased`}
         suppressHydrationWarning
       >
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460255466960810"
+          crossOrigin="anonymous"
+        />
         <GoogleAnalytics gaId="G-4FBK6YT104" />
 
         <script
