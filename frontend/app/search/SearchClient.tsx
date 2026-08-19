@@ -263,17 +263,34 @@ function SearchClient() {
                     requestedDays = daysMatch ? parseInt(daysMatch[1]) : 2;
                 }
 
-                const response = await fetch(`/api/search`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        destination: dest,
-                        days: requestedDays,
-                        origin,
-                        startDate: startDate || oldDate,
-                        endDate: endDate
-                    }),
-                });
+                let response;
+                try {
+                    response = await fetch(`/api/search`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            destination: dest,
+                            days: requestedDays,
+                            origin,
+                            startDate: startDate || oldDate,
+                            endDate: endDate
+                        }),
+                    });
+                    if (!response.ok) throw new Error('Local search API non-200');
+                } catch (localErr) {
+                    console.warn("Local search API failed, trying production backend fallback:", localErr);
+                    response = await fetch(`https://backend-flax-eight-93.vercel.app/api/search`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            destination: dest,
+                            days: requestedDays,
+                            origin,
+                            startDate: startDate || oldDate,
+                            endDate: endDate
+                        }),
+                    });
+                }
 
                 if (!response.ok) throw new Error('Failed to fetch itinerary');
 
