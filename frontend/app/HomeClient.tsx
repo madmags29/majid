@@ -103,28 +103,31 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
     if (cachedLoc) {
       setUserLocation(cachedLoc);
     } else if (!userLocation) {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 2000);
+      const fetchTimer = setTimeout(() => {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 2000);
 
-      fetch('https://ipapi.co/json/', { signal: controller.signal })
-        .then(async res => {
-            if (!res.ok) throw new Error('ipapi rate limit or error');
-            return res.json();
-        })
-        .then(data => {
-          clearTimeout(timeoutId);
-          const location = data.city ? `${data.city}, ${data.country_name}` : data.country_name || 'Global';
-          setUserLocation(prev => prev || location);
-          if (typeof window !== 'undefined') sessionStorage.setItem('userLocation', location);
-        })
-        .catch(err => {
-          clearTimeout(timeoutId);
-          console.warn("Geolocation failed on Home:", err);
-          if (!userLocation) {
-             setUserLocation('Global');
-             if (typeof window !== 'undefined') sessionStorage.setItem('userLocation', 'Global');
-          }
-        });
+        fetch('https://ipapi.co/json/', { signal: controller.signal })
+          .then(async res => {
+              if (!res.ok) throw new Error('ipapi rate limit or error');
+              return res.json();
+          })
+          .then(data => {
+            clearTimeout(timeoutId);
+            const location = data.city ? `${data.city}, ${data.country_name}` : data.country_name || 'Global';
+            setUserLocation(prev => prev || location);
+            if (typeof window !== 'undefined') sessionStorage.setItem('userLocation', location);
+          })
+          .catch(err => {
+            clearTimeout(timeoutId);
+            console.warn("Geolocation failed on Home:", err);
+            if (!userLocation) {
+               setUserLocation('Global');
+               if (typeof window !== 'undefined') sessionStorage.setItem('userLocation', 'Global');
+            }
+          });
+      }, 1500);
+      return () => clearTimeout(fetchTimer);
     }
   }, []);
 

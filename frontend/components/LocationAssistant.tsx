@@ -106,7 +106,7 @@ const LocationAssistant: React.FC<LocationAssistantProps> = ({ onLocationFound }
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 50 }}
-                className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] w-full max-w-sm px-4"
+                className="fixed bottom-28 sm:bottom-24 md:bottom-20 left-1/2 -translate-x-1/2 z-[99] w-full max-w-sm px-4"
             >
                 <div className="bg-slate-900/95 backdrop-blur-xl border border-blue-500/30 rounded-2xl p-4 shadow-[0_20px_50px_rgba(0,0,0,0.5)] border-t-white/10 flex flex-col gap-3">
                     <div className="flex items-start gap-3">

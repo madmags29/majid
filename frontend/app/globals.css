@@ -293,3 +293,14 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #334155;
 }
+
+@keyframes floatPulse {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.05);
+  }
+}
