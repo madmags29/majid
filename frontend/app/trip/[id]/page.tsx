@@ -10,7 +10,7 @@ interface Props {
 }
 
 async function getTrip(id: string) {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
+    const apiUrl = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || 'https://backend-flax-eight-93.vercel.app';
     const res = await fetch(`${apiUrl}/api/trips/${id}`, { next: { revalidate: 3600 } });
 
     if (!res.ok) {
@@ -74,8 +74,35 @@ export default async function TripPage({ params }: Props) {
     const createdDate = new Date(createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
     const heroImage = itinerary.heroImage?.url || itinerary.days?.[0]?.activities?.[0]?.imageUrl || 'https://images.pexels.com/photos/346885/pexels-photo-346885.jpeg?auto=compress&cs=tinysrgb&w=1200';
 
+    const tripSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'Trip',
+        name: `${destination} Weekend Getaway Itinerary`,
+        description: itinerary.summary || `Personalized AI weekend itinerary for ${destination}.`,
+        itinerary: {
+            '@type': 'ItemList',
+            numberOfItems: itinerary.days?.length || 2,
+            itemListElement: itinerary.days?.map((day: any, idx: number) => ({
+                '@type': 'ListItem',
+                position: idx + 1,
+                name: `Day ${day.day || idx + 1}: ${day.title || destination}`,
+                description: day.summary || day.activities?.map((a: any) => a.title).join(', ')
+            }))
+        },
+        touristType: ['Weekend Traveler', 'Vacationer'],
+        provider: {
+            '@type': 'Organization',
+            name: 'Weekend Travellers',
+            url: 'https://weekendtravellers.com'
+        }
+    };
+
     return (
         <div className="min-h-screen bg-slate-950 text-white selection:bg-blue-500/30 pb-20">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(tripSchema) }}
+            />
             <InnerHeader
                 title={destination}
                 subtitle="Curated Trip"

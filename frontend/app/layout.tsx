@@ -177,6 +177,37 @@ const brandJsonLd = {
   description: 'AI-powered micro-vacation & weekend getaway planner platform.'
 };
 
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: 'https://weekendtravellers.com'
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Explore Getaways',
+      item: 'https://weekendtravellers.com/explore'
+    },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: 'AI Trip Planner',
+      item: 'https://weekendtravellers.com/chat'
+    },
+    {
+      '@type': 'ListItem',
+      position: 4,
+      name: 'Travel Blog',
+      item: 'https://weekendtravellers.com/blog'
+    }
+  ]
+};
+
 import CookieConsent from "@/components/CookieConsent";
 
 export default function RootLayout({
@@ -225,6 +256,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(brandJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
         />
         <SmoothScroll>
           {children}

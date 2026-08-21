@@ -136,11 +136,40 @@ export default async function BlogPostDetail({ params }: Props) {
         }))
     } : null;
 
+    const breadcrumbSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: 'https://weekendtravellers.com'
+            },
+            {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Blog',
+                item: 'https://weekendtravellers.com/blog'
+            },
+            {
+                '@type': 'ListItem',
+                position: 3,
+                name: post.title,
+                item: `https://weekendtravellers.com/blog/${post.slug}`
+            }
+        ]
+    };
+
     return (
         <main className="min-h-screen bg-[#020617] text-slate-200 pb-20">
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
             />
             {faqSchema && (
                 <script

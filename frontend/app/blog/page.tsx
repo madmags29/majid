@@ -1,6 +1,23 @@
 import React from 'react';
+import type { Metadata } from 'next';
 import BlogClientPage from './BlogClientPage';
 import { API_URL, IS_BUILD } from '@/lib/config';
+
+export const metadata: Metadata = {
+    title: 'Travel Blog & Getaway Guides | Weekend Travellers',
+    description: 'Explore expert travel guides, weekend trip itineraries, road trip tips, and AI travel advice for top destinations in India, Europe, Asia, and worldwide.',
+    keywords: [
+        'travel blog', 'weekend getaway guides', 'road trip itineraries', 'best travel spots 2026', 'AI travel planning blog', 'budget travel tips'
+    ],
+    openGraph: {
+        title: 'Travel Blog & Getaway Guides | Weekend Travellers',
+        description: 'Explore expert travel guides, weekend trip itineraries, road trip tips, and AI travel advice worldwide.',
+        type: 'website',
+    },
+    alternates: {
+        canonical: '/blog',
+    },
+};
 
 // Revalidate the blog list every hour
 export const revalidate = 3600;
@@ -32,10 +49,25 @@ export default async function BlogLandingPage() {
         console.error('Failed to fetch blog posts:', error);
     }
     
-    // Pass the purely-rendered posts to the client component to animate them
-    // This perfectly solves exactly what the client requested - SSR!
+    const blogCollectionSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        name: 'Weekend Travellers Travel Blog',
+        url: 'https://weekendtravellers.com/blog',
+        description: 'Explore expert travel guides, weekend trip itineraries, road trip tips, and AI travel advice.',
+        publisher: {
+            '@type': 'Organization',
+            name: 'Weekend Travellers',
+            logo: 'https://weekendtravellers.com/icon.svg'
+        }
+    };
+
     return (
         <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(blogCollectionSchema) }}
+            />
             <div className="sr-only">
                 {/* Fallback semantic text strictly for crawlers on index */}
                 <h1>Ultimate Weekend Getaway and Travel Blog</h1>

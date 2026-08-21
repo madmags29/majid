@@ -21,5 +21,32 @@ export default function ContactLayout({
 }: {
     children: React.ReactNode;
 }) {
-    return <>{children}</>;
+    const contactSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'ContactPage',
+        name: 'Contact Weekend Travellers',
+        url: 'https://weekendtravellers.com/contact',
+        description: 'Contact Weekend Travellers support team for inquiries, feedback, and partnerships.',
+        mainEntity: {
+            '@type': 'Organization',
+            name: 'Weekend Travellers',
+            url: 'https://weekendtravellers.com',
+            contactPoint: {
+                '@type': 'ContactPoint',
+                email: 'support@weekendtravellers.com',
+                contactType: 'customer support',
+                availableLanguage: ['English']
+            }
+        }
+    };
+
+    return (
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(contactSchema) }}
+            />
+            {children}
+        </>
+    );
 }

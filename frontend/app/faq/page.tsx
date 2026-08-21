@@ -1,8 +1,25 @@
 import React from 'react';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowLeft, HelpCircle, Compass, ShieldCheck, CreditCard, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import FaqHeader from './FaqHeader';
+
+export const metadata: Metadata = {
+    title: 'Frequently Asked Questions (FAQ) | AI Travel Planner Insights',
+    description: 'Find direct answers to common questions about Weekend Travellers AI itinerary generation, budget travel, customization, hotel bookings, and travel security.',
+    keywords: [
+        'AI travel planner FAQ', 'weekend trip planner questions', 'AI itinerary generator help', 'weekend travellers support', 'free travel planner AI', 'micro-vacation answers'
+    ],
+    openGraph: {
+        title: 'Frequently Asked Questions (FAQ) | Weekend Travellers',
+        description: 'Find direct answers to common questions about Weekend Travellers AI itinerary generation, budget travel, customization, hotel bookings, and travel security.',
+        type: 'website',
+    },
+    alternates: {
+        canonical: '/faq',
+    },
+};
 
 const faqs = [
     {
