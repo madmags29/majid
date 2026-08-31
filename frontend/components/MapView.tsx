@@ -252,6 +252,12 @@ export default function MapView({ itinerary, selectedActivity, isExpanded }: Map
                                             src={loc.imageUrl}
                                             alt={loc.location}
                                             className="w-full h-full object-cover"
+                                            onError={(e) => {
+                                                const target = e.target as HTMLImageElement;
+                                                if (!target.src.includes('pexels-photo-346885')) {
+                                                    target.src = 'https://images.pexels.com/photos/346885/pexels-photo-346885.jpeg?auto=compress&cs=tinysrgb&w=600';
+                                                }
+                                            }}
                                         />
                                     </div>
                                 )}

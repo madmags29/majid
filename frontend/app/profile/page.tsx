@@ -23,6 +23,7 @@ export default function ProfilePage() {
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [imgError, setImgError] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -188,9 +189,14 @@ export default function ProfilePage() {
                                 <div className="flex items-center gap-6">
                                     <div className="relative group">
                                         <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-3xl font-bold text-white overflow-hidden border-4 border-slate-800 shadow-lg">
-                                            {picture ? (
+                                            {picture && !imgError ? (
                                                 /* eslint-disable-next-line @next/next/no-img-element */
-                                                <img src={picture} alt={name} className="w-full h-full object-cover" />
+                                                <img 
+                                                    src={picture} 
+                                                    alt={name} 
+                                                    className="w-full h-full object-cover" 
+                                                    onError={() => setImgError(true)}
+                                                />
                                             ) : (
                                                 name.charAt(0).toUpperCase()
                                             )}

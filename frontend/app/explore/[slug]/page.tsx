@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { MapPin, ArrowLeft } from 'lucide-react';
 import InnerHeader from '@/components/InnerHeader';
+import ShareTripButton from '@/components/ShareTripButton';
 import DirectItineraryDisplay from '@/components/DirectItineraryDisplay';
 import ItineraryDisplay from '@/components/ItineraryDisplay';
 import RelatedDestinations from '@/components/RelatedDestinations';
@@ -153,7 +154,13 @@ export default async function DestinationPage({ params }: Props) {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(tripSchema) }}
             />
-            <InnerHeader title={destination.name} subtitle="Curated Destination" showBack backHref="/explore" />
+            <InnerHeader 
+                title={destination.name} 
+                subtitle="Curated Destination" 
+                showBack 
+                backHref="/explore" 
+                actions={<ShareTripButton destination={destination.name} variant="header" />}
+            />
             
             <div className="max-w-6xl mx-auto px-4 pt-4">
                 <Breadcrumbs 

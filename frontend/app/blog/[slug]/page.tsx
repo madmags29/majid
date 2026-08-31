@@ -191,7 +191,7 @@ export default async function BlogPostDetail({ params }: Props) {
             {/* Hero Section */}
             <header className="relative w-full h-[60vh] min-h-[400px]">
                 <Image
-                    src={post.heroImage || '/placeholder.jpg'}
+                    src={post.heroImage || 'https://images.pexels.com/photos/346885/pexels-photo-346885.jpeg?auto=compress&cs=tinysrgb&w=1200'}
                     alt={post.title}
                     fill
                     className="object-cover"

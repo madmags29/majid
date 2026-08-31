@@ -21,11 +21,11 @@ interface DestinationSuggestion {
 
 // Fallback image map just in case Pexels API isn't built into suggestions yet
 const fallbackImages = [
-    'https://images.unsplash.com/photo-1599661046289-e31897c93e14?w=800&q=80', // Jaipur
-    'https://images.unsplash.com/photo-1502602861348-73599a0edabe?w=800&q=80', // Paris
+    'https://images.pexels.com/photos/3581369/pexels-photo-3581369.jpeg?auto=compress&cs=tinysrgb&w=800', // Jaipur
+    'https://images.pexels.com/photos/1308940/pexels-photo-1308940.jpeg?auto=compress&cs=tinysrgb&w=800', // Paris
     'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&q=80', // Bali
     'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&q=80', // Tokyo
-    'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5f1?w=800&q=80', // Santorini
+    'https://images.pexels.com/photos/1010657/pexels-photo-1010657.jpeg?auto=compress&cs=tinysrgb&w=800', // Santorini
     'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80', // Dubai
     'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=800&q=80', // New York
     'https://images.unsplash.com/photo-1531572753322-ad063cecc140?w=800&q=80', // Rome

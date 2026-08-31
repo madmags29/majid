@@ -1,9 +1,11 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowLeft, MapPin, Calendar, Clock, Share2 } from 'lucide-react';
+import { ArrowLeft, MapPin, Calendar, Clock, Sparkles } from 'lucide-react';
 import ItineraryDisplay from '@/components/ItineraryDisplay';
 import InnerHeader from '@/components/InnerHeader';
+import ShareTripButton from '@/components/ShareTripButton';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 interface Props {
     params: { id: string };
@@ -98,7 +100,7 @@ export default async function TripPage({ params }: Props) {
     };
 
     return (
-        <div className="min-h-screen bg-slate-950 text-white selection:bg-blue-500/30 pb-20">
+        <div className="min-h-screen bg-slate-950 text-white selection:bg-blue-500/30 pb-24">
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(tripSchema) }}
@@ -108,60 +110,72 @@ export default async function TripPage({ params }: Props) {
                 subtitle="Curated Trip"
                 showBack
                 backHref="/explore"
-                actions={
-                    <button className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 border border-blue-500/20 rounded-full text-xs sm:text-sm font-bold transition-colors">
-                        <Share2 className="w-4 h-4" />
-                        <span className="hidden sm:inline">Share Trip</span>
-                    </button>
-                }
+                actions={<ShareTripButton destination={destination} variant="header" />}
             />
 
-            <main className="pt-16">
-                {/* Immersive Hero Header */}
-                <div className="relative h-[50vh] min-h-[400px] w-full">
-                    <div className="absolute inset-0 z-0">
-                        <Image
-                            src={heroImage}
-                            alt={destination}
-                            fill
-                            priority
-                            className="object-cover"
-                            sizes="100vw"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent opacity-90" />
-                    </div>
+            <div className="max-w-5xl mx-auto px-4 lg:px-8 pt-4">
+                <Breadcrumbs
+                    items={[
+                        { label: 'Explore', href: '/explore' },
+                        { label: `${destination} Trip`, href: `/trip/${id}`, active: true }
+                    ]}
+                />
+            </div>
 
-                    <div className="absolute bottom-0 left-0 w-full p-8 md:p-12 z-10 max-w-5xl mx-auto xl:px-0">
-                        <div className="flex flex-wrap items-center gap-3 mb-4 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-                            <span className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-500/20 backdrop-blur-md border border-blue-500/30 rounded-lg text-xs font-bold text-blue-300 uppercase tracking-widest">
-                                <MapPin className="w-3.5 h-3.5" /> Destination
-                            </span>
-                            <span className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800/60 backdrop-blur-md border border-slate-700 rounded-lg text-xs font-bold text-slate-300 uppercase tracking-widest">
-                                <Calendar className="w-3.5 h-3.5" /> {itinerary.days?.length || 2} Days
-                            </span>
+            <main className="pt-4">
+                {/* Immersive Hero Header */}
+                <div className="max-w-5xl mx-auto px-4 lg:px-8">
+                    <div className="relative h-[48vh] min-h-[380px] w-full rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
+                        <div className="absolute inset-0 z-0">
+                            <Image
+                                src={heroImage}
+                                alt={destination}
+                                fill
+                                priority
+                                className="object-cover"
+                                sizes="(max-width: 1200px) 100vw, 1024px"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent opacity-95" />
                         </div>
 
-                        <h1 className="text-4xl md:text-6xl font-black text-white mb-4 tracking-tight drop-shadow-2xl animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-                            {destination}
-                        </h1>
+                        <div className="absolute bottom-0 left-0 w-full p-6 md:p-10 z-10">
+                            <div className="flex flex-wrap items-center gap-2.5 mb-3 animate-fade-in-up">
+                                <span className="flex items-center gap-1.5 px-3 py-1 bg-blue-500/25 backdrop-blur-md border border-blue-400/30 rounded-full text-xs font-bold text-blue-300 uppercase tracking-wider">
+                                    <MapPin className="w-3.5 h-3.5" /> Destination
+                                </span>
+                                <span className="flex items-center gap-1.5 px-3 py-1 bg-slate-800/80 backdrop-blur-md border border-slate-700 rounded-full text-xs font-bold text-slate-200 uppercase tracking-wider">
+                                    <Calendar className="w-3.5 h-3.5" /> {itinerary.days?.length || 2} Days
+                                </span>
+                                {itinerary.budget && (
+                                    <span className="flex items-center gap-1.5 px-3 py-1 bg-emerald-500/20 backdrop-blur-md border border-emerald-500/30 rounded-full text-xs font-bold text-emerald-300 uppercase tracking-wider capitalize">
+                                        <Sparkles className="w-3.5 h-3.5" /> {itinerary.budget}
+                                    </span>
+                                )}
+                            </div>
 
-                        <div className="flex items-center gap-4 text-sm text-slate-400 font-medium animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-                            <span className="flex items-center gap-1.5">
-                                <Clock className="w-4 h-4 opacity-70" /> Generated on {createdDate}
-                            </span>
-                            {itinerary.budget && (
-                                <>
-                                    <span className="w-1.5 h-1.5 rounded-full bg-slate-700" />
-                                    <span className="capitalize">{itinerary.budget} Budget</span>
-                                </>
-                            )}
+                            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                                <div>
+                                    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight drop-shadow-2xl">
+                                        {destination}
+                                    </h1>
+                                    <div className="flex items-center gap-4 text-xs sm:text-sm text-slate-400 font-medium mt-2">
+                                        <span className="flex items-center gap-1.5">
+                                            <Clock className="w-3.5 h-3.5 opacity-70" /> Generated on {createdDate}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div className="shrink-0 flex items-center gap-2">
+                                    <ShareTripButton destination={destination} variant="outline" />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 {/* Itinerary Content Engine */}
-                <div className="max-w-5xl mx-auto px-4 lg:px-8 mt-12">
-                    <div className="bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-6 md:p-8">
+                <div className="max-w-5xl mx-auto px-4 lg:px-8 mt-8">
+                    <div className="bg-slate-900/90 border border-slate-800/80 backdrop-blur-sm rounded-3xl shadow-2xl p-6 md:p-8">
                         <ItineraryDisplay itinerary={itinerary} />
                     </div>
                 </div>

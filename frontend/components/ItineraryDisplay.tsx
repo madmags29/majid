@@ -16,13 +16,13 @@ interface Activity {
 }
 
 const FALLBACK_IMAGES = [
-    'https://images.unsplash.com/photo-1502602861348-73599a0edabe?w=800&q=80',
-    'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&q=80',
-    'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&q=80',
-    'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5f1?w=800&q=80',
-    'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80',
-    'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=800&q=80',
-    'https://images.unsplash.com/photo-1531572753322-ad063cecc140?w=800&q=80'
+    'https://images.pexels.com/photos/1308940/pexels-photo-1308940.jpeg?auto=compress&cs=tinysrgb&w=800', // Paris
+    'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&q=80', // Bali
+    'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&q=80', // Tokyo
+    'https://images.pexels.com/photos/1010657/pexels-photo-1010657.jpeg?auto=compress&cs=tinysrgb&w=800', // Santorini
+    'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80', // Dubai
+    'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=800&q=80', // New York
+    'https://images.unsplash.com/photo-1531572753322-ad063cecc140?w=800&q=80'  // Rome
 ];
 
 interface Day {
@@ -164,50 +164,79 @@ export default function ItineraryDisplay({ itinerary, className, selectedActivit
 
             {/* Daily Timeline */}
             <div className="space-y-8">
+                {/* Day Navigation Tabs */}
+                {itinerary.days.length > 1 && (
+                    <div className="sticky top-20 z-30 flex items-center gap-2 overflow-x-auto py-2.5 px-3 bg-slate-900/90 backdrop-blur-md rounded-2xl border border-white/10 shadow-lg no-scrollbar">
+                        <span className="text-xs font-bold text-slate-400 uppercase tracking-widest px-2 shrink-0">Jump To:</span>
+                        {itinerary.days.map((day) => (
+                            <button
+                                key={day.day}
+                                type="button"
+                                onClick={() => {
+                                    const el = document.getElementById(`day-${day.day}`);
+                                    if (el) {
+                                        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                    }
+                                }}
+                                className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800/80 hover:bg-blue-600/20 hover:text-blue-300 text-slate-200 border border-slate-700/60 hover:border-blue-500/40 transition-all shrink-0 cursor-pointer"
+                            >
+                                Day {day.day}
+                            </button>
+                        ))}
+                    </div>
+                )}
+
                 {itinerary.days.map((day, dIdx) => (
-                    <div key={dIdx} className="bg-slate-900/50 rounded-2xl border border-slate-800 overflow-hidden shadow-2xl">
-                        <div className="bg-slate-800/80 px-6 py-4 border-b border-slate-700 flex items-center justify-between">
-                            <h4 className="text-lg font-black flex items-center gap-4">
-                                <span className="flex items-center justify-center px-3 py-1 rounded-lg bg-blue-600/20 text-blue-400 text-sm whitespace-nowrap border border-blue-500/20">
+                    <div 
+                        key={dIdx} 
+                        id={`day-${day.day}`} 
+                        className="bg-slate-900/60 rounded-3xl border border-slate-800/80 overflow-hidden shadow-2xl transition-all scroll-mt-32"
+                    >
+                        <div className="bg-slate-800/80 px-6 py-4 border-b border-slate-700/70 flex items-center justify-between">
+                            <h4 className="text-lg font-black flex items-center gap-3 text-white">
+                                <span className="flex items-center justify-center px-3 py-1 rounded-xl bg-blue-600 text-white font-bold text-xs whitespace-nowrap shadow-md shadow-blue-600/30">
                                     Day {day.day}
                                 </span>
-                                {day.title}
+                                <span className="truncate">{day.title}</span>
                             </h4>
+                            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider hidden sm:inline">
+                                {(day.activities || []).length} Activities
+                            </span>
                         </div>
                         <div className="p-6 space-y-6">
                             {(day.activities || []).map((activity, aIdx) => (
                                 <div
                                     key={aIdx}
                                     className={cn(
-                                        "p-4 sm:p-5 rounded-xl border border-slate-800 transition-all duration-300 cursor-pointer group hover:scale-[1.01]",
+                                        "p-5 rounded-2xl border transition-all duration-300 cursor-pointer group hover:scale-[1.01]",
                                         selectedActivity === `${day.day}-${aIdx}`
-                                            ? "bg-blue-600/10 border-blue-500/50 ring-1 ring-blue-500/20"
-                                            : "bg-slate-800/30 hover:bg-slate-800/50 hover:border-slate-700"
+                                            ? "bg-blue-600/15 border-blue-500/60 ring-2 ring-blue-500/30 shadow-lg shadow-blue-500/10"
+                                            : "bg-slate-800/40 hover:bg-slate-800/70 border-slate-800 hover:border-slate-700"
                                     )}
                                     onClick={() => setSelectedActivity(`${day.day}-${aIdx}`)}
                                 >
-                                    <div className="flex items-start justify-between mb-3">
-                                        <div className="text-sm font-bold text-blue-400 uppercase tracking-widest flex items-center gap-2">
-                                            <Clock className="w-4 h-4" />
+                                    <div className="flex items-start justify-between mb-3 gap-2">
+                                        <div className="text-xs font-black text-blue-400 uppercase tracking-widest flex items-center gap-1.5 bg-blue-500/10 px-2.5 py-1 rounded-lg border border-blue-500/20">
+                                            <Clock className="w-3.5 h-3.5" />
                                             {activity.time}
                                         </div>
                                         {activity.ticket_price && (
-                                            <span className="text-xs font-bold text-green-400 bg-green-900/20 px-3 py-1 rounded-full border border-green-500/30 shadow-lg shadow-green-900/20">
+                                            <span className="text-xs font-bold text-emerald-300 bg-emerald-950/40 px-3 py-1 rounded-full border border-emerald-500/30 shadow-sm">
                                                 {formatCurrency(activity.ticket_price, itinerary.trip_details.currency)}
                                             </span>
                                         )}
                                     </div>
-                                    <div className="text-lg sm:text-xl font-bold text-slate-100 flex items-center gap-3 mb-3">
-                                        <MapPin className="w-5 h-5 text-blue-500 shrink-0" />
+                                    <div className="text-lg sm:text-xl font-bold text-slate-100 flex items-center gap-2.5 mb-3 group-hover:text-blue-300 transition-colors">
+                                        <MapPin className="w-4 h-4 text-blue-500 shrink-0" />
                                         <span>{activity.location}</span>
                                     </div>
                                     {activity.imageUrl && (
-                                        <div className="mt-4 mb-4 rounded-xl overflow-hidden h-48 w-full relative border border-white/5">
+                                        <div className="mt-4 mb-4 rounded-2xl overflow-hidden h-52 w-full relative border border-white/10 shadow-lg">
                                             {/* eslint-disable-next-line @next/next/no-img-element */}
                                             <img
                                                 src={activity.imageUrl}
                                                 alt={activity.location}
-                                                className="w-full h-full object-cover transform scale-100 group-hover:scale-110 transition-transform duration-700"
+                                                className="w-full h-full object-cover transform scale-100 group-hover:scale-105 transition-transform duration-700"
                                                 onError={(e) => {
                                                     const target = e.target as HTMLImageElement;
                                                     const randomFallback = FALLBACK_IMAGES[Math.floor(Math.random() * FALLBACK_IMAGES.length)];
@@ -216,10 +245,10 @@ export default function ItineraryDisplay({ itinerary, className, selectedActivit
                                                     }
                                                 }}
                                             />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity" />
                                         </div>
                                     )}
-                                    <div className="text-slate-400 text-sm sm:text-base leading-relaxed sm:line-clamp-3 group-hover:line-clamp-none transition-all duration-300">
+                                    <div className="text-slate-300 text-sm sm:text-base leading-relaxed sm:line-clamp-3 group-hover:line-clamp-none transition-all duration-300">
                                         {activity.description}
                                     </div>
                                 </div>
