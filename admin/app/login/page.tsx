@@ -1,13 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Zap, Lock, Mail, Loader2 } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
 
 export default function LoginPage() {
-    const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({ email: '', password: '' });
 
@@ -16,22 +14,25 @@ export default function LoginPage() {
         setIsLoading(true);
 
         try {
-            // Note: We use the regular auth endpoint but check for isAdmin in the response or next step
             const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
-            console.log('Attempting login to:', `${apiUrl}/auth/login`);
 
             const res = await axios.post(`${apiUrl}/auth/login`, formData);
 
-            const { token } = res.data;
+            const { token, user } = res.data;
 
-            // We need to verify if the user is actually an admin
-            // In a production app, the backend would ideally return this or the admin check would happen on the next request.
-            // For now, let's assume if they can access the admin dashboard, they are admin.
+            // Reject non-admin users
+            if (!user?.isAdmin) {
+                toast.error('Access denied. You do not have admin privileges.');
+                setIsLoading(false);
+                return;
+            }
 
             localStorage.setItem('adminToken', token);
             document.cookie = `adminToken=${token}; path=/; max-age=604800; samesite=lax`;
             toast.success('Login successful! Welcome to the Admin Panel.');
-            router.push('/');
+
+            // Use hard navigation so the browser sends the cookie to middleware
+            window.location.href = '/';
         } catch (error: unknown) {
             const err = error as { response?: { data?: { message?: string } } };
             toast.error(err.response?.data?.message || 'Login failed. Please check your credentials.');
@@ -39,6 +40,7 @@ export default function LoginPage() {
             setIsLoading(false);
         }
     };
+
 
     return (
         <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
