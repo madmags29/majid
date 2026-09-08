@@ -24,29 +24,36 @@ export const revalidate = 3600;
 
 export default async function BlogLandingPage() {
     let posts = [];
+    const primaryUrl = process.env.BACKEND_URL 
+        || process.env.NEXT_PUBLIC_API_URL 
+        || 'https://backend-flax-eight-93.vercel.app';
+    const fallbackUrl = 'https://backend-flax-eight-93.vercel.app';
+
+    const fetchPostsFromUrl = async (url: string) => {
+        const res = await fetch(`${url}/api/blog?t=${Date.now()}`, { 
+            cache: 'no-store',
+            next: { revalidate: 0 } 
+        });
+        if (res.ok) {
+            return await res.json();
+        }
+        return null;
+    };
+
     try {
-        // For SSR on Vercel: next.config.ts rewrites only apply to browser/client requests.
-        // Server-side fetch MUST use the absolute backend URL directly.
-        const backendUrl = process.env.BACKEND_URL 
-            || process.env.NEXT_PUBLIC_API_URL 
-            || 'https://backend-flax-eight-93.vercel.app';
-        
-        // Skip fetching during local builds pointing to localhost (avoids ECONNREFUSED)
-        if (IS_BUILD && backendUrl.includes('localhost')) {
-            console.log('Skipping blog posts fetch during build (localhost not available)...');
-        } else {
-            const res = await fetch(`${backendUrl}/api/blog?t=${Date.now()}`, { 
-                cache: 'no-store',
-                next: { revalidate: 0 } 
-            });
-            if (res.ok) {
-                posts = await res.json();
-            } else {
-                console.error('Blog API returned non-OK status:', res.status);
-            }
+        if (!IS_BUILD || !primaryUrl.includes('localhost')) {
+            posts = await fetchPostsFromUrl(primaryUrl);
         }
     } catch (error) {
-        console.error('Failed to fetch blog posts:', error);
+        // Fallback below
+    }
+
+    if ((!posts || posts.length === 0) && primaryUrl !== fallbackUrl) {
+        try {
+            posts = await fetchPostsFromUrl(fallbackUrl);
+        } catch (err) {
+            console.error('Failed to fetch blog posts from fallback:', err);
+        }
     }
     
     const blogCollectionSchema = {

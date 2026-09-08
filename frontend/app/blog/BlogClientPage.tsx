@@ -54,9 +54,14 @@ export default function BlogClientPage({ posts }: { posts: any[] }) {
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 0.6 }}
                                     >
-                                        <span className="inline-block px-3 py-1 bg-blue-600 text-white text-xs font-bold uppercase tracking-widest rounded-full mb-4 shadow-lg shadow-blue-500/20">
-                                            Featured Story
-                                        </span>
+                                        <div className="flex flex-wrap items-center gap-2 mb-4">
+                                            <span className="inline-block px-3 py-1 bg-blue-600 text-white text-xs font-bold uppercase tracking-widest rounded-full shadow-lg shadow-blue-500/20">
+                                                Featured Story
+                                            </span>
+                                            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-950/80 text-emerald-300 text-xs font-bold uppercase tracking-wider rounded-full border border-emerald-500/30 backdrop-blur-md">
+                                                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" /> AEO / GEO Verified
+                                            </span>
+                                        </div>
                                         <h2 className="text-3xl md:text-5xl lg:text-6xl font-black tracking-tight text-white mb-6 leading-tight drop-shadow-lg">
                                             {featuredPost.title}
                                         </h2>
@@ -65,7 +70,7 @@ export default function BlogClientPage({ posts }: { posts: any[] }) {
                                         </p>
                                         <div className="flex items-center gap-6 mb-8 text-sm md:text-base text-slate-300">
                                             <span className="flex items-center gap-2"><User size={18} className="text-blue-400" /> {featuredPost.author}</span>
-                                            <span className="flex items-center gap-2"><Calendar size={18} className="text-blue-400" /> {featuredPost.publishedDate ? new Date(featuredPost.publishedDate).toLocaleDateString() : 'Recent'}</span>
+                                            <span className="flex items-center gap-2"><Calendar size={18} className="text-blue-400" /> {featuredPost.publishedDate ? new Date(featuredPost.publishedDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : 'Recent'}</span>
                                         </div>
                                         <Link href={`/blog/${featuredPost.slug}`} className="inline-flex items-center gap-2 bg-white text-slate-950 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-blue-500 hover:text-white transition-all transform hover:scale-105 active:scale-95 shadow-xl">
                                             Read More <ArrowRight size={20} />
@@ -147,6 +152,11 @@ export default function BlogClientPage({ posts }: { posts: any[] }) {
                                                     {post.keyword ? post.keyword.split(' ')[0] : 'TRAVEL'}
                                                 </span>
                                             </div>
+                                            <div className="absolute top-4 right-4">
+                                                <span className="px-2.5 py-1 bg-emerald-950/85 backdrop-blur-md text-emerald-300 text-[10px] font-black uppercase tracking-wider rounded-full border border-emerald-500/30 flex items-center gap-1 shadow-lg">
+                                                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" /> AEO Verified
+                                                </span>
+                                            </div>
                                         </Link>
                                         <div className="p-8 flex flex-col flex-1">
                                             <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest text-slate-500 mb-4">
@@ -165,7 +175,7 @@ export default function BlogClientPage({ posts }: { posts: any[] }) {
                                                     </div>
                                                     <span className="text-xs font-bold text-slate-300">{post.author || 'Editorial'}</span>
                                                 </div>
-                                                <span className="text-[10px] font-bold text-slate-500">{post.publishedDate ? new Date(post.publishedDate).toLocaleDateString() : 'Recent'}</span>
+                                                <span className="text-[10px] font-bold text-slate-500">{post.publishedDate ? new Date(post.publishedDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : 'Recent'}</span>
                                             </div>
                                         </div>
                                     </motion.article>

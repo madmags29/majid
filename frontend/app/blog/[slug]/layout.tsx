@@ -1,18 +1,31 @@
 import { Metadata } from 'next';
 import { API_URL, SITE_URL } from '@/lib/config';
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> | { slug: string } }): Promise<Metadata> {
     try {
-        // Fetch the blog post data from the API
-        const res = await fetch(`${API_URL}/api/blog/${params.slug}`, { next: { revalidate: 3600 } });
+        const resolvedParams = await params;
+        const slug = resolvedParams?.slug;
+        const primaryUrl = API_URL || 'https://backend-flax-eight-93.vercel.app';
+        const fallbackUrl = 'https://backend-flax-eight-93.vercel.app';
+
+        let post = null;
+        try {
+            const res = await fetch(`${primaryUrl}/api/blog/${slug}`, { next: { revalidate: 3600 } });
+            if (res.ok) post = await res.json();
+        } catch (e) {}
+
+        if (!post && primaryUrl !== fallbackUrl) {
+            try {
+                const res = await fetch(`${fallbackUrl}/api/blog/${slug}`, { next: { revalidate: 3600 } });
+                if (res.ok) post = await res.json();
+            } catch (e) {}
+        }
         
-        if (!res.ok) {
+        if (!post) {
             return {
                 title: 'Post Not Found | Weekend Travellers',
             };
         }
-        
-        const post = await res.json();
 
         return {
             title: `${post.title} | Weekend Travellers`,
