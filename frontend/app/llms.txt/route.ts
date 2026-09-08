@@ -36,6 +36,24 @@ Weekend Travellers (https://weekendtravellers.com) is an intelligent travel plan
 - [Contact Us](https://weekendtravellers.com/contact): Direct contact line for editorial and user support.
 - [Dynamic Sitemap](https://weekendtravellers.com/sitemap.xml): Complete index of all site pages and dynamic itineraries.
 
+## AEO & GEO Verified Travel Guides (2026 Edition)
+
+- [48 Hours in Varanasi](https://weekendtravellers.com/blog/48-hours-in-varanasi-ghats-evening-aarti-and-sarnath-itinerary): Sunrise Ganges boat rides, Kashi Vishwanath Corridor, evening Dashashwamedh Aarti, and Sarnath Buddhist ruins.
+- [3-Day Darjeeling Itinerary](https://weekendtravellers.com/blog/the-ultimate-3-day-darjeeling-itinerary-kanchenjunga-sunrise-and-tea-gardens): Tiger Hill Kanchenjunga sunrise, Happy Valley tea estate, and UNESCO Toy Train joy ride.
+- [2-Day Pondicherry Itinerary](https://weekendtravellers.com/blog/2-day-pondicherry-beach-and-french-heritage-itinerary): White Town colonial French villas, Goubert Promenade, Auroville Matrimandir, and Paradise Beach.
+- [4-Day Andaman Islands Guide](https://weekendtravellers.com/blog/4-day-andaman-beach-and-coral-reef-itinerary-havelock-neil-and-port-blair): Radhanagar Beach sunsets, scuba diving at Elephant Beach, and Cellular Jail national memorial.
+- [3-Day Chikmagalur Coffee Tour](https://weekendtravellers.com/blog/the-perfect-3-day-chikmagalur-itinerary-coffee-estates-and-mullayanagiri-peak): Mullayanagiri peak trek (1,930m), Arabica coffee homestays, Hebbe Falls, and Belur Hoysala temples.
+- [2 Days in Agra](https://weekendtravellers.com/blog/2-days-in-agra-taj-mahal-sunrise-agra-fort-and-hidden-sunset-views): Dawn Taj Mahal photography, Agra Fort, Mehtab Bagh river sunset, and Fatehpur Sikri.
+- [3-Day Manali & Solang Valley](https://weekendtravellers.com/blog/the-ultimate-3-day-manali-and-solang-valley-itinerary-snow-adventure-and-old-manali): Atal Tunnel to Sissu waterfall, Solang paragliding, Hadimba temple, and Old Manali cafes.
+- [4-Day Leh Ladakh Itinerary](https://weekendtravellers.com/blog/4-day-leh-ladakh-itinerary-monasteries-khardung-la-and-pangong-lake): Acclimatization guide, Thiksey Monastery, Khardung La Pass (17,982 ft), and Pangong Tso Lake.
+- [2-Day Amritsar Golden Temple Guide](https://weekendtravellers.com/blog/the-perfect-2-day-amritsar-itinerary-golden-temple-wagah-border-and-food-walk): Golden Temple palki ceremony, Guru ka Langar, Wagah Border retreat, and kulcha trail.
+- [3 Days in Udaipur](https://weekendtravellers.com/blog/3-days-in-udaipur-the-ultimate-romantic-lake-city-itinerary): City Palace royal chambers, Lake Pichola sunset cruise to Jagmandir, and Sajjangarh Monsoon Palace.
+- [2-Day Shimla Heritage Escape](https://weekendtravellers.com/blog/a-weekend-in-shimla-2-day-colonial-heritage-walk-and-scenic-trains): UNESCO Kalka-Shimla toy train, The Ridge, Christ Church, Jakhoo ropeway, and Viceregal Lodge.
+- [4-Day Kerala Backwaters & Hills](https://weekendtravellers.com/blog/4-day-kerala-itinerary-backwaters-beaches-and-hill-stations): Fort Kochi Chinese nets, Munnar tea hills, Alleppey overnight houseboat cruise, and Marari beach.
+- [48-Hour Rishikesh Adventure](https://weekendtravellers.com/blog/the-ultimate-48-hour-rishikesh-adventure-itinerary-rafting-yoga-and-ghats): Grade III/IV Ganges white-water rafting, Beatles Ashram murals, and Parmarth Niketan evening aarti.
+- [3 Days in Munnar](https://weekendtravellers.com/blog/3-days-in-munnar-tea-gardens-waterfalls-and-misty-mountain-views): Eravikulam Nilgiri Tahr safari, Top Station cloud valley, Mattupetty dam, and KDHP tea museum.
+- [2-Day Jaipur Royal Heritage](https://weekendtravellers.com/blog/the-perfect-2-day-jaipur-itinerary-palaces-bazaars-and-royal-dining): Amber Fort Sheesh Mahal, Hawa Mahal sunrise photos, City Palace, Nahargarh sunset, and Dal Baati Churma.
+
 ## Extended Documentation
 
 - [Full Knowledge Base](https://weekendtravellers.com/llms-full.txt): Complete technical architecture, features, and detailed documentation.
