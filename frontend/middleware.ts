@@ -2,32 +2,23 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-    const { pathname } = request.nextUrl;
+    const { pathname, search } = request.nextUrl;
 
     // Check if the request is for the admin section
-    if (pathname.startsWith('/admin')) {
-        const token = request.cookies.get('adminToken')?.value;
-        const isLoginPage = pathname === '/admin/login';
+    if (pathname === '/admin' || pathname === '/admin/') {
+        return NextResponse.redirect(new URL(`https://admin.weekendtravellers.com${search}`));
+    }
 
-        // 1. If trying to access admin pages (except login) without a token, redirect to login
-        if (!token && !isLoginPage) {
-            const url = request.nextUrl.clone();
-            url.pathname = '/admin/login';
-            return NextResponse.redirect(url);
-        }
-
-        // 2. If trying to access login page WITH a token, redirect to admin dashboard
-        if (token && isLoginPage) {
-            const url = request.nextUrl.clone();
-            url.pathname = '/admin'; // Redirect to dashboard
-            return NextResponse.redirect(url);
-        }
+    if (pathname.startsWith('/admin/')) {
+        const subPath = pathname.replace(/^\/admin/, '');
+        return NextResponse.redirect(new URL(`https://admin.weekendtravellers.com${subPath}${search}`));
     }
 
     return NextResponse.next();
 }
 
 export const config = {
-    // Match /admin/* including nested routes, but exclude static assets
-    matcher: ['/admin/:path*'],
+    // Match /admin and /admin/*
+    matcher: ['/admin', '/admin/:path*'],
 };
+

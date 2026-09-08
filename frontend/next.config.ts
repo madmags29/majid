@@ -70,6 +70,20 @@ const nextConfig: NextConfig = {
             }
         ],
     },
+    async redirects() {
+        return [
+            {
+                source: "/admin",
+                destination: "https://admin.weekendtravellers.com",
+                permanent: false,
+            },
+            {
+                source: "/admin/:path*",
+                destination: "https://admin.weekendtravellers.com/:path*",
+                permanent: false,
+            },
+        ];
+    },
     async rewrites() {
         const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:5001";
         return [
