@@ -42,7 +42,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
         title: post.metaTitle || post.title,
         description: post.metaDescription,
-        keywords: [post.keyword, 'weekend getaway India', 'travel guide India', 'trip planning', 'AEO verified travel', 'AI weekend planner'],
+        keywords: [post.keyword, 'weekend getaway India', 'travel guide India', 'trip planning', 'weekend itineraries', 'AI weekend planner'],
         openGraph: {
             title: post.metaTitle || post.title,
             description: post.metaDescription,
@@ -256,9 +256,6 @@ export default async function BlogPostDetail({ params }: Props) {
                             <span className="inline-block px-4 py-1.5 bg-blue-600 text-white text-xs font-bold uppercase tracking-widest rounded-full shadow-lg shadow-blue-500/20">
                                 {post.keyword || 'TRAVEL'}
                             </span>
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-950/80 text-emerald-300 text-xs font-bold uppercase tracking-wider rounded-full border border-emerald-500/30 backdrop-blur-md">
-                                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" /> AEO / GEO Verified
-                            </span>
                         </div>
                         <h1 className="text-3xl md:text-5xl lg:text-6xl font-black tracking-tight text-white mb-6 leading-tight drop-shadow-2xl">
                             {post.title}
@@ -284,9 +281,9 @@ export default async function BlogPostDetail({ params }: Props) {
                     {parsedContent?.directAnswer && (
                         <div className="mb-10 p-6 md:p-8 rounded-3xl bg-gradient-to-br from-blue-950/50 via-slate-900/70 to-slate-900/90 border border-blue-500/30 shadow-2xl relative overflow-hidden">
                             <div className="flex items-center gap-2 mb-3">
-                                <span className="flex h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse" />
-                                <span className="text-xs font-bold uppercase tracking-wider text-emerald-300 bg-emerald-950/80 px-3 py-1 rounded-full border border-emerald-500/30">
-                                    AI Answer Engine Verified • AEO Direct Answer
+                                <span className="flex h-2 w-2 rounded-full bg-blue-400" />
+                                <span className="text-xs font-bold uppercase tracking-wider text-blue-300 bg-blue-950/80 px-3 py-1 rounded-full border border-blue-500/30">
+                                    Trip Overview • Quick Summary
                                 </span>
                             </div>
                             <p className="text-slate-100 text-base md:text-lg font-medium leading-relaxed aeo-direct-answer">

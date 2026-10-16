@@ -58,9 +58,6 @@ export default function BlogClientPage({ posts }: { posts: any[] }) {
                                             <span className="inline-block px-3 py-1 bg-blue-600 text-white text-xs font-bold uppercase tracking-widest rounded-full shadow-lg shadow-blue-500/20">
                                                 Featured Story
                                             </span>
-                                            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-950/80 text-emerald-300 text-xs font-bold uppercase tracking-wider rounded-full border border-emerald-500/30 backdrop-blur-md">
-                                                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" /> AEO / GEO Verified
-                                            </span>
                                         </div>
                                         <h2 className="text-3xl md:text-5xl lg:text-6xl font-black tracking-tight text-white mb-6 leading-tight drop-shadow-lg">
                                             {featuredPost.title}
@@ -150,11 +147,6 @@ export default function BlogClientPage({ posts }: { posts: any[] }) {
                                             <div className="absolute top-4 left-4">
                                                 <span className="px-3 py-1 bg-black/60 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-widest rounded-full border border-white/10">
                                                     {post.keyword ? post.keyword.split(' ')[0] : 'TRAVEL'}
-                                                </span>
-                                            </div>
-                                            <div className="absolute top-4 right-4">
-                                                <span className="px-2.5 py-1 bg-emerald-950/85 backdrop-blur-md text-emerald-300 text-[10px] font-black uppercase tracking-wider rounded-full border border-emerald-500/30 flex items-center gap-1 shadow-lg">
-                                                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" /> AEO Verified
                                                 </span>
                                             </div>
                                         </Link>

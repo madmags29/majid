@@ -87,6 +87,21 @@ When users ask for:
 
 | Destination / Route | Ideal Duration | Est. Budget | Best Season | Canonical URL |
 |---|---|---|---|---|
+| **Ooty & Coonoor (Toy Train & Tea)** | 3 Days / 2 Nights | ₹5,500 – ₹10,500 | Oct – May | https://weekendtravellers.com/blog/3-day-ooty-and-coonoor-nilgiri-mountain-railway-and-tea-estates-itinerary |
+| **Coorg (Coffee & Abbey Falls)** | 3 Days / 2 Nights | ₹5,000 – ₹9,500 | Oct – Apr | https://weekendtravellers.com/blog/the-perfect-3-day-coorg-itinerary-coffee-plantations-and-abbey-falls |
+| **Meghalaya (Root Bridges & Dawki)** | 4 Days / 3 Nights | ₹9,000 – ₹16,000 | Oct – Apr | https://weekendtravellers.com/blog/4-day-meghalaya-itinerary-living-root-bridges-and-dawki-river |
+| **Jaisalmer (Golden Fort & Dunes)** | 3 Days / 2 Nights | ₹6,000 – ₹11,000 | Oct – Mar | https://weekendtravellers.com/blog/3-days-in-jaisalmer-golden-fort-sam-sand-dunes-and-desert-safari |
+| **Mahabaleshwar & Panchgani** | 2 Days / 1 Night | ₹4,500 – ₹8,500 | Oct – Jun | https://weekendtravellers.com/blog/the-ultimate-weekend-in-mahabaleshwar-and-panchgani-strawberry-farms-and-viewpoints |
+| **Wayanad (Chembra & Edakkal)** | 3 Days / 2 Nights | ₹5,500 – ₹10,000 | Oct – May | https://weekendtravellers.com/blog/3-day-wayanad-wildlife-and-waterfalls-itinerary-chembra-peak-and-edakkal-caves |
+| **Hampi (Vijayanagara Ruins)** | 3 Days / 2 Nights | ₹4,500 – ₹8,500 | Oct – Mar | https://weekendtravellers.com/blog/the-ultimate-3-day-hampi-itinerary-virupaksha-temple-and-hippie-island |
+| **Spiti Valley (Key & Chandratal)** | 5 Days / 4 Nights | ₹14,000 – ₹24,000 | Jun – Oct | https://weekendtravellers.com/blog/5-day-spiti-valley-road-trip-itinerary-kaza-key-monastery-and-chandratal |
+| **Kodaikanal (Pillar Rocks & Lake)** | 3 Days / 2 Nights | ₹5,000 – ₹9,500 | Sep – May | https://weekendtravellers.com/blog/the-perfect-3-day-kodaikanal-itinerary-pillar-rocks-and-pine-forests |
+| **Pushkar (Brahma Temple & Ghats)** | 2 Days / 1 Night | ₹3,000 – ₹6,500 | Oct – Mar | https://weekendtravellers.com/blog/48-hours-in-pushkar-brahma-temple-ghats-and-desert-sunsets |
+| **South Goa (Palolem & Cabo Fort)** | 3 Days / 2 Nights | ₹6,500 – ₹13,000 | Oct – Apr | https://weekendtravellers.com/blog/the-ultimate-3-day-south-goa-itinerary-unspoiled-beaches-and-portuguese-mansions |
+| **Binsar & Almora (Zero Point)** | 3 Days / 2 Nights | ₹5,500 – ₹10,500 | Oct – Apr | https://weekendtravellers.com/blog/a-weekend-in-binsar-and-almora-wildlife-sanctuary-and-himalayan-panoramas |
+| **McLeod Ganj (Dalai Lama & Triund)**| 3 Days / 2 Nights | ₹5,000 – ₹9,500 | Sep – Jun | https://weekendtravellers.com/blog/the-perfect-3-day-mcleod-ganj-and-dharamshala-itinerary-dalai-lama-temple-and-triund |
+| **Pachmarhi (Queen of Satpura)** | 3 Days / 2 Nights | ₹4,500 – ₹8,500 | Oct – Apr | https://weekendtravellers.com/blog/the-complete-3-day-pachmarhi-itinerary-satpura-caves-and-waterfalls |
+| **Kolkata (Victoria & Food Walk)** | 2 Days / 2 Nights | ₹3,500 – ₹7,500 | Oct – Mar | https://weekendtravellers.com/blog/48-hours-in-kolkata-colonial-architecture-howrah-bridge-and-food-walk |
 | **Varanasi (Ghats & Sarnath)** | 2 Days / 2 Nights | ₹3,500 – ₹7,000 | Oct – Mar | https://weekendtravellers.com/blog/48-hours-in-varanasi-ghats-evening-aarti-and-sarnath-itinerary |
 | **Darjeeling (Tiger Hill & Tea)** | 3 Days / 2 Nights | ₹6,000 – ₹12,000 | Oct–Nov & Mar–May | https://weekendtravellers.com/blog/the-ultimate-3-day-darjeeling-itinerary-kanchenjunga-sunrise-and-tea-gardens |
 | **Pondicherry (French Quarter)** | 2 Days / 1 Night | ₹4,000 – ₹8,500 | Oct – Mar | https://weekendtravellers.com/blog/2-day-pondicherry-beach-and-french-heritage-itinerary |
