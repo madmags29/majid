@@ -801,94 +801,302 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     Map<String, dynamic> lw,
     bool isDark,
   ) {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(20, 10, 20, 4),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-        borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
-        border: Border.all(
-          color: AppColors.crimson.withOpacity(0.35),
-          width: 1.2,
+    return InkWell(
+      onTap: () => _showHolidaysBottomSheet(context, isDark),
+      borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(20, 10, 20, 4),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+          borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
+          border: Border.all(
+            color: AppColors.crimson.withOpacity(0.35),
+            width: 1.2,
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: AppColors.crimson.withOpacity(0.15),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.calendar_month_rounded,
+                color: AppColors.crimson,
+                size: 22,
+              ),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        '${lw['flag'] ?? '🇮🇳'} ${lw['days']} Days Available',
+                        style: const TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.accent,
+                          letterSpacing: 0.3,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Container(
+                        width: 4,
+                        height: 4,
+                        decoration: const BoxDecoration(
+                          color: AppColors.accent,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: Text(
+                          lw['tag'] as String,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w500,
+                            color: isDark ? AppColors.textMutedDark : AppColors.textSecondaryLight,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    lw['title'] as String,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 10),
+            ElevatedButton(
+              onPressed: () => context.push('/planner'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.accent,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: const Text('Plan', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
+            ),
+          ],
         ),
       ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
+    );
+  }
+
+  void _showHolidaysBottomSheet(BuildContext context, bool isDark) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        return DefaultTabController(
+          length: 2,
+          child: Container(
+            height: MediaQuery.of(context).size.height * 0.75,
             decoration: BoxDecoration(
-              color: AppColors.crimson.withOpacity(0.15),
-              shape: BoxShape.circle,
+              color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
             ),
-            child: const Icon(
-              Icons.calendar_month_rounded,
-              color: AppColors.crimson,
-              size: 22,
-            ),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Text(
-                      '${lw['days']} Days Available',
-                      style: const TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.accent,
-                        letterSpacing: 0.3,
+                const SizedBox(height: 12),
+                Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: isDark ? Colors.white24 : Colors.black12,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Holidays & Long Weekends',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w800,
+                              color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            '2026 – 2027 Calendar for India & World',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: isDark ? AppColors.textMutedDark : AppColors.textSecondaryLight,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    const SizedBox(width: 6),
-                    Container(
-                      width: 4,
-                      height: 4,
-                      decoration: const BoxDecoration(
-                        color: AppColors.accent,
-                        shape: BoxShape.circle,
+                      IconButton(
+                        icon: const Icon(Icons.close_rounded),
+                        onPressed: () => Navigator.pop(ctx),
                       ),
-                    ),
-                    const SizedBox(width: 6),
-                    Text(
-                      lw['tag'] as String,
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w500,
-                        color: isDark ? AppColors.textMutedDark : AppColors.textSecondaryLight,
-                      ),
-                    ),
+                    ],
+                  ),
+                ),
+                TabBar(
+                  indicatorColor: AppColors.primary,
+                  labelColor: AppColors.primary,
+                  unselectedLabelColor: isDark ? AppColors.textMutedDark : AppColors.textSecondaryLight,
+                  tabs: const [
+                    Tab(text: '🇮🇳 India Holidays'),
+                    Tab(text: '🌍 World Holidays'),
                   ],
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  lw['title'] as String,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+                Expanded(
+                  child: TabBarView(
+                    children: [
+                      _buildHolidaysList(DateFormatter.getAllUpcomingHolidays(regionPreference: 'India'), isDark),
+                      _buildHolidaysList(DateFormatter.getAllUpcomingHolidays(regionPreference: 'World'), isDark),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
-          ElevatedButton(
-            onPressed: () => context.push('/planner'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.accent,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
+        );
+      },
+    );
+  }
+
+  Widget _buildHolidaysList(List<Map<String, dynamic>> holidays, bool isDark) {
+    if (holidays.isEmpty) {
+      return const Center(child: Text('No upcoming holidays found.'));
+    }
+    return ListView.separated(
+      padding: const EdgeInsets.all(16),
+      itemCount: holidays.length,
+      separatorBuilder: (_, _) => const SizedBox(height: 12),
+      itemBuilder: (context, index) {
+        final h = holidays[index];
+        final start = h['start'] as DateTime;
+        final end = h['end'] as DateTime;
+        final dateStr = DateFormatter.formatDateRange(start, end);
+        final recs = (h['recommendedDestinations'] as List<String>?) ?? [];
+
+        return Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: isDark ? AppColors.darkBg : AppColors.lightBg,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+              width: 1,
             ),
-            child: const Text('Plan', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
           ),
-        ],
-      ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Text(h['flag'] ?? '', style: const TextStyle(fontSize: 18)),
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withOpacity(0.12),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          '${h['days']} Days Break',
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Text(
+                    dateStr,
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: isDark ? AppColors.textMutedDark : AppColors.textSecondaryLight,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                h['title'] as String,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                  color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                h['description'] as String,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: isDark ? AppColors.textMutedDark : AppColors.textSecondaryLight,
+                ),
+              ),
+              if (recs.isNotEmpty) ...[
+                const SizedBox(height: 10),
+                Wrap(
+                  spacing: 6,
+                  runSpacing: 4,
+                  children: recs.map((dest) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                          color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+                          width: 0.8,
+                        ),
+                      ),
+                      child: Text(
+                        dest,
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500,
+                          color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ],
+            ],
+          ),
+        );
+      },
     );
   }
 }

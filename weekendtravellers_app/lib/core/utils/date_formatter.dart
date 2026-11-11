@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import '../../shared/data/holiday_data.dart';
 
 /// Formatter for travel dates and weekend calculations
 class DateFormatter {
@@ -35,40 +36,26 @@ class DateFormatter {
     return (nextSat, nextSun);
   }
 
-  /// Check for upcoming long weekends in India (e.g. holiday adjacent to Friday or Monday)
-  static Map<String, dynamic>? getUpcomingLongWeekend() {
-    // Curated dynamic long weekends (holiday calendar model)
-    final now = DateTime.now();
-    final sampleLongWeekends = [
-      {
-        'title': 'Diwali Long Weekend',
-        'start': DateTime(now.year, 11, 1),
-        'end': DateTime(now.year, 11, 3),
-        'days': 3,
-        'tag': 'Festive Escape',
-      },
-      {
-        'title': 'Republic Day Long Weekend',
-        'start': DateTime(now.year + 1, 1, 24),
-        'end': DateTime(now.year + 1, 1, 26),
-        'days': 3,
-        'tag': 'Winter Getaway',
-      },
-      {
-        'title': 'Holi Long Weekend',
-        'start': DateTime(now.year + 1, 3, 14),
-        'end': DateTime(now.year + 1, 3, 16),
-        'days': 3,
-        'tag': 'Spring Escape',
-      },
-    ];
+  /// Check for upcoming long weekends in India & World (holiday adjacent to Friday or Monday)
+  static Map<String, dynamic>? getUpcomingLongWeekend({String? regionPreference}) {
+    final nextHoliday = HolidayData.getNextUpcomingHoliday(regionPreference: regionPreference);
+    return nextHoliday?.toMap();
+  }
 
-    for (final lw in sampleLongWeekends) {
-      final start = lw['start'] as DateTime;
-      if (start.isAfter(now)) {
-        return lw;
-      }
+  /// Get all upcoming curated holidays for India and World
+  static List<Map<String, dynamic>> getAllUpcomingHolidays({String? regionPreference}) {
+    final now = DateTime.now();
+    List<HolidayModel> list;
+    if (regionPreference == 'India') {
+      list = HolidayData.indiaHolidays;
+    } else if (regionPreference == 'World') {
+      list = HolidayData.worldHolidays;
+    } else {
+      list = HolidayData.getAllHolidays();
     }
-    return null;
+    return list
+        .where((h) => h.end.isAfter(now))
+        .map((h) => h.toMap())
+        .toList();
   }
 }
