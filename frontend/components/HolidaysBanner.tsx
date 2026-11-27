@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, Sparkles, MapPin, ArrowRight, Compass } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { INDIA_HOLIDAYS, WORLD_HOLIDAYS, HolidayItem } from '@/lib/holidays';
@@ -96,21 +95,13 @@ export default function HolidaysBanner() {
       </div>
 
       {/* Holiday Cards Grid */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={activeTab}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.2 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
-        >
-          {holidays.map((item) => (
-            <div
-              key={item.id}
-              onClick={() => handlePlanHoliday(item)}
-              className="group relative bg-slate-900/50 hover:bg-slate-900/80 backdrop-blur-md border border-white/10 hover:border-blue-500/50 rounded-3xl p-6 transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-blue-500/10 flex flex-col justify-between cursor-pointer text-left"
-            >
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {holidays.map((item) => (
+          <div
+            key={item.id}
+            onClick={() => handlePlanHoliday(item)}
+            className="group relative bg-slate-900/90 hover:bg-slate-900 border border-white/10 hover:border-blue-500/50 rounded-3xl p-6 transition-colors duration-200 shadow-xl flex flex-col justify-between cursor-pointer text-left"
+          >
               <div>
                 {/* Header row: Days tag + Dates */}
                 <div className="flex items-center justify-between gap-2 mb-3">
@@ -169,8 +160,7 @@ export default function HolidaysBanner() {
               </div>
             </div>
           ))}
-        </motion.div>
-      </AnimatePresence>
+      </div>
     </div>
   );
 }

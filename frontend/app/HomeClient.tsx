@@ -19,7 +19,6 @@ import CinematicLoader from '@/components/CinematicLoader';
 const AuthModal = dynamic(() => import('@/components/AuthModal'));
 const CategoryBanner = dynamic(() => import('@/components/CategoryBanner'));
 const HolidaysBanner = dynamic(() => import('@/components/HolidaysBanner'));
-const FloatingDestinations = dynamic(() => import('@/components/FloatingDestinations'), { ssr: false });
 const LocationAssistant = dynamic(() => import('@/components/LocationAssistant'), { ssr: false });
 const RightMenu = dynamic(() => import('@/components/RightMenu'));
 
@@ -40,7 +39,7 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [videoUrl, setVideoUrl] = useState<string>('');
   const [videoCredit, setVideoCredit] = useState<{ name: string, url: string } | null>(null);
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [suggestions, setSuggestions] = useState<string[]>(['Rishikesh', 'Jaipur', 'Goa', 'Manali', 'Paris']);
   const [userLocation, setUserLocation] = useState<string>('');
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
@@ -198,8 +197,7 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
         {isLoading && <CinematicLoader key="loader" />}
       </AnimatePresence>
 
-      <div className="fixed inset-0 bg-[#0f172a] -z-30" />
-      <div className="fixed inset-0 bg-[#0f172a] -z-30 md:hidden pointer-events-none">
+      <div className="fixed inset-0 bg-[#0f172a] -z-30 pointer-events-none">
         <Image
           src="/video-poster.png"
           alt="Destination background"
@@ -211,11 +209,8 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
       </div>
 
       {videoUrl && (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: isVideoReady ? 1 : 0 }}
-            transition={{ duration: 1 }}
-            className="fixed inset-0 w-full h-full -z-10 will-change-transform hidden md:block"
+        <div
+            className={`fixed inset-0 w-full h-full -z-10 hidden md:block pointer-events-none transition-opacity duration-700 ${isVideoReady ? 'opacity-100' : 'opacity-0'}`}
         >
             <div className="absolute inset-0 bg-black/80 z-10" />
             <video
@@ -224,7 +219,6 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
                 muted
                 playsInline
                 onLoadedData={() => setIsVideoReady(true)}
-                onCanPlay={() => setIsVideoReady(true)}
                 className="w-full h-full object-cover"
                 poster="/video-poster.png"
                 title="Destination background"
@@ -232,14 +226,13 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
                 <source src={videoUrl} type="video/mp4" />
             </video>
             {videoCredit && (
-                <div className="absolute bottom-4 right-4 z-20 text-[10px] text-slate-400 bg-black/40 px-2 py-1 rounded backdrop-blur-sm pointer-events-auto">
+                <div className="absolute bottom-4 right-4 z-20 text-[10px] text-slate-400 bg-black/40 px-2 py-1 rounded pointer-events-auto">
                     Video by <a href={videoCredit.url} target="_blank" rel="noopener noreferrer" className="text-slate-300 hover:text-blue-400 underline decoration-dashed">{videoCredit.name}</a> on Pexels
                 </div>
             )}
-        </motion.div>
+        </div>
       )}
 
-      <FloatingDestinations />
       <LocationAssistant onLocationFound={handleLocationFound} />
 
       <header className="w-full py-3 px-4 sm:py-4 sm:px-6 flex justify-between items-center z-50">
