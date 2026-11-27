@@ -192,7 +192,7 @@ export default async function LandingPage() {
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 text-center md:text-left">
               <div>
                 <h2 className="text-4xl md:text-5xl font-black italic tracking-tighter text-white mb-4 uppercase">Latest Stories</h2>
-                <p className="text-xl text-slate-400 max-w-2xl">Expert travel guides, researched destination insights, and AI-assisted trip planning.</p>
+                <p className="text-xl text-slate-400 max-w-2xl">Practical travel guides, researched destination insights and AI-assisted trip planning.</p>
               </div>
               <Link href="/blog" className="inline-flex items-center gap-2 text-blue-400 font-bold hover:text-blue-300 transition-colors uppercase tracking-widest text-xs">
                 View All Stories <Search size={14} />
