@@ -41,6 +41,14 @@ export default function BlogClientPage({ posts }: { posts: BlogPostItem[] }) {
             <InnerHeader title="Weekend Travellers Blog" subtitle="Stories & Guides" />
 
             <main className="container mx-auto px-4 py-12 md:py-20 lg:max-w-7xl">
+                <header className="mb-10 space-y-2">
+                    <h1 className="text-3xl md:text-5xl font-black tracking-tight text-white">
+                        Weekend Travel Guides &amp; Stories
+                    </h1>
+                    <p className="text-slate-400 text-base md:text-lg max-w-2xl">
+                        Practical 2-to-4 day itineraries, seasonal travel advice, and destination deep-dives.
+                    </p>
+                </header>
                 {!posts || posts.length === 0 ? (
                     <div className="text-center py-20">
                         <h2 className="text-2xl font-bold text-white mb-4">No stories found yet.</h2>
