@@ -84,12 +84,17 @@ function MapController({ selectedActivity, markerRefs }: { selectedActivity: str
     return null;
 }
 
-// Component to update map view
-function ChangeView({ center, zoom }: { center: [number, number]; zoom: number }) {
+// Component to update map view & fit all pins cleanly
+function ChangeView({ center, zoom, positions }: { center: [number, number]; zoom: number; positions: [number, number][] }) {
     const map = useMap();
     useEffect(() => {
-        map.setView(center, zoom);
-    }, [center, zoom, map]);
+        if (positions.length > 1) {
+            const bounds = L.latLngBounds(positions.map(p => L.latLng(p[0], p[1])));
+            map.fitBounds(bounds, { padding: [50, 50], maxZoom: 14, animate: true });
+        } else {
+            map.setView(center, zoom);
+        }
+    }, [center, zoom, positions, map]);
     return null;
 }
 
@@ -98,13 +103,18 @@ import dynamic from 'next/dynamic';
 const RoutingMachine = dynamic(() => import('./RoutingMachine'), { ssr: false });
 
 export default function MapView({ itinerary, selectedActivity, isExpanded }: MapViewProps) {
-    const [center, setCenter] = useState<[number, number]>([48.8566, 2.3522]); // Default (Paris), will update
+    const initialLat = itinerary?.trip_details?.destination_coordinates?.lat;
+    const initialLng = itinerary?.trip_details?.destination_coordinates?.lng;
+    const hasInitialCoords = typeof initialLat === 'number' && typeof initialLng === 'number' && (initialLat !== 0 || initialLng !== 0);
+
+    const [geocodedCenter, setGeocodedCenter] = useState<[number, number]>([20.5937, 78.9629]);
+    const center: [number, number] = hasInitialCoords ? [initialLat, initialLng] : geocodedCenter;
     const [zoom] = useState(13);
     const markerRefs = useRef<{ [key: string]: L.Marker | null }>({});
 
-    // Fetch coordinates for the destination
+    // Geocode destination name only when destination_coordinates are missing
     useEffect(() => {
-        if (!itinerary.destination) return;
+        if (hasInitialCoords || !itinerary?.destination) return;
 
         const fetchCoordinates = async () => {
             try {
@@ -113,15 +123,15 @@ export default function MapView({ itinerary, selectedActivity, isExpanded }: Map
                 if (data && data.length > 0) {
                     const lat = parseFloat(data[0].lat);
                     const lon = parseFloat(data[0].lon);
-                    setCenter([lat, lon]);
+                    setGeocodedCenter([lat, lon]);
                 }
-            } catch (error) {
-                console.error("Failed to geocode destination:", error);
+            } catch {
+                // Keep current center
             }
         };
 
         fetchCoordinates();
-    }, [itinerary.destination]);
+    }, [itinerary?.destination, hasInitialCoords]);
 
     // Mock geocoding - deterministic based on string hash to keep positions stable
     const getCoordinates = (location: string, dayIndex: number, activityIndex: number, currentCenter: [number, number]): [number, number] => {
@@ -177,18 +187,18 @@ export default function MapView({ itinerary, selectedActivity, isExpanded }: Map
     const waypoints = useMemo(() => locations.filter(l => l.type === 'activity').map(loc => L.latLng(loc.position[0], loc.position[1])), [locations]);
 
 
-    // Icons
+    // Icons (explicit SVG width/height so pins never collapse to 0x0)
     const activityIcon = L.divIcon({
-        className: 'bg-transparent',
-        html: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#1e3a8a" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 drop-shadow-lg"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>`,
+        className: 'bg-transparent border-0',
+        html: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" style="width:32px;height:32px;display:block;" viewBox="0 0 24 24" fill="#1e3a8a" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>`,
         iconSize: [32, 32],
         iconAnchor: [16, 32],
         popupAnchor: [0, -32]
     });
 
     const hotelIcon = L.divIcon({
-        className: 'bg-transparent',
-        html: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ef4444" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 drop-shadow-lg"><path d="M3 21h18M5 21V7l8-4 8 4v14M9 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"></path></svg>`,
+        className: 'bg-transparent border-0',
+        html: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" style="width:32px;height:32px;display:block;" viewBox="0 0 24 24" fill="#ef4444" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l8-4 8 4v14M9 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"></path></svg>`,
         iconSize: [32, 32],
         iconAnchor: [16, 32],
         popupAnchor: [0, -32]
@@ -205,7 +215,7 @@ export default function MapView({ itinerary, selectedActivity, isExpanded }: Map
             >
                 <InvalidateSizeController isExpanded={!!isExpanded} />
                 <MapController selectedActivity={selectedActivity} markerRefs={markerRefs} />
-                <ChangeView center={center} zoom={zoom} />
+                <ChangeView center={center} zoom={zoom} positions={locations.map(l => l.position)} />
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

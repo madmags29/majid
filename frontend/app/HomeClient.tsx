@@ -367,8 +367,8 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: unk
             </div>
           </div>
           <CategoryBanner userLocation={userLocation} />
-          <HolidaysBanner />
         </div>
+        <HolidaysBanner />
       </section>
     </>
   );

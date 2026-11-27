@@ -25,7 +25,7 @@ export default function HolidaysBanner() {
 
   const handlePlanHoliday = (holiday: HolidayItem) => {
     router.push(
-      `/search?destination=${encodeURIComponent(holiday.searchQuery)}&start=${holiday.startDate}&end=${holiday.endDate}`
+      `/search?destination=${encodeURIComponent(holiday.searchQuery)}&startDate=${holiday.startDate}&endDate=${holiday.endDate}`
     );
   };
 
@@ -43,8 +43,8 @@ export default function HolidaysBanner() {
   };
 
   return (
-    <div className="w-full mt-16 max-w-6xl mx-auto px-4 z-20">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6 text-left">
+    <div className="w-full mt-20 max-w-7xl mx-auto px-4 sm:px-6 z-20">
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-8 text-left">
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-wider mb-2">
             <Calendar className="w-3.5 h-3.5" />
@@ -95,24 +95,24 @@ export default function HolidaysBanner() {
       </div>
 
       {/* Holiday Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {holidays.map((item) => (
           <div
             key={item.id}
             onClick={() => handlePlanHoliday(item)}
-            className="group relative bg-slate-900/90 hover:bg-slate-900 border border-white/10 hover:border-blue-500/50 rounded-3xl p-6 transition-colors duration-200 shadow-xl flex flex-col justify-between cursor-pointer text-left"
+            className="group relative bg-slate-900/90 hover:bg-slate-900 border border-white/10 hover:border-blue-500/50 rounded-3xl p-6 transition-colors duration-200 shadow-xl flex flex-col justify-between cursor-pointer text-left min-w-0"
           >
               <div>
                 {/* Header row: Days tag + Dates */}
-                <div className="flex items-center justify-between gap-2 mb-3">
-                  <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                  <div className="flex items-center gap-2 shrink-0">
                     <span className="text-xl">{item.flag}</span>
-                    <span className={`px-2.5 py-0.5 rounded-full text-xs font-extrabold border ${item.badgeColor}`}>
+                    <span className={`px-2.5 py-0.5 rounded-full text-xs font-extrabold border whitespace-nowrap ${item.badgeColor}`}>
                       {item.days} Days Break
                     </span>
                   </div>
-                  <span className="text-[11px] font-bold tracking-wider uppercase text-slate-400 flex items-center gap-1">
-                    <Calendar className="w-3 h-3 text-blue-400" />
+                  <span className="text-[11px] font-bold tracking-wider uppercase text-slate-400 flex items-center gap-1 whitespace-nowrap">
+                    <Calendar className="w-3 h-3 text-blue-400 shrink-0" />
                     {formatDateDisplay(item.startDate, item.endDate)}
                   </span>
                 </div>
