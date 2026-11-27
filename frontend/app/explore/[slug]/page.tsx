@@ -295,7 +295,7 @@ export default async function DestinationPage({ params }: Props) {
                             Experience {destination.name}
                         </h2>
                         <p className="text-xl text-slate-400 leading-relaxed font-light">
-                            {destination.name} is a premier destination curated by our expert travel team. Known for its distinct {destination.tags.join(', ')} vibes, it offers a perfect blend of relaxation and discovery for those seeking a premium weekend break in 2026.
+                            {destination.name} is researched and structured for 2-to-4 day weekend trips. Known for its {destination.tags.join(', ')} appeal, it offers a practical mix of sightseeing, local food, and short-stay logistics.
                         </p>
                     </div>
 
@@ -321,7 +321,10 @@ export default async function DestinationPage({ params }: Props) {
                             prose-h2:text-3xl prose-h2:font-black prose-h2:text-blue-400 prose-h2:italic prose-h2:uppercase
                             prose-p:text-slate-400 prose-p:leading-relaxed"
                             dangerouslySetInnerHTML={{ 
-                                __html: deepContent.replace(/<br\/><br\/>/g, '<div class="h-4"></div>') 
+                                __html: deepContent
+                                    .replace(/<h1(\b[^>]*)>/gi, '<h2$1>')
+                                    .replace(/<\/h1>/gi, '</h2>')
+                                    .replace(/<br\/><br\/>/g, '<div class="h-4"></div>') 
                             }} 
                         />
                     )}
@@ -414,10 +417,20 @@ export default async function DestinationPage({ params }: Props) {
                                 <BookOpen className="w-3.5 h-3.5" /> Editorial Notes &amp; Estimates
                             </div>
                             <p className="text-xs text-slate-400 leading-relaxed max-w-2xl">
-                                Compiled by the <Link href="/authors" className="text-slate-200 underline">Weekend Travellers Editorial Team</Link>. Budget ranges and drive times are planning estimates—not live quotes. Check our{' '}
+                                Compiled by the <Link href="/authors" className="text-slate-200 underline">Weekend Travellers Editorial Team</Link>. Budget ranges and drive times are planning estimates—not live quotes. Verify live schedules and entry rules via{' '}
+                                <a href={destination.country === 'India' ? 'https://www.incredibleindia.gov.in/' : 'https://www.unwto.org/'} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">
+                                    {destination.country === 'India' ? 'Incredible India' : 'official tourism portals'}
+                                </a>
+                                {destination.country === 'India' && (
+                                    <>
+                                        {' '}and{' '}
+                                        <a href="https://www.irctc.co.in/" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">IRCTC</a>
+                                    </>
+                                )}
+                                , or review our{' '}
                                 <Link href="/editorial-policy" className="text-blue-400 hover:underline">Editorial Policy</Link>,{' '}
-                                <Link href="/disclaimer" className="text-blue-400 hover:underline">Disclaimer</Link>, or{' '}
-                                <Link href="/corrections-policy" className="text-blue-400 hover:underline">report an update</Link>.
+                                <Link href="/disclaimer" className="text-blue-400 hover:underline">Disclaimer</Link>, and{' '}
+                                <Link href="/corrections-policy" className="text-blue-400 hover:underline">Corrections Policy</Link>.
                             </p>
                         </div>
                         <Link href="/tools" className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shrink-0">

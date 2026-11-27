@@ -34,15 +34,15 @@ export default function PrivacyPage() {
                 </section>
 
                 <section className="space-y-4">
-                    <h2 className="text-2xl font-semibold text-white">2. Data We Collect</h2>
+                    <h2 className="text-2xl font-semibold text-white">2. Data We Collect &amp; Browser Storage</h2>
                     <p className="text-slate-300 leading-relaxed">
-                        We may collect, use, store and transfer different kinds of personal data about you which we have grouped together follows:
+                        We collect only the information needed to operate your account, respond to messages, and keep planning features working:
                     </p>
                     <ul className="list-disc pl-6 text-slate-300 space-y-2">
-                        <li><strong>Identity Data:</strong> includes first name, last name, username or similar identifier.</li>
-                        <li><strong>Contact Data:</strong> includes email address and telephone numbers.</li>
-                        <li><strong>Technical Data:</strong> includes internet protocol (IP) address, your login data, browser type and version, time zone setting and location.</li>
-                        <li><strong>Usage Data:</strong> includes information about how you use our website and services.</li>
+                        <li><strong>Account &amp; Contact Data:</strong> Name and email address when you register an account, post a comment, or submit our contact form (phone number is optional).</li>
+                        <li><strong>Saved Trips &amp; Browser Local Storage:</strong> If you sign in, saved trips are stored in our database. Unauthenticated recent searches and temporary trip drafts are stored locally in your browser&apos;s <code>localStorage</code> and can be cleared anytime from your browser settings.</li>
+                        <li><strong>Technical &amp; Usage Data:</strong> Standard request logs (IP address, browser type, device viewport) and analytics cookies used to monitor uptime and page performance.</li>
+                        <li><strong>Third-Party APIs &amp; Embeds:</strong> Destination weather forecasts are fetched from Open-Meteo, interactive maps load OpenStreetMap tiles via Leaflet, and optional accommodation links connect to third-party booking partners (such as Agoda, Hotellook, or Travelpayouts).</li>
                     </ul>
                 </section>
 

@@ -254,7 +254,9 @@ export default async function BlogPostDetail({ params }: Props) {
                             {post.title}
                         </h1>
                         <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 text-sm text-slate-200 font-medium">
-                            <span className="flex items-center gap-2"><User size={18} className="text-blue-400" /> {post.author}</span>
+                            <Link href="/authors" className="flex items-center gap-2 hover:text-blue-300 transition-colors">
+                                <User size={18} className="text-blue-400" /> {post.author || 'Weekend Travellers Editorial Team'}
+                            </Link>
                             <span className="flex items-center gap-2"><Calendar size={18} className="text-blue-400" /> {post.publishedDate ? new Date(post.publishedDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : 'Recent'}</span>
                             <span className="flex items-center gap-2"><Clock size={18} className="text-blue-400" /> {post.readingTime}</span>
                         </div>
@@ -413,17 +415,58 @@ export default async function BlogPostDetail({ params }: Props) {
                 <BlogSidebar author={post.author} title={post.title} slug={post.slug} />
             </main>
 
-            {/* AdSense Optimization: High-Value Content Section */}
-            <section className="container mx-auto px-4 py-20 lg:max-w-4xl border-t border-white/5 mt-20">
-                <div className="bg-slate-900/30 border border-slate-800 rounded-3xl p-8 md:p-12">
-                    <h2 className="text-2xl font-black text-white mb-6 uppercase tracking-tight italic">Structural Quality & Editorial Integrity</h2>
-                    <div className="space-y-6 text-slate-400 text-sm leading-relaxed">
+            {/* Sources, References & Editorial Transparency */}
+            <section className="container mx-auto px-4 py-16 lg:max-w-4xl border-t border-white/5 mt-16">
+                <div className="bg-slate-900/40 border border-slate-800 rounded-3xl p-8 md:p-10 space-y-6">
+                    <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">Sources, Estimates &amp; Editorial Notes</h2>
+                    <div className="space-y-4 text-slate-300 text-sm leading-relaxed">
                         <p>
-                            At Weekend Travellers, we believe that travel journalism in 2026 demands a higher standard of accuracy and logistical verification. Every article published under our &quot;Editorial&quot; banner—including this guide—is subjected to a comprehensive multi-point audit combining computational data and human expertise.
+                            Published by{' '}
+                            <Link href="/authors" className="text-blue-400 hover:underline font-medium">
+                                {post.author || 'Weekend Travellers Editorial Team'}
+                            </Link>
+                            . Costs, hotel ranges, entry fees, and transit durations mentioned in this guide are <strong>planning estimates</strong> and vary by season and availability.
                         </p>
-                        <p>
-                            <strong>A Commitment to E-E-A-T</strong><br/>
-                            This content is designed to meet the highest standards of Experience, Expertise, Authoritativeness, and Trustworthiness (E-E-A-T). For more details on how we curate our weekend itineraries and verify local gems, please visit our <Link href="/about" className="text-blue-400 hover:underline">About Us</Link> page.
+                        <div>
+                            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Official Reference Portals</h3>
+                            <ul className="list-disc pl-5 space-y-1.5 text-slate-300">
+                                <li>
+                                    <a href="https://www.incredibleindia.gov.in/" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">
+                                        Incredible India (Ministry of Tourism, Government of India)
+                                    </a>{' '}
+                                    — official destination advisories and heritage information.
+                                </li>
+                                <li>
+                                    <a href="https://www.irctc.co.in/" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">
+                                        IRCTC / Indian Railways
+                                    </a>{' '}
+                                    — live train timings, Nilgiri Mountain Railway &amp; hill-rail reservations, and fares.
+                                </li>
+                                {(post.slug?.includes('ooty') || post.slug?.includes('coonoor') || post.slug?.includes('tamil')) && (
+                                    <li>
+                                        <a href="https://www.tamilnadutourism.tn.gov.in/" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">
+                                            Tamil Nadu Tourism Development Corporation
+                                        </a>{' '}
+                                        — Nilgiris district attractions, botanical garden, and boat house updates.
+                                    </li>
+                                )}
+                                <li>
+                                    <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">
+                                        OpenStreetMap
+                                    </a>{' '}
+                                    &amp;{' '}
+                                    <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">
+                                        Open-Meteo
+                                    </a>{' '}
+                                    — route coordinates and weather reference data.
+                                </li>
+                            </ul>
+                        </div>
+                        <p className="text-xs text-slate-400 pt-2">
+                            Learn more in our{' '}
+                            <Link href="/editorial-policy" className="text-blue-400 hover:underline">Editorial Policy</Link>,{' '}
+                            <Link href="/disclaimer" className="text-blue-400 hover:underline">Travel Disclaimer</Link>, or report an outdated detail via our{' '}
+                            <Link href="/corrections-policy" className="text-blue-400 hover:underline">Corrections Policy</Link>.
                         </p>
                     </div>
                 </div>

@@ -21,14 +21,18 @@ export default function AboutPage() {
         '@type': 'AboutPage',
         name: 'About Weekend Travellers',
         url: 'https://weekendtravellers.com/about',
-        description: 'Discover how Weekend Travellers uses advanced AI to curate the best 2 & 3 day weekend itineraries, hidden gems, and road trip plans.',
+        description: 'Learn who runs Weekend Travellers, how we research 2-to-4 day weekend itineraries, and how our planning tools and editorial reviews work.',
         mainEntity: {
             '@type': 'Organization',
             name: 'Weekend Travellers',
             url: 'https://weekendtravellers.com',
             logo: 'https://weekendtravellers.com/icon.svg',
             foundingDate: '2024',
-            description: 'Global AI travel planner and intelligent weekend getaway generator.'
+            founder: {
+                '@type': 'Person',
+                name: 'Majid Khan'
+            },
+            description: 'Independent weekend travel publication and AI-assisted 2-to-4 day trip planner.'
         }
     };
 
@@ -57,7 +61,7 @@ export default function AboutPage() {
                             Planning a 2-week vacation is exciting, but planning a 2-day weekend getaway often feels like more work than it&apos;s worth. Between finding the right destination, coordinating travel timings, and vetting restaurant reviews, hours are wasted on research. 
                         </p>
                         <p className="text-lg text-slate-300 leading-relaxed">
-                            In 2024, a group of dedicated travelers and data scientists asked: <strong>&quot;What if you could plan a perfect weekend in under 60 seconds?&quot;</strong> That question led to the birth of <strong>Weekend Travellers</strong>.
+                            In 2024, founder <strong>Majid Khan</strong> started <strong>Weekend Travellers</strong> with a practical goal: helping busy travelers map out realistic 2-to-4 day weekend trips—complete with route distances, budget ranges, and day-by-day pacing—without spending hours juggling dozens of browser tabs.
                         </p>
                     </section>
 

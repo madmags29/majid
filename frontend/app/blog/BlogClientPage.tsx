@@ -9,6 +9,8 @@ import InnerHeader from '@/components/InnerHeader';
 import AdBanner from '@/components/AdBanner';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { API_URL } from '@/lib/config';
+import { toast } from 'sonner';
 
 interface BlogPostItem {
     _id: string;
@@ -24,6 +26,42 @@ interface BlogPostItem {
 
 export default function BlogClientPage({ posts }: { posts: BlogPostItem[] }) {
     const [selectedCategory, setSelectedCategory] = React.useState<string | null>(null);
+    const [newsletterEmail, setNewsletterEmail] = React.useState('');
+    const [subscribing, setSubscribing] = React.useState(false);
+    const [subscribed, setSubscribed] = React.useState(false);
+
+    const handleSubscribe = async (e: React.FormEvent) => {
+        e.preventDefault();
+        const email = newsletterEmail.trim();
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            toast.error('Please enter a valid email address.');
+            return;
+        }
+        setSubscribing(true);
+        try {
+            const res = await fetch(`${API_URL}/api/contact`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: 'Blog Newsletter Reader',
+                    email,
+                    comment: 'Subscribed to Weekend Travellers weekly travel guide updates from /blog.',
+                }),
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+                setSubscribed(true);
+                setNewsletterEmail('');
+                toast.success('Thanks for subscribing! We will send new weekend guides to your inbox.');
+            } else {
+                toast.error(data.message || 'Unable to subscribe right now. Please try again.');
+            }
+        } catch {
+            toast.error('Connection error. Please try again later.');
+        } finally {
+            setSubscribing(false);
+        }
+    };
 
     const featuredPost = posts[0];
     const latestPosts = posts.slice(1);
@@ -52,7 +90,7 @@ export default function BlogClientPage({ posts }: { posts: BlogPostItem[] }) {
                 {!posts || posts.length === 0 ? (
                     <div className="text-center py-20">
                         <h2 className="text-2xl font-bold text-white mb-4">No stories found yet.</h2>
-                        <p className="text-slate-400">Our AI writers are busy exploring the world. Check back soon!</p>
+                        <p className="text-slate-400">New editorial guides are being prepared. Check back soon!</p>
                     </div>
                 ) : (
                     <>
@@ -212,37 +250,39 @@ export default function BlogClientPage({ posts }: { posts: BlogPostItem[] }) {
                 <section className="py-24 border-t border-slate-800/50">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
                         <div className="space-y-8">
-                            <h3 className="text-4xl font-black text-white italic tracking-tighter uppercase">Our <span className="text-purple-400">Editorial</span> Vision</h3>
+                            <h3 className="text-4xl font-black text-white italic tracking-tighter uppercase">Our <span className="text-purple-400">Editorial</span> Approach</h3>
                             <p className="text-slate-400 leading-relaxed text-lg">
-                                In an era of generic travel advice, the Weekend Travellers blog stands as a beacon for the modern Explorer. We recognize that the most valuable commodity for our readers in 2026 isn&apos;t just information—it&apos;s <strong>curation</strong>. Our blog is more than just a collection of stories; it is a tactical manual for reclaiming your time and discovering the world in bite-sized, high-impact adventures.
+                                Weekend Travellers focuses on practical, 2-to-4 day travel guides rather than generic long-haul roundups. Every guide is structured around realistic transit windows, seasonal weather, and neighborhood pacing.
                             </p>
                             <p className="text-slate-400 leading-relaxed text-lg">
-                                Every guide, itinerary, and travel hack published on our platform undergoes a rigorous assessment process. We combine the computational power of Large Language Models (LLMs) with the human intuition of seasoned travelers. This hybrid approach allows us to identify emerging trends, localized events, and &quot;anti-tourist&quot; routes that standard algorithms often miss.
+                                We use AI tools to help draft and organize itinerary outlines, then review guides against public tourism boards, highway and rail corridors, and transparent cost estimates. Read our{' '}
+                                <Link href="/editorial-policy" className="text-blue-400 hover:underline">Editorial Policy</Link>{' '}
+                                and <Link href="/authors" className="text-blue-400 hover:underline">Authors page</Link> for full details.
                             </p>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div className="p-10 bg-slate-900/40 rounded-[2.5rem] border border-slate-800 flex flex-col items-center text-center space-y-4">
-                                <span className="text-3xl font-black text-white italic tracking-tighter">AI+Human</span>
-                                <p className="text-sm text-slate-500 leading-relaxed">
-                                    We leverage advanced AI to synthesize vast amounts of logistical data, while our human editors ensure every story resonates with authentic emotion and practical reliability.
+                                <span className="text-3xl font-black text-white italic tracking-tighter">AI + Review</span>
+                                <p className="text-sm text-slate-400 leading-relaxed">
+                                    AI assists with itinerary structuring, while editorial review checks seasonal fit and geographical feasibility.
                                 </p>
                             </div>
                             <div className="p-10 bg-slate-900/40 rounded-[2.5rem] border border-slate-800 flex flex-col items-center text-center space-y-4">
-                                <span className="text-3xl font-black text-white italic tracking-tighter">Micro-Focus</span>
-                                <p className="text-sm text-slate-500 leading-relaxed">
-                                    We specialize exclusively in 2-4 day travel cycles. We don&apos;t care about gap years; we care about making your next Saturday and Sunday legendary.
+                                <span className="text-3xl font-black text-white italic tracking-tighter">2–4 Days</span>
+                                <p className="text-sm text-slate-400 leading-relaxed">
+                                    Built specifically for weekend and long-weekend travel windows—minimizing transit fatigue.
                                 </p>
                             </div>
                             <div className="p-10 bg-slate-900/40 rounded-[2.5rem] border border-slate-800 flex flex-col items-center text-center space-y-4">
-                                <span className="text-3xl font-black text-white italic tracking-tighter">Verified</span>
-                                <p className="text-sm text-slate-500 leading-relaxed">
-                                    Every hotel recommendation and transit route is cross-checked against current 2026 availability and user-verified reliability scores.
+                                <span className="text-3xl font-black text-white italic tracking-tighter">Estimates</span>
+                                <p className="text-sm text-slate-400 leading-relaxed">
+                                    Budgets, entry fees, and travel times are clearly labeled as planning estimates; verify live fares before booking.
                                 </p>
                             </div>
                             <div className="p-10 bg-slate-900/40 rounded-[2.5rem] border border-slate-800 flex flex-col items-center text-center space-y-4">
-                                <span className="text-3xl font-black text-white italic tracking-tighter">Future</span>
-                                <p className="text-sm text-slate-500 leading-relaxed">
-                                    Our vision is to build the world&apos;s largest repository of &quot;perfect weekends,&quot; helping millions of travelers escape the mundane without a passport stamp required.
+                                <span className="text-3xl font-black text-white italic tracking-tighter">Corrections</span>
+                                <p className="text-sm text-slate-400 leading-relaxed">
+                                    Spot an outdated price or route? Reach out anytime via our <Link href="/contact" className="text-blue-400 hover:underline">Contact page</Link>.
                                 </p>
                             </div>
                         </div>
@@ -250,21 +290,31 @@ export default function BlogClientPage({ posts }: { posts: BlogPostItem[] }) {
                 </section>
 
                 {/* Newsletter */}
-                <section className="mt-32 relative rounded-[3rem] overflow-hidden p-1 p-px bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-pink-500/20 shadow-2xl">
+                <section className="mt-32 relative rounded-[3rem] overflow-hidden p-px bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-pink-500/20 shadow-2xl">
                     <div className="bg-slate-950/90 backdrop-blur-xl rounded-[2.9rem] px-8 py-16 md:px-20 md:py-24 text-center">
-                        <h3 className="text-4xl md:text-5xl lg:text-6xl font-black italic uppercase tracking-tighter text-white mb-6">Join the Weekend Tribe</h3>
-                        <p className="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto mb-12 font-medium">Get secret weekend routes and early access to our AI features delivered once a week. No spam, ever.</p>
+                        <h3 className="text-4xl md:text-5xl lg:text-6xl font-black italic uppercase tracking-tighter text-white mb-6">Weekend Route Updates</h3>
+                        <p className="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto mb-12 font-medium">Get newly reviewed weekend guides and long-weekend route ideas in your inbox. No spam, ever.</p>
                         
-                        <form className="flex flex-col md:flex-row gap-4 max-w-xl mx-auto group">
-                            <input 
-                                type="email" 
-                                placeholder="Your email address" 
-                                className="flex-1 bg-slate-900 border border-slate-800 focus:border-blue-500 outline-none rounded-2xl px-6 py-4 text-white placeholder:text-slate-500 transition-all shadow-inner"
-                            />
-                            <button type="button" className="bg-blue-600 hover:bg-blue-500 text-white font-black uppercase tracking-widest text-xs px-10 py-4 rounded-2xl transition-all shadow-lg shadow-blue-900/40 active:scale-95">
-                                Subscribe
-                            </button>
-                        </form>
+                        {subscribed ? (
+                            <p className="text-emerald-400 font-semibold text-base">
+                                You&apos;re subscribed! Thank you for joining Weekend Travellers updates.
+                            </p>
+                        ) : (
+                            <form onSubmit={handleSubscribe} className="flex flex-col md:flex-row gap-4 max-w-xl mx-auto group">
+                                <input 
+                                    type="email" 
+                                    required
+                                    aria-label="Email address for weekend route updates"
+                                    value={newsletterEmail}
+                                    onChange={(e) => setNewsletterEmail(e.target.value)}
+                                    placeholder="Your email address" 
+                                    className="flex-1 bg-slate-900 border border-slate-800 focus:border-blue-500 outline-none rounded-2xl px-6 py-4 text-white placeholder:text-slate-500 transition-all shadow-inner"
+                                />
+                                <button type="submit" disabled={subscribing} className="bg-blue-600 hover:bg-blue-500 disabled:opacity-60 text-white font-black uppercase tracking-widest text-xs px-10 py-4 rounded-2xl transition-all shadow-lg shadow-blue-900/40 active:scale-95">
+                                    {subscribing ? 'Subscribing...' : 'Subscribe'}
+                                </button>
+                            </form>
+                        )}
                     </div>
                 </section>
             </main>

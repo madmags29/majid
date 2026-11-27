@@ -192,7 +192,7 @@ export default async function LandingPage() {
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 text-center md:text-left">
               <div>
                 <h2 className="text-4xl md:text-5xl font-black italic tracking-tighter text-white mb-4 uppercase">Latest Stories</h2>
-                <p className="text-xl text-slate-400 max-w-2xl">Expert guides, weekend hacks, and travel inspiration from our AI writers.</p>
+                <p className="text-xl text-slate-400 max-w-2xl">Expert travel guides, researched destination insights, and AI-assisted trip planning.</p>
               </div>
               <Link href="/blog" className="inline-flex items-center gap-2 text-blue-400 font-bold hover:text-blue-300 transition-colors uppercase tracking-widest text-xs">
                 View All Stories <Search size={14} />
@@ -249,7 +249,7 @@ export default async function LandingPage() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
               <h2 className="text-4xl md:text-5xl font-black italic tracking-tighter text-white mb-4 uppercase">Explore the World</h2>
-              <p className="text-xl text-slate-400 max-w-2xl">Dive deep into our curated guides for countries, states, and cities. 2000+ words of history, food, and secret spots.</p>
+              <p className="text-xl text-slate-400 max-w-2xl">Browse destination guides across India and international hubs—covering routes, seasonal timing, local food, and budget estimates.</p>
             </div>
           </div>
 
@@ -291,40 +291,40 @@ export default async function LandingPage() {
           <div className="relative z-10">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 tracking-tight flex items-center gap-3">
               <span className="w-8 h-1 bg-blue-500 rounded-full"></span>
-              How Our AI Travel Engine Works
+              How Our Weekend Planning System Works
             </h2>
             <div className="space-y-6 text-slate-300 leading-relaxed text-lg">
               <p>
-                Planning a vacation should be the start of your relaxation, not an administrative chore. At <strong>Weekend Travellers</strong>, our proprietary AI itinerary generator revolutionizes short-term travel by transforming the chaotic web of flight schedules, hotel availability, and local attraction reviews into a single, cohesive weekend plan in under sixty seconds.
+                Planning a short getaway shouldn&apos;t take longer than the trip itself. At <strong>Weekend Travellers</strong>, we combine structured destination reference guides, practical budget and distance calculators, and AI-assisted itinerary drafting to help you organize a 2-to-4 day trip cleanly.
               </p>
               <div className="grid md:grid-cols-2 gap-8 my-8">
                 <div className="space-y-2">
-                  <h3 className="text-xl font-bold text-blue-400">1. Data Aggregation & Contextualization</h3>
+                  <h3 className="text-xl font-bold text-blue-400">1. Structured Destination Data</h3>
                   <p className="text-sm">
-                    While traditional travel agencies rely on static databases, our machine learning models constantly analyze millions of data points across global events, local weather patterns, transit delays, and real-time crowd densities. This ensures that every 48-hour or 72-hour micro-vacation we recommend is structurally sound and seasonally appropriate.
+                    Our destination guides organize key logistics in one place—best seasons to visit, air/rail/road connections, suitability for families, couples, or solo travelers, and indicative daily budget ranges—alongside live weather forecasts from Open-Meteo.
                   </p>
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-xl font-bold text-purple-400">2. The &ldquo;Micro-Vacation&rdquo; Philosophy</h3>
+                  <h3 className="text-xl font-bold text-purple-400">2. The &ldquo;Weekend-First&rdquo; Approach</h3>
                   <p className="text-sm">
-                    As remote work and digital nomadism blur the lines between leisure and labor, the concept of the two-week annual holiday is becoming obsolete. We specialize exclusively in the <em>Weekend Getaway</em> methodology. By minimizing transit times and maximizing high-impact cultural experiences, we help travelers reset their mental health without draining their PTO reserves.
+                    Unlike long-haul vacation planners, our routes are built around 48-to-96 hour windows. We group nearby sights by neighborhood and realistic transit times so you spend less time commuting and more time exploring.
                   </p>
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-xl font-bold text-pink-400">3. Algorithmic Personalization</h3>
+                  <h3 className="text-xl font-bold text-pink-400">3. AI-Assisted Customization</h3>
                   <p className="text-sm">
-                    No two travelers are identical. Whether you are a solo backpacker searching for underground speakeasies in Tokyo or a family needing stroller-friendly paths in Rome, our generative AI scales its recommendations dynamically. The tool cross-references your inputted preferences against verified, hyper-local editorial content rather than generic tourist traps.
+                    When you enter a starting city, budget, or travel style in Search or AI Chat, our planner drafts a tailored day-by-day schedule. Because AI outputs and cost figures are planning estimates, we clearly label them and recommend checking live fares and timings before booking.
                   </p>
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-xl font-bold text-indigo-400">4. Commitment to Sustainability</h3>
+                  <h3 className="text-xl font-bold text-indigo-400">4. Editorial Transparency</h3>
                   <p className="text-sm">
-                    Overtourism is a critical issue in 2026. Therefore, our engine actively penalizes overcrowded districts in favor of sustainable, secondary markets. By distributing tourist density and promoting verified eco-friendly vendors, Weekend Travellers acts not just as a planner, but as a responsible steward of global communities.
+                    Curated guides and travel articles are reviewed against official tourism and transit references, and every page links to our <Link href="/editorial-policy" className="text-blue-400 hover:underline">Editorial Policy</Link>, <Link href="/authors" className="text-blue-400 hover:underline">Authors</Link>, and <Link href="/corrections-policy" className="text-blue-400 hover:underline">Corrections Policy</Link>.
                   </p>
                 </div>
               </div>
               <p>
-                By synthesizing this vast logistical complexity into actionable, readable itineraries, we bridge the gap between spontaneous wanderlust and organized execution. Stop spending hours juggling browser tabs and navigating conflicting TripAdvisor reviews. Welcome to the future of the smart weekend getaway. Explore responsibly, travel smartly, and make every hour of your weekend count.
+                Use our interactive planner to draft a route, estimate costs with our free <Link href="/tools" className="text-blue-400 hover:underline">Travel Tools</Link>, and verify local details with official links before you head out.
               </p>
             </div>
           </div>
@@ -354,9 +354,9 @@ export default async function LandingPage() {
                     <span className="text-xl font-black text-purple-400 font-cursive italic">02</span>
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-white mb-2">Smart Itinerary Generation</h3>
+                    <h3 className="text-xl font-bold text-white mb-2">Draft Your Itinerary</h3>
                     <p className="text-slate-400 leading-relaxed">
-                      Our advanced AI travel engine instantly builds a comprehensive, hour-by-hour itinerary. Unlike generic travel guides, we include hidden local secrets, the best times to visit specific attractions to avoid crowds, and curated food recommendations that reflect the authentic culture of the destination.
+                      Our AI-assisted planner builds a day-by-day schedule tailored to your trip length, with neighborhood pacing, local food ideas, and interactive map pins.
                     </p>
                   </div>
                 </div>

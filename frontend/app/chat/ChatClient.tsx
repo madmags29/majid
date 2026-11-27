@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect, Suspense, useCallback } from 'react';
+import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { ArrowLeft, User, LogIn, Loader2, Send, RefreshCw, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -227,27 +228,12 @@ function ChatClient() {
                         </AnimatePresence>
                         <div ref={messagesEndRef} />
 
-                        {/* AdSense Optimization: High-Value Content Section */}
-                        <div className="mt-32 p-8 md:p-10 bg-white/[0.02] border border-white/5 rounded-[2rem] backdrop-blur-sm group/adsense transition-all hover:bg-blue-500/5 hover:border-blue-500/30">
-                            <div className="flex items-center gap-3 mb-6">
-                                <span className="p-2 rounded-lg bg-blue-500/10 text-blue-400">
-                                    <RefreshCw className="w-4 h-4" />
-                                </span>
-                                <h3 className="text-sm font-black text-white uppercase tracking-[0.2em] italic">Conversational Strategy</h3>
-                            </div>
-                            <div className="space-y-6 text-[11px] md:text-xs text-slate-500 leading-relaxed max-w-2xl">
-                                <p className="group-hover/adsense:text-slate-400 transition-colors">
-                                    Our conversational interface is the primary entry point for personalized 2026 micro-vacation planning. When you input a destination or a &quot;vibe&quot; into this chat, our natural language processing models immediately begin deconstructing your request into actionable travel parameters. This isn&apos;t just a simple search; it&apos;s a multi-layered query that cross-references your current geographical location with global travel trends and seasonal logistics.
-                                </p>
-                                <p className="group-hover/adsense:text-slate-400 transition-colors">
-                                    <strong className="text-slate-300">The Generative Advantage</strong><br/>
-                                    By using generative AI, Weekend Travellers moves beyond the limitations of static brochures. The itineraries generated through this interface are structurally sound—meaning they account for closing times, travel distances, and pedestrian-friendly routing. Whether you are looking for a &quot;quiet retreat&quot; or a &quot;high-energy city break,&quot; the intelligence behind this chat adapts its lexical weights to prioritize the results that most closely align with your stated mood.
-                                </p>
-                                <p className="group-hover/adsense:text-slate-400 transition-colors">
-                                    <strong className="text-slate-300">Scaling Your Adventure</strong><br/>
-                                    Every interaction in this chat helps refine our destination index. By analyzing the nuanced requests of thousands of travelers, we can identify emerging hotspots and &quot;hidden gems&quot; before they reach mainstream saturation. Our commitment to ethical AI ensures that your specific travel dreams are matched with verified, safe, and high-quality local vendors, promoting sustainable tourism one weekend at a time.
-                                </p>
-                            </div>
+                        <div className="mt-16 p-6 bg-white/[0.02] border border-white/5 rounded-2xl">
+                            <p className="text-xs text-slate-400 leading-relaxed max-w-2xl">
+                                <strong>How AI Chat Planning Works:</strong> Use this chat to draft or customize a 2-to-4 day itinerary by destination, budget, or travel pace. Suggestions are AI-assisted planning estimates; always verify live transport timings, entry fees, and accommodation availability before booking. Read our{' '}
+                                <Link href="/editorial-policy" className="text-blue-400 hover:underline">Editorial Policy</Link> and{' '}
+                                <Link href="/disclaimer" className="text-blue-400 hover:underline">Disclaimer</Link>.
+                            </p>
                         </div>
                     </div>
 
