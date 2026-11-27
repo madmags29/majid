@@ -92,6 +92,7 @@ export default async function LandingPage() {
                   { label: 'From New Delhi', href: '/search?destination=Rishikesh&origin=New+Delhi' },
                   { label: 'From Mumbai', href: '/search?destination=Goa&origin=Mumbai' },
                   { label: 'From Bangalore', href: '/search?destination=Coorg&origin=Bangalore' },
+                  { label: 'From Pune', href: '/search?destination=Mahabaleshwar&origin=Pune' },
                   { label: 'From Hyderabad', href: '/search?destination=Hampi&origin=Hyderabad' },
                   { label: 'From London', href: '/search?destination=Paris&origin=London' },
                   { label: 'From New York', href: '/search?destination=Vancouver&origin=New+York' },
@@ -111,10 +112,26 @@ export default async function LandingPage() {
 
             <div className="bg-slate-900/40 border border-white/10 rounded-3xl p-8 space-y-5 flex flex-col justify-between">
               <div>
-                <h2 className="text-2xl font-black text-white tracking-tight">Free Weekend Planning Tools</h2>
+                <h2 className="text-2xl font-black text-white tracking-tight">Explore by Budget, Style &amp; Tools</h2>
                 <p className="text-sm text-slate-400 mt-1">
-                  Estimate stay, food, and transit costs before you book, or check whether a destination fits a 2-day drive.
+                  Pick a trip style for solo, couple, or family travel, or estimate costs before you book.
                 </p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  { label: 'Budget Escapes', href: '/search?destination=Gokarna&budget=Budget' },
+                  { label: 'Family Trips', href: '/search?destination=Jaipur&style=Family' },
+                  { label: 'Couple Getaways', href: '/search?destination=Udaipur&style=Couples' },
+                  { label: 'Solo Adventures', href: '/search?destination=Rishikesh&style=Solo' },
+                ].map(item => (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    className="px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-purple-600/20 border border-white/10 hover:border-purple-500/40 text-xs font-semibold text-slate-200 transition-colors"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
               </div>
               <div className="flex flex-wrap gap-3">
                 <Link href="/tools" className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors">
@@ -123,8 +140,8 @@ export default async function LandingPage() {
                 <Link href="/explore/all" className="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-white text-xs font-bold transition-colors">
                   Filter 68+ Destinations
                 </Link>
-                <Link href="/chat" className="px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200 text-xs font-bold transition-colors">
-                  Interactive Trip Assistant
+                <Link href="/about" className="px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200 text-xs font-bold transition-colors">
+                  About Us
                 </Link>
               </div>
             </div>

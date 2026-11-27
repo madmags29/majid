@@ -101,7 +101,12 @@ const jsonLd = {
   name: 'Weekend Travellers',
   url: 'https://weekendtravellers.com',
   logo: 'https://weekendtravellers.com/icon.svg',
-  description: 'AI-powered personalized weekend trip planner for curated 2-3 day itineraries.',
+  foundingDate: '2024',
+  founder: {
+    '@type': 'Person',
+    name: 'Majid Khan'
+  },
+  description: 'Independent weekend travel publication and AI-assisted 2-to-4 day trip planner.',
   sameAs: [
     'https://instagram.com/weekendtravellers.official',
     'https://youtube.com/@weekendtravellers.official'
@@ -148,33 +153,13 @@ const serviceJsonLd = {
   areaServed: 'Worldwide'
 };
 
-const travelAgencyJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'TravelAgency',
-  name: 'Weekend Travellers',
-  url: 'https://weekendtravellers.com',
-  logo: 'https://weekendtravellers.com/icon.svg',
-  image: 'https://weekendtravellers.com/og-image.png',
-  description: 'Global AI travel planner and intelligent weekend getaway generator for custom 2-4 day itineraries.',
-  telephone: '',
-  priceRange: '$$',
-  address: {
-    '@type': 'PostalAddress',
-    addressCountry: 'US'
-  },
-  sameAs: [
-    'https://instagram.com/weekendtravellers.official',
-    'https://youtube.com/@weekendtravellers.official'
-  ]
-};
-
 const brandJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Brand',
   name: 'Weekend Travellers',
   url: 'https://weekendtravellers.com',
   logo: 'https://weekendtravellers.com/icon.svg',
-  description: 'AI-powered micro-vacation & weekend getaway planner platform.'
+  description: 'Weekend travel publication & 2-to-4 day getaway planner.'
 };
 
 const breadcrumbJsonLd = {
@@ -226,6 +211,12 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${cursive.variable} antialiased`}
         suppressHydrationWarning
       >
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:rounded-xl focus:bg-blue-600 focus:text-white focus:font-bold focus:shadow-xl"
+        >
+          Skip to main content
+        </a>
         <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9460255466960810"
@@ -251,10 +242,6 @@ export default function RootLayout({
         />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(travelAgencyJsonLd) }}
-        />
-        <script
-          type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(brandJsonLd) }}
         />
         <script
@@ -262,7 +249,9 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
         />
         <SmoothScroll>
-          {children}
+          <div id="main-content" tabIndex={-1} className="outline-none">
+            {children}
+          </div>
           <Suspense fallback={null}>
             <AuthHandler />
           </Suspense>
