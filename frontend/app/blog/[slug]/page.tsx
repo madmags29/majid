@@ -366,6 +366,54 @@ export default async function BlogPostDetail({ params }: Props) {
                         ))}
                     </div>
 
+                    {/* Verified Practical Reference for Ooty & Coonoor */}
+                    {(post.slug?.includes('ooty') || post.slug?.includes('coonoor')) && (
+                        <section className="my-12 p-6 md:p-8 rounded-3xl bg-slate-900/50 border border-slate-800 space-y-5">
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                                <h3 className="text-lg md:text-xl font-bold text-white">Verified Reference: Ooty &amp; Coonoor Timings, Fees &amp; Toy Train</h3>
+                                <span className="text-[11px] font-semibold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full">
+                                    Checked Nov 2026
+                                </span>
+                            </div>
+                            <p className="text-xs text-slate-400 leading-relaxed">
+                                Indicative fees and schedules cross-checked against Tamil Nadu Tourism / Forest Department guidelines and Indian Railways (IRCTC) timetables. Always confirm live slots before departure.
+                            </p>
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-left text-xs md:text-sm border-collapse">
+                                    <thead>
+                                        <tr className="border-b border-slate-800 text-slate-400">
+                                            <th className="py-2.5 pr-4 font-semibold">Attraction / Service</th>
+                                            <th className="py-2.5 pr-4 font-semibold">Hours / Schedule</th>
+                                            <th className="py-2.5 font-semibold">Indicative Fee</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-slate-800/70 text-slate-300">
+                                        <tr>
+                                            <td className="py-2.5 pr-4 font-medium text-white">Government Botanical Garden</td>
+                                            <td className="py-2.5 pr-4">7:00 AM – 6:00 PM (Daily)</td>
+                                            <td className="py-2.5">~₹30–₹40 adult, ~₹15–₹20 child (camera extra)</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="py-2.5 pr-4 font-medium text-white">Doddabetta Peak &amp; Telescope House</td>
+                                            <td className="py-2.5 pr-4">7:00 AM – 6:00 PM (Daily)</td>
+                                            <td className="py-2.5">~₹10 per person (under 5 free; camera extra)</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="py-2.5 pr-4 font-medium text-white">Avalanche Lake Eco-Safari</td>
+                                            <td className="py-2.5 pr-4">9:00 AM – 3:00 PM (Weather-dependent)</td>
+                                            <td className="py-2.5">Forest bus ~₹200/person; Jeep ~₹2,000/trip</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="py-2.5 pr-4 font-medium text-white">Nilgiri Mountain Railway (UAM → ONR)</td>
+                                            <td className="py-2.5 pr-4">~09:15 AM, ~12:15 PM, ~2:11 PM, ~5:41 PM (~50–70 min)</td>
+                                            <td className="py-2.5">Book via IRCTC (codes UAM to ONR; 60-day ARP)</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    )}
+
                     {/* Interactive AI Trip Planner Callout */}
                     <div className="my-16 p-8 md:p-10 rounded-[2.5rem] bg-gradient-to-br from-blue-900/30 via-purple-900/20 to-slate-900 border border-blue-500/30 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl">
                         <div>

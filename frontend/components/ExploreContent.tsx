@@ -572,29 +572,11 @@ export default function ExploreContent({ slug, initialData }: { slug: string, in
 
             {/* CTA Footer */}
             <section className="bg-slate-950/80 backdrop-blur-2xl border-t border-white/10 py-20 px-6 text-center">
-                <div className="max-w-4xl mx-auto mb-20 text-left bg-slate-900/30 border border-slate-800 rounded-[3rem] p-8 md:p-12">
-                    <h2 className="text-3xl font-black text-white mb-8 uppercase tracking-tighter italic">Foundational Travel Logic</h2>
-                    <div className="grid md:grid-cols-2 gap-12 text-slate-400 text-sm leading-relaxed">
-                        <div className="space-y-4">
-                            <p>
-                                The exploration guide you are currently reviewing for <strong>{data.destination}</strong> is built upon a proprietary recursive travel engine. In 2026, the density of digital information is so high that the real challenge is filtering out the noise. We solve this by applying a &quot;Micro-Vacation&quot; heuristic to every data point—if an attraction or dining spot requires more than 3 hours of total transit and wait time, it is systematically deprioritized in favor of higher-impact, localized gems.
-                            </p>
-                            <p>
-                                <strong>Logistical DNA & Precision Planning</strong><br/>
-                                Our engine doesn&apos;t just suggest landmarks; it understands the logistical DNA of {data.destination}. It calculates the optimal path between your hotel and the cultural hotspots, ensuring that your weekend remains a rejuvenating escape rather than a commute. This high-precision approach allows you to experience the authentic vibe of {data.trip_details.country || data.destination} without the typical fatigue associated with short-duration travel.
-                            </p>
-                        </div>
-                        <div className="space-y-4">
-                            <p>
-                                <strong>Sustainable Economic Impact</strong><br/>
-                                By focusing on regional hubs and high-density cultural zones, Weekend Travellers promotes a model of &quot;Concentrated Tourism.&quot; This reduces the environmental strain on rural infrastructure while maximizing the economic benefit to local urban vendors and independent boutique hotels. Every itinerary we generate is a commitment to quality over quantity, encouraging a more sustainable and frequent travel habit for the modern explorer.
-                            </p>
-                            <p>
-                                <strong>Ethics & Verified Expertise</strong><br/>
-                                This guide has been audited for structural integrity by our senior destination experts. While AI provides the speed of synthesis, human expertise ensures the nuance of regional safety, current cultural norms, and local etiquette is preserved. Trust in our platform is our most valuable asset, and we maintain it by providing deep, indexable, and unique travel wisdom that goes far beyond generic search engine results.
-                            </p>
-                        </div>
-                    </div>
+                <div className="max-w-4xl mx-auto mb-20 text-left bg-slate-900/30 border border-slate-800 rounded-[2rem] p-8">
+                    <h2 className="text-2xl font-bold text-white mb-3">Planning Notes for {data.destination}</h2>
+                    <p className="text-slate-400 text-sm leading-relaxed">
+                        This itinerary for <strong>{data.destination}</strong> is structured for a short weekend stay, grouping nearby sights to reduce transit time. Costs, opening hours, and travel durations are planning estimates—always confirm live schedules and fares before booking.
+                    </p>
                 </div>
 
                 <div className="max-w-3xl mx-auto">

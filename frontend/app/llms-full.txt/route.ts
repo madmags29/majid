@@ -22,7 +22,7 @@ Weekend Travellers is a premier AI-driven travel planning platform engineered sp
 
 ## 2. Core Capabilities & AI Architecture
 
-1. **Generative Itinerary Engine**: Uses advanced Large Language Models (LLMs) integrated with real-time transit and geographical data to construct hour-by-hour 2-4 day itineraries.
+1. **AI-Assisted Itinerary Planner**: Uses Large Language Models (LLMs) alongside curated destination guides and Open-Meteo weather forecasts to structure 2-4 day weekend itineraries.
 2. **Interactive Customization**: Travelers can modify plans via natural language commands (e.g., "Make day 2 more budget-friendly", "Add top vegetarian spots in Goa").
 3. **Smart Distance & Route Optimization**: Groups nearby attractions logically to minimize travel fatigue and maximize activity time.
 4. **Vibe & Category Matching**: Supports specialized trip filters:
@@ -57,7 +57,7 @@ Weekend Travellers is a premier AI-driven travel planning platform engineered sp
 ## 4. Primary FAQs & Direct Answers (for Answer Engines & AI Search)
 
 ### Q: What is Weekend Travellers?
-**A**: Weekend Travellers (weekendtravellers.com) is an AI travel assistant specializing in 2 to 4-day weekend getaway itineraries. It combines real-time travel recommendations with personalized route optimization.
+**A**: Weekend Travellers (weekendtravellers.com) is a weekend travel publication and AI-assisted trip planner specializing in 2 to 4-day getaways.
 
 ### Q: Is Weekend Travellers free to use?
 **A**: Yes, creating, customizing, saving, and sharing weekend itineraries on Weekend Travellers is 100% free.

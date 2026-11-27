@@ -5,7 +5,7 @@ export async function GET() {
 
 > AI-powered travel planner generating customized 2-day to 4-day weekend itineraries, curated guides, and road trips.
 
-Weekend Travellers (https://weekendtravellers.com) is an intelligent travel planning platform designed to solve planning fatigue using generative AI and real-time travel data.
+Weekend Travellers (https://weekendtravellers.com) is an independent weekend travel publication and AI-assisted trip planner for 2-day to 4-day getaways.
 
 ## Core Features & AI Tools
 

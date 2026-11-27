@@ -223,3 +223,97 @@ export const REGION_HUBS: Record<string, {
   },
 };
 
+export interface OfficialSourceLink {
+  label: string;
+  url: string;
+  note: string;
+}
+
+const INDIA_STATE_SOURCES: Record<string, OfficialSourceLink> = {
+  goa: { label: 'Goa Tourism (Official)', url: 'https://goatourism.gov.in/', note: 'Beaches, heritage sites, and seasonal advisories' },
+  manali: { label: 'Himachal Pradesh Tourism', url: 'https://himachaltourism.gov.in/', note: 'Rohtang/Atal Tunnel permits and hill-station updates' },
+  shimla: { label: 'Himachal Pradesh Tourism', url: 'https://himachaltourism.gov.in/', note: 'Shimla heritage routes and weather advisories' },
+  jaipur: { label: 'Rajasthan Tourism', url: 'https://www.tourism.rajasthan.gov.in/', note: 'Fort/palace entry fees and monument timings' },
+  udaipur: { label: 'Rajasthan Tourism', url: 'https://www.tourism.rajasthan.gov.in/', note: 'Lake Pichola, City Palace, and regional guides' },
+  jodhpur: { label: 'Rajasthan Tourism', url: 'https://www.tourism.rajasthan.gov.in/', note: 'Mehrangarh Fort and heritage advisories' },
+  munnar: { label: 'Kerala Tourism', url: 'https://www.keralatourism.org/', note: 'Eravikulam National Park and tea-hill advisories' },
+  kochi: { label: 'Kerala Tourism', url: 'https://www.keralatourism.org/', note: 'Fort Kochi heritage trail and ferry updates' },
+  alleppey: { label: 'Kerala Tourism', url: 'https://www.keralatourism.org/', note: 'Backwater houseboat guidelines and routes' },
+  rishikesh: { label: 'Uttarakhand Tourism', url: 'https://uttarakhandtourism.gov.in/', note: 'River rafting seasons and pilgrimage updates' },
+  varanasi: { label: 'UP Tourism', url: 'https://uptourism.gov.in/', note: 'Ghat timings, temple access, and cultural events' },
+  agra: { label: 'UP Tourism / ASI', url: 'https://asi.nic.in/', note: 'Taj Mahal & Agra Fort official monument timings' },
+  darjeeling: { label: 'West Bengal Tourism', url: 'https://wbtourism.gov.in/', note: 'Darjeeling Himalayan Railway & viewpoint updates' },
+  amritsar: { label: 'Punjab Tourism', url: 'https://punjabtourism.punjab.gov.in/', note: 'Golden Temple & Wagah Border ceremony timings' },
+  hampi: { label: 'Karnataka Tourism', url: 'https://karnatakatourism.org/', note: 'Hampi UNESCO ruins & heritage site access' },
+  coorg: { label: 'Karnataka Tourism', url: 'https://karnatakatourism.org/', note: 'Kodagu waterfalls, estates, and road updates' },
+  mysore: { label: 'Karnataka Tourism', url: 'https://karnatakatourism.org/', note: 'Mysore Palace illumination & entry timings' },
+  gokarna: { label: 'Karnataka Tourism', url: 'https://karnatakatourism.org/', note: 'Coastal trek and beach safety advisories' },
+  andaman: { label: 'Andaman & Nicobar Tourism', url: 'https://www.andamantourism.gov.in/', note: 'Ferry schedules and island permit rules' },
+  leh: { label: 'Ladakh Tourism', url: 'https://ladakh.gov.in/', note: 'High-altitude acclimatization and inner-line permits' },
+  pondicherry: { label: 'Puducherry Tourism', url: 'https://tourism.py.gov.in/', note: 'French Quarter, beaches, and local events' },
+  mumbai: { label: 'Maharashtra Tourism', url: 'https://maharashtratourism.gov.in/', note: 'Elephanta Caves ferries and city heritage' },
+  delhi: { label: 'Delhi Tourism', url: 'https://delhitourism.gov.in/', note: 'Monument timings and Delhi Metro connections' },
+  hyderabad: { label: 'Telangana Tourism', url: 'https://tourism.telangana.gov.in/', note: 'Golconda Fort, Charminar, and museum hours' },
+};
+
+const INTERNATIONAL_SOURCES: Record<string, OfficialSourceLink> = {
+  paris: { label: 'Paris je t’aime (Official)', url: 'https://parisjetaime.com/eng/', note: 'Museum passes, transit, and opening hours' },
+  london: { label: 'Visit London / TfL', url: 'https://www.visitlondon.com/', note: 'Attractions, Oyster/contactless transit, and events' },
+  rome: { label: 'Italia.it / Turismo Roma', url: 'https://www.turismoroma.it/en', note: 'Colosseum, Vatican, and public transit guidance' },
+  venice: { label: 'Venezia Unica (Official)', url: 'https://www.veneziaunica.it/en', note: 'Vaporetto passes and city access fee rules' },
+  florence: { label: 'Feel Florence (Official)', url: 'https://www.feelflorence.it/en', note: 'Uffizi & Duomo booking and museum hours' },
+  amsterdam: { label: 'I amsterdam (Official)', url: 'https://www.iamsterdam.com/en', note: 'Canal cruises, Rijksmuseum, and GVB transit' },
+  barcelona: { label: 'Barcelona Turisme', url: 'https://www.barcelonaturisme.com/', note: 'Sagrada Família tickets and TMB transit' },
+  santorini: { label: 'Visit Greece (Official)', url: 'https://www.visitgreece.gr/', note: 'Ferry connections and seasonal island guidance' },
+  prague: { label: 'Prague City Tourism', url: 'https://www.prague.eu/en', note: 'Prague Castle hours and PID public transport' },
+  lisbon: { label: 'Visit Lisboa (Official)', url: 'https://www.visitlisboa.com/', note: 'Tram 28, Sintra rail, and museum passes' },
+  athens: { label: 'This is Athens (Official)', url: 'https://www.thisisathens.org/', note: 'Acropolis tickets and archaeological sites' },
+  vienna: { label: 'Wien.info (Official)', url: 'https://www.wien.info/en', note: 'Palaces, Wiener Linien transit, and concert halls' },
+  budapest: { label: 'Visit Budapest', url: 'https://www.budapestinfo.hu/en', note: 'Thermal baths, Parliament tours, and BKK transit' },
+  tokyo: { label: 'JNTO / Go Tokyo', url: 'https://www.gotokyo.org/en/', note: 'JR passes, Suica/Pasmo, and attraction hours' },
+  dubai: { label: 'Visit Dubai (Official)', url: 'https://www.visitdubai.com/en', note: 'RTA Metro, attractions, and seasonal events' },
+  abudhabi: { label: 'Visit Abu Dhabi', url: 'https://visitabudhabi.ae/en', note: 'Sheikh Zayed Grand Mosque & museum access' },
+  doha: { label: 'Visit Qatar (Official)', url: 'https://visitqatar.com/', note: 'Stopover transit, Souq Waqif, and museums' },
+  newyork: { label: 'NYC Tourism (Official)', url: 'https://www.nycgo.com/', note: 'MTA subway, ferries, and landmark tickets' },
+  losangeles: { label: 'Discover Los Angeles', url: 'https://www.discoverlosangeles.com/', note: 'Museums, beaches, and LA Metro info' },
+  'san-francisco': { label: 'SF Travel (Official)', url: 'https://www.sftravel.com/', note: 'Alcatraz ferries, cable cars, and BART' },
+  vancouver: { label: 'Destination Vancouver', url: 'https://www.destinationvancouver.com/', note: 'Stanley Park, SeaBus, and transit updates' },
+  cancun: { label: 'Visit Mexico', url: 'https://www.visitmexico.com/', note: 'Ferry routes, Chichén Itzá, and beach advisories' },
+  'mexico-city': { label: 'Visit Mexico', url: 'https://www.visitmexico.com/', note: 'Museum hours and Metrobus transit' },
+  riodejaneiro: { label: 'Visit Brasil', url: 'https://visitbrasil.com/', note: 'Christ the Redeemer & Sugarloaf tickets' },
+  'buenos-aires': { label: 'Turismo Buenos Aires', url: 'https://turismo.buenosaires.gob.ar/en', note: 'SUBE card transit and neighborhood guides' },
+  cairo: { label: 'Experience Egypt', url: 'https://www.experienceegypt.eg/', note: 'Giza Plateau & GEM official ticket info' },
+  marrakesh: { label: 'Visit Morocco', url: 'https://www.visitmorocco.com/en', note: 'Medina guidance and ONCF rail connections' },
+  'cape-town': { label: 'Cape Town Tourism', url: 'https://www.capetown.travel/', note: 'Table Mountain cableway and Robben Island ferries' },
+};
+
+export function getOfficialSourcesForDestination(dest: DestinationOption): OfficialSourceLink[] {
+  const sources: OfficialSourceLink[] = [];
+  const isIndia = INDIA_IDS.has(dest.id) || dest.country.toLowerCase() === 'india';
+
+  if (isIndia) {
+    if (INDIA_STATE_SOURCES[dest.id]) {
+      sources.push(INDIA_STATE_SOURCES[dest.id]);
+    }
+    sources.push(
+      { label: 'Incredible India (Ministry of Tourism)', url: 'https://www.incredibleindia.gov.in/', note: 'National tourism advisories & heritage sites' },
+      { label: 'IRCTC / Indian Railways', url: 'https://www.irctc.co.in/', note: 'Live train schedules, seat availability & fares' }
+    );
+  } else if (INTERNATIONAL_SOURCES[dest.id]) {
+    sources.push(INTERNATIONAL_SOURCES[dest.id]);
+  } else {
+    sources.push({
+      label: 'UN Tourism (UNWTO)',
+      url: 'https://www.unwto.org/',
+      note: 'Global destination & travel advisory portal',
+    });
+  }
+
+  sources.push(
+    { label: 'OpenStreetMap', url: 'https://www.openstreetmap.org/', note: 'Map coordinates & neighborhood layout' },
+    { label: 'Open-Meteo', url: 'https://open-meteo.com/', note: 'Live weather forecast data' }
+  );
+
+  return sources;
+}
+

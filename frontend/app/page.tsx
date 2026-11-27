@@ -57,7 +57,7 @@ export default async function LandingPage() {
         "name": "How does an AI trip planner work for Indian destinations?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Our AI trip planner analyzes real-time data, local transit, and seasonal trends in India to generate a 2-day or 3-day itinerary instantly. It includes hidden gems, food recommendations, and logistical advice tailored to your preferences."
+          "text": "Our AI-assisted trip planner combines curated destination guides, Open-Meteo weather forecasts, and user preferences to draft a 2-day or 3-day itinerary with suggested sightseeing, food ideas, and budget estimates."
         }
       },
       {

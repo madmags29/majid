@@ -212,39 +212,35 @@ export default function ExplorePage() {
                         <div className="space-y-8">
                             <h2 className="text-4xl font-black text-white italic tracking-tighter uppercase">The Science of <span className="text-blue-400">Weekend Travel</span></h2>
                             <p className="text-slate-400 leading-relaxed text-lg">
-                                At Weekend Travellers, we believe that travel shouldn&apos;t require a 14-day sabbatical. In the modern, fast-paced world of 2026, the <strong>&quot;Micro-Vacation&quot;</strong> has become a vital tool for mental health and exploration. Our platform is built on the philosophy that a well-planned 48-hour trip can provide as much rejuvenation as a two-week holiday, provided the logistics are handled with precision.
+                                Weekend Travellers organizes destination guides around practical 2-to-4 day travel windows—focusing on places reachable from major rail, road, and airport hubs with compact sightseeing clusters.
                             </p>
                             <p className="text-slate-400 leading-relaxed text-lg">
-                                We curate our destination directory based on a strict set of criteria: accessibility (within a 4-6 hour travel window from major hubs), cultural density (high number of attractions per square mile), and unique &quot;vibe&quot; profiles. Whether we are highlighting the spiritual ghats of Rishikesh or the neon-soaked streets of Shinjuku, our goal is to maximize your experience while minimizing planning fatigue.
-                            </p>
-                            <p className="text-slate-400 leading-relaxed text-lg">
-                                <strong>How We Identify Trending Destinations</strong><br/>
-                                Our &quot;Destination Graph&quot; actively monitors flight pricing algorithms, social media check-ins, and seasonal weather forecasts to predict the viability of a city for an upcoming weekend. Unlike typical travel blogs that recycle the same Top 10 lists year after year, our dynamic directory shifts constantly. If Paris is experiencing an unprecedented transit strike, it drops down our rankings. If a secondary city like Valencia announces a massive cultural festival with cheap incoming regional flights, it skyrockets to the top. This guarantees that our &quot;Trending Destinations&quot; section is not just aspirational, but fundamentally actionable and highly relevant to the present moment.
+                                Each guide covers best seasons to visit, indicative daily budget ranges, air/rail/road connections, local food highlights, and safety notes, alongside links to official tourism and transit portals so you can verify live schedules before traveling.
                             </p>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div className="p-8 bg-slate-900/40 rounded-3xl border border-slate-800 hover:border-blue-500/30 transition-all">
-                                <h3 className="text-xl font-bold text-white mb-4">AI-Driven Curation</h3>
-                                <p className="text-sm text-slate-500 leading-relaxed">
-                                    Our proprietary AI analysis engine cross-references thousands of data points including local event calendars, seasonal weather patterns, and real-time transit logistics to ensure our featured destinations are always &quot;trip-ready&quot;.
+                                <h3 className="text-xl font-bold text-white mb-4">Structured Logistics</h3>
+                                <p className="text-sm text-slate-400 leading-relaxed">
+                                    Every destination page groups seasonal timing, airport/rail/road access, and estimated budgets in one consistent layout.
                                 </p>
                             </div>
                             <div className="p-8 bg-slate-900/40 rounded-3xl border border-slate-800 hover:border-purple-500/30 transition-all">
-                                <h3 className="text-xl font-bold text-white mb-4">Authentic Insights</h3>
-                                <p className="text-sm text-slate-500 leading-relaxed">
-                                    We prioritize hidden gems and local-favorite spots over generic tourist traps. Every curated guide is designed to give you a localized perspective, helping you blend into the culture rather than just observing it from the outside.
+                                <h3 className="text-xl font-bold text-white mb-4">Practical Local Context</h3>
+                                <p className="text-sm text-slate-400 leading-relaxed">
+                                    Guides highlight regional dishes, neighborhood pacing, and suitability for couples, families, or solo travelers.
                                 </p>
                             </div>
                             <div className="p-8 bg-slate-900/40 rounded-3xl border border-slate-800 hover:border-pink-500/30 transition-all">
-                                <h3 className="text-xl font-bold text-white mb-4">2026 Ready</h3>
-                                <p className="text-sm text-slate-500 leading-relaxed">
-                                    As travel norms evolve, so do our guides. We include the latest information on digital nomad facilities, sustainable travel options, and modern booking tips to keep your weekend trips efficient and responsible.
+                                <h3 className="text-xl font-bold text-white mb-4">Transparent Estimates</h3>
+                                <p className="text-sm text-slate-400 leading-relaxed">
+                                    Costs and travel times are clearly marked as planning estimates, with official tourism and rail references for live verification.
                                 </p>
                             </div>
                             <div className="p-8 bg-slate-900/40 rounded-3xl border border-slate-800 hover:border-green-500/30 transition-all">
-                                <h3 className="text-xl font-bold text-white mb-4">Global Reach</h3>
-                                <p className="text-sm text-slate-500 leading-relaxed">
-                                    While we have a deep focus on the Indian subcontinent, our directory spans Europe, Asia, and the Americas, providing a truly global perspective on the perfect weekend escape.
+                                <h3 className="text-xl font-bold text-white mb-4">India &amp; Global Hubs</h3>
+                                <p className="text-sm text-slate-400 leading-relaxed">
+                                    With deep coverage across India alongside selected hubs in Europe, Asia, the Americas, and the Middle East.
                                 </p>
                             </div>
                         </div>

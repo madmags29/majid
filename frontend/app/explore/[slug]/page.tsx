@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { EXLPORE_DESTINATIONS } from '@/lib/destinations';
-import { getDestinationEditorialMeta, getDestinationRegion, REGION_HUBS } from '@/lib/destinationMetadata';
+import { getDestinationEditorialMeta, getDestinationRegion, getOfficialSourcesForDestination, REGION_HUBS } from '@/lib/destinationMetadata';
 import Link from 'next/link';
 import Image from 'next/image';
 import { MapPin, Calendar, Wallet, Users, Plane, Train, Car, ShieldAlert, Utensils, BookOpen } from 'lucide-react';
@@ -152,6 +152,7 @@ export default async function DestinationPage({ params }: Props) {
     }
 
     const editorialMeta = getDestinationEditorialMeta(destination);
+    const officialSources = getOfficialSourcesForDestination(destination);
 
     // SSR Fetch Deep Explore Content (includes itinerary and long-form SEO text)
     let exploreData = null;
@@ -411,31 +412,36 @@ export default async function DestinationPage({ params }: Props) {
 
                 {/* Editorial Transparency & Sources Box */}
                 <section className="container mx-auto px-4 py-12 lg:max-w-4xl border-t border-white/5">
-                    <div className="bg-slate-900/40 border border-slate-800 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row gap-6 justify-between items-start md:items-center">
-                        <div className="space-y-2">
-                            <div className="text-xs font-bold uppercase tracking-wider text-blue-400 flex items-center gap-1.5">
-                                <BookOpen className="w-3.5 h-3.5" /> Editorial Notes &amp; Estimates
+                    <div className="bg-slate-900/40 border border-slate-800 rounded-2xl p-6 md:p-8 space-y-5">
+                        <div className="flex flex-col md:flex-row gap-6 justify-between items-start md:items-center">
+                            <div className="space-y-2">
+                                <div className="text-xs font-bold uppercase tracking-wider text-blue-400 flex items-center gap-1.5">
+                                    <BookOpen className="w-3.5 h-3.5" /> Official Sources &amp; Editorial Notes
+                                </div>
+                                <p className="text-xs text-slate-400 leading-relaxed max-w-2xl">
+                                    Compiled by the <Link href="/authors" className="text-slate-200 underline">Weekend Travellers Editorial Team</Link>. Budget ranges and drive times are planning estimates—not live quotes. Review our{' '}
+                                    <Link href="/editorial-policy" className="text-blue-400 hover:underline">Editorial Policy</Link>,{' '}
+                                    <Link href="/disclaimer" className="text-blue-400 hover:underline">Disclaimer</Link>, and{' '}
+                                    <Link href="/corrections-policy" className="text-blue-400 hover:underline">Corrections Policy</Link>.
+                                </p>
                             </div>
-                            <p className="text-xs text-slate-400 leading-relaxed max-w-2xl">
-                                Compiled by the <Link href="/authors" className="text-slate-200 underline">Weekend Travellers Editorial Team</Link>. Budget ranges and drive times are planning estimates—not live quotes. Verify live schedules and entry rules via{' '}
-                                <a href={destination.country === 'India' ? 'https://www.incredibleindia.gov.in/' : 'https://www.unwto.org/'} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">
-                                    {destination.country === 'India' ? 'Incredible India' : 'official tourism portals'}
-                                </a>
-                                {destination.country === 'India' && (
-                                    <>
-                                        {' '}and{' '}
-                                        <a href="https://www.irctc.co.in/" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">IRCTC</a>
-                                    </>
-                                )}
-                                , or review our{' '}
-                                <Link href="/editorial-policy" className="text-blue-400 hover:underline">Editorial Policy</Link>,{' '}
-                                <Link href="/disclaimer" className="text-blue-400 hover:underline">Disclaimer</Link>, and{' '}
-                                <Link href="/corrections-policy" className="text-blue-400 hover:underline">Corrections Policy</Link>.
-                            </p>
+                            <Link href="/tools" className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shrink-0">
+                                Open Budget Calculator
+                            </Link>
                         </div>
-                        <Link href="/tools" className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shrink-0">
-                            Open Budget Calculator
-                        </Link>
+                        <div className="border-t border-slate-800 pt-4">
+                            <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">Verify Live Timings &amp; Entry Rules</div>
+                            <ul className="grid sm:grid-cols-2 gap-2 text-xs text-slate-300">
+                                {officialSources.map((src) => (
+                                    <li key={src.label}>
+                                        <a href={src.url} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline font-medium">
+                                            {src.label}
+                                        </a>
+                                        <span className="text-slate-500"> — {src.note}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
                 </section>
             </main>

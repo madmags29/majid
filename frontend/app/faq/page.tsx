@@ -28,11 +28,11 @@ const faqs = [
         questions: [
             {
                 q: "What is weekendtravellers.com and how does it help me?",
-                a: "Weekendtravellers.com is an advanced AI-powered travel assistant meticulously designed for planning high-impact 2 to 4-day getaways. We solve the problem of 'planning fatigue' by analyzing thousands of data points—from transit logistics to local weather—to give you a cohesive, expert-level itinerary in seconds. Our goal is to make every weekend feel like a luxury vacation."
+                a: "Weekendtravellers.com is a weekend travel publication and AI-assisted trip planner designed for 2-to-4 day getaways. It brings together structured destination guides, budget and distance calculators, and custom itinerary drafting so you can plan a short trip in minutes."
             },
             {
-                q: "How does the smart AI trip planner work for 2026?",
-                a: "Our engine utilizes the latest Large Language Models (LLMs) combined with real-time travel APIs. When you enter a destination, the AI cross-references current travel trends, popular hotspots, and hidden local secrets to create a balanced plan. It considers 'vibe' matches, geographical proximity of activities, and optimal meal timings to ensure a stress-free experience."
+                q: "How does the AI-assisted trip planner work?",
+                a: "When you enter a destination, starting city, or travel style, our planner combines curated destination data with large language model (LLM) structuring and Open-Meteo weather forecasts to draft a day-by-day itinerary. Suggested timings, routes, and costs are planning estimates—always verify live fares and opening hours before booking."
             }
         ]
     },
@@ -46,11 +46,11 @@ const faqs = [
             },
             {
                 q: "What kind of travel logistics are included?",
-                a: "Every itinerary includes suggested transport between points, walking/driving distances, and estimated costs. We also provide 'Best Time to Start' suggestions for each day to help you avoid peak crowds at popular attractions."
+                a: "Itineraries include suggested neighborhood groupings, indicative transit options, and estimated budget ranges. Because local schedules and traffic vary, we recommend checking official rail, road, and attraction websites before departure."
             },
             {
                 q: "How do I book the suggested hotels or flights?",
-                a: "We partner with industry leaders like Hotellook and Agoda. Every hotel suggestion comes with a curated link that takes you directly to real-time pricing and availability. We don't handle payments directly, ensuring you always get the best market rates through verified partners."
+                a: "Where hotel links are shown, they connect to third-party booking partners such as Hotellook or Agoda so you can check current availability and prices directly on their platform. Weekend Travellers does not process hotel payments or manage reservations."
             }
         ]
     },
@@ -81,8 +81,8 @@ const faqs = [
                 a: "Yes, the core planning engine, AI chat customization, and itinerary saving features are completely free for our users. We strive to provide the best travel planning experience without any paywalls or hidden subscriptions for the basic traveler."
             },
             {
-                q: "Do you offer premium or group planning?",
-                a: "Currently, our standard service is robust enough for all types of weekend travel. We are exploring advanced group-syncing features for late 2026, which will allow multiple users to edit a single plan in real-time."
+                q: "Do you offer group planning?",
+                a: "You can share any itinerary link with travel companions so everyone can review the day-by-day plan. Multi-user collaborative editing is not currently offered."
             }
         ]
     }
@@ -149,23 +149,18 @@ export default function FAQPage() {
                     ))}
                 </div>
 
-                {/* AdSense Optimization: High-Value Content Section */}
                 <div className="mt-24 bg-slate-900/40 border border-slate-800 rounded-3xl p-8 md:p-12 mb-16 text-left">
-                    <h2 className="text-3xl font-bold text-white mb-6 uppercase tracking-tighter italic">Foundational Knowledge & Philosophy</h2>
+                    <h2 className="text-3xl font-bold text-white mb-6 uppercase tracking-tighter italic">Editorial Standards &amp; Transparency</h2>
                     <div className="space-y-6 text-slate-400 text-sm leading-relaxed">
                         <p>
-                            Navigating the complexities of travel planning in 2026 can be daunting. Weekend Travellers was founded on a core principle: <strong>Information Accessibility</strong>. Our Frequently Asked Questions (FAQ) page isn&apos;t just a list of procedural instructions; it&apos;s a repository of the collective wisdom we have gathered about the &quot;Micro-Vacation&quot; movement. Whether you are curious about the technical specifications of our generative AI or want to understand the economics of weekend getaways, we provide transparency into our operations to build a culture of trust.
+                            Weekend Travellers is an independent travel publication and trip-planning platform founded by <strong>Majid Khan</strong>. This FAQ explains how our destination guides, calculators, and AI-assisted itinerary drafts work, and what their limitations are.
                         </p>
                         <p>
-                            <strong>A Note on Our Content Integrity</strong><br/>
-                            We pride ourselves on the accuracy and structural integrity of every answer provided here. Our destination expert team, comprising travelers who have collectively explored over 100 global cities, regularly audits these FAQs to reflect changes in tourism laws, visa policies, and transit norms. We strictly avoid the use of thin, boilerplate content in our support documentation, ensuring that every explanation provides genuine, unique value to the reader.
-                        </p>
-                        <p>
-                            <strong>Global Standards and Ethical AI</strong><br/>
-                            As we integrate more advanced machine learning models into our travel planner, we maintain a firm commitment to ethical AI usage. This means adhering to global standards for data protection (GDPR/CCPA) and ensuring that our algorithm doesn&apos;t overfit its recommendations to high-commission vendors. Our goal is to empower the individual traveler with the same level of granular logistical data that was once only available to high-end bespoke travel agents. 
-                        </p>
-                        <p>
-                            We hope this documentation serves as a reliable guide for your next journey. If you find any information that requires further clarification or have a unique travel scenario not covered here, please reach out to our team immediately. Your success is the baseline metric by which we measure our own.
+                            <strong>How We Maintain Accuracy</strong><br/>
+                            Curated destination guides and policy pages are reviewed by our editorial desk against official tourism portals, rail/highway references, and reader feedback. Cost ranges, entry fees, and travel durations are always presented as planning estimates rather than live quotes. Read our{' '}
+                            <Link href="/editorial-policy" className="text-blue-400 hover:underline">Editorial Policy</Link>,{' '}
+                            <Link href="/authors" className="text-blue-400 hover:underline">Authors &amp; Team</Link>, and{' '}
+                            <Link href="/corrections-policy" className="text-blue-400 hover:underline">Corrections Policy</Link>.
                         </p>
                     </div>
                 </div>

@@ -71,7 +71,7 @@ export default function AboutPage() {
                                 <Globe className="text-blue-400" /> Our Mission
                             </h3>
                             <p className="text-slate-400 leading-relaxed">
-                                To democratize travel planning. We believe everyone deserves a rejuvenating break without the administrative burden. Our mission is to provide 2026-ready, AI-driven itineraries that focus on local authenticity, sustainability, and efficiency.
+                                To make short-trip planning straightforward and honest. We focus on practical 2-to-4 day itineraries with realistic transit windows, local context, and transparent budget estimates.
                             </p>
                         </div>
                         <div className="bg-slate-900/50 p-10 rounded-[2rem] border border-slate-800 space-y-6">
