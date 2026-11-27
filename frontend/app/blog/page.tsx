@@ -4,7 +4,7 @@ import BlogClientPage from './BlogClientPage';
 import { API_URL, IS_BUILD } from '@/lib/config';
 
 export const metadata: Metadata = {
-    title: 'Travel Blog & Getaway Guides | Weekend Travellers',
+    title: 'Travel Blog & Getaway Guides',
     description: 'Explore expert travel guides, weekend trip itineraries, road trip tips, and AI travel advice for top destinations in India, Europe, Asia, and worldwide.',
     keywords: [
         'travel blog', 'weekend getaway guides', 'road trip itineraries', 'best travel spots 2026', 'AI travel planning blog', 'budget travel tips'

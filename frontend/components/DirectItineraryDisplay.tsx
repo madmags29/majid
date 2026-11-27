@@ -26,8 +26,7 @@ export default function DirectItineraryDisplay({ destinationName }: { destinatio
             }
 
             try {
-                // Use relative path to leverage Next.js rewrites and avoid CORS/port issues on client
-                const response = await fetch(`/api/search`, {
+                let response = await fetch(`/api/search`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -36,16 +35,26 @@ export default function DirectItineraryDisplay({ destinationName }: { destinatio
                     }),
                 });
 
+                if (!response.ok) {
+                    response = await fetch(`https://backend-flax-eight-93.vercel.app/api/search`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            destination: destinationName,
+                            days: 2,
+                        }),
+                    });
+                }
+
                 if (!response.ok) throw new Error('Failed to fetch');
                 const data = await response.json();
-                
+
                 if (isMounted) {
                     setItinerary(data);
                     localStorage.setItem(cacheKey, JSON.stringify(data));
                     setLoading(false);
                 }
-            } catch (err) {
-                console.error(err);
+            } catch {
                 if (isMounted) {
                     setError(true);
                     setLoading(false);

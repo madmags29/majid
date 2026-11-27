@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     if (hub && (!destination || slug === 'india' || slug === 'europe')) {
         return {
-            title: `${hub.title} | Weekend Travellers`,
+            title: hub.title,
             description: hub.description,
             alternates: { canonical: `/explore/${slug}` },
         };

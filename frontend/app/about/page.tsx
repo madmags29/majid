@@ -3,7 +3,7 @@ import { MapPin, Users, Heart, Globe } from 'lucide-react';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-    title: 'About Us | Weekend Travellers',
+    title: 'About Us',
     description: 'Learn who runs Weekend Travellers, how we research 2-to-4 day weekend travel guides, and how our AI planning tools and editorial reviews work.',
     openGraph: {
         title: 'About Us | Weekend Travellers',

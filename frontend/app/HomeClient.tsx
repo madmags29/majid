@@ -120,8 +120,7 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: unk
             }
           })
           .catch(() => {
-            setVideoUrl('https://images.pexels.com/video-files/3015510/3015510-hd_1920_1080_24fps.mp4');
-            setVideoCredit({ name: 'Pexels', url: 'https://pexels.com' });
+            // Keep static /video-poster.png background when video API is unavailable
           });
       });
 

@@ -94,9 +94,9 @@ export default function InnerHeader({
                             <div className="h-4 w-[1px] bg-slate-800 mx-1 hidden md:block" />
                             <div className="block overflow-hidden">
                                 {title && (
-                                    <h1 className="text-xs sm:text-sm font-bold text-slate-200 truncate max-w-[120px] xs:max-w-[180px] md:max-w-[240px]">
+                                    <span className="block text-xs sm:text-sm font-bold text-slate-200 truncate max-w-[120px] xs:max-w-[180px] md:max-w-[240px]">
                                         {title}
-                                    </h1>
+                                    </span>
                                 )}
                                 {subtitle && (
                                     <p className="text-[10px] md:text-[10px] text-slate-500 uppercase tracking-widest font-black truncate">

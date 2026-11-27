@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 type AdBannerProps = {
     dataAdSlot: string;
@@ -12,12 +12,16 @@ export default function AdBanner({
     dataAdFormat,
     dataFullWidthResponsive,
 }: AdBannerProps) {
+    const pushedRef = useRef(false);
+
     useEffect(() => {
+        if (pushedRef.current) return;
+        pushedRef.current = true;
         try {
             const w = window as unknown as { adsbygoogle?: unknown[] };
             (w.adsbygoogle = w.adsbygoogle || []).push({});
-        } catch (error) {
-            console.error('AdSense error:', error instanceof Error ? error.message : String(error));
+        } catch {
+            // AdSense script not loaded or already initialized
         }
     }, []);
 
