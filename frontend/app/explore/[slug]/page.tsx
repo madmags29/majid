@@ -155,24 +155,27 @@ export default async function DestinationPage({ params }: Props) {
 
     // SSR Fetch Deep Explore Content (includes itinerary and long-form SEO text)
     let exploreData = null;
-    try {
-        const backendUrl = process.env.BACKEND_URL 
-            || process.env.NEXT_PUBLIC_API_URL 
-            || 'https://backend-flax-eight-93.vercel.app';
+    const rawBackendUrl = process.env.BACKEND_URL
+        || process.env.NEXT_PUBLIC_API_URL
+        || 'https://backend-flax-eight-93.vercel.app';
+    const backendUrl = rawBackendUrl.replace('localhost', '127.0.0.1');
+    const fallbackUrl = 'https://backend-flax-eight-93.vercel.app';
 
-        // During build, if pointing to local, skip fetching to avoid ECONNREFUSED/timeout
-        if (IS_BUILD && (backendUrl.includes('localhost') || backendUrl.includes('127.0.0.1'))) {
-            console.log(`Skipping explore fetch for ${destination.name} during build...`);
-        } else {
-            const response = await fetch(`${backendUrl}/api/explore?slug=${encodeURIComponent(destination.id)}`, {
-                next: { revalidate: 604800 }
-            });
-            if (response.ok) {
-                exploreData = await response.json();
+    if (!(IS_BUILD && (backendUrl.includes('localhost') || backendUrl.includes('127.0.0.1')))) {
+        for (const url of [backendUrl, ...(backendUrl !== fallbackUrl ? [fallbackUrl] : [])]) {
+            try {
+                const response = await fetch(`${url}/api/explore?slug=${encodeURIComponent(destination.id)}`, {
+                    next: { revalidate: 604800 },
+                    signal: AbortSignal.timeout(4000),
+                });
+                if (response.ok) {
+                    exploreData = await response.json();
+                    break;
+                }
+            } catch {
+                // Fall back to production backend or client-side DirectItineraryDisplay
             }
         }
-    } catch (e) {
-        console.error("Failed to SSR explore data", e);
     }
 
     const itinerary = exploreData?.days || exploreData?.itinerary;
