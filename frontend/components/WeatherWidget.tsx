@@ -54,11 +54,22 @@ export default function WeatherWidget({ lat, lng, className }: WeatherWidgetProp
             try {
                 setLoading(true);
                 const res = await fetch(`/api/weather?lat=${lat}&lng=${lng}`);
-                if (!res.ok) throw new Error('Failed to fetch weather');
-                const data = await res.json();
-                setWeather(data);
-            } catch (err) {
-                console.error(err);
+                if (res.ok) {
+                    const data = await res.json();
+                    setWeather(data);
+                    return;
+                }
+                // Fallback directly to Open-Meteo if local/backend proxy is unavailable
+                const fallbackRes = await fetch(
+                    `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true&daily=temperature_2m_max,temperature_2m_min&timezone=auto`
+                );
+                if (fallbackRes.ok) {
+                    const fallbackData = await fallbackRes.json();
+                    setWeather(fallbackData);
+                    return;
+                }
+                setError(true);
+            } catch {
                 setError(true);
             } finally {
                 setLoading(false);
