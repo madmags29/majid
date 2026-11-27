@@ -10,30 +10,31 @@ import { API_URL, IS_BUILD } from '@/lib/config';
 export const revalidate = 3600;
 
 async function getBlogPosts() {
-  // For SSR on Vercel: rewrites only apply to browser requests, NOT server-side fetch.
-  // We must use the absolute backend URL here.
   const rawBackendUrl = process.env.BACKEND_URL
     || process.env.NEXT_PUBLIC_API_URL
     || 'https://backend-flax-eight-93.vercel.app';
   const backendUrl = rawBackendUrl.replace('localhost', '127.0.0.1');
+  const fallbackUrl = 'https://backend-flax-eight-93.vercel.app';
 
   if (IS_BUILD && (backendUrl.includes('localhost') || backendUrl.includes('127.0.0.1'))) {
-    console.log('Skipping blog post fetch during build to prevent timeout...');
     return [];
   }
 
-  try {
-    const res = await fetch(`${backendUrl}/api/blog`, { 
-      next: { revalidate: 60 },
-      signal: AbortSignal.timeout(3000)
-    });
-    if (!res.ok) return [];
-    const data = await res.json();
-    return Array.isArray(data) ? data.slice(0, 10) : [];
-  } catch (error) {
-    console.error('Failed to fetch blog posts for homepage:', error);
-    return [];
+  for (const url of [backendUrl, ...(backendUrl !== fallbackUrl ? [fallbackUrl] : [])]) {
+    try {
+      const res = await fetch(`${url}/api/blog`, {
+        next: { revalidate: 60 },
+        signal: AbortSignal.timeout(3000)
+      });
+      if (res.ok) {
+        const data = await res.json();
+        return Array.isArray(data) ? data.slice(0, 10) : [];
+      }
+    } catch {
+      // Try fallback if local backend is not running
+    }
   }
+  return [];
 }
 
 export default async function LandingPage() {
@@ -199,7 +200,7 @@ export default async function LandingPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-              {blogPosts.map((post: any) => (
+              {blogPosts.map((post: { _id: string; slug: string; heroImage: string; title: string; publishedDate?: string; keyword?: string; metaDescription?: string }) => (
                 <article 
                   key={post._id}
                   className="group flex flex-col h-full bg-slate-900/30 rounded-[2rem] overflow-hidden border border-slate-800/50 hover:border-blue-500/50 transition-all shadow-xl hover:shadow-2xl hover:shadow-blue-500/5"

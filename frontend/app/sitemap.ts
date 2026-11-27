@@ -58,7 +58,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         if (res.ok) {
             const posts = await res.json();
             if (Array.isArray(posts)) {
-                blogEntries = posts.map((post: any) => ({
+                blogEntries = posts.map((post: { slug: string; updatedAt?: string; publishedDate?: string }) => ({
                     url: `${baseUrl}/blog/${post.slug}`,
                     lastModified: new Date(post.updatedAt || post.publishedDate || Date.now()),
                     changeFrequency: 'weekly' as const,
@@ -77,7 +77,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         if (res.ok) {
             const trips = await res.json();
             if (Array.isArray(trips)) {
-                tripEntries = trips.map((trip: any) => ({
+                tripEntries = trips.map((trip: { _id: string; updatedAt?: string; createdAt?: string }) => ({
                     url: `${baseUrl}/trip/${trip._id}`,
                     lastModified: new Date(trip.updatedAt || trip.createdAt || Date.now()),
                     changeFrequency: 'monthly' as const,

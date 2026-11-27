@@ -69,9 +69,8 @@ export default async function BlogPostDetail({ params }: Props) {
     const fallbackUrl = 'https://backend-flax-eight-93.vercel.app';
 
     const fetchPostFromUrl = async (url: string) => {
-        const res = await fetch(`${url}/api/blog/${slug}?t=${Date.now()}`, { 
+        const res = await fetch(`${url}/api/blog/${slug}`, {
             cache: 'no-store',
-            next: { revalidate: 0 }
         });
         if (res.ok) {
             const data = await res.json();
@@ -149,7 +148,7 @@ export default async function BlogPostDetail({ params }: Props) {
         itinerary: parsedContent.sections ? {
             '@type': 'ItemList',
             numberOfItems: parsedContent.sections.length,
-            itemListElement: parsedContent.sections.map((sec: any, idx: number) => ({
+            itemListElement: parsedContent.sections.map((sec: { heading: string }, idx: number) => ({
                 '@type': 'ListItem',
                 position: idx + 1,
                 name: sec.heading
@@ -166,7 +165,7 @@ export default async function BlogPostDetail({ params }: Props) {
     const faqSchema = faqsList.length > 0 ? {
         '@context': 'https://schema.org',
         '@type': 'FAQPage',
-        mainEntity: faqsList.map((f: any) => ({
+        mainEntity: faqsList.map((f: { question: string; answer: string }) => ({
             '@type': 'Question',
             name: f.question,
             acceptedAnswer: {
@@ -333,7 +332,7 @@ export default async function BlogPostDetail({ params }: Props) {
                             <ChevronRight className="text-blue-500" /> In this article
                         </h3>
                         <nav className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {parsedContent?.sections?.map((section: any, i: number) => (
+                            {parsedContent?.sections?.map((section: { heading: string; content: string }, i: number) => (
                                 <a key={i} href={`#section-${i}`} className="text-slate-400 hover:text-blue-400 transition-colors text-sm font-medium">
                                     {i + 1}. {section.heading}
                                 </a>
@@ -343,7 +342,7 @@ export default async function BlogPostDetail({ params }: Props) {
 
                     {/* Dynamic Sections */}
                     <div className="space-y-20">
-                        {parsedContent?.sections?.map((section: any, i: number) => (
+                        {parsedContent?.sections?.map((section: { heading: string; content: string }, i: number) => (
                             <section key={i} id={`section-${i}`} className="prose prose-invert prose-2xl max-w-none">
                                 <h2 className="text-3xl md:text-4xl font-black text-white mb-6 italic tracking-tight uppercase">
                                     {section.heading}
@@ -392,7 +391,7 @@ export default async function BlogPostDetail({ params }: Props) {
                                 <Compass className="text-blue-400" size={28} /> Frequently Asked Questions
                             </h2>
                             <div className="space-y-6">
-                                {post.faqs.map((faq: any, i: number) => (
+                                {post.faqs.map((faq: { question: string; answer: string }, i: number) => (
                                     <div key={i} className="bg-slate-900/40 p-6 md:p-8 rounded-2xl border border-slate-800/50">
                                         <h4 className="text-lg font-bold text-white mb-3 flex items-start gap-2">
                                             <span className="text-blue-400 font-black">Q:</span>

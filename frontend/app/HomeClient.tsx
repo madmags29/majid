@@ -31,7 +31,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any[] }) {
+export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: unknown[] }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');

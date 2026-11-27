@@ -6,7 +6,7 @@ import CinematicLoader from './CinematicLoader';
 import { API_URL } from '@/lib/config';
 
 export default function DirectItineraryDisplay({ destinationName }: { destinationName: string }) {
-    const [itinerary, setItinerary] = useState<any>(null);
+    const [itinerary, setItinerary] = useState<React.ComponentProps<typeof ItineraryDisplay>['itinerary'] | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 

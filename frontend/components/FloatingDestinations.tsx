@@ -1,57 +1,18 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { Star } from 'lucide-react';
 
-const DESTINATIONS = [
-    "Paris", "Tokyo", "Bali", "New York", "Santorini", "Dubai", "London",
-    "Rome", "Maldives", "Kyoto", "Barcelona", "Sydney", "Cairo", "Istanbul",
-    "Bangkok", "Cape Town", "Rio de Janeiro", "Amalfi Coast", "Petra", "Machu Picchu",
-    "Bora Bora", "Venice", "Prague", "Amsterdam", "San Francisco", "Queenstown",
-    "Reykjavik", "Marrakech", "Seville", "Florence", "Lisbon", "Edinburgh",
-    "Hawaii", "Las Vegas", "Miami", "Singapore", "Hong Kong", "Seoul", "Mumbai",
-    "Goa", "Jaipur", "Cusco", "Lima", "Buenos Aires", "Vancouver", "Toronto",
-    "Kuala Lumpur", "Hanoi", "New Delhi", "Agra"
+const STATIC_ITEMS = [
+    { id: 0, text: 'Paris', x: 8, y: 18, delay: 0.2, duration: 7.0 },
+    { id: 1, text: 'Tokyo', x: 82, y: 22, delay: 1.1, duration: 8.2 },
+    { id: 2, text: 'Bali', x: 10, y: 72, delay: 0.6, duration: 6.8 },
+    { id: 3, text: 'Jaipur', x: 84, y: 74, delay: 1.8, duration: 7.5 },
 ];
 
-interface FloatingText {
-    id: number;
-    text: string;
-    x: number;
-    y: number;
-    delay: number;
-    duration: number;
-}
-
 export default function FloatingDestinations() {
-    const [items, setItems] = useState<FloatingText[]>([]);
-
-    useEffect(() => {
-        const shuffled = [...DESTINATIONS].sort(() => Math.random() - 0.5);
-        const initialItems = Array.from({ length: 6 }).map((_, i) => {
-            let x, y;
-            do {
-                x = Math.floor(Math.random() * 85 + 5);
-                y = Math.floor(Math.random() * 85 + 5);
-            } while (x > 25 && x < 75 && y > 25 && y < 75);
-
-            return {
-                id: i,
-                text: shuffled[i % shuffled.length],
-                x,
-                y,
-                delay: Math.round((Math.random() * 3) * 10) / 10,
-                duration: Math.round((6 + Math.random() * 3) * 10) / 10
-            };
-        });
-        setItems(initialItems);
-    }, []);
-
-    if (items.length === 0) return null;
-
     return (
         <div className="hidden md:block fixed inset-0 pointer-events-none z-0 overflow-hidden">
-            {items.map((item) => (
+            {STATIC_ITEMS.map((item) => (
                 <div
                     key={item.id}
                     style={{
@@ -63,7 +24,6 @@ export default function FloatingDestinations() {
                         animationDelay: `${item.delay}s`,
                         animationIterationCount: 'infinite',
                         animationTimingFunction: 'ease-in-out',
-                        textShadow: '0 0 20px rgba(255,255,255,0.8)'
                     }}
                     className="flex flex-col items-center justify-center text-white font-cursive text-2xl md:text-3xl tracking-wide select-none opacity-0"
                 >

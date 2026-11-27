@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { API_URL, SITE_URL } from '@/lib/config';
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> | { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     try {
         const resolvedParams = await params;
         const slug = resolvedParams?.slug;

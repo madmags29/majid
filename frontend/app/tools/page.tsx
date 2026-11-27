@@ -150,7 +150,7 @@ export default function TravelToolsPage() {
                 <select
                   id="budget-stay"
                   value={stayTier}
-                  onChange={(e) => setStayTier(e.target.value as any)}
+                  onChange={(e) => setStayTier(e.target.value as 'budget' | 'moderate' | 'boutique')}
                   className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white"
                 >
                   <option value="budget">Budget / Hostel</option>

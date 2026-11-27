@@ -76,11 +76,11 @@ export default async function TripPage({ params }: Props) {
         itinerary: {
             '@type': 'ItemList',
             numberOfItems: itinerary.days?.length || 2,
-            itemListElement: itinerary.days?.map((day: any, idx: number) => ({
+            itemListElement: itinerary.days?.map((day: { day?: number; title?: string; summary?: string; activities?: { title?: string }[] }, idx: number) => ({
                 '@type': 'ListItem',
                 position: idx + 1,
                 name: `Day ${day.day || idx + 1}: ${day.title || destination}`,
-                description: day.summary || day.activities?.map((a: any) => a.title).join(', ')
+                description: day.summary || day.activities?.map((a: { title?: string }) => a.title).join(', ')
             }))
         },
         touristType: ['Weekend Traveler', 'Vacationer'],

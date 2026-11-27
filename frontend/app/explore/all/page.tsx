@@ -102,7 +102,7 @@ export default function AllDestinationsPage() {
                             <select
                                 id="filter-region"
                                 value={selectedRegion}
-                                onChange={(e) => setSelectedRegion(e.target.value as any)}
+                                onChange={(e) => setSelectedRegion(e.target.value as 'All' | RegionKey)}
                                 className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white"
                             >
                                 {REGIONS.map(r => <option key={r} value={r}>{r === 'All' ? 'All Regions' : r}</option>)}
@@ -113,7 +113,7 @@ export default function AllDestinationsPage() {
                             <select
                                 id="filter-budget"
                                 value={selectedBudget}
-                                onChange={(e) => setSelectedBudget(e.target.value as any)}
+                                onChange={(e) => setSelectedBudget(e.target.value as 'All' | BudgetTier)}
                                 className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white"
                             >
                                 {BUDGETS.map(b => <option key={b} value={b}>{b === 'All' ? 'All Budgets' : b}</option>)}

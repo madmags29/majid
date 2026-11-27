@@ -14,9 +14,10 @@ export default function AdBanner({
 }: AdBannerProps) {
     useEffect(() => {
         try {
-            ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
-        } catch (error: any) {
-            console.error('AdSense error:', error.message);
+            const w = window as unknown as { adsbygoogle?: unknown[] };
+            (w.adsbygoogle = w.adsbygoogle || []).push({});
+        } catch (error) {
+            console.error('AdSense error:', error instanceof Error ? error.message : String(error));
         }
     }, []);
 

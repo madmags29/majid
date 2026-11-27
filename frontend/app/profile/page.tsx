@@ -344,7 +344,7 @@ export default function ProfilePage() {
                     <h3 className="text-xl font-bold text-white mb-4">Your Digital Travel Vault</h3>
                     <div className="space-y-4 text-slate-400 text-sm leading-relaxed">
                         <p>
-                            Welcome to your personalized dashboard at Weekend Travellers. Designing an itinerary with artificial intelligence is only the first step in modern micro-vacation planning. By maintaining an active profile—your personal "Digital Travel Vault"—you grant our core logic engine the ability to learn and adapt to your unique preferences. Whether you consistently request mid-tier boutique hotels in pedestrian-friendly districts or favor early-morning historical tours over late-night dining, your connected profile ensures every subsequent query gets faster, more accurate, and highly personalized.
+                            Welcome to your personalized dashboard at Weekend Travellers. Designing an itinerary with artificial intelligence is only the first step in modern micro-vacation planning. By maintaining an active profile—your personal &ldquo;Digital Travel Vault&rdquo;—you grant our core logic engine the ability to learn and adapt to your unique preferences. Whether you consistently request mid-tier boutique hotels in pedestrian-friendly districts or favor early-morning historical tours over late-night dining, your connected profile ensures every subsequent query gets faster, more accurate, and highly personalized.
                         </p>
                         <p>
                             <strong>Data Sovereignty & Privacy First</strong><br/>

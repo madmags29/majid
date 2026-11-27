@@ -10,7 +10,19 @@ import AdBanner from '@/components/AdBanner';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-export default function BlogClientPage({ posts }: { posts: any[] }) {
+interface BlogPostItem {
+    _id: string;
+    slug: string;
+    title: string;
+    heroImage: string;
+    keyword?: string;
+    publishedDate?: string;
+    readingTime?: string;
+    metaDescription?: string;
+    author?: string;
+}
+
+export default function BlogClientPage({ posts }: { posts: BlogPostItem[] }) {
     const [selectedCategory, setSelectedCategory] = React.useState<string | null>(null);
 
     const featuredPost = posts[0];

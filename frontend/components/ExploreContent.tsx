@@ -423,7 +423,7 @@ export default function ExploreContent({ slug, initialData }: { slug: string, in
                                                                 className="object-cover group-hover:scale-110 transition-transform duration-500"
                                                                 sizes="(max-width: 768px) 100vw, 192px"
                                                                 onError={(e) => {
-                                                                    const target = e.target as any;
+                                                                    const target = e.currentTarget as HTMLImageElement;
                                                                     const randomFallback = FALLBACK_IMAGES[Math.floor(Math.random() * FALLBACK_IMAGES.length)];
                                                                     if (target.src !== randomFallback) {
                                                                         target.src = randomFallback;
