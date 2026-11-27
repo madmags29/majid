@@ -73,7 +73,10 @@ function ChatClient() {
             setUserLocation(locationStr);
 
             // 2. Fetch Suggestions based on Location
-            const sugRes = await fetch(`/api/suggestions?location=${encodeURIComponent(locationStr)}`);
+            let sugRes = await fetch(`/api/suggestions?location=${encodeURIComponent(locationStr)}`);
+            if (!sugRes.ok) {
+                sugRes = await fetch(`https://backend-flax-eight-93.vercel.app/api/suggestions?location=${encodeURIComponent(locationStr)}`);
+            }
             if (!sugRes.ok) throw new Error('Failed to fetch suggestions');
             const sugData = await sugRes.json();
 
@@ -83,8 +86,7 @@ function ChatClient() {
                 : [];
 
             setPopularDestinations(formattedData);
-        } catch (err) {
-            console.error("Failed to load local destinations:", err);
+        } catch {
             // Fallback
             setPopularDestinations([
                 { name: 'Paris', tag: 'Romantic Getaway' },

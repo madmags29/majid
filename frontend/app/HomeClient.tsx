@@ -67,14 +67,23 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: unk
     if (!location) return;
     setIsLoadingSuggestions(true);
     try {
-      const res = await fetch(`/api/suggestions?location=${encodeURIComponent(location)}`);
-      if (!res.ok) throw new Error('Failed to fetch suggestions');
-      const data = await res.json();
-      const parsedSuggestions = data.map((item: string | { name: string }) => typeof item === 'string' ? item : item.name);
-      setSuggestions(parsedSuggestions);
-    } catch (err) {
-      console.error('Failed to load suggestions', err);
-      setSuggestions(prev => prev.length > 0 ? prev : ['Paris', 'Tokyo', 'Bali', 'New York', 'Santorini']);
+      let res = await fetch(`/api/suggestions?location=${encodeURIComponent(location)}`);
+      if (!res.ok) {
+        res = await fetch(`https://backend-flax-eight-93.vercel.app/api/suggestions?location=${encodeURIComponent(location)}`);
+      }
+      if (res.ok) {
+        const data = await res.json();
+        const parsedSuggestions = Array.isArray(data)
+          ? data.map((item: string | { name: string }) => typeof item === 'string' ? item : item.name)
+          : [];
+        if (parsedSuggestions.length > 0) {
+          setSuggestions(parsedSuggestions);
+          return;
+        }
+      }
+      setSuggestions(prev => prev.length > 0 ? prev : ['Rishikesh', 'Jaipur', 'Goa', 'Manali', 'Paris']);
+    } catch {
+      setSuggestions(prev => prev.length > 0 ? prev : ['Rishikesh', 'Jaipur', 'Goa', 'Manali', 'Paris']);
     } finally {
       setIsLoadingSuggestions(false);
     }
