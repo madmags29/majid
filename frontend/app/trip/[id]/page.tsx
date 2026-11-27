@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowLeft, MapPin, Calendar, Clock, Sparkles } from 'lucide-react';
@@ -60,16 +61,7 @@ export default async function TripPage({ params }: Props) {
     const trip = await getTrip(id);
 
     if (!trip || !trip.itinerary) {
-        return (
-            <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-white p-4">
-                <InnerHeader showBack backHref="/explore" />
-                <h1 className="text-4xl font-bold mb-4 text-slate-300">Itinerary Not Found</h1>
-                <p className="text-slate-500 mb-8">This trip may have been deleted or never existed.</p>
-                <Link href="/explore" className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-colors flex items-center shadow-lg shadow-blue-500/20">
-                    <ArrowLeft className="w-4 h-4 mr-2" /> Back to Explore
-                </Link>
-            </div>
-        );
+        notFound();
     }
 
     const { destination, itinerary, createdAt } = trip;

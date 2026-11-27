@@ -1,5 +1,6 @@
 import React from 'react';
 import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Calendar, Clock, User, ChevronRight, Share2, Facebook, Twitter, Linkedin, Sparkles, MapPin, Compass, CheckCircle2 } from 'lucide-react';
@@ -99,14 +100,7 @@ export default async function BlogPostDetail({ params }: Props) {
     }
 
     if (!post) {
-        return (
-            <div className="min-h-screen bg-[#020617] text-white flex flex-col items-center justify-center p-4">
-                <h1 className="text-4xl font-bold mb-4">Post Not Found</h1>
-                <Link href="/blog">
-                    <Button variant="outline">Back to Blog</Button>
-                </Link>
-            </div>
-        );
+        notFound();
     }
 
     const { parsedContent } = post;

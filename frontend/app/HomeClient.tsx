@@ -19,7 +19,6 @@ import CinematicLoader from '@/components/CinematicLoader';
 const AuthModal = dynamic(() => import('@/components/AuthModal'));
 const CategoryBanner = dynamic(() => import('@/components/CategoryBanner'));
 const HolidaysBanner = dynamic(() => import('@/components/HolidaysBanner'));
-const VisitorCounter = dynamic(() => import('@/components/VisitorCounter'), { ssr: false });
 const FloatingDestinations = dynamic(() => import('@/components/FloatingDestinations'), { ssr: false });
 const LocationAssistant = dynamic(() => import('@/components/LocationAssistant'), { ssr: false });
 const RightMenu = dynamic(() => import('@/components/RightMenu'));
@@ -289,8 +288,8 @@ export default function HomeClient({ initialBlogPosts }: { initialBlogPosts: any
 
       <section className="flex-1 flex flex-col items-center justify-center px-4 py-20 pb-32 relative z-30">
         <div className="text-center max-w-4xl z-10 w-full">
-          <div className="flex justify-center mb-6 min-h-[40px]">
-            <VisitorCounter />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-semibold text-blue-200 mb-6">
+            <span>2–4 Day Weekend Guides, Routes &amp; Budget Planner</span>
           </div>
           <h1 className="text-3xl sm:text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-4 sm:mb-6 drop-shadow-2xl">
             Discover Your Perfect <br />

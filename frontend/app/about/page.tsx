@@ -3,14 +3,11 @@ import { MapPin, Users, Heart, Globe } from 'lucide-react';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-    title: 'About Us | AI Travel Planner for Weekend Getaways',
-    description: 'Discover how Weekend Travellers uses advanced AI to curate the best 2 & 3 day weekend itineraries, hidden gems, and road trip plans for 2026.',
-    keywords: [
-        'AI travel planner', 'AI trip planner', 'best AI travel planner', 'vacation itinerary generator', 'custom travel itineraries', 'holiday planner AI', 'weekend getaway planner', 'weekend trip generator', 'global travel planner', 'AI travel guide', 'free AI travel planner', 'weekend travellers', 'road trip planner AI', 'AI travel assistant', 'smart travel itinerary', 'travel planner 2026', 'best travel destinations globally', 'AI trip planner destinations', 'top vacation spots worldwide', 'global weekend getaways'
-    ],
+    title: 'About Us | Weekend Travellers',
+    description: 'Learn who runs Weekend Travellers, how we research 2-to-4 day weekend travel guides, and how our AI planning tools and editorial reviews work.',
     openGraph: {
-        title: 'About Us | AI Travel Planner for Weekend Getaways',
-        description: 'Discover how Weekend Travellers uses advanced AI to curate the best 2 & 3 day weekend itineraries, hidden gems, and road trip plans for 2026.',
+        title: 'About Us | Weekend Travellers',
+        description: 'Learn who runs Weekend Travellers, how we research weekend travel guides, and how our planning tools work.',
         type: 'website',
     },
     alternates: {
@@ -84,60 +81,61 @@ export default function AboutPage() {
                     </div>
 
                     <section className="space-y-8 mt-12 bg-slate-900/30 p-8 md:p-12 rounded-[2.5rem] border border-slate-800">
-                        <h2 className="text-3xl font-bold text-white border-l-4 border-purple-500 pl-6">Why Trust Us? (E-E-A-T Methodology)</h2>
+                        <h2 className="text-3xl font-bold text-white border-l-4 border-purple-500 pl-6">How We Research &amp; Maintain Guides</h2>
                         <div className="space-y-6 text-slate-300 leading-relaxed text-lg">
                             <p>
-                                In 2026, the internet is flooded with unverified travel lists and automated content. At Weekend Travellers, we strictly adhere to Google's E-E-A-T guidelines (Experience, Expertise, Authoritativeness, and Trustworthiness). We don&apos;t just generate text; we curate verified, actionable experiences. Our AI engine is trained on thousands of hours of local travel journalism, user-verified reviews, and real-time transit data. Every recommendation is cross-referenced for quality, ensuring you don't end up at a closed restaurant or a tourist trap.
+                                Weekend Travellers is an independent travel publication and trip-planning platform founded by <strong>Majid Khan</strong>. Our focus is simple: practical 2-to-4 day itineraries with realistic travel times, route guidance, and transparent budget ranges.
                             </p>
                             <p>
-                                <strong>Algorithmic Transparency & Data Sourcing</strong><br/>
-                                Our engine does not randomly pick attractions from a map. We use a proprietary ranking system that scores destinations based on &quot;Weekend Viability.&quot; This score calculates factors such as airport proximity to downtown cores, the density of top-rated local dining within walking distance, and the average time spent in transit versus time spent exploring. If a destination requires too much logistical friction for a 48-hour trip, our algorithm filters it out.
+                                <strong>Honest Use of AI &amp; Editorial Review</strong><br/>
+                                We use AI tools to help structure custom trip plans in our interactive planner and draft initial destination outlines. Every curated editorial guide is reviewed for geographical feasibility, seasonal fit, and clear separation between verified reference facts and planning estimates. Read our full{' '}
+                                <Link href="/editorial-policy" className="text-blue-400 hover:underline">Editorial Policy</Link>{' '}
+                                and{' '}
+                                <Link href="/disclaimer" className="text-blue-400 hover:underline">Travel Disclaimer</Link>.
                             </p>
                             <p>
-                                <strong>Human-in-the-Loop Editorial Process</strong><br/>
-                                While AI provides the data backbone, human expertise ensures the soul of travel remains intact. Our global network of destination experts regularly audits our AI-generated itineraries. They adjust the pacing to ensure you aren't rushing from landmark to landmark, and they verify that the &quot;hidden gems&quot; recommended are genuinely authentic and culturally respectful. We firmly believe that AI should assist human curation, not replace it.
-                            </p>
-                            <p>
-                                <strong>Commitment to Sustainable Travel</strong><br/>
-                                Weekend getaways have historically contributed to high carbon footprints per day of travel. We are committed to changing this narrative. Our platform actively promotes train travel and public transit networks where available, and our hotel recommendations prioritize properties with verified eco-certifications. We also work to combat overtourism by highlighting secondary cities and off-season windows, ensuring your visit supports local economies without straining infrastructure.
+                                <strong>Corrections &amp; Transparency</strong><br/>
+                                Prices, road conditions, and attraction timings change over time. If you spot anything outdated, you can report it anytime via our{' '}
+                                <Link href="/corrections-policy" className="text-blue-400 hover:underline">Corrections Policy</Link>{' '}
+                                or <Link href="/contact" className="text-blue-400 hover:underline">Contact page</Link>.
                             </p>
                         </div>
                         <ul className="grid md:grid-cols-2 gap-6 list-none p-0 mt-8">
                             <li className="flex gap-4 items-start bg-slate-950/50 p-6 rounded-2xl border border-slate-800">
                                 <div className="bg-blue-500/10 p-2 rounded-lg mt-1"><Users className="w-5 h-5 text-blue-400" /></div>
                                 <div>
-                                    <span className="block font-bold text-white">Community Driven</span>
-                                    <span className="text-sm text-slate-400">Our geographical data is refined by continuous feedback and active reviews from thousands of weekend travelers worldwide.</span>
+                                    <span className="block font-bold text-white">Meet the Team</span>
+                                    <span className="text-sm text-slate-400">Learn who operates the site on our <Link href="/authors" className="text-blue-400 hover:underline">Authors &amp; Editorial Team</Link> page.</span>
                                 </div>
                             </li>
                             <li className="flex gap-4 items-start bg-slate-950/50 p-6 rounded-2xl border border-slate-800">
                                 <div className="bg-purple-500/10 p-2 rounded-lg mt-1"><MapPin className="w-5 h-5 text-purple-400" /></div>
                                 <div>
-                                    <span className="block font-bold text-white">Hyper-Local Logistics</span>
-                                    <span className="text-sm text-slate-400">We prioritize local transit efficiency and pedestrian-friendly zones to maximize your time exploring over time spent commuting.</span>
+                                    <span className="block font-bold text-white">Weekend-First Logistics</span>
+                                    <span className="text-sm text-slate-400">We prioritize realistic transit windows and compact sightseeing clusters suited for 48–72 hour trips.</span>
                                 </div>
                             </li>
                         </ul>
                     </section>
                 </div>
 
-                {/* Stats */}
+                {/* Fact-Checked Platform Scope */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8 py-12 border-t border-b border-slate-800">
                     <div className="text-center space-y-2">
                         <div className="text-4xl font-black text-white">2024</div>
-                        <div className="text-xs uppercase tracking-widest font-bold text-slate-500">Established</div>
+                        <div className="text-xs uppercase tracking-widest font-bold text-slate-500">Founded</div>
                     </div>
                     <div className="text-center space-y-2">
-                        <div className="text-4xl font-black text-white">100+</div>
-                        <div className="text-xs uppercase tracking-widest font-bold text-slate-500">Global Cities</div>
+                        <div className="text-4xl font-black text-white">68+</div>
+                        <div className="text-xs uppercase tracking-widest font-bold text-slate-500">Destination Guides</div>
                     </div>
                     <div className="text-center space-y-2">
-                        <div className="text-4xl font-black text-white">50k+</div>
-                        <div className="text-xs uppercase tracking-widest font-bold text-slate-500">Active Users</div>
+                        <div className="text-4xl font-black text-white">2–4</div>
+                        <div className="text-xs uppercase tracking-widest font-bold text-slate-500">Day Trip Focus</div>
                     </div>
                     <div className="text-center space-y-2">
-                        <div className="text-4xl font-black text-white">AI</div>
-                        <div className="text-xs uppercase tracking-widest font-bold text-slate-500">Integration</div>
+                        <div className="text-4xl font-black text-white">Free</div>
+                        <div className="text-xs uppercase tracking-widest font-bold text-slate-500">Planning Tools</div>
                     </div>
                 </div>
 

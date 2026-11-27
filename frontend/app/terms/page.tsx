@@ -3,14 +3,11 @@ import { Metadata } from 'next';
 import { SUPPORT_EMAIL } from '@/lib/config';
 
 export const metadata: Metadata = {
-    title: 'Terms & Conditions | Weekend Travellers AI Trip Planner',
-    description: 'Rules and guidelines for using our AI travel planning services and website.',
-    keywords: [
-        'AI travel planner', 'AI trip planner', 'best AI travel planner', 'vacation itinerary generator', 'custom travel itineraries', 'holiday planner AI', 'weekend getaway planner', 'weekend trip generator', 'global travel planner', 'AI travel guide', 'free AI travel planner', 'weekend travellers', 'road trip planner AI', 'AI travel assistant', 'smart travel itinerary', 'travel planner 2026', 'best travel destinations globally', 'AI trip planner destinations', 'top vacation spots worldwide', 'global weekend getaways'
-    ],
+    title: 'Terms & Conditions | Weekend Travellers',
+    description: 'Rules and guidelines for using our travel guides, planning tools, and website.',
     openGraph: {
-        title: 'Terms & Conditions | Weekend Travellers AI Trip Planner',
-        description: 'Rules and guidelines for using our AI travel planning services and website.',
+        title: 'Terms & Conditions | Weekend Travellers',
+        description: 'Rules and guidelines for using our travel guides, planning tools, and website.',
         type: 'website',
     },
     alternates: {
@@ -26,7 +23,7 @@ export default function TermsPage() {
                     Terms & Conditions
                 </h1>
 
-                <p className="text-slate-400">Last updated: {new Date().toLocaleDateString()}</p>
+                <p className="text-slate-400">Last updated: November 27, 2026</p>
 
                 <section className="space-y-4">
                     <h2 className="text-2xl font-semibold text-white">1. Agreement to Terms</h2>

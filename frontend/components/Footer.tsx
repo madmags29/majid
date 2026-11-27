@@ -59,6 +59,11 @@ const Footer = () => {
                                         <span className="w-1 h-1 bg-indigo-500 rounded-full"></span> Smart Search
                                     </Link>
                                 </li>
+                                <li>
+                                    <Link href="/tools" className="text-slate-400 hover:text-blue-400 transition-colors flex items-center gap-2">
+                                        <span className="w-1 h-1 bg-emerald-500 rounded-full"></span> Travel Tools
+                                    </Link>
+                                </li>
                             </ul>
                         </div>
 
@@ -68,12 +73,17 @@ const Footer = () => {
                             <ul className="space-y-3 text-sm">
                                 <li>
                                     <Link href="/blog" className="text-slate-400 hover:text-blue-400 transition-colors">
-                                        Travel Blog
+                                        Travel Stories
                                     </Link>
                                 </li>
                                 <li>
                                     <Link href="/about" className="text-slate-400 hover:text-blue-400 transition-colors">
                                         About Us
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/authors" className="text-slate-400 hover:text-blue-400 transition-colors">
+                                        Authors &amp; Team
                                     </Link>
                                 </li>
                                 <li>
@@ -99,18 +109,18 @@ const Footer = () => {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/explore/india/goa" className="text-slate-400 hover:text-blue-400 transition-colors">
+                                    <Link href="/explore/goa" className="text-slate-400 hover:text-blue-400 transition-colors">
                                         Goa Weekends
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/explore/india/rajasthan" className="text-slate-400 hover:text-blue-400 transition-colors">
+                                    <Link href="/explore/jaipur" className="text-slate-400 hover:text-blue-400 transition-colors">
                                         Rajasthan Heritage
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/explore/india/kerala" className="text-slate-400 hover:text-blue-400 transition-colors">
-                                        Kerala Backwaters
+                                    <Link href="/explore/munnar" className="text-slate-400 hover:text-blue-400 transition-colors">
+                                        Kerala Escapes
                                     </Link>
                                 </li>
                             </ul>
@@ -126,32 +136,47 @@ const Footer = () => {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/explore/asia/thailand" className="text-slate-400 hover:text-blue-400 transition-colors">
+                                    <Link href="/explore/thailand-bangkok" className="text-slate-400 hover:text-blue-400 transition-colors">
                                         Thailand Beaches
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/explore/asia/japan" className="text-slate-400 hover:text-blue-400 transition-colors">
+                                    <Link href="/explore/tokyo" className="text-slate-400 hover:text-blue-400 transition-colors">
                                         Japan Culture
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/explore/asia/indonesia/bali" className="text-slate-400 hover:text-blue-400 transition-colors">
+                                    <Link href="/explore/bali" className="text-slate-400 hover:text-blue-400 transition-colors">
                                         Bali Islands
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link href="/explore/asia/uae/dubai" className="text-slate-400 hover:text-blue-400 transition-colors">
+                                    <Link href="/explore/dubai" className="text-slate-400 hover:text-blue-400 transition-colors">
                                         Dubai Luxury
                                     </Link>
                                 </li>
                             </ul>
                         </div>
 
-                        {/* Legal */}
+                        {/* Legal & Editorial */}
                         <div>
-                            <h3 className="text-white font-bold mb-6 text-xs tracking-[0.2em] uppercase italic">Legal</h3>
+                            <h3 className="text-white font-bold mb-6 text-xs tracking-[0.2em] uppercase italic">Trust &amp; Legal</h3>
                             <ul className="space-y-3 text-sm">
+                                <li>
+                                    <Link href="/editorial-policy" className="text-slate-400 hover:text-blue-400 transition-colors">
+                                        Editorial Policy
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/corrections-policy" className="text-slate-400 hover:text-blue-400 transition-colors">
+                                        Corrections Policy
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/disclaimer" className="text-slate-400 hover:text-blue-400 transition-colors">
+                                        Travel Disclaimer
+                                    </Link>
+                                </li>
                                 <li>
                                     <Link href="/terms" className="text-slate-400 hover:text-blue-400 transition-colors">
                                         Terms of Service

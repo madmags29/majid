@@ -2,13 +2,10 @@ import { Metadata } from 'next';
 import { SUPPORT_EMAIL } from '@/lib/config';
 
 export const metadata: Metadata = {
-    title: 'Privacy Policy | Weekend Travellers AI Trip Planner',
-    description: 'Our commitment to protecting your privacy and data. Learn how Weekend Travellers handles your information.',
-    keywords: [
-        'AI travel planner', 'AI trip planner', 'best AI travel planner', 'vacation itinerary generator', 'custom travel itineraries', 'holiday planner AI', 'weekend getaway planner', 'weekend trip generator', 'global travel planner', 'AI travel guide', 'free AI travel planner', 'weekend travellers', 'road trip planner AI', 'AI travel assistant', 'smart travel itinerary', 'travel planner 2026', 'best travel destinations globally', 'AI trip planner destinations', 'top vacation spots worldwide', 'global weekend getaways'
-    ],
+    title: 'Privacy Policy | Weekend Travellers',
+    description: 'Our commitment to protecting your privacy and data. Learn how Weekend Travellers handles account information, cookies, and advertising.',
     openGraph: {
-        title: 'Privacy Policy | Weekend Travellers AI Trip Planner',
+        title: 'Privacy Policy | Weekend Travellers',
         description: 'Our commitment to protecting your privacy and data. Learn how Weekend Travellers handles your information.',
         type: 'website',
     },
@@ -25,7 +22,7 @@ export default function PrivacyPage() {
                     Privacy Policy
                 </h1>
 
-                <p className="text-slate-400">Last updated: {new Date().toLocaleDateString()}</p>
+                <p className="text-slate-400">Last updated: November 27, 2026</p>
 
                 <section className="space-y-4">
                     <h2 className="text-2xl font-semibold text-white">1. Introduction</h2>

@@ -1,42 +1,55 @@
 import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { EXLPORE_DESTINATIONS } from '@/lib/destinations';
+import { getDestinationEditorialMeta, getDestinationRegion, REGION_HUBS } from '@/lib/destinationMetadata';
 import Link from 'next/link';
 import Image from 'next/image';
-import { MapPin, ArrowLeft } from 'lucide-react';
+import { MapPin, Calendar, Wallet, Users, Plane, Train, Car, ShieldAlert, Utensils, BookOpen } from 'lucide-react';
 import InnerHeader from '@/components/InnerHeader';
 import ShareTripButton from '@/components/ShareTripButton';
 import DirectItineraryDisplay from '@/components/DirectItineraryDisplay';
 import ItineraryDisplay from '@/components/ItineraryDisplay';
 import RelatedDestinations from '@/components/RelatedDestinations';
-import { API_URL, IS_BUILD } from '@/lib/config';
+import { IS_BUILD } from '@/lib/config';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
 interface Props {
-    params: { slug: string };
+    params: Promise<{ slug: string }>;
 }
 
-// Generate static params for all hardcoded destinations to pre-render them
+// Generate static params for destinations + regional category hubs
 export async function generateStaticParams() {
-    return EXLPORE_DESTINATIONS.map((dest) => ({
-        slug: dest.id,
-    }));
+    const destParams = EXLPORE_DESTINATIONS.map((dest) => ({ slug: dest.id }));
+    const hubParams = Object.keys(REGION_HUBS)
+        .filter(id => !EXLPORE_DESTINATIONS.some(d => d.id === id))
+        .map(id => ({ slug: id }));
+    return [...destParams, ...hubParams];
 }
 
 // Generate Dynamic SEO Metadata
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { slug } = await params;
+    const hub = REGION_HUBS[slug];
     const destination = EXLPORE_DESTINATIONS.find((d) => d.id === slug);
+
+    if (hub && (!destination || slug === 'india' || slug === 'europe')) {
+        return {
+            title: `${hub.title} | Weekend Travellers`,
+            description: hub.description,
+            alternates: { canonical: `/explore/${slug}` },
+        };
+    }
 
     if (!destination) {
         return {
             title: 'Destination Not Found | Weekend Travellers',
-            description: 'The requested destination could not be found.'
+            description: 'The requested destination could not be found.',
         };
     }
 
     const titleName = destination.name;
-    const title = `${titleName}, ${destination.country} Perfect Weekend Guide & Itinerary | Weekend Travellers`;
-    const description = `Looking for the best things to do in ${titleName}? Explore our expert AI-generated 2-day weekend itinerary for ${titleName}, ${destination.country}, including top attractions, budget estimates, flights, and hidden gems.`;
+    const title = `${titleName}, ${destination.country} Weekend Travel Guide & Itinerary`;
+    const description = `Practical 2-to-3 day weekend travel guide for ${titleName}, ${destination.country}: best season, transport routes, estimated daily budget, and day-by-day itinerary.`;
 
     return {
         title,
@@ -61,19 +74,84 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function DestinationPage({ params }: Props) {
     const { slug } = await params;
+    const hub = REGION_HUBS[slug];
     const destination = EXLPORE_DESTINATIONS.find((d) => d.id === slug);
 
-    if (!destination) {
+    // Render Regional Category Hub for india, europe, asia, americas, middle-east
+    if (hub && (!destination || slug === 'india' || slug === 'europe')) {
+        const regionalDestinations = EXLPORE_DESTINATIONS.filter(
+            d => d.id !== slug && getDestinationRegion(d) === hub.regionKey
+        );
+
         return (
-            <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-white p-4">
-                <InnerHeader title="Not Found" subtitle="Destination" showBack backHref="/explore" />
-                <h1 className="text-4xl font-bold mb-4 text-slate-300">Destination Not Found</h1>
-                <Link href="/explore" className="text-blue-400 hover:text-blue-300 transition-colors flex items-center">
-                    <ArrowLeft className="w-4 h-4 mr-2" /> Back to Explore
-                </Link>
+            <div className="min-h-screen bg-slate-950 text-white">
+                <InnerHeader title={hub.name} subtitle="Regional Hub" showBack backHref="/explore" />
+                <div className="max-w-6xl mx-auto px-6 pt-6">
+                    <Breadcrumbs
+                        items={[
+                            { label: 'Explore', href: '/explore' },
+                            { label: hub.name, href: `/explore/${hub.id}`, active: true },
+                        ]}
+                    />
+                </div>
+
+                <main className="max-w-6xl mx-auto px-6 py-12 space-y-12">
+                    <header className="space-y-4 max-w-3xl">
+                        <h1 className="text-4xl md:text-6xl font-black tracking-tight text-white">{hub.title}</h1>
+                        <p className="text-lg text-slate-300 leading-relaxed">{hub.description}</p>
+                        <ul className="flex flex-wrap gap-3 pt-2">
+                            {hub.highlights.map(h => (
+                                <li key={h} className="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-300">
+                                    {h}
+                                </li>
+                            ))}
+                        </ul>
+                    </header>
+
+                    <section aria-label={`${hub.name} destinations`}>
+                        <h2 className="text-2xl font-bold text-white mb-6">
+                            Curated {hub.name} Guides ({regionalDestinations.length})
+                        </h2>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {regionalDestinations.map(dest => {
+                                const meta = getDestinationEditorialMeta(dest);
+                                return (
+                                    <Link
+                                        key={dest.id}
+                                        href={`/explore/${dest.id}`}
+                                        className="group relative h-80 rounded-3xl overflow-hidden border border-white/10 hover:border-blue-500/50 transition-all shadow-xl block"
+                                    >
+                                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/35 to-transparent z-10" />
+                                        <Image
+                                            src={dest.image}
+                                            alt={dest.imageAlt || `${dest.name}, ${dest.country}`}
+                                            fill
+                                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                                            sizes="(max-width: 768px) 100vw, 33vw"
+                                        />
+                                        <div className="absolute bottom-0 left-0 p-6 z-20 w-full">
+                                            <span className="text-xs font-bold text-blue-400 uppercase tracking-wider">{dest.country}</span>
+                                            <h3 className="text-2xl font-black text-white mt-1 mb-1">{dest.name}</h3>
+                                            <p className="text-xs text-slate-300 mb-3">{meta.bestTime.split('(')[0].trim()} &bull; {meta.budgetTier}</p>
+                                            <span className="inline-block bg-white text-slate-950 rounded-full font-bold px-4 py-1.5 text-xs group-hover:bg-blue-500 group-hover:text-white transition-colors">
+                                                View Guide
+                                            </span>
+                                        </div>
+                                    </Link>
+                                );
+                            })}
+                        </div>
+                    </section>
+                </main>
             </div>
         );
     }
+
+    if (!destination) {
+        notFound();
+    }
+
+    const editorialMeta = getDestinationEditorialMeta(destination);
 
     // SSR Fetch Deep Explore Content (includes itinerary and long-form SEO text)
     let exploreData = null;
@@ -245,18 +323,67 @@ export default async function DestinationPage({ params }: Props) {
                         />
                     )}
 
-                    <div className="mt-16 p-8 rounded-3xl bg-slate-900/50 border border-slate-800 grid md:grid-cols-3 gap-8 text-center">
-                        <div>
-                            <div className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-2">Best Time to Visit</div>
-                            <div className="text-lg font-bold text-white">Spring & Autumn</div>
+                    <div className="mt-16 p-8 rounded-3xl bg-slate-900/50 border border-slate-800 grid sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left">
+                        <div className="space-y-1.5">
+                            <div className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                                <Calendar className="w-3.5 h-3.5 text-blue-400" /> Best Time to Visit
+                            </div>
+                            <div className="text-sm font-semibold text-white">{editorialMeta.bestTime}</div>
                         </div>
-                        <div>
-                            <div className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-2">Top Highlight</div>
-                            <div className="text-lg font-bold text-white">Authentic {destination.tags[0]}</div>
+                        <div className="space-y-1.5">
+                            <div className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                                <Wallet className="w-3.5 h-3.5 text-emerald-400" /> Est. Daily Budget
+                            </div>
+                            <div className="text-sm font-semibold text-white">{editorialMeta.dailyBudgetEstimate}</div>
                         </div>
-                        <div>
-                            <div className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-2">Travel Style</div>
-                            <div className="text-lg font-bold text-white">Premium/Boutique</div>
+                        <div className="space-y-1.5">
+                            <div className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                                <Users className="w-3.5 h-3.5 text-purple-400" /> Who Should Visit
+                            </div>
+                            <div className="text-sm font-semibold text-white">{editorialMeta.suitability.join(', ')}</div>
+                        </div>
+                        <div className="space-y-1.5">
+                            <div className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                                <MapPin className="w-3.5 h-3.5 text-amber-400" /> Ideal Duration
+                            </div>
+                            <div className="text-sm font-semibold text-white">{editorialMeta.idealDuration}</div>
+                        </div>
+                    </div>
+
+                    {/* Structured Practical Planning Guide */}
+                    <div className="mt-12 grid md:grid-cols-3 gap-6 text-left">
+                        <div className="p-6 rounded-2xl bg-slate-900/40 border border-slate-800 space-y-2">
+                            <h3 className="font-bold text-white flex items-center gap-2 text-base">
+                                <Plane className="w-4 h-4 text-blue-400" /> By Air
+                            </h3>
+                            <p className="text-xs text-slate-400 leading-relaxed">{editorialMeta.howToReach.air}</p>
+                        </div>
+                        <div className="p-6 rounded-2xl bg-slate-900/40 border border-slate-800 space-y-2">
+                            <h3 className="font-bold text-white flex items-center gap-2 text-base">
+                                <Train className="w-4 h-4 text-purple-400" /> By Rail
+                            </h3>
+                            <p className="text-xs text-slate-400 leading-relaxed">{editorialMeta.howToReach.rail}</p>
+                        </div>
+                        <div className="p-6 rounded-2xl bg-slate-900/40 border border-slate-800 space-y-2">
+                            <h3 className="font-bold text-white flex items-center gap-2 text-base">
+                                <Car className="w-4 h-4 text-emerald-400" /> By Road
+                            </h3>
+                            <p className="text-xs text-slate-400 leading-relaxed">{editorialMeta.howToReach.road}</p>
+                        </div>
+                    </div>
+
+                    <div className="mt-6 grid md:grid-cols-2 gap-6 text-left">
+                        <div className="p-6 rounded-2xl bg-slate-900/40 border border-slate-800 space-y-2">
+                            <h3 className="font-bold text-white flex items-center gap-2 text-base">
+                                <Utensils className="w-4 h-4 text-amber-400" /> Local Food Highlights
+                            </h3>
+                            <p className="text-sm text-slate-300 leading-relaxed">{editorialMeta.localFood}</p>
+                        </div>
+                        <div className="p-6 rounded-2xl bg-slate-900/40 border border-slate-800 space-y-2">
+                            <h3 className="font-bold text-white flex items-center gap-2 text-base">
+                                <ShieldAlert className="w-4 h-4 text-rose-400" /> Safety &amp; Accessibility
+                            </h3>
+                            <p className="text-sm text-slate-300 leading-relaxed">{editorialMeta.safetyAndAccessibility}</p>
                         </div>
                     </div>
                 </section>
@@ -264,7 +391,7 @@ export default async function DestinationPage({ params }: Props) {
                 <section className="max-w-6xl mx-auto px-4 pb-24">
                     {itinerary ? (
                         <div className="mt-12 bg-slate-900/40 rounded-3xl p-6 md:p-10 border border-slate-800 shadow-2xl text-left">
-                            <h2 className="text-3xl font-black text-white mb-10 text-center tracking-tight">Your 2-Day AI Itinerary</h2>
+                            <h2 className="text-3xl font-black text-white mb-10 text-center tracking-tight">Your 2-Day Weekend Itinerary</h2>
                             <ItineraryDisplay itinerary={{ ...exploreData, days: itinerary, trip_details: tripDetails }} />
                         </div>
                     ) : (
@@ -276,23 +403,23 @@ export default async function DestinationPage({ params }: Props) {
                     <RelatedDestinations currentId={destination.id} lat={destination.lat} lng={destination.lng} />
                 </section>
 
-                {/* AdSense Optimization: High-Value Content Section */}
-                <section className="container mx-auto px-4 py-20 lg:max-w-4xl border-t border-white/5 mt-20">
-                    <div className="bg-slate-900/30 border border-slate-800 rounded-3xl p-8 md:p-12 mb-12 shadow-2xl">
-                        <h2 className="text-2xl font-black text-white mb-6 uppercase tracking-tight italic">Why {destination.name} Defines Modern Travel</h2>
-                        <div className="space-y-6 text-slate-400 text-sm leading-relaxed">
-                            <p>
-                                Selecting a destination for a high-impact weekend requires more than just a pin on a map. At Weekend Travellers, we analyze the specific <strong>Logistical DNA</strong> of cities like {destination.name} before featuring them in our expert index. For a 2026 traveler, the value of {destination.name} lies in its &quot;48-hour feasibility&quot;—the ability to provide a complete cultural narrative without the need for a week-long commitment.
-                            </p>
-                            <p>
-                                <strong>Authenticity in the Algorithmic Age</strong><br/>
-                                While our AI-driven itinerary provides the structural backbone for your journey to {destination.country}, the real magic happens in the local intersections. We prioritize &quot;Anti-Tourist&quot; landmarks and hyper-local dining gems that our data indicates are trending towards high-quality, authentic experiences. By focusing on {destination.tags.join(' and ')} archetypes, we ensure that your stay in {destination.name} isn&apos;t just a sequence of photos, but a coherent story of discovery.
-                            </p>
-                            <p>
-                                <strong>Sustainable Exploration</strong><br/>
-                                Our commitment to {destination.name} extends beyond your visit. We encourage a model of tourism that respects the local infrastructure and supports independent vendors. By following our curated paths, you are contributing to a recursive feedback loop that helps us maintain the quality and integrity of travel for future explorers. Enjoy your curated journey through the heart of {destination.country}.
+                {/* Editorial Transparency & Sources Box */}
+                <section className="container mx-auto px-4 py-12 lg:max-w-4xl border-t border-white/5">
+                    <div className="bg-slate-900/40 border border-slate-800 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row gap-6 justify-between items-start md:items-center">
+                        <div className="space-y-2">
+                            <div className="text-xs font-bold uppercase tracking-wider text-blue-400 flex items-center gap-1.5">
+                                <BookOpen className="w-3.5 h-3.5" /> Editorial Notes &amp; Estimates
+                            </div>
+                            <p className="text-xs text-slate-400 leading-relaxed max-w-2xl">
+                                Compiled by the <Link href="/authors" className="text-slate-200 underline">Weekend Travellers Editorial Team</Link>. Budget ranges and drive times are planning estimates—not live quotes. Check our{' '}
+                                <Link href="/editorial-policy" className="text-blue-400 hover:underline">Editorial Policy</Link>,{' '}
+                                <Link href="/disclaimer" className="text-blue-400 hover:underline">Disclaimer</Link>, or{' '}
+                                <Link href="/corrections-policy" className="text-blue-400 hover:underline">report an update</Link>.
                             </p>
                         </div>
+                        <Link href="/tools" className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shrink-0">
+                            Open Budget Calculator
+                        </Link>
                     </div>
                 </section>
             </main>

@@ -8,7 +8,7 @@ export default function robots(): MetadataRoute.Robots {
             {
                 userAgent: '*',
                 allow: '/',
-                disallow: [],
+                disallow: ['/api/', '/profile', '/reset-password', '/trips'],
             },
             {
                 userAgent: [
@@ -20,19 +20,13 @@ export default function robots(): MetadataRoute.Robots {
                     'Google-Extended',
                     'Applebot-Extended',
                     'Amazonbot',
-                    'Bytespider',
                     'Cohere-ai',
-                    'Diffbot',
-                    'Omgilibot',
                     'Mediapartners-Google'
                 ],
                 allow: '/',
+                disallow: ['/api/', '/profile', '/reset-password', '/trips'],
             },
         ],
-        sitemap: [
-            `${baseUrl}/sitemap.xml`,
-            `${baseUrl}/llms.txt`,
-            `${baseUrl}/llms-full.txt`
-        ],
+        sitemap: `${baseUrl}/sitemap.xml`,
     };
 }

@@ -39,30 +39,6 @@ async function getBlogPosts() {
 export default async function LandingPage() {
   const blogPosts = await getBlogPosts();
 
-  const websiteSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Weekend Travellers",
-    "url": "https://weekendtravellers.com",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "https://weekendtravellers.com/search?destination={search_term_string}",
-      "query-input": "required name=search_term_string"
-    }
-  };
-
-  const organizationSchema = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "Weekend Travellers",
-    "url": "https://weekendtravellers.com",
-    "logo": "https://weekendtravellers.com/logo.png",
-    "sameAs": [
-      "https://facebook.com/weekendtravellers",
-      "https://twitter.com/weekendtravellrs"
-    ]
-  };
-
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -98,18 +74,62 @@ export default async function LandingPage() {
     <div className="min-h-screen text-white flex flex-col relative overflow-x-hidden">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
-      />
-      <script
-        type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       
       <HomeClient initialBlogPosts={blogPosts} />
+
+      {/* Trips from Major Cities & Planning Tools - Information Architecture */}
+      <section className="py-16 px-6 relative z-20 border-t border-white/5 bg-slate-950/80">
+        <div className="max-w-7xl mx-auto space-y-12">
+          <div className="grid lg:grid-cols-2 gap-8">
+            <div className="bg-slate-900/40 border border-white/10 rounded-3xl p-8 space-y-5">
+              <h2 className="text-2xl font-black text-white tracking-tight">Weekend Trips from Major Cities</h2>
+              <p className="text-sm text-slate-400">Jump straight into 2–3 day road and rail getaways tailored from your starting hub.</p>
+              <div className="flex flex-wrap gap-2.5">
+                {[
+                  { label: 'From New Delhi', href: '/search?destination=Rishikesh&origin=New+Delhi' },
+                  { label: 'From Mumbai', href: '/search?destination=Goa&origin=Mumbai' },
+                  { label: 'From Bangalore', href: '/search?destination=Coorg&origin=Bangalore' },
+                  { label: 'From Hyderabad', href: '/search?destination=Hampi&origin=Hyderabad' },
+                  { label: 'From London', href: '/search?destination=Paris&origin=London' },
+                  { label: 'From New York', href: '/search?destination=Vancouver&origin=New+York' },
+                  { label: 'From Dubai', href: '/search?destination=Abu+Dhabi&origin=Dubai' },
+                  { label: 'From Tokyo', href: '/search?destination=Kyoto&origin=Tokyo' },
+                ].map(hub => (
+                  <Link
+                    key={hub.label}
+                    href={hub.href}
+                    className="px-4 py-2 rounded-xl bg-white/5 hover:bg-blue-600/20 border border-white/10 hover:border-blue-500/40 text-xs font-semibold text-slate-200 transition-colors"
+                  >
+                    {hub.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            <div className="bg-slate-900/40 border border-white/10 rounded-3xl p-8 space-y-5 flex flex-col justify-between">
+              <div>
+                <h2 className="text-2xl font-black text-white tracking-tight">Free Weekend Planning Tools</h2>
+                <p className="text-sm text-slate-400 mt-1">
+                  Estimate stay, food, and transit costs before you book, or check whether a destination fits a 2-day drive.
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <Link href="/tools" className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors">
+                  Budget &amp; Distance Calculators
+                </Link>
+                <Link href="/explore/all" className="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-white text-xs font-bold transition-colors">
+                  Filter 68+ Destinations
+                </Link>
+                <Link href="/chat" className="px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200 text-xs font-bold transition-colors">
+                  Interactive Trip Assistant
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Discover India - Server Rendered for SEO */}
       <section className="py-24 px-6 relative z-20 border-t border-white/5 bg-slate-900/10">
@@ -236,10 +256,10 @@ export default async function LandingPage() {
             {[
               { name: 'India', slug: 'india', image: 'https://images.pexels.com/photos/1007427/pexels-photo-1007427.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'From the Himalayas to the backwaters of Kerala.' },
               { name: 'Europe', slug: 'europe', image: 'https://images.pexels.com/photos/672532/pexels-photo-672532.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Timeless cities, art, and legendary landscapes.' },
-              { name: 'Thailand', slug: 'thailand-bangkok', image: 'https://images.pexels.com/photos/2412711/pexels-photo-2412711.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Exotic beaches, street food, and golden temples.' },
+              { name: 'Asia', slug: 'asia', image: 'https://images.pexels.com/photos/2412711/pexels-photo-2412711.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Vibrant street food, temples, and tropical islands.' },
               { name: 'Japan', slug: 'tokyo', image: 'https://images.pexels.com/photos/1440476/pexels-photo-1440476.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Neon cities, ancient shrines, and cherry blossoms.' },
-              { name: 'Bali', slug: 'bali', image: 'https://images.pexels.com/photos/2166553/pexels-photo-2166553.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Tropical paradise, spiritual retreats, and surf.' },
-              { name: 'Goa', slug: 'goa', image: 'https://images.pexels.com/photos/4429334/pexels-photo-4429334.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Sun-drenched beaches and Portuguese heritage.' }
+              { name: 'Americas', slug: 'americas', image: 'https://images.pexels.com/photos/219692/pexels-photo-219692.jpeg?auto=compress&cs=tinysrgb&w=600', description: 'Iconic skylines, national parks, and coastal escapes.' },
+              { name: 'Middle East', slug: 'middle-east', image: 'https://images.pexels.com/photos/32870/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=600', description: 'Desert excursions, stopovers, and winter sun.' }
             ].map((region) => (
               <Link key={region.slug} href={`/explore/${region.slug}`} className="group relative h-96 rounded-3xl overflow-hidden border border-white/10 hover:border-blue-500/50 transition-all shadow-2xl">
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent z-10" />
@@ -356,30 +376,33 @@ export default async function LandingPage() {
               <div className="bg-slate-900/60 backdrop-blur-3xl p-10 rounded-[2.8rem] space-y-8">
                 <h3 className="text-3xl font-black italic tracking-tighter text-white uppercase">Why Choose Weekend Travellers?</h3>
                 <p className="text-slate-300 leading-relaxed italic">
-                  &quot;In 2026, travel shouldn&apos;t be a chore. We built Weekend Travellers to solve the &apos;planning fatigue&apos; that ruins short getaways. By leveraging real-time data and advanced LLMs, we provide value that static blogs can&apos;t: personalization, accuracy, and speed.&quot;
+                  &quot;Planning a 48-hour break shouldn&apos;t take more time than the trip itself. We combine structured destination reference guides with practical budget and distance tools so you can decide where to go—and what it realistically costs—in minutes.&quot;
                 </p>
                 <div className="grid grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <div className="text-2xl font-black text-blue-400">50K+</div>
-                    <div className="text-xs uppercase tracking-widest font-bold text-slate-500">Trips Planned</div>
+                    <div className="text-2xl font-black text-blue-400">68+</div>
+                    <div className="text-xs uppercase tracking-widest font-bold text-slate-500">Destination Guides</div>
                   </div>
                   <div className="space-y-2">
-                    <div className="text-2xl font-black text-purple-400">AI Driven</div>
-                    <div className="text-xs uppercase tracking-widest font-bold text-slate-500">Real-time Data</div>
+                    <div className="text-2xl font-black text-purple-400">2–4 Days</div>
+                    <div className="text-xs uppercase tracking-widest font-bold text-slate-500">Weekend Focus</div>
                   </div>
                   <div className="space-y-2">
-                    <div className="text-2xl font-black text-pink-400">2026 Ready</div>
-                    <div className="text-xs uppercase tracking-widest font-bold text-slate-500">Latest Trends</div>
+                    <div className="text-2xl font-black text-pink-400">Free Tools</div>
+                    <div className="text-xs uppercase tracking-widest font-bold text-slate-500">Budget &amp; Distance</div>
                   </div>
                   <div className="space-y-2">
-                    <div className="text-2xl font-black text-green-400">100% Free</div>
-                    <div className="text-xs uppercase tracking-widest font-bold text-slate-500">No Hidden Fees</div>
+                    <div className="text-2xl font-black text-green-400">Transparent</div>
+                    <div className="text-xs uppercase tracking-widest font-bold text-slate-500">Estimates &amp; Sources</div>
                   </div>
                 </div>
-                <div className="pt-4">
-                  <p className="text-sm text-slate-400 leading-relaxed">
-                    We specialize in 2-day and 3-day itineraries, focusing on maximizing your experience without the burnout of long-distance travel. Our mission is to make every weekend feel like a full vacation.
-                  </p>
+                <div className="pt-2 flex flex-wrap gap-3">
+                  <Link href="/tools" className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors">
+                    Open Budget &amp; Distance Tools
+                  </Link>
+                  <Link href="/editorial-policy" className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200 text-xs font-bold transition-colors">
+                    Read Editorial Policy
+                  </Link>
                 </div>
               </div>
             </div>

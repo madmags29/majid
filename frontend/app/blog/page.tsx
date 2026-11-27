@@ -75,11 +75,6 @@ export default async function BlogLandingPage() {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(blogCollectionSchema) }}
             />
-            <div className="sr-only">
-                {/* Fallback semantic text strictly for crawlers on index */}
-                <h1>Ultimate Weekend Getaway and Travel Blog</h1>
-                <p>Welcome to the Weekend Travellers expert blog. Discover our latest AI-generated top weekend travel itineraries, secret destinations, budget guides, and packing tips.</p>
-            </div>
             <BlogClientPage posts={Array.isArray(posts) ? posts : []} />
         </>
     );

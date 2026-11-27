@@ -73,6 +73,52 @@ const nextConfig: NextConfig = {
     async redirects() {
         return [
             {
+                source: "/:path*",
+                has: [
+                    {
+                        type: "host",
+                        value: "www.weekendtravellers.com",
+                    },
+                ],
+                destination: "https://weekendtravellers.com/:path*",
+                permanent: true,
+            },
+            {
+                source: "/explore/india/goa",
+                destination: "/explore/goa",
+                permanent: true,
+            },
+            {
+                source: "/explore/india/rajasthan",
+                destination: "/explore/jaipur",
+                permanent: true,
+            },
+            {
+                source: "/explore/india/kerala",
+                destination: "/explore/munnar",
+                permanent: true,
+            },
+            {
+                source: "/explore/asia/thailand",
+                destination: "/explore/thailand-bangkok",
+                permanent: true,
+            },
+            {
+                source: "/explore/asia/japan",
+                destination: "/explore/tokyo",
+                permanent: true,
+            },
+            {
+                source: "/explore/asia/indonesia/bali",
+                destination: "/explore/bali",
+                permanent: true,
+            },
+            {
+                source: "/explore/asia/uae/dubai",
+                destination: "/explore/dubai",
+                permanent: true,
+            },
+            {
                 source: "/admin",
                 destination: "https://admin.weekendtravellers.com",
                 permanent: false,

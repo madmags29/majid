@@ -30,9 +30,9 @@ export default function ContactPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Simple client-side validation
-        if (!formData.name || !formData.email || !formData.phone || !formData.comment) {
-            toast.error('Please fill in all mandatory fields.');
+        // Simple client-side validation (phone is optional)
+        if (!formData.name || !formData.email || !formData.comment) {
+            toast.error('Please fill in your name, email, and message.');
             return;
         }
 
@@ -176,11 +176,10 @@ export default function ContactPage() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-sm font-bold text-slate-300 ml-1">Phone Number <span className="text-red-500">*</span></label>
+                                    <label className="text-sm font-bold text-slate-300 ml-1">Phone Number <span className="text-slate-500 font-normal">(Optional)</span></label>
                                     <input
                                         type="tel"
                                         name="phone"
-                                        required
                                         placeholder="+91 00000 00000"
                                         value={formData.phone}
                                         onChange={handleChange}

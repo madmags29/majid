@@ -20,6 +20,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { url: `${baseUrl}/about`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.5 },
         { url: `${baseUrl}/contact`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.5 },
         { url: `${baseUrl}/faq`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.5 },
+        { url: `${baseUrl}/editorial-policy`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.4 },
+        { url: `${baseUrl}/authors`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.4 },
+        { url: `${baseUrl}/corrections-policy`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.3 },
+        { url: `${baseUrl}/disclaimer`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.3 },
+        { url: `${baseUrl}/tools`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.8 },
         { url: `${baseUrl}/privacy`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.3 },
         { url: `${baseUrl}/terms`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.3 },
         { url: `${baseUrl}/cookie-policy`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.3 },
@@ -27,13 +32,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { url: `${baseUrl}/chat`, lastModified: new Date(), changeFrequency: 'daily' as const, priority: 0.9 },
     ];
 
-    // 2. Categories
-    const categories = ['india', 'europe', 'asia', 'americas', 'middle-east'].map(route => ({
-        url: `${baseUrl}/explore/${route}`,
-        lastModified: new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: 0.7,
-    }));
+    // 2. Regional Categories (exclude india & europe if already in EXLPORE_DESTINATIONS to avoid duplicate sitemap entries)
+    const destIds = new Set(EXLPORE_DESTINATIONS.map(d => d.id));
+    const categories = ['india', 'europe', 'asia', 'americas', 'middle-east']
+        .filter(route => !destIds.has(route))
+        .map(route => ({
+            url: `${baseUrl}/explore/${route}`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly' as const,
+            priority: 0.7,
+        }));
 
     // 3. Destinations from lib/destinations.ts
     const destinationEntries = EXLPORE_DESTINATIONS.map(dest => ({
@@ -70,7 +78,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             const trips = await res.json();
             if (Array.isArray(trips)) {
                 tripEntries = trips.map((trip: any) => ({
-                    url: `${baseUrl}/trips/${trip._id}`,
+                    url: `${baseUrl}/trip/${trip._id}`,
                     lastModified: new Date(trip.updatedAt || trip.createdAt || Date.now()),
                     changeFrequency: 'monthly' as const,
                     priority: 0.6,
